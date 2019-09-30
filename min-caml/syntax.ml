@@ -31,12 +31,6 @@ let rec indent n =
 
 let p = print_string
 
-let rec print_args xs =
-  print_newline ();
-  match xs with
-  | [] -> ()
-  | (a,b)::[] -> p ("(" ^ a ^ " : "); Type.print b; p ")"
-  | (a,b)::ys -> p ("(" ^ a ^ " : "); Type.print b; p "), "; print_args ys
 
 let rec print e i =
   print_newline ();
@@ -70,14 +64,14 @@ let rec print e i =
       Type.print fty; p ")";
       print_newline ();
       indent (i + 1);
-      print_args f.args;
+      Type.print_args f.args;
       print f.body (i + 1);
       print x (i + 1)
   | App (x, ys) -> p "APP"; print x (i + 1) ; prints ys (i + 1)
   | Tuple xs -> p "TUPLE"; prints xs (i + 1)
   | LetTuple (xs, y, z) ->
     (* (Id.t * Type.t) list * t * t *)
-      print_args xs;
+      Type.print_args xs;
       print y (i + 1); print z (i + 1)
   | Array (x, y) -> p "ARRAY"; print x (i + 1); print y (i + 1)
   | Get   (x, y) -> p "GET"; print x (i + 1); print y (i + 1)

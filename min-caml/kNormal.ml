@@ -177,3 +177,54 @@ let rec g env = function (* K正規化ルーチン本体 (caml2html: knormal_g) *)
                 (fun z -> Put(x, y, z), Type.Unit)))
 
 let f e = fst (g M.empty e)
+
+
+
+let p = print_string
+let rec indent n =
+  if n = 0 then () else (p "  "; indent (n-1))
+let rec p_rec xs j =
+  match xs with
+  | [] -> ()
+  | y::ys -> print_newline (); indent j; p y; p_rec ys j
+
+let rec print e i =
+  indent i;
+  let j = i + 1 in
+  match e with
+  | Unit -> p "unit"
+  | Int n -> p "int "; print_int n
+  | Float x -> p "float "; print_float x
+  | Neg x      -> p ("neg " ^ x)
+  | Add (x,y)  -> p ("add " ^ x ^ " " ^ y)
+  | Sub (x,y)  -> p ("sub " ^ x ^ " " ^ y)
+  | FNeg  x    -> p ("fneg " ^ x)
+  | FAdd (x,y) -> p ("fadd " ^ x ^ " " ^ y)
+  | FSub (x,y) -> p ("fsub " ^ x ^ " " ^ y)
+  | FMul (x,y) -> p ("fmul " ^ x ^ " " ^ y)
+  | FDiv (x,y) -> p ("fdiv " ^ x ^ " " ^ y)
+  | IfEq (a,b,e1,e2) -> p ("if " ^ a ^ " == " ^ b); print_newline ();
+                        print e1 j; print_newline (); print e2 j
+  | IfLE (a,b,e1,e2) -> p ("if " ^ a ^ " <= " ^ b); print_newline ();
+                        print e1 j; print_newline (); print e2 j
+  | Let ((name,typ),e1,e2) -> p ("let " ^ name ^ " :"); Type.print typ; print_newline ();
+                              print e1 j; print_newline (); indent i; p "in"; print_newline ();
+                              print e2 i
+  | Var x -> p x
+  | LetRec (fdef, e) ->
+      let (name,typ) = fdef.name in
+      p ("letrec " ^ name ^ " :"); Type.print typ; print_newline ();
+      indent i; p "variables : "; Type.print_args fdef.args; print_newline ();
+      print fdef.body j; print_newline (); indent i; p "in";
+      print_newline (); print e j
+  | App (f,xs) -> p "app"; print_newline (); indent j; p f; p_rec xs j
+  | Tuple xs -> p "Tuple"; p_rec xs j
+  | LetTuple (xs,y,z) ->
+      p "let tuple ";
+      Type.print_args xs;
+      print_newline (); indent j; p y; print_newline (); indent i; p "in"; print_newline ();
+      print z j
+  | Get (x,y) -> p (x^".("^y^")")
+  | Put (x,y,z) -> p (x^".("^y^") <- "^z)
+  | ExtArray x -> p ("extarray " ^ x)
+  | ExtFunApp (f,x) -> p ("extfunapp"); print_newline (); indent i; p f; p_rec x j
