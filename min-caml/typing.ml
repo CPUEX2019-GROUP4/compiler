@@ -151,6 +151,10 @@ let rec g env e = (* 型推論ルーチン (caml2html: typing_g) *)
   with Unify(t1, t2) -> raise (Error(deref_term e, deref_typ t1, deref_typ t2))
 
 let f e =
+  (* syntax print *)
+  Syntax.print e 0;
+  (****************)
+
   extenv := M.empty;
 (*
   (match deref_typ (g M.empty e) with
@@ -158,6 +162,21 @@ let f e =
   | _ -> Format.eprintf "warning: final result does not have type unit@.");
 *)
   (try unify Type.Unit (g M.empty e)
-  with Unify _ -> failwith "top level does not have type unit");
+  with 
+  | Unify _ -> failwith "top level does not have type unit"
+  | Error (term,typ1,typ2) ->
+      print_string "\x1b[4m";
+      print_newline ();
+      (* 下線引く!!!!!!!!!!!!!!!!!!!!! *)
+      print term 0;
+      print_newline ();
+      print_string "\x1b[0;31mError:\x1b[0m This expression has type ";
+      Type.print typ2;
+      print_string " but an expression was expected of type ";
+      Type.print typ1;
+      print_string "."; print_newline ();
+      failwith ("Type Error.")
+  );
+
   extenv := M.map deref_typ !extenv;
   deref_term e

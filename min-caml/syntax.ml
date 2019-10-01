@@ -37,9 +37,9 @@ let rec print e i =
   indent i;
   match e with
   | Unit -> p "UNIT"
-  | Bool x -> (p "BOOL"; p (if x then "true" else "false"))
-  | Int x -> p "INT"; print_int x
-  | Float x -> p "FLOAT"; print_float x
+  | Bool x -> (p "BOOL "; p (if x then "true" else "false"))
+  | Int x -> p "INT "; print_int x
+  | Float x -> p "FLOAT "; print_float x
   | Not x -> p "NOT"; print x (i + 1)
   | Neg x -> p "NEG"; print x (i + 1)
   | Add (x, y) -> p "ADD"; print x (i + 1); print y (i + 1)
@@ -60,7 +60,7 @@ let rec print e i =
   * { name : Id.t * Type.t; args : (Id.t * Type.t) list; body : t } *)
       let (fid, fty) = f.name
       in
-      p ("LETREC" ^ (fid) ^ " (");
+      p ("LETREC " ^ (fid) ^ " (");
       Type.print fty; p ")";
       print_newline ();
       indent (i + 1);

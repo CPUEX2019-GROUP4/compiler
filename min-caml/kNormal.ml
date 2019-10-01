@@ -176,8 +176,6 @@ let rec g env = function (* K正規化ルーチン本体 (caml2html: knormal_g) *)
             (fun y -> insert_let (g env e3)
                 (fun z -> Put(x, y, z), Type.Unit)))
 
-let f e = fst (g M.empty e)
-
 
 
 let p = print_string
@@ -192,7 +190,7 @@ let rec print e i =
   indent i;
   let j = i + 1 in
   match e with
-  | Unit -> p "unit"
+  | Unit -> p "unit ()"
   | Int n -> p "int "; print_int n
   | Float x -> p "float "; print_float x
   | Neg x      -> p ("neg " ^ x)
@@ -207,13 +205,13 @@ let rec print e i =
                         print e1 j; print_newline (); print e2 j
   | IfLE (a,b,e1,e2) -> p ("if " ^ a ^ " <= " ^ b); print_newline ();
                         print e1 j; print_newline (); print e2 j
-  | Let ((name,typ),e1,e2) -> p ("let " ^ name ^ " :"); Type.print typ; print_newline ();
+  | Let ((name,typ),e1,e2) -> p ("let " ^ name ^ " : "); Type.print typ; p " ="; print_newline ();
                               print e1 j; print_newline (); indent i; p "in"; print_newline ();
                               print e2 i
   | Var x -> p x
   | LetRec (fdef, e) ->
       let (name,typ) = fdef.name in
-      p ("letrec " ^ name ^ " :"); Type.print typ; print_newline ();
+      p ("letrec " ^ name ^ " : "); Type.print typ; p " ="; print_newline ();
       indent i; p "variables : "; Type.print_args fdef.args; print_newline ();
       print fdef.body j; print_newline (); indent i; p "in";
       print_newline (); print e j
@@ -227,4 +225,12 @@ let rec print e i =
   | Get (x,y) -> p (x^".("^y^")")
   | Put (x,y,z) -> p (x^".("^y^") <- "^z)
   | ExtArray x -> p ("extarray " ^ x)
-  | ExtFunApp (f,x) -> p ("extfunapp"); print_newline (); indent i; p f; p_rec x j
+  | ExtFunApp (f,x) -> p ("extfunapp"); print_newline (); indent j; p f; p_rec x j
+
+
+
+
+let f e = let return = fst (g M.empty e) in
+(print_newline (); print_newline (); p "KNormal.print"; print_newline (); print return 0; print_newline ());
+  return
+

@@ -138,9 +138,16 @@ exp: /* (* ∞Ï»Ã§Œº∞ (caml2html: parser_exp) *) */
     { Array($2, $3) }
 | error
     { failwith
-        (Printf.sprintf "parse error near characters %d-%d"
-           (Parsing.symbol_start ())
-           (Parsing.symbol_end ())) }
+        (Printf.sprintf "%s line %d:%d-%d \x1b[31mParse Error:\x1b[0m"
+           (Parsing.symbol_start_pos ()).pos_fname
+           (Parsing.symbol_start_pos ()).pos_lnum
+           ((Parsing.symbol_start_pos ()).pos_cnum -
+           (Parsing.symbol_start_pos ()).pos_bol)
+           ((Parsing.symbol_end_pos ()).pos_cnum -
+           (Parsing.symbol_end_pos ()).pos_bol)
+           (*   (Lexing.lexeme_end lexbuf)*)
+        )
+    }
 
 fundef:
 | IDENT formal_args EQUAL exp

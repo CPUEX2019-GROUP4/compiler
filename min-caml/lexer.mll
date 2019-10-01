@@ -11,6 +11,8 @@ let lower = ['a'-'z']
 let upper = ['A'-'Z']
 
 rule token = parse
+| '\n'
+    { Lexing.new_line lexbuf; token lexbuf }
 | space+
     { token lexbuf }
 | "(*"
@@ -84,11 +86,20 @@ rule token = parse
     { IDENT(Lexing.lexeme lexbuf) }
 | _
     { failwith
-        (Printf.sprintf "unknown token %s near characters %d-%d"
+        (Printf.sprintf "%s line %d:%d-%d \x1b[31mError:\x1b[0m: unknown token %s "
+           (Lexing.lexeme_start_p lexbuf).pos_fname
+           (Lexing.lexeme_start_p lexbuf).pos_lnum
+           ((Lexing.lexeme_start_p lexbuf).pos_cnum -
+           (Lexing.lexeme_start_p lexbuf).pos_bol)
+           ((Lexing.lexeme_end_p lexbuf).pos_cnum -
+           (Lexing.lexeme_end_p lexbuf).pos_bol)
            (Lexing.lexeme lexbuf)
-           (Lexing.lexeme_start lexbuf)
-           (Lexing.lexeme_end lexbuf)) }
+           (*   (Lexing.lexeme_end lexbuf)*)
+        )
+    }
 and comment = parse
+| '\n'
+    { Lexing.new_line lexbuf; comment lexbuf }
 | "*)"
     { () }
 | "(*"

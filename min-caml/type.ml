@@ -36,7 +36,9 @@ and prints es =
   | x::xs -> print x; p " * "; prints xs
 
 let rec print_args xs =
-  print_newline ();
+  (*
+   * print_newline ();
+   *)
   match xs with
   | [] -> ()
   | (a,b)::[] -> p ("(" ^ a ^ " : "); print b; p ")"
