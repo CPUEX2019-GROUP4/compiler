@@ -13,8 +13,6 @@ addi $t,$s,C
 subi $t,$s,C
 # $t = $s - C (signed)
 
-##### load / store byte 確認
-
 lw $t,C($s) (4 byte = 32 bit)
 # $t = Memory[$s + C]
 
@@ -69,16 +67,4 @@ jr $s
 
 jal C
 # $31 = PC + 8; PC = PC+4[31:28] . C*4
-
-
-
-
-
-
-
-
-
-
-
-
 
