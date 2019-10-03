@@ -7,7 +7,9 @@ type t = (* 命令の列 (caml2html: sparcasm_t) *)
 and exp = (* 一つ一つの命令に対応する式 (caml2html: sparcasm_exp) *)
   | Nop
   | Li of int
+  (* load immidiate *)
   | FLi of Id.l
+  (* load float *)
   | SetL of Id.l
   | Mr of Id.t
   | Neg of Id.t
