@@ -1,52 +1,56 @@
-.data
-.balign	8
-.text
+	.text
+	.globl _min_caml_start
+	.align 2
 ack.15:
-	cmpl	$0, %eax
-	jg	jle_else.34
-	movl	%ebx, %eax
-	addl	$1, %eax
-	ret
-jle_else.34:
-	cmpl	$0, %ebx
-	jg	jle_else.35
-	subl	$1, %eax
-	movl	$1, %ebx
-	jmp	ack.15
-jle_else.35:
-	movl	%eax, %ecx
-	subl	$1, %ecx
-	subl	$1, %ebx
-	movl	%ecx, 0(%ebp)
-	addl	$8, %ebp
-	call	ack.15
-	subl	$8, %ebp
-	movl	%eax, %ebx
-	movl	0(%ebp), %eax
-	jmp	ack.15
-.globl	min_caml_start
-min_caml_start:
-.globl	_min_caml_start
-_min_caml_start: # for cygwin
-	pushl	%eax
-	pushl	%ebx
-	pushl	%ecx
-	pushl	%edx
-	pushl	%esi
-	pushl	%edi
-	pushl	%ebp
-	movl	32(%esp),%ebp
-	movl	36(%esp),%eax
-	movl	%eax,min_caml_hp
-	movl	$3, %eax
-	movl	$10, %ebx
-	call	ack.15
-	call	min_caml_print_int
-	popl	%ebp
-	popl	%edi
-	popl	%esi
-	popl	%edx
-	popl	%ecx
-	popl	%ebx
-	popl	%eax
-	ret
+	cmpwi	cr7, r2, 0
+	bgt	cr7, ble_else.34
+	addi	r2, r5, 1
+	blr
+ble_else.34:
+	cmpwi	cr7, r5, 0
+	bgt	cr7, ble_else.35
+	subi	r2, r2, 1
+	li	r5, 1
+	b	ack.15
+ble_else.35:
+	subi	r6, r2, 1
+	subi	r5, r5, 1
+	sw	r6, 0(r3)
+	mflr	r31
+	stw	r31, 4(r3)
+	addi	r3, r3, 8
+	bl	ack.15
+	subi	r3, r3, 8
+	lwz	r31, 4(r3)
+	mr	r5, r2
+	mtlr	r31
+	lwz	r2, 0(r3)
+	b	ack.15
+_min_caml_start: # main entry point
+	mflr	r0
+	stmw	r30, -8(r1)
+	stw	r0, 8(r1)
+	stwu	r1, -96(r1)
+#	main program starts
+	li	r2, 3
+	li	r5, 10
+	mflr	r31
+	stw	r31, 4(r3)
+	addi	r3, r3, 8
+	bl	ack.15
+	subi	r3, r3, 8
+	lwz	r31, 4(r3)
+	mtlr	r31
+	mflr	r31
+	stw	r31, 4(r3)
+	addi	r3, r3, 8
+	bl	min_caml_print_int
+	subi	r3, r3, 8
+	lwz	r31, 4(r3)
+	mtlr	r31
+#	main program ends
+	lwz	r1, 0(r1)
+	lwz	r0, 8(r1)
+	mtlr	r0
+	lmw	r30, -8(r1)
+	blr

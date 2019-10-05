@@ -1,49 +1,57 @@
-.data
-.balign	8
-.text
+	.text
+	.globl _min_caml_start
+	.align 2
 f.13:
-	movl	$12345, %eax
-	ret
-.globl	min_caml_start
-min_caml_start:
-.globl	_min_caml_start
-_min_caml_start: # for cygwin
-	pushl	%eax
-	pushl	%ebx
-	pushl	%ecx
-	pushl	%edx
-	pushl	%esi
-	pushl	%edi
-	pushl	%ebp
-	movl	32(%esp),%ebp
-	movl	36(%esp),%eax
-	movl	%eax,min_caml_hp
-	movl	$10, %eax
-	movl	$3, %ebx
-	call	min_caml_create_array
-	movl	0(%eax), %ebx
-	cmpl	$3, %ebx
-	jne	je_else.30
-	movl	%eax, 0(%ebp)
-	addl	$8, %ebp
-	call	f.13
-	subl	$8, %ebp
-	movl	0(%ebp), %ebx
-	movl	4(%ebx), %ebx
-	addl	%ebx, %eax
-	addl	$67890, %eax
-	jmp	je_cont.31
-je_else.30:
-	movl	$7, %eax
-je_cont.31:
-	addl	$8, %ebp
-	call	min_caml_print_int
-	subl	$8, %ebp
-	popl	%ebp
-	popl	%edi
-	popl	%esi
-	popl	%edx
-	popl	%ecx
-	popl	%ebx
-	popl	%eax
-	ret
+	li	r2, 12345
+	blr
+_min_caml_start: # main entry point
+	mflr	r0
+	stmw	r30, -8(r1)
+	stw	r0, 8(r1)
+	stwu	r1, -96(r1)
+#	main program starts
+	li	r2, 10
+	li	r5, 3
+	mflr	r31
+	stw	r31, 4(r3)
+	addi	r3, r3, 8
+	bl	min_caml_create_array
+	subi	r3, r3, 8
+	lwz	r31, 4(r3)
+	mtlr	r31
+	lui	r5, 1
+	ori	r5, r5, 2354
+	lw	r6, 0(r2)
+	cmpwi	cr7, r6, 3
+	bne	cr7, beq_else.33
+	sw	r5, 0(r3)
+	sw	r2, 4(r3)
+	mflr	r31
+	stw	r31, 12(r3)
+	addi	r3, r3, 16
+	bl	f.13
+	subi	r3, r3, 16
+	lwz	r31, 12(r3)
+	mtlr	r31
+	lwz	r5, 4(r3)
+	lw	r5, 4(r5)
+	add	r2, r2, r5
+	lwz	r5, 0(r3)
+	add	r2, r2, r5
+	b	beq_cont.34
+beq_else.33:
+	li	r2, 7
+beq_cont.34:
+	mflr	r31
+	stw	r31, 12(r3)
+	addi	r3, r3, 16
+	bl	min_caml_print_int
+	subi	r3, r3, 16
+	lwz	r31, 12(r3)
+	mtlr	r31
+#	main program ends
+	lwz	r1, 0(r1)
+	lwz	r0, 8(r1)
+	mtlr	r0
+	lmw	r30, -8(r1)
+	blr

@@ -1,54 +1,56 @@
-.data
-.balign	8
-.text
+	.text
+	.globl _min_caml_start
+	.align 2
 odd.21:
-	cmpl	$0, %eax
-	jg	jle_else.36
-	cmpl	$0, %eax
-	jl	jge_else.37
-	movl	$456, %eax
-	ret
-jge_else.37:
-	addl	$1, %eax
-	jmp	even.17
-jle_else.36:
-	subl	$1, %eax
-	jmp	even.17
+	cmpwi	cr7, r2, 0
+	bgt	cr7, ble_else.36
+	cmpwi	cr7, r2, 0
+	blt	cr7, bge_else.37
+	li	r2, 456
+	blr
+bge_else.37:
+	addi	r2, r2, 1
+	b	even.17
+ble_else.36:
+	subi	r2, r2, 1
+	b	even.17
 even.17:
-	cmpl	$0, %eax
-	jg	jle_else.38
-	cmpl	$0, %eax
-	jl	jge_else.39
-	movl	$123, %eax
-	ret
-jge_else.39:
-	addl	$1, %eax
-	jmp	odd.21
-jle_else.38:
-	subl	$1, %eax
-	jmp	odd.21
-.globl	min_caml_start
-min_caml_start:
-.globl	_min_caml_start
-_min_caml_start: # for cygwin
-	pushl	%eax
-	pushl	%ebx
-	pushl	%ecx
-	pushl	%edx
-	pushl	%esi
-	pushl	%edi
-	pushl	%ebp
-	movl	32(%esp),%ebp
-	movl	36(%esp),%eax
-	movl	%eax,min_caml_hp
-	movl	$789, %eax
-	call	even.17
-	call	min_caml_print_int
-	popl	%ebp
-	popl	%edi
-	popl	%esi
-	popl	%edx
-	popl	%ecx
-	popl	%ebx
-	popl	%eax
-	ret
+	cmpwi	cr7, r2, 0
+	bgt	cr7, ble_else.38
+	cmpwi	cr7, r2, 0
+	blt	cr7, bge_else.39
+	li	r2, 123
+	blr
+bge_else.39:
+	addi	r2, r2, 1
+	b	odd.21
+ble_else.38:
+	subi	r2, r2, 1
+	b	odd.21
+_min_caml_start: # main entry point
+	mflr	r0
+	stmw	r30, -8(r1)
+	stw	r0, 8(r1)
+	stwu	r1, -96(r1)
+#	main program starts
+	li	r2, 789
+	mflr	r31
+	stw	r31, 4(r3)
+	addi	r3, r3, 8
+	bl	even.17
+	subi	r3, r3, 8
+	lwz	r31, 4(r3)
+	mtlr	r31
+	mflr	r31
+	stw	r31, 4(r3)
+	addi	r3, r3, 8
+	bl	min_caml_print_int
+	subi	r3, r3, 8
+	lwz	r31, 4(r3)
+	mtlr	r31
+#	main program ends
+	lwz	r1, 0(r1)
+	lwz	r0, 8(r1)
+	mtlr	r0
+	lmw	r30, -8(r1)
+	blr

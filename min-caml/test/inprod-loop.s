@@ -1,80 +1,104 @@
-.data
-.balign	8
-l.48:	# 0.000000
-	.long	0x0
-	.long	0x0
-l.46:	# 1000000.000000
-	.long	0x0
-	.long	0x412e8480
-l.44:	# 4.560000
-	.long	0xa3d70a3d
-	.long	0x40123d70
-l.42:	# 1.230000
-	.long	0x7ae147ae
-	.long	0x3ff3ae14
-.text
+	.data
+	.literal8
+	.align 3
+l.47:	 # 0.000000
+	.long	0
+	.long	0
+	.align 3
+l.46:	 # 1000000.000000
+	.long	0
+	.long	1093567616
+	.align 3
+l.45:	 # 4.560000
+	.long	-1546188227
+	.long	1074937200
+	.align 3
+l.44:	 # 1.230000
+	.long	2061584302
+	.long	1072934420
+	.text
+	.globl _min_caml_start
+	.align 2
 inprod.18:
-	cmpl	$0, %ecx
-	jl	jge_else.53
-	movsd	(%eax,%ecx,8), %xmm1
-	movsd	(%ebx,%ecx,8), %xmm2
-	mulsd	%xmm2, %xmm1
-	addsd	%xmm1, %xmm0
-	subl	$1, %ecx
-	jmp	inprod.18
-jge_else.53:
-	ret
-.globl	min_caml_start
-min_caml_start:
-.globl	_min_caml_start
-_min_caml_start: # for cygwin
-	pushl	%eax
-	pushl	%ebx
-	pushl	%ecx
-	pushl	%edx
-	pushl	%esi
-	pushl	%edi
-	pushl	%ebp
-	movl	32(%esp),%ebp
-	movl	36(%esp),%eax
-	movl	%eax,min_caml_hp
-	movl	$3, %eax
-	movl	$l.42, %ebx
-	movsd	0(%ebx), %xmm0
-	call	min_caml_create_float_array
-	movl	$3, %ebx
-	movl	$l.44, %ecx
-	movsd	0(%ecx), %xmm0
-	movl	%eax, 0(%ebp)
-	movl	%ebx, %eax
-	addl	$8, %ebp
-	call	min_caml_create_float_array
-	subl	$8, %ebp
-	movl	%eax, %ebx
-	movl	$l.46, %eax
-	movsd	0(%eax), %xmm0
-	movl	$l.48, %eax
-	movsd	0(%eax), %xmm1
-	movl	$2, %ecx
-	movl	0(%ebp), %eax
-	movsd	%xmm0, 8(%ebp)
-	movsd	%xmm1, %xmm0
-	addl	$16, %ebp
-	call	inprod.18
-	subl	$16, %ebp
-	movsd	8(%ebp), %xmm1
-	mulsd	%xmm1, %xmm0
-	addl	$16, %ebp
-	call	min_caml_truncate
-	subl	$16, %ebp
-	addl	$16, %ebp
-	call	min_caml_print_int
-	subl	$16, %ebp
-	popl	%ebp
-	popl	%edi
-	popl	%esi
-	popl	%edx
-	popl	%ecx
-	popl	%ebx
-	popl	%eax
-	ret
+	cmpwi	cr7, r6, 0
+	blt	cr7, bge_else.51
+	sllv	r7, r6, 3
+	lfdx	f1, r2, r7
+	sllv	r7, r6, 3
+	lfdx	f2, r5, r7
+	fmul	f1, f1, f2
+	fadd	f0, f0, f1
+	subi	r6, r6, 1
+	b	inprod.18
+bge_else.51:
+	blr
+_min_caml_start: # main entry point
+	mflr	r0
+	stmw	r30, -8(r1)
+	stw	r0, 8(r1)
+	stwu	r1, -96(r1)
+#	main program starts
+	li	r2, 3
+	lis	r31, ha16(l.44)
+	addi	r31, r31, lo16(l.44)
+	lfd	f0, 0(r31)
+	mflr	r31
+	stw	r31, 4(r3)
+	addi	r3, r3, 8
+	bl	min_caml_create_float_array
+	subi	r3, r3, 8
+	lwz	r31, 4(r3)
+	mtlr	r31
+	li	r5, 3
+	lis	r31, ha16(l.45)
+	addi	r31, r31, lo16(l.45)
+	lfd	f0, 0(r31)
+	sw	r2, 0(r3)
+	mflr	r31
+	mr	r2, r5
+	stw	r31, 4(r3)
+	addi	r3, r3, 8
+	bl	min_caml_create_float_array
+	subi	r3, r3, 8
+	lwz	r31, 4(r3)
+	mr	r5, r2
+	mtlr	r31
+	lis	r31, ha16(l.46)
+	addi	r31, r31, lo16(l.46)
+	lfd	f0, 0(r31)
+	lis	r31, ha16(l.47)
+	addi	r31, r31, lo16(l.47)
+	lfd	f1, 0(r31)
+	li	r6, 2
+	lwz	r2, 0(r3)
+	stfd	f0, 8(r3)
+	mflr	r31
+	fmr	f0, f1
+	stw	r31, 20(r3)
+	addi	r3, r3, 24
+	bl	inprod.18
+	subi	r3, r3, 24
+	lwz	r31, 20(r3)
+	mtlr	r31
+	lfd	f1, 8(r3)
+	fmul	f0, f1, f0
+	mflr	r31
+	stw	r31, 20(r3)
+	addi	r3, r3, 24
+	bl	min_caml_truncate
+	subi	r3, r3, 24
+	lwz	r31, 20(r3)
+	mtlr	r31
+	mflr	r31
+	stw	r31, 20(r3)
+	addi	r3, r3, 24
+	bl	min_caml_print_int
+	subi	r3, r3, 24
+	lwz	r31, 20(r3)
+	mtlr	r31
+#	main program ends
+	lwz	r1, 0(r1)
+	lwz	r0, 8(r1)
+	mtlr	r0
+	lmw	r30, -8(r1)
+	blr

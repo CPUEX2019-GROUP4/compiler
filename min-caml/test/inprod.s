@@ -1,133 +1,175 @@
-.data
-.balign	8
-l.79:	# 6.000000
-	.long	0x0
-	.long	0x40180000
-l.77:	# 5.000000
-	.long	0x0
-	.long	0x40140000
-l.75:	# 4.000000
-	.long	0x0
-	.long	0x40100000
-l.69:	# 3.000000
-	.long	0x0
-	.long	0x40080000
-l.67:	# 2.000000
-	.long	0x0
-	.long	0x40000000
-l.65:	# 1.000000
-	.long	0x0
-	.long	0x3ff00000
-l.63:	# 1000000.000000
-	.long	0x0
-	.long	0x412e8480
-.text
+	.data
+	.literal8
+	.align 3
+l.73:	 # 6.000000
+	.long	0
+	.long	1075314688
+	.align 3
+l.72:	 # 5.000000
+	.long	0
+	.long	1075052544
+	.align 3
+l.71:	 # 4.000000
+	.long	0
+	.long	1074790400
+	.align 3
+l.66:	 # 3.000000
+	.long	0
+	.long	1074266112
+	.align 3
+l.65:	 # 2.000000
+	.long	0
+	.long	1073741824
+	.align 3
+l.64:	 # 1.000000
+	.long	0
+	.long	1072693248
+	.align 3
+l.63:	 # 1000000.000000
+	.long	0
+	.long	1093567616
+	.text
+	.globl _min_caml_start
+	.align 2
 getx.23:
-	movsd	0(%eax), %xmm0
-	ret
+	lfd	f0, 0(r2)
+	blr
 gety.25:
-	movsd	8(%eax), %xmm0
-	ret
+	lfd	f0, 8(r2)
+	blr
 getz.27:
-	movsd	16(%eax), %xmm0
-	ret
+	lfd	f0, 16(r2)
+	blr
 inprod.29:
-	movl	%eax, 0(%ebp)
-	movl	%ebx, 4(%ebp)
-	addl	$8, %ebp
-	call	getx.23
-	subl	$8, %ebp
-	movl	4(%ebp), %eax
-	movsd	%xmm0, 8(%ebp)
-	addl	$16, %ebp
-	call	getx.23
-	subl	$16, %ebp
-	movsd	8(%ebp), %xmm1
-	mulsd	%xmm0, %xmm1
-	movl	0(%ebp), %eax
-	movsd	%xmm1, 16(%ebp)
-	addl	$24, %ebp
-	call	gety.25
-	subl	$24, %ebp
-	movl	4(%ebp), %eax
-	movsd	%xmm0, 24(%ebp)
-	addl	$32, %ebp
-	call	gety.25
-	subl	$32, %ebp
-	movsd	24(%ebp), %xmm1
-	mulsd	%xmm0, %xmm1
-	movsd	16(%ebp), %xmm0
-	addsd	%xmm1, %xmm0
-	movl	0(%ebp), %eax
-	movsd	%xmm0, 32(%ebp)
-	addl	$40, %ebp
-	call	getz.27
-	subl	$40, %ebp
-	movl	4(%ebp), %eax
-	movsd	%xmm0, 40(%ebp)
-	addl	$48, %ebp
-	call	getz.27
-	subl	$48, %ebp
-	movsd	40(%ebp), %xmm1
-	mulsd	%xmm0, %xmm1
-	movsd	32(%ebp), %xmm0
-	addsd	%xmm1, %xmm0
-	ret
-.globl	min_caml_start
-min_caml_start:
-.globl	_min_caml_start
-_min_caml_start: # for cygwin
-	pushl	%eax
-	pushl	%ebx
-	pushl	%ecx
-	pushl	%edx
-	pushl	%esi
-	pushl	%edi
-	pushl	%ebp
-	movl	32(%esp),%ebp
-	movl	36(%esp),%eax
-	movl	%eax,min_caml_hp
-	movl	$l.63, %eax
-	movsd	0(%eax), %xmm0
-	movl	$l.65, %eax
-	movsd	0(%eax), %xmm1
-	movl	$l.67, %eax
-	movsd	0(%eax), %xmm2
-	movl	$l.69, %eax
-	movsd	0(%eax), %xmm3
-	movl	min_caml_hp, %eax
-	addl	$24, min_caml_hp
-	movsd	%xmm3, 16(%eax)
-	movsd	%xmm2, 8(%eax)
-	movsd	%xmm1, 0(%eax)
-	movl	$l.75, %ebx
-	movsd	0(%ebx), %xmm1
-	movl	$l.77, %ebx
-	movsd	0(%ebx), %xmm2
-	movl	$l.79, %ebx
-	movsd	0(%ebx), %xmm3
-	movl	min_caml_hp, %ebx
-	addl	$24, min_caml_hp
-	movsd	%xmm3, 16(%ebx)
-	movsd	%xmm2, 8(%ebx)
-	movsd	%xmm1, 0(%ebx)
-	movsd	%xmm0, 0(%ebp)
-	addl	$8, %ebp
-	call	inprod.29
-	subl	$8, %ebp
-	movsd	0(%ebp), %xmm1
-	mulsd	%xmm1, %xmm0
-	addl	$8, %ebp
-	call	min_caml_truncate
-	subl	$8, %ebp
-	addl	$8, %ebp
-	call	min_caml_print_int
-	subl	$8, %ebp
-	popl	%ebp
-	popl	%edi
-	popl	%esi
-	popl	%edx
-	popl	%ecx
-	popl	%ebx
-	popl	%eax
-	ret
+	sw	r2, 0(r3)
+	sw	r5, 4(r3)
+	mflr	r31
+	stw	r31, 12(r3)
+	addi	r3, r3, 16
+	bl	getx.23
+	subi	r3, r3, 16
+	lwz	r31, 12(r3)
+	mtlr	r31
+	lwz	r2, 4(r3)
+	stfd	f0, 8(r3)
+	mflr	r31
+	stw	r31, 20(r3)
+	addi	r3, r3, 24
+	bl	getx.23
+	subi	r3, r3, 24
+	lwz	r31, 20(r3)
+	mtlr	r31
+	lfd	f1, 8(r3)
+	fmul	f0, f1, f0
+	lwz	r2, 0(r3)
+	stfd	f0, 16(r3)
+	mflr	r31
+	stw	r31, 28(r3)
+	addi	r3, r3, 32
+	bl	gety.25
+	subi	r3, r3, 32
+	lwz	r31, 28(r3)
+	mtlr	r31
+	lwz	r2, 4(r3)
+	stfd	f0, 24(r3)
+	mflr	r31
+	stw	r31, 36(r3)
+	addi	r3, r3, 40
+	bl	gety.25
+	subi	r3, r3, 40
+	lwz	r31, 36(r3)
+	mtlr	r31
+	lfd	f1, 24(r3)
+	fmul	f0, f1, f0
+	lfd	f1, 16(r3)
+	fadd	f0, f1, f0
+	lwz	r2, 0(r3)
+	stfd	f0, 32(r3)
+	mflr	r31
+	stw	r31, 44(r3)
+	addi	r3, r3, 48
+	bl	getz.27
+	subi	r3, r3, 48
+	lwz	r31, 44(r3)
+	mtlr	r31
+	lwz	r2, 4(r3)
+	stfd	f0, 40(r3)
+	mflr	r31
+	stw	r31, 52(r3)
+	addi	r3, r3, 56
+	bl	getz.27
+	subi	r3, r3, 56
+	lwz	r31, 52(r3)
+	mtlr	r31
+	lfd	f1, 40(r3)
+	fmul	f0, f1, f0
+	lfd	f1, 32(r3)
+	fadd	f0, f1, f0
+	blr
+_min_caml_start: # main entry point
+	mflr	r0
+	stmw	r30, -8(r1)
+	stw	r0, 8(r1)
+	stwu	r1, -96(r1)
+#	main program starts
+	lis	r31, ha16(l.63)
+	addi	r31, r31, lo16(l.63)
+	lfd	f0, 0(r31)
+	lis	r31, ha16(l.64)
+	addi	r31, r31, lo16(l.64)
+	lfd	f1, 0(r31)
+	lis	r31, ha16(l.65)
+	addi	r31, r31, lo16(l.65)
+	lfd	f2, 0(r31)
+	lis	r31, ha16(l.66)
+	addi	r31, r31, lo16(l.66)
+	lfd	f3, 0(r31)
+	or	r2, r4, r0
+	addi	r4, r4, 24
+	stfd	f3, 16(r2)
+	stfd	f2, 8(r2)
+	stfd	f1, 0(r2)
+	lis	r31, ha16(l.71)
+	addi	r31, r31, lo16(l.71)
+	lfd	f1, 0(r31)
+	lis	r31, ha16(l.72)
+	addi	r31, r31, lo16(l.72)
+	lfd	f2, 0(r31)
+	lis	r31, ha16(l.73)
+	addi	r31, r31, lo16(l.73)
+	lfd	f3, 0(r31)
+	or	r5, r4, r0
+	addi	r4, r4, 24
+	stfd	f3, 16(r5)
+	stfd	f2, 8(r5)
+	stfd	f1, 0(r5)
+	stfd	f0, 0(r3)
+	mflr	r31
+	stw	r31, 12(r3)
+	addi	r3, r3, 16
+	bl	inprod.29
+	subi	r3, r3, 16
+	lwz	r31, 12(r3)
+	mtlr	r31
+	lfd	f1, 0(r3)
+	fmul	f0, f1, f0
+	mflr	r31
+	stw	r31, 12(r3)
+	addi	r3, r3, 16
+	bl	min_caml_truncate
+	subi	r3, r3, 16
+	lwz	r31, 12(r3)
+	mtlr	r31
+	mflr	r31
+	stw	r31, 12(r3)
+	addi	r3, r3, 16
+	bl	min_caml_print_int
+	subi	r3, r3, 16
+	lwz	r31, 12(r3)
+	mtlr	r31
+#	main program ends
+	lwz	r1, 0(r1)
+	lwz	r0, 8(r1)
+	mtlr	r0
+	lmw	r30, -8(r1)
+	blr
