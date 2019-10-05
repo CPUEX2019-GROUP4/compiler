@@ -1,8 +1,8 @@
 nop
 - 
 
-| add $d,$s,$t |
-$d = $s + $t |
+|add $d,$s,$t|
+$d = $s + $t|
 
 sub $d,$s,$t
 -  $d = $s - $t
