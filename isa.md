@@ -27,29 +27,29 @@
 <td colspan="5">アドレス (26)
 </td></tr></tbody></table>
 
-
+機能はずっと 0.
 
 # 命令セット
 
 |命令|形式|意味|詳細|
 |:--|:--:|:--|:--|
 |nop||nothing||
-|add $d,$s,$t||$d = $s + $t||
-|sub $d,$s,$t||$d = $s - $t||
-|addi $t,$s,C||$t = $s + C (signed)||
-|subi $t,$s,C||$t = $s - C (signed)||
-|lw $t,C($s)||$t = Memory[$s + C]||
-|sw $t,C($s)||Memory[$s + C] = $t||
-|lui $t,C||$t = C << 16||
-|or $d,$s,$t||$d = $s \| $t||
-|ori $t,$s,C||$t = $s \| C||
-|slt $d,$s,$t||$d = ($s < $t)||
-|slti $t,$s,C||$t = ($s < C)||
-|sll $d,$t,C||$d = $t << C||
-|sllv $d,$t,$s||$d = $t << s||
-|beq $s,$t,C||if ($s == $t) go to PC+4+4\*C||
-|bne $s,$t,C||if ($s != $t) go to PC+4+4\*C||
-|j C||PC = PC+4[31:28] . C\*4||
-|jr $s||goto address $s||
-|jal C||$31 = PC + 8; PC = PC+4[31:28] . C\*4||
+|add $d,$a,$b|R|$d = $a + $b||
+|sub $d,$a,$b|R|$d = $a - $b||
+|addi $d,$a,C|I|$d = $a + C (signed)||
+|subi $d,$a,C|I|$d = $a - C (signed)||
+|lw $d,$a,C|I|$d = Memory[$s + C]||
+|sw $d,$a,C|I|Memory[$a + C] = $d||
+|lui $d,C|I|$d = C << 16||
+|or $d,$a,$b|R|$d = $a \| $b||
+|ori $d,$a,C|I|$d = $a \| C||
+|slt $d,$a,$b|R|$d = ($a < $b)||
+|slti $d,$a,C|I|$d = ($a < C)||
+|sll $d,$a,C|I|$d = $a << C||
+|sllv $d,$a,$b|R|$d = $a << b||
+|beq $d,$a,C|I|if ($d == $a) go to PC+4+4\*C||
+|bne $d,$a,C|I|if ($d != $a) go to PC+4+4\*C||
+|j C|J|PC = PC+4[31:28] . C\*4||
+|jr $s|R|goto address $s||
+|jal C|J|$31 = PC + 8; PC = PC+4[31:28] . C\*4||
 
