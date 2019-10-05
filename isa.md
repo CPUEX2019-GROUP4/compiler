@@ -12,34 +12,15 @@
 |ori $t,$s,C||$t = $s \| C|
 |slt $d,$s,$t||$d = ($s < $t)|
 |slti $t,$s,C||$t = ($s < C)|
-
-sll $d,$t,C
--  $d = $t << C
-
-sllv $d,$t,$s
--  $d = $t << s
-
-beq $s,$t,C
--  if ($s == $t) go to PC+4+4\*C
-
-bne $s,$t,C
-- if ($s != $t) go to PC+4+4\*C
-
-j C
--  PC = PC+4[31:28] . C\*4
-
-jr $s
--  goto address $s
-
-jal C
--  $31 = PC + 8; PC = PC+4[31:28] . C\*4
+|sll $d,$t,C||$d = $t << C|
+|sllv $d,$t,$s||$d = $t << s|
+|beq $s,$t,C||if ($s == $t) go to PC+4+4\*C|
+|bne $s,$t,C||if ($s != $t) go to PC+4+4\*C|
+|j C||PC = PC+4[31:28] . C\*4|
+|jr $s||goto address $s|
+|jal C||$31 = PC + 8; PC = PC+4[31:28] . C\*4|
 
 
 
 
 
-
-|header1|header2|header3|
-|:--|--:|:--:|
-|align left|align right|align center|
-|a|b|c|
