@@ -49,7 +49,7 @@
 |sllv $d,$a,$b|R|$d = $a << b||
 |beq $d,$a,C|I|if ($d == $a) go to PC+4+4\*C||
 |bne $d,$a,C|I|if ($d != $a) go to PC+4+4\*C||
-|j C|J|PC = PC+4[31:28] . C\*4||
-|jr $s|R|goto address $s||
-|jal C|J|$31 = PC + 8; PC = PC+4[31:28] . C\*4||
+|j C|J|PC = PC+4[31:28] . C\*4|指定されたアドレスに無条件ジャンプ|
+|jr $d|R|goto address $d|指定したレジスタが示すアドレスに無条件ジャンプ|
+|jal C|J|$31 = PC + 8; PC = PC+4[31:28] . C\*4|リンクレジスタ($31)にリターンアドレスを格納してジャンプする。プロシージャからの復帰は jr で行う.|
 
