@@ -67,6 +67,7 @@
 |fdiv $d,$a,$b|R|$d = $a / $b|除算|
 |lwcZ $d,$a,CONST|I|$d = Memory[$a + CONST]|load|
 |swcZ $d,$a,CONST|I|Memory[$a + CONST] = $d|store|
+|fclt $a,$b|R|if ($a < $b) cond=1; else cond=0|浮動小数点数 2 つを大小比較し, $bの方が小さければFPUのステータスレジスタの条件ビットを1に, そうでなければ0にセットする.|
 |bc1t 100|| if (cond == 1) go to PC+4+100|浮動小数点条件ビットが1ならPC相対（即値）で分岐|
 |bc1f 100|| if (cond == 0) go to PC+4+100|浮動小数点条件ビットが0ならPC相対（即値）で分岐|
 
