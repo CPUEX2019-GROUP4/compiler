@@ -1,4 +1,5 @@
 # 命令形式
+
 <table class="wikitable">
 <tbody><tr>
 <th>タイプ</th>
@@ -7,17 +8,17 @@
 <tr align="center">
 <td><b>R</b></td>
 <td>オペコード (6)</td>
-<td>rs (5)</td>
-<td>rt (5)</td>
 <td>rd (5)</td>
+<td>ra (5)</td>
+<td>rb (5)</td>
 <td>シフト量 (5)</td>
 <td>機能 (6)
 </td></tr>
 <tr align="center">
 <td><b>I</b></td>
 <td>オペコード (6)</td>
-<td>rs (5)</td>
-<td>rt (5)</td>
+<td>rd (5)</td>
+<td>ra (5)</td>
 <td colspan="3">即値 (16)
 </td></tr>
 <tr align="center">
