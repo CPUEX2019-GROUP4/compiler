@@ -1,38 +1,17 @@
 nop
 - 
-
-|add $d,$s,$t|$d = $s + $t|
 |:--:|:--|
-
-sub $d,$s,$t
--  $d = $s - $t
-
-addi $t,$s,C
--  $t = $s + C (signed)
-
-subi $t,$s,C
--  $t = $s - C (signed)
-
-lw $t,C($s) (4 byte = 32 bit)
--  $t = Memory[$s + C]
-
-sw $t,C($s) (4 byte = 32 bit)
--  Memory[$s + C] = $t
-
-lui $t,C (load immidiate (32 bit) 1st)
--  $t = C << 16
-
-or $d,$s,$t
--  $d = $s | $t
-
-ori $t,$s,C
--  $t = $s | C
-
-slt $d,$s,$t
--  $d = ($s < $t) ($s,$t は符号付き)
-
-slti $t,$s,C
--  $t = ($s < C)  (C は符号拡張)
+|add $d,$s,$t|$d = $s + $t|
+|sub $d,$s,$t|$d = $s - $t|
+|addi $t,$s,C|$t = $s + C (signed)|
+|subi $t,$s,C|$t = $s - C (signed)|
+|lw $t,C($s)|$t = Memory[$s + C]|
+|sw $t,C($s)|Memory[$s + C] = $t|
+|lui $t,C|$t = C << 16|
+|or $d,$s,$t|$d = $s \| $t|
+|ori $t,$s,C|$t = $s \| C|
+|slt $d,$s,$t|$d = ($s < $t)|
+|slti $t,$s,C|$t = ($s < C)|
 
 sll $d,$t,C
 -  $d = $t << C
