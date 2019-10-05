@@ -1,6 +1,6 @@
-nop
-- 
+|命令|内容|
 |:--:|:--|
+|nop|nothing|
 |add $d,$s,$t|$d = $s + $t|
 |sub $d,$s,$t|$d = $s - $t|
 |addi $t,$s,C|$t = $s + C (signed)|
