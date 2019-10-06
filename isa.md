@@ -59,18 +59,18 @@ $r0, $r1, ..., $r31.
 |subi $d,$a,C|I|$d = $a - C (signed)|定数減算|
 |lw $d,$a,C|I|$d = Memory[$a + C]|load|
 |sw $d,$a,C|I|Memory[$a + C] = $d|store|
-|lui $d,C|I|$d = C << 16|load upper immidiate (上位 16 bit をレジスタに格納) 下 16 bit は 0|
-|or $d,$a,$b|R|$d = $a \| $b|OR|
-|ori $d,$a,C|I|$d = $a \| C|定数OR|
-|slt $d,$a,$b|R|$d = ($a < $b)|比較|
-|slti $d,$a,C|I|$d = ($a < C)|定数比較|
-|sllv $d,$a,$b|R|$d = $a << b|shift|
-|sll $d,$a,C|I|$d = $a << C|定数shift|
-|beq $d,$a,C|I|if ($d == $a) go to PC+4+4\*C|条件分岐 (=)|
-|bne $d,$a,C|I|if ($d != $a) go to PC+4+4\*C|条件分岐 (\neq)|
-|j C|J|PC = PC+4[31:28] . C\*4|指定されたアドレスに無条件ジャンプ. PC = {PC + 4 の上位 4 bit, C * 4} |
+|lui $d,C|I|$d = C << 16|シフトは論理シフト. load upper immidiate (上位 16 bit をレジスタに格納) 下 16 bit は 0|
+|or $d,$a,$b|R|$d = $a \| $b|bit OR|
+|ori $d,$a,C|I|$d = $a \| C|定数 bit OR|
+|slt $d,$a,$b|R|$d = ($a < $b)|signed 比較|
+|slti $d,$a,C|I|$d = ($a < C)|signed 定数比較|
+|sllv $d,$a,$b|R|$d = $a << b|論理shift|
+|sll $d,$a,C|I|$d = $a << C|定数論理shift|
+|beq $d,$a,C|I|if ($d == $a) go to PC+4+4\*C|条件分岐 (bit =)|
+|bne $d,$a,C|I|if ($d != $a) go to PC+4+4\*C|条件分岐 (bit \neq)|
+|j C|J|PC = PC+4[31:28] . C\*4|指定されたアドレスに無条件ジャンプ. PC = {PC + 4 の上位 4 bit, 0 が 28 bit} + C * 4. C は signed.|
 |jr $d|R|goto address $d|指定したレジスタが示すアドレスに無条件ジャンプ|
-|jal C|J|$31 = PC + 8; PC = PC+4[31:28] . C\*4|リンクレジスタ($31)にリターンアドレスを格納してジャンプする. プロシージャからの復帰は jr で行う.|
+|jal C|J|$31 = PC + 8; PC = PC+4[31:28] . C\*4|リンクレジスタ($31)にリターンアドレスを格納してジャンプする. プロシージャからの復帰は jr で行う. PC の処理は j と同じ.|
 
 ## 命令語
 
