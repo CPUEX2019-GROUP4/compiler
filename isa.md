@@ -57,7 +57,7 @@ $r0, $r1, ..., $r31.
 |sub $d,$a,$b|R|$d = $a - $b|減算|
 |addi $d,$a,C|I|$d = $a + C (signed)|定数加算|
 |subi $d,$a,C|I|$d = $a - C (signed)|定数減算|
-|lw $d,$a,C|I|$d = Memory[$s + C]|load|
+|lw $d,$a,C|I|$d = Memory[$a + C]|load|
 |sw $d,$a,C|I|Memory[$a + C] = $d|store|
 |lui $d,C|I|$d = C << 16|load upper immidiate (上位 16 bit をレジスタに格納) 下 16 bit は 0|
 |or $d,$a,$b|R|$d = $a \| $b|OR|
