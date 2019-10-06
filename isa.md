@@ -27,7 +27,6 @@
 <td colspan="5">アドレス (26)
 </td></tr></tbody></table>
 
-
 ## レジスタ
 
 | name | use |
@@ -65,7 +64,7 @@ $r0, $r1, ..., $r31.
 |slt $d,$a,$b|R|$d = ($a < $b)|signed 比較|
 |slti $d,$a,C|I|$d = ($a < C)|signed 定数比較|
 |sllv $d,$a,$b|R|$d = $a << $b|論理shift|
-|sll $d,$a,C|I|$d = $a << C|定数論理shift|
+|sll $d,$a,C|R|$d = $a << C|定数論理shift. C は シフト量の値. |
 |beq $d,$a,C|I|if ($d == $a) go to PC+4+4\*C|条件分岐 (bit =)|
 |bne $d,$a,C|I|if ($d != $a) go to PC+4+4\*C|条件分岐 (bit \neq)|
 |j C|J|PC = PC+4[31:28] . C\*4|指定されたアドレスに無条件ジャンプ. PC = {PC + 4 の上位 4 bit, 0 が 28 bit} + C * 4. C は signed.|
@@ -86,8 +85,8 @@ sll と同じだが気にしなくていい.
 |sub |100010|
 |or  |100101|
 |slt |101010|
-|sll |000000|
 |sllv|000100|
+|sll |000000|
 |jr  |001000|
 
 #### I 形式
@@ -151,6 +150,4 @@ opecode は 010001.
 |swcZ|111000|
 |bc1t|010001|
 |bc1f|010101|
-
-
 
