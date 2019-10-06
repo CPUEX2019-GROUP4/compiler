@@ -64,7 +64,7 @@ $r0, $r1, ..., $r31.
 |ori $d,$a,C|I|$d = $a \| C|定数 bit OR|
 |slt $d,$a,$b|R|$d = ($a < $b)|signed 比較|
 |slti $d,$a,C|I|$d = ($a < C)|signed 定数比較|
-|sllv $d,$a,$b|R|$d = $a << b|論理shift|
+|sllv $d,$a,$b|R|$d = $a << $b|論理shift|
 |sll $d,$a,C|I|$d = $a << C|定数論理shift|
 |beq $d,$a,C|I|if ($d == $a) go to PC+4+4\*C|条件分岐 (bit =)|
 |bne $d,$a,C|I|if ($d != $a) go to PC+4+4\*C|条件分岐 (bit \neq)|
