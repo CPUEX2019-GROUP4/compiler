@@ -34,7 +34,7 @@ _min_caml_start: # main entry point
 	lis	r31, ha16(l.29)
 	addi	r31, r31, lo16(l.29)
 	lfd	f0, 0(r31)
-	sw	r2, 0(r3)
+	stw	r2, 0(r3)
 	mflr	r31
 	stw	r31, 4(r3)
 	addi	r3, r3, 8
@@ -45,7 +45,7 @@ _min_caml_start: # main entry point
 	lis	r31, ha16(l.30)
 	addi	r31, r31, lo16(l.30)
 	lfd	f0, 0(r31)
-	sw	r2, 4(r3)
+	stw	r2, 4(r3)
 	mflr	r31
 	stw	r31, 12(r3)
 	addi	r3, r3, 16
@@ -66,7 +66,7 @@ bge_cont.35:
 	lwz	r7, 4(r3)
 	b	ble_cont.37
 ble_else.36:
-	or	r7, r2, r0
+	mr	r7, r2
 ble_cont.37:
 	add	r5, r5, r7
 	lwz	r7, 4(r3)
@@ -74,7 +74,7 @@ ble_cont.37:
 	blt	cr7, bge_else.38
 	b	bge_cont.39
 bge_else.38:
-	or	r2, r6, r0
+	mr	r2, r6
 bge_cont.39:
 	add	r2, r5, r2
 	mflr	r31

@@ -41,8 +41,8 @@ getz.27:
 	lfd	f0, 16(r2)
 	blr
 inprod.29:
-	sw	r2, 0(r3)
-	sw	r5, 4(r3)
+	stw	r2, 0(r3)
+	stw	r5, 4(r3)
 	mflr	r31
 	stw	r31, 12(r3)
 	addi	r3, r3, 16
@@ -124,7 +124,7 @@ _min_caml_start: # main entry point
 	lis	r31, ha16(l.66)
 	addi	r31, r31, lo16(l.66)
 	lfd	f3, 0(r31)
-	or	r2, r4, r0
+	mr	r2, r4
 	addi	r4, r4, 24
 	stfd	f3, 16(r2)
 	stfd	f2, 8(r2)
@@ -138,7 +138,7 @@ _min_caml_start: # main entry point
 	lis	r31, ha16(l.73)
 	addi	r31, r31, lo16(l.73)
 	lfd	f3, 0(r31)
-	or	r5, r4, r0
+	mr	r5, r4
 	addi	r4, r4, 24
 	stfd	f3, 16(r5)
 	stfd	f2, 8(r5)

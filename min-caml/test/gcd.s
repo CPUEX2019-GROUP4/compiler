@@ -4,7 +4,7 @@
 gcd.7:
 	cmpwi	cr7, r2, 0
 	bne	cr7, beq_else.17
-	or	r2, r5, r0
+	mr	r2, r5
 	blr
 beq_else.17:
 	cmpw	cr7, r2, r5
@@ -24,7 +24,7 @@ _min_caml_start: # main entry point
 	stwu	r1, -96(r1)
 #	main program starts
 	li	r2, 21600
-	lui	r5, 5
+	lis	r5, 5
 	ori	r5, r5, 9820
 	mflr	r31
 	stw	r31, 4(r3)

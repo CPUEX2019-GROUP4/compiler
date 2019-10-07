@@ -25,29 +25,29 @@ f.43:
 	add	r28, r12, r13
 	add	r29, r14, r15
 	add	r30, r14, r16
-	sw	r30, 0(r3)
+	stw	r30, 0(r3)
 	add	r30, r14, r17
-	sw	r30, 4(r3)
+	stw	r30, 4(r3)
 	add	r30, r14, r18
-	sw	r30, 8(r3)
+	stw	r30, 8(r3)
 	add	r30, r14, r19
-	sw	r30, 12(r3)
+	stw	r30, 12(r3)
 	add	r30, r14, r20
-	sw	r30, 16(r3)
+	stw	r30, 16(r3)
 	add	r30, r14, r21
-	sw	r30, 20(r3)
+	stw	r30, 20(r3)
 	add	r30, r14, r22
-	sw	r30, 24(r3)
+	stw	r30, 24(r3)
 	add	r30, r14, r23
-	sw	r30, 28(r3)
+	stw	r30, 28(r3)
 	add	r30, r14, r24
-	sw	r30, 32(r3)
+	stw	r30, 32(r3)
 	add	r30, r14, r25
-	sw	r30, 36(r3)
+	stw	r30, 36(r3)
 	add	r30, r14, r26
-	sw	r30, 40(r3)
+	stw	r30, 40(r3)
 	add	r30, r14, r27
-	sw	r30, 44(r3)
+	stw	r30, 44(r3)
 	add	r30, r14, r28
 	add	r2, r2, r5
 	add	r2, r2, r6
@@ -99,7 +99,7 @@ f.43:
 	lwz	r5, 44(r3)
 	add	r2, r2, r5
 	add	r2, r2, r30
-	sub	r2, r0, r2
+	neg	r2, r2
 	blr
 _min_caml_start: # main entry point
 	mflr	r0

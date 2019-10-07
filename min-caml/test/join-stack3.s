@@ -23,7 +23,7 @@ _min_caml_start: # main entry point
 	subi	r3, r3, 8
 	lwz	r31, 4(r3)
 	mtlr	r31
-	sw	r2, 0(r3)
+	stw	r2, 0(r3)
 	cmpwi	cr7, r2, 0
 	bgt	cr7, ble_else.27
 	mflr	r31

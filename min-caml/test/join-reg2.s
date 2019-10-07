@@ -25,7 +25,7 @@ _min_caml_start: # main entry point
 	mtlr	r31
 	cmpwi	cr7, r2, 0
 	bgt	cr7, ble_else.30
-	sw	r2, 0(r3)
+	stw	r2, 0(r3)
 	mflr	r31
 	stw	r31, 4(r3)
 	addi	r3, r3, 8
@@ -37,7 +37,7 @@ _min_caml_start: # main entry point
 	add	r2, r2, r5
 	b	ble_cont.31
 ble_else.30:
-	sw	r2, 0(r3)
+	stw	r2, 0(r3)
 	mflr	r31
 	stw	r31, 4(r3)
 	addi	r3, r3, 8

@@ -15,7 +15,7 @@ ble_else.34:
 ble_else.35:
 	subi	r6, r2, 1
 	subi	r5, r5, 1
-	sw	r6, 0(r3)
+	stw	r6, 0(r3)
 	mflr	r31
 	stw	r31, 4(r3)
 	addi	r3, r3, 8

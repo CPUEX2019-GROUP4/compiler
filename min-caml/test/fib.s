@@ -7,7 +7,7 @@ fib.10:
 	blr
 ble_else.24:
 	subi	r5, r2, 1
-	sw	r2, 0(r3)
+	stw	r2, 0(r3)
 	mflr	r31
 	mr	r2, r5
 	stw	r31, 4(r3)
@@ -18,7 +18,7 @@ ble_else.24:
 	mtlr	r31
 	lwz	r5, 0(r3)
 	subi	r5, r5, 2
-	sw	r2, 4(r3)
+	stw	r2, 4(r3)
 	mflr	r31
 	mr	r2, r5
 	stw	r31, 12(r3)

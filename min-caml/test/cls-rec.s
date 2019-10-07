@@ -2,14 +2,14 @@
 	.globl _min_caml_start
 	.align 2
 f.8:
-	lw	r5, 4(r30)
+	lwz	r5, 4(r30)
 	cmpwi	cr7, r2, 0
 	bne	cr7, beq_else.21
 	li	r2, 0
 	blr
 beq_else.21:
 	subi	r2, r2, 1
-	sw	r5, 0(r3)
+	stw	r5, 0(r3)
 	mflr	r31
 	stw	r31, 4(r3)
 	addi	r3, r3, 8
@@ -29,12 +29,12 @@ _min_caml_start: # main entry point
 	stwu	r1, -96(r1)
 #	main program starts
 	li	r2, 10
-	or	r30, r4, r0
+	mr	r30, r4
 	addi	r4, r4, 8
 	lis	r5, ha16(f.8)
 	addi	r5, r5, lo16(f.8)
-	sw	r5, 0(r30)
-	sw	r2, 4(r30)
+	stw	r5, 0(r30)
+	stw	r2, 4(r30)
 	li	r2, 123
 	mflr	r31
 	stw	r31, 4(r3)

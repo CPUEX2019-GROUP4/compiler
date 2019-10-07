@@ -56,30 +56,30 @@ l.331:	 # 0.000000
 	.globl _min_caml_start
 	.align 2
 loop3.282:
-	lw	r5, 20(r30)
-	lw	r6, 16(r30)
-	lw	r7, 12(r30)
-	lw	r8, 8(r30)
-	lw	r9, 4(r30)
+	lwz	r5, 20(r30)
+	lwz	r6, 16(r30)
+	lwz	r7, 12(r30)
+	lwz	r8, 8(r30)
+	lwz	r9, 4(r30)
 	cmpwi	cr7, r2, 0
 	blt	cr7, bge_else.408
-	sllv	r10, r6, 2
+	slwi	r10, r6, 2
 	lwzx	r10, r7, r10
-	sllv	r11, r6, 2
+	slwi	r11, r6, 2
 	lwzx	r7, r7, r11
-	sllv	r11, r5, 3
+	slwi	r11, r5, 3
 	lfdx	f0, r7, r11
-	sllv	r6, r6, 2
+	slwi	r6, r6, 2
 	lwzx	r6, r9, r6
-	sllv	r7, r2, 3
+	slwi	r7, r2, 3
 	lfdx	f1, r6, r7
-	sllv	r6, r2, 2
+	slwi	r6, r2, 2
 	lwzx	r6, r8, r6
-	sllv	r7, r5, 3
+	slwi	r7, r5, 3
 	lfdx	f2, r6, r7
 	fmul	f1, f1, f2
 	fadd	f0, f0, f1
-	sllv	r5, r5, 3
+	slwi	r5, r5, 3
 	stfdx	f0, r10, r5
 	subi	r2, r2, 1
 	lwz	r29, 0(r30)
@@ -88,26 +88,26 @@ loop3.282:
 bge_else.408:
 	blr
 loop2.274:
-	lw	r5, 20(r30)
-	lw	r6, 16(r30)
-	lw	r7, 12(r30)
-	lw	r8, 8(r30)
-	lw	r9, 4(r30)
+	lwz	r5, 20(r30)
+	lwz	r6, 16(r30)
+	lwz	r7, 12(r30)
+	lwz	r8, 8(r30)
+	lwz	r9, 4(r30)
 	cmpwi	cr7, r2, 0
 	blt	cr7, bge_else.410
-	or	r10, r4, r0
+	mr	r10, r4
 	addi	r4, r4, 24
 	lis	r11, ha16(loop3.282)
 	addi	r11, r11, lo16(loop3.282)
-	sw	r11, 0(r10)
-	sw	r2, 20(r10)
-	sw	r6, 16(r10)
-	sw	r7, 12(r10)
-	sw	r8, 8(r10)
-	sw	r9, 4(r10)
+	stw	r11, 0(r10)
+	stw	r2, 20(r10)
+	stw	r6, 16(r10)
+	stw	r7, 12(r10)
+	stw	r8, 8(r10)
+	stw	r9, 4(r10)
 	subi	r5, r5, 1
-	sw	r30, 0(r3)
-	sw	r2, 4(r3)
+	stw	r30, 0(r3)
+	stw	r2, 4(r3)
 	mflr	r31
 	mr	r2, r5
 	mr	r30, r10
@@ -128,26 +128,26 @@ loop2.274:
 bge_else.410:
 	blr
 loop1.269:
-	lw	r5, 20(r30)
-	lw	r6, 16(r30)
-	lw	r7, 12(r30)
-	lw	r8, 8(r30)
-	lw	r9, 4(r30)
+	lwz	r5, 20(r30)
+	lwz	r6, 16(r30)
+	lwz	r7, 12(r30)
+	lwz	r8, 8(r30)
+	lwz	r9, 4(r30)
 	cmpwi	cr7, r2, 0
 	blt	cr7, bge_else.412
-	or	r10, r4, r0
+	mr	r10, r4
 	addi	r4, r4, 24
 	lis	r11, ha16(loop2.274)
 	addi	r11, r11, lo16(loop2.274)
-	sw	r11, 0(r10)
-	sw	r6, 20(r10)
-	sw	r2, 16(r10)
-	sw	r7, 12(r10)
-	sw	r8, 8(r10)
-	sw	r9, 4(r10)
+	stw	r11, 0(r10)
+	stw	r6, 20(r10)
+	stw	r2, 16(r10)
+	stw	r7, 12(r10)
+	stw	r8, 8(r10)
+	stw	r9, 4(r10)
 	subi	r5, r5, 1
-	sw	r30, 0(r3)
-	sw	r2, 4(r3)
+	stw	r30, 0(r3)
+	stw	r2, 4(r3)
 	mflr	r31
 	mr	r2, r5
 	mr	r30, r10
@@ -168,31 +168,31 @@ loop1.269:
 bge_else.412:
 	blr
 mul.140:
-	or	r30, r4, r0
+	mr	r30, r4
 	addi	r4, r4, 24
 	lis	r10, ha16(loop1.269)
 	addi	r10, r10, lo16(loop1.269)
-	sw	r10, 0(r30)
-	sw	r6, 20(r30)
-	sw	r5, 16(r30)
-	sw	r9, 12(r30)
-	sw	r8, 8(r30)
-	sw	r7, 4(r30)
+	stw	r10, 0(r30)
+	stw	r6, 20(r30)
+	stw	r5, 16(r30)
+	stw	r9, 12(r30)
+	stw	r8, 8(r30)
+	stw	r7, 4(r30)
 	subi	r2, r2, 1
 	lwz	r29, 0(r30)
 	mtctr	r29
 	bctr
 init.256:
-	lw	r5, 8(r30)
-	lw	r6, 4(r30)
+	lwz	r5, 8(r30)
+	lwz	r6, 4(r30)
 	cmpwi	cr7, r2, 0
 	blt	cr7, bge_else.414
 	lis	r31, ha16(l.331)
 	addi	r31, r31, lo16(l.331)
 	lfd	f0, 0(r31)
-	sw	r30, 0(r3)
-	sw	r6, 4(r3)
-	sw	r2, 8(r3)
+	stw	r30, 0(r3)
+	stw	r6, 4(r3)
+	stw	r2, 8(r3)
 	mflr	r31
 	mr	r2, r5
 	stw	r31, 12(r3)
@@ -202,7 +202,7 @@ init.256:
 	lwz	r31, 12(r3)
 	mtlr	r31
 	lwz	r5, 8(r3)
-	sllv	r6, r5, 2
+	slwi	r6, r5, 2
 	lwz	r7, 4(r3)
 	stwx	r2, r7, r6
 	subi	r2, r5, 1
@@ -213,9 +213,9 @@ init.256:
 bge_else.414:
 	blr
 make.148:
-	lw	r6, 4(r30)
-	sw	r2, 0(r3)
-	sw	r5, 4(r3)
+	lwz	r6, 4(r30)
+	stw	r2, 0(r3)
+	stw	r5, 4(r3)
 	mflr	r31
 	mr	r5, r6
 	stw	r31, 12(r3)
@@ -224,17 +224,17 @@ make.148:
 	subi	r3, r3, 16
 	lwz	r31, 12(r3)
 	mtlr	r31
-	or	r30, r4, r0
+	mr	r30, r4
 	addi	r4, r4, 16
 	lis	r5, ha16(init.256)
 	addi	r5, r5, lo16(init.256)
-	sw	r5, 0(r30)
+	stw	r5, 0(r30)
 	lwz	r5, 4(r3)
-	sw	r5, 8(r30)
-	sw	r2, 4(r30)
+	stw	r5, 8(r30)
+	stw	r2, 4(r30)
 	lwz	r5, 0(r3)
 	subi	r5, r5, 1
-	sw	r2, 8(r3)
+	stw	r2, 8(r3)
 	mflr	r31
 	mr	r2, r5
 	stw	r31, 12(r3)
@@ -264,15 +264,15 @@ _min_caml_start: # main entry point
 	subi	r3, r3, 8
 	lwz	r31, 4(r3)
 	mtlr	r31
-	or	r30, r4, r0
+	mr	r30, r4
 	addi	r4, r4, 8
 	lis	r5, ha16(make.148)
 	addi	r5, r5, lo16(make.148)
-	sw	r5, 0(r30)
-	sw	r2, 4(r30)
+	stw	r5, 0(r30)
+	stw	r2, 4(r30)
 	li	r2, 2
 	li	r5, 3
-	sw	r30, 0(r3)
+	stw	r30, 0(r3)
 	mflr	r31
 	stw	r31, 4(r3)
 	addi	r3, r3, 8
@@ -285,7 +285,7 @@ _min_caml_start: # main entry point
 	li	r5, 3
 	li	r6, 2
 	lwz	r30, 0(r3)
-	sw	r2, 4(r3)
+	stw	r2, 4(r3)
 	mflr	r31
 	mr	r2, r5
 	mr	r5, r6
@@ -300,7 +300,7 @@ _min_caml_start: # main entry point
 	li	r5, 2
 	li	r6, 2
 	lwz	r30, 0(r3)
-	sw	r2, 8(r3)
+	stw	r2, 8(r3)
 	mflr	r31
 	mr	r2, r5
 	mr	r5, r6
@@ -314,63 +314,63 @@ _min_caml_start: # main entry point
 	mr	r9, r2
 	mtlr	r31
 	lwz	r7, 4(r3)
-	lw	r2, 0(r7)
+	lwz	r2, 0(r7)
 	lis	r31, ha16(l.338)
 	addi	r31, r31, lo16(l.338)
 	lfd	f0, 0(r31)
 	stfd	f0, 0(r2)
-	lw	r2, 0(r7)
+	lwz	r2, 0(r7)
 	lis	r31, ha16(l.341)
 	addi	r31, r31, lo16(l.341)
 	lfd	f0, 0(r31)
 	stfd	f0, 8(r2)
-	lw	r2, 0(r7)
+	lwz	r2, 0(r7)
 	lis	r31, ha16(l.344)
 	addi	r31, r31, lo16(l.344)
 	lfd	f0, 0(r31)
 	stfd	f0, 16(r2)
-	lw	r2, 4(r7)
+	lwz	r2, 4(r7)
 	lis	r31, ha16(l.347)
 	addi	r31, r31, lo16(l.347)
 	lfd	f0, 0(r31)
 	stfd	f0, 0(r2)
-	lw	r2, 4(r7)
+	lwz	r2, 4(r7)
 	lis	r31, ha16(l.350)
 	addi	r31, r31, lo16(l.350)
 	lfd	f0, 0(r31)
 	stfd	f0, 8(r2)
-	lw	r2, 4(r7)
+	lwz	r2, 4(r7)
 	lis	r31, ha16(l.353)
 	addi	r31, r31, lo16(l.353)
 	lfd	f0, 0(r31)
 	stfd	f0, 16(r2)
 	lwz	r8, 8(r3)
-	lw	r2, 0(r8)
+	lwz	r2, 0(r8)
 	lis	r31, ha16(l.356)
 	addi	r31, r31, lo16(l.356)
 	lfd	f0, 0(r31)
 	stfd	f0, 0(r2)
-	lw	r2, 0(r8)
+	lwz	r2, 0(r8)
 	lis	r31, ha16(l.359)
 	addi	r31, r31, lo16(l.359)
 	lfd	f0, 0(r31)
 	stfd	f0, 8(r2)
-	lw	r2, 4(r8)
+	lwz	r2, 4(r8)
 	lis	r31, ha16(l.362)
 	addi	r31, r31, lo16(l.362)
 	lfd	f0, 0(r31)
 	stfd	f0, 0(r2)
-	lw	r2, 4(r8)
+	lwz	r2, 4(r8)
 	lis	r31, ha16(l.365)
 	addi	r31, r31, lo16(l.365)
 	lfd	f0, 0(r31)
 	stfd	f0, 8(r2)
-	lw	r2, 8(r8)
+	lwz	r2, 8(r8)
 	lis	r31, ha16(l.368)
 	addi	r31, r31, lo16(l.368)
 	lfd	f0, 0(r31)
 	stfd	f0, 0(r2)
-	lw	r2, 8(r8)
+	lwz	r2, 8(r8)
 	lis	r31, ha16(l.371)
 	addi	r31, r31, lo16(l.371)
 	lfd	f0, 0(r31)
@@ -378,7 +378,7 @@ _min_caml_start: # main entry point
 	li	r2, 2
 	li	r5, 3
 	li	r6, 2
-	sw	r9, 12(r3)
+	stw	r9, 12(r3)
 	mflr	r31
 	stw	r31, 20(r3)
 	addi	r3, r3, 24
@@ -387,7 +387,7 @@ _min_caml_start: # main entry point
 	lwz	r31, 20(r3)
 	mtlr	r31
 	lwz	r2, 12(r3)
-	lw	r5, 0(r2)
+	lwz	r5, 0(r2)
 	lfd	f0, 0(r5)
 	mflr	r31
 	stw	r31, 20(r3)
@@ -411,7 +411,7 @@ _min_caml_start: # main entry point
 	lwz	r31, 20(r3)
 	mtlr	r31
 	lwz	r2, 12(r3)
-	lw	r5, 0(r2)
+	lwz	r5, 0(r2)
 	lfd	f0, 8(r5)
 	mflr	r31
 	stw	r31, 20(r3)
@@ -435,7 +435,7 @@ _min_caml_start: # main entry point
 	lwz	r31, 20(r3)
 	mtlr	r31
 	lwz	r2, 12(r3)
-	lw	r5, 4(r2)
+	lwz	r5, 4(r2)
 	lfd	f0, 0(r5)
 	mflr	r31
 	stw	r31, 20(r3)
@@ -459,7 +459,7 @@ _min_caml_start: # main entry point
 	lwz	r31, 20(r3)
 	mtlr	r31
 	lwz	r2, 12(r3)
-	lw	r2, 4(r2)
+	lwz	r2, 4(r2)
 	lfd	f0, 8(r2)
 	mflr	r31
 	stw	r31, 20(r3)

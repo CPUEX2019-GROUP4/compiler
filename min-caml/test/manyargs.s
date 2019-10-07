@@ -2,7 +2,7 @@
 	.globl _min_caml_start
 	.align 2
 f.52:
-	lw	r29, 4(r30)
+	lwz	r29, 4(r30)
 	add	r2, r29, r2
 	add	r2, r2, r5
 	add	r2, r2, r6
@@ -36,12 +36,12 @@ _min_caml_start: # main entry point
 	stwu	r1, -96(r1)
 #	main program starts
 	li	r2, 42
-	or	r30, r4, r0
+	mr	r30, r4
 	addi	r4, r4, 8
 	lis	r5, ha16(f.52)
 	addi	r5, r5, lo16(f.52)
-	sw	r5, 0(r30)
-	sw	r2, 4(r30)
+	stw	r5, 0(r30)
+	stw	r2, 4(r30)
 	li	r2, 1
 	li	r5, 2
 	li	r6, 3

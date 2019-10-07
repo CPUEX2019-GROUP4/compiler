@@ -2,11 +2,11 @@
 	.globl _min_caml_start
 	.align 2
 foo.12:
-	sw	r9, 0(r3)
-	sw	r8, 4(r3)
-	sw	r7, 8(r3)
-	sw	r6, 12(r3)
-	sw	r5, 16(r3)
+	stw	r9, 0(r3)
+	stw	r8, 4(r3)
+	stw	r7, 8(r3)
+	stw	r6, 12(r3)
+	stw	r5, 16(r3)
 	mflr	r31
 	stw	r31, 20(r3)
 	addi	r3, r3, 24

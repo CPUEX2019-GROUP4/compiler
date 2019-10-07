@@ -2,17 +2,17 @@
 	.globl _min_caml_start
 	.align 2
 adder.11:
-	lw	r5, 4(r30)
+	lwz	r5, 4(r30)
 	add	r2, r5, r2
 	blr
 make_adder.5:
-	or	r5, r4, r0
+	mr	r5, r4
 	addi	r4, r4, 8
 	lis	r6, ha16(adder.11)
 	addi	r6, r6, lo16(adder.11)
-	sw	r6, 0(r5)
-	sw	r2, 4(r5)
-	or	r2, r5, r0
+	stw	r6, 0(r5)
+	stw	r2, 4(r5)
+	mr	r2, r5
 	blr
 _min_caml_start: # main entry point
 	mflr	r0

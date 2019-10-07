@@ -22,9 +22,9 @@ l.44:	 # 1.230000
 inprod.18:
 	cmpwi	cr7, r6, 0
 	blt	cr7, bge_else.51
-	sllv	r7, r6, 3
+	slwi	r7, r6, 3
 	lfdx	f1, r2, r7
-	sllv	r7, r6, 3
+	slwi	r7, r6, 3
 	lfdx	f2, r5, r7
 	fmul	f1, f1, f2
 	fadd	f0, f0, f1
@@ -53,7 +53,7 @@ _min_caml_start: # main entry point
 	lis	r31, ha16(l.45)
 	addi	r31, r31, lo16(l.45)
 	lfd	f0, 0(r31)
-	sw	r2, 0(r3)
+	stw	r2, 0(r3)
 	mflr	r31
 	mr	r2, r5
 	stw	r31, 4(r3)

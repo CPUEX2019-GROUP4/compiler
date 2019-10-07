@@ -19,13 +19,13 @@ _min_caml_start: # main entry point
 	subi	r3, r3, 8
 	lwz	r31, 4(r3)
 	mtlr	r31
-	lui	r5, 1
+	lis	r5, 1
 	ori	r5, r5, 2354
-	lw	r6, 0(r2)
+	lwz	r6, 0(r2)
 	cmpwi	cr7, r6, 3
 	bne	cr7, beq_else.33
-	sw	r5, 0(r3)
-	sw	r2, 4(r3)
+	stw	r5, 0(r3)
+	stw	r2, 4(r3)
 	mflr	r31
 	stw	r31, 12(r3)
 	addi	r3, r3, 16
@@ -34,7 +34,7 @@ _min_caml_start: # main entry point
 	lwz	r31, 12(r3)
 	mtlr	r31
 	lwz	r5, 4(r3)
-	lw	r5, 4(r5)
+	lwz	r5, 4(r5)
 	add	r2, r2, r5
 	lwz	r5, 0(r3)
 	add	r2, r2, r5
