@@ -247,7 +247,7 @@ and g'_args oc x_reg_cl ys zs =
       (0, x_reg_cl)
       ys in
   List.iter
-    (fun (y, r) -> Printf.fprintf oc "    mr    %s, %s\n" (reg r) (reg y))
+    (fun (y, r) -> Printf.fprintf oc "    mv %s %s\n" (reg r) (reg y)) (**************)
     (shuffle reg_sw yrs);
   let (d, zfrs) =
     List.fold_left
@@ -271,7 +271,7 @@ let f oc (Prog(data, fundefs, e)) =
      List.iter
        (fun (Id.L(x), d) ->
          Printf.fprintf oc "    .align 3\n";
-         Printf.fprintf oc "%s:     # %f\n" x d;
+         Printf.fprintf oc "%s:    # %f\n" x d;
          Printf.fprintf oc "    .long    %ld\n" (gethi d);
          Printf.fprintf oc "    .long    %ld\n" (getlo d))
        data);

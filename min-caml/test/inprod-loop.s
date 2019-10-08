@@ -1,19 +1,19 @@
     .data
     .literal8
     .align 3
-l.47:     # 0.000000
+l.47:    # 0.000000
     .long    0
     .long    0
     .align 3
-l.46:     # 1000000.000000
+l.46:    # 1000000.000000
     .long    0
     .long    1093567616
     .align 3
-l.45:     # 4.560000
+l.45:    # 4.560000
     .long    -1546188227
     .long    1074937200
     .align 3
-l.44:     # 1.230000
+l.44:    # 1.230000
     .long    2061584302
     .long    1072934420
 _min_caml_start: # main entry point
@@ -35,7 +35,7 @@ _min_caml_start: # main entry point
     lfd f0 0(r31)
     sw r2 r3 0
     or r31 r0 r31
-    mr    r2, r5
+    mv r2 r5
     sw r31 r3 4
     addi r3 r3 8
     jal min_caml_create_float_array

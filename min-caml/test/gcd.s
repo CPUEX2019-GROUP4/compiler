@@ -27,9 +27,9 @@ gcd.7:
     j gcd.7
 beq_else.18:
     sub r2 r2 r5
-    mr    r29, r5
-    mr    r5, r2
-    mr    r2, r29
+    mv r29 r5
+    mv r5 r2
+    mv r2 r29
     j gcd.7
 beq_else.17:
     or r2 r5 r0

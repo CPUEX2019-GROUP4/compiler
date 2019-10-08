@@ -17,7 +17,7 @@ _min_caml_start: # main entry point
     sw r7 r6 0
     sw r5 r3 0
     or r31 r0 r31
-    mr    r5, r6
+    mv r5 r6
     sw r31 r3 4
     addi r3 r3 8
     jal compose.7
