@@ -280,7 +280,9 @@ let f oc (Prog(data, fundefs, e)) =
   Printf.fprintf oc "    .globl _min_caml_start\n";
   Printf.fprintf oc "    .align 2\n";
   *)
-  List.iter (fun fundef -> h oc fundef) fundefs;
+  (* 下に移動
+   * List.iter (fun fundef -> h oc fundef) fundefs;
+   *)
   Printf.fprintf oc "_min_caml_start: # main entry point\n";
   (* DELEATED
   Printf.fprintf oc "    mflr    r0\n";
@@ -301,3 +303,4 @@ let f oc (Prog(data, fundefs, e)) =
   Printf.fprintf oc "    lmw    r30, -8(r1)\n";
   Printf.fprintf oc "    blr\n"
   *)
+  List.iter (fun fundef -> h oc fundef) fundefs;

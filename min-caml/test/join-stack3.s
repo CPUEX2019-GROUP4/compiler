@@ -1,12 +1,3 @@
-f.10:
-    li    r2, 123
-    jr r31
-g.12:
-    li    r2, 456
-    jr r31
-h.14:
-    li    r2, 789
-    jr r31
 _min_caml_start: # main entry point
 #    main program starts
     or r31 r0 r31
@@ -47,3 +38,12 @@ ble_cont.28:
     lw r31 r3 4
     or r31 r0 r31
 #    main program ends
+f.10:
+    li    r2, 123
+    jr r31
+g.12:
+    li    r2, 456
+    jr r31
+h.14:
+    li    r2, 789
+    jr r31

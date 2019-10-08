@@ -16,19 +16,6 @@ l.45:     # 4.560000
 l.44:     # 1.230000
     .long    2061584302
     .long    1072934420
-inprod.18:
-    slti r28 r6 0
-    bne r0 r28 bge_else.51
-    sllv r7 r6 3
- #shift    lfdx    f1, r2, r7
-    sllv r7 r6 3
- #shift    lfdx    f2, r5, r7
-    fmul    f1, f1, f2
-    fadd    f0, f0, f1
-    subi r6 r6 1
-    j inprod.18
-bge_else.51:
-    jr r31
 _min_caml_start: # main entry point
 #    main program starts
     li    r2, 3
@@ -90,3 +77,16 @@ _min_caml_start: # main entry point
     lw r31 r3 20
     or r31 r0 r31
 #    main program ends
+inprod.18:
+    slti r28 r6 0
+    bne r0 r28 bge_else.52
+    sllv r7 r6 3
+ #shift    lfdx    f1, r2, r7
+    sllv r7 r6 3
+ #shift    lfdx    f2, r5, r7
+    fmul    f1, f1, f2
+    fadd    f0, f0, f1
+    subi r6 r6 1
+    j inprod.18
+bge_else.52:
+    jr r31

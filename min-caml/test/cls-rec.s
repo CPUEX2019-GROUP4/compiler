@@ -1,24 +1,3 @@
-f.8:
-    lw r5 r30 4
-    ori r28 r0 0
-    bne r2 r28 beq_else.21
-    subi r2 r2 1
-    sw r5 r3 0
-    mflr    r31
-    sw r31 r3 4
-    addi r3 r3 8
-    lw r31 r30 0
-    mv r26 r31
-    jalr r26
-    subi r3 r3 8
-    lw r31 r3 4
-    or r31 r0 r31
-    lw r5 r3 0
-    add r2 r5 r2
-    jr r31
-beq_else.21:
-    li    r2, 0
-    jr r31
 _min_caml_start: # main entry point
 #    main program starts
     li    r2, 10
@@ -46,3 +25,24 @@ _min_caml_start: # main entry point
     lw r31 r3 4
     or r31 r0 r31
 #    main program ends
+f.8:
+    lw r5 r30 4
+    ori r28 r0 0
+    bne r2 r28 beq_else.21
+    subi r2 r2 1
+    sw r5 r3 0
+    mflr    r31
+    sw r31 r3 4
+    addi r3 r3 8
+    lw r31 r30 0
+    mv r26 r31
+    jalr r26
+    subi r3 r3 8
+    lw r31 r3 4
+    or r31 r0 r31
+    lw r5 r3 0
+    add r2 r5 r2
+    jr r31
+beq_else.21:
+    li    r2, 0
+    jr r31

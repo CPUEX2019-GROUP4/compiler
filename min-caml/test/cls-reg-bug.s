@@ -1,3 +1,50 @@
+_min_caml_start: # main entry point
+#    main program starts
+    li    r2, 1
+    li    r5, 2
+    li    r6, 3
+    li    r7, 4
+    li    r8, 5
+    li    r9, 6
+    li    r10, 7
+    li    r11, 8
+    li    r12, 9
+    li    r13, 10
+    or r14 r4 r0
+    addi r4 r4 40
+    sw r13 r14 36
+    sw r12 r14 32
+    sw r11 r14 28
+    sw r10 r14 24
+    sw r9 r14 20
+    sw r8 r14 16
+    sw r7 r14 12
+    sw r6 r14 8
+    sw r5 r14 4
+    sw r2 r14 0
+    or r2 r14 r0
+    or r31 r0 r31
+    sw r31 r3 4
+    addi r3 r3 8
+    jal h.26
+    subi r3 r3 8
+    lw r31 r3 4
+    or r31 r0 r31
+    or r31 r0 r31
+    sw r31 r3 4
+    addi r3 r3 8
+    jal min_caml_print_int
+    subi r3 r3 8
+    lw r31 r3 4
+    or r31 r0 r31
+    or r31 r0 r31
+    sw r31 r3 4
+    addi r3 r3 8
+    jal min_caml_print_newline
+    subi r3 r3 8
+    lw r31 r3 4
+    or r31 r0 r31
+#    main program ends
 g.52:
     lw r5 r30 40
     lw r6 r30 36
@@ -58,50 +105,3 @@ h.26:
     lw r29 r30 0
     or r26 r0 r29
     jr r26
-_min_caml_start: # main entry point
-#    main program starts
-    li    r2, 1
-    li    r5, 2
-    li    r6, 3
-    li    r7, 4
-    li    r8, 5
-    li    r9, 6
-    li    r10, 7
-    li    r11, 8
-    li    r12, 9
-    li    r13, 10
-    or r14 r4 r0
-    addi r4 r4 40
-    sw r13 r14 36
-    sw r12 r14 32
-    sw r11 r14 28
-    sw r10 r14 24
-    sw r9 r14 20
-    sw r8 r14 16
-    sw r7 r14 12
-    sw r6 r14 8
-    sw r5 r14 4
-    sw r2 r14 0
-    or r2 r14 r0
-    or r31 r0 r31
-    sw r31 r3 4
-    addi r3 r3 8
-    jal h.26
-    subi r3 r3 8
-    lw r31 r3 4
-    or r31 r0 r31
-    or r31 r0 r31
-    sw r31 r3 4
-    addi r3 r3 8
-    jal min_caml_print_int
-    subi r3 r3 8
-    lw r31 r3 4
-    or r31 r0 r31
-    or r31 r0 r31
-    sw r31 r3 4
-    addi r3 r3 8
-    jal min_caml_print_newline
-    subi r3 r3 8
-    lw r31 r3 4
-    or r31 r0 r31
-#    main program ends

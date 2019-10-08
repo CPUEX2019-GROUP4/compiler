@@ -28,6 +28,64 @@ l.64:     # 1.000000
 l.63:     # 1000000.000000
     .long    0
     .long    1093567616
+_min_caml_start: # main entry point
+#    main program starts
+    lis r31 ha16(l.63)
+    addi r31 r31 lo16(l.63)
+    lfd f0 0(r31)
+    lis r31 ha16(l.64)
+    addi r31 r31 lo16(l.64)
+    lfd f1 0(r31)
+    lis r31 ha16(l.65)
+    addi r31 r31 lo16(l.65)
+    lfd f2 0(r31)
+    lis r31 ha16(l.66)
+    addi r31 r31 lo16(l.66)
+    lfd f3 0(r31)
+    or r2 r4 r0
+    addi r4 r4 24
+    stfd    f3, 16(r2)
+    stfd    f2, 8(r2)
+    stfd    f1, 0(r2)
+    lis r31 ha16(l.71)
+    addi r31 r31 lo16(l.71)
+    lfd f1 0(r31)
+    lis r31 ha16(l.72)
+    addi r31 r31 lo16(l.72)
+    lfd f2 0(r31)
+    lis r31 ha16(l.73)
+    addi r31 r31 lo16(l.73)
+    lfd f3 0(r31)
+    or r5 r4 r0
+    addi r4 r4 24
+    stfd    f3, 16(r5)
+    stfd    f2, 8(r5)
+    stfd    f1, 0(r5)
+    stfd    f0, 0(r3)
+    or r31 r0 r31
+    sw r31 r3 12
+    addi r3 r3 16
+    jal inprod.29
+    subi r3 r3 16
+    lw r31 r3 12
+    or r31 r0 r31
+    lfd    f1, 0(r3)
+    fmul    f0, f1, f0
+    or r31 r0 r31
+    sw r31 r3 12
+    addi r3 r3 16
+    jal min_caml_truncate
+    subi r3 r3 16
+    lw r31 r3 12
+    or r31 r0 r31
+    or r31 r0 r31
+    sw r31 r3 12
+    addi r3 r3 16
+    jal min_caml_print_int
+    subi r3 r3 16
+    lw r31 r3 12
+    or r31 r0 r31
+#    main program ends
 getx.23:
     lfd    f0, 0(r2)
     jr r31
@@ -103,61 +161,3 @@ inprod.29:
     lfd    f1, 32(r3)
     fadd    f0, f1, f0
     jr r31
-_min_caml_start: # main entry point
-#    main program starts
-    lis r31 ha16(l.63)
-    addi r31 r31 lo16(l.63)
-    lfd f0 0(r31)
-    lis r31 ha16(l.64)
-    addi r31 r31 lo16(l.64)
-    lfd f1 0(r31)
-    lis r31 ha16(l.65)
-    addi r31 r31 lo16(l.65)
-    lfd f2 0(r31)
-    lis r31 ha16(l.66)
-    addi r31 r31 lo16(l.66)
-    lfd f3 0(r31)
-    or r2 r4 r0
-    addi r4 r4 24
-    stfd    f3, 16(r2)
-    stfd    f2, 8(r2)
-    stfd    f1, 0(r2)
-    lis r31 ha16(l.71)
-    addi r31 r31 lo16(l.71)
-    lfd f1 0(r31)
-    lis r31 ha16(l.72)
-    addi r31 r31 lo16(l.72)
-    lfd f2 0(r31)
-    lis r31 ha16(l.73)
-    addi r31 r31 lo16(l.73)
-    lfd f3 0(r31)
-    or r5 r4 r0
-    addi r4 r4 24
-    stfd    f3, 16(r5)
-    stfd    f2, 8(r5)
-    stfd    f1, 0(r5)
-    stfd    f0, 0(r3)
-    or r31 r0 r31
-    sw r31 r3 12
-    addi r3 r3 16
-    jal inprod.29
-    subi r3 r3 16
-    lw r31 r3 12
-    or r31 r0 r31
-    lfd    f1, 0(r3)
-    fmul    f0, f1, f0
-    or r31 r0 r31
-    sw r31 r3 12
-    addi r3 r3 16
-    jal min_caml_truncate
-    subi r3 r3 16
-    lw r31 r3 12
-    or r31 r0 r31
-    or r31 r0 r31
-    sw r31 r3 12
-    addi r3 r3 16
-    jal min_caml_print_int
-    subi r3 r3 16
-    lw r31 r3 12
-    or r31 r0 r31
-#    main program ends

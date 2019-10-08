@@ -1,16 +1,3 @@
-adder.11:
-    lw r5 r30 4
-    add r2 r5 r2
-    jr r31
-make_adder.5:
-    or r5 r4 r0
-    addi r4 r4 8
-    lis r6 ha16(adder.11)
-    addi r6 r6 lo16(adder.11)
-    sw r6 r5 0
-    sw r2 r5 4
-    or r2 r5 r0
-    jr r31
 _min_caml_start: # main entry point
 #    main program starts
     li    r2, 3
@@ -40,3 +27,16 @@ _min_caml_start: # main entry point
     lw r31 r3 4
     or r31 r0 r31
 #    main program ends
+adder.11:
+    lw r5 r30 4
+    add r2 r5 r2
+    jr r31
+make_adder.5:
+    or r5 r4 r0
+    addi r4 r4 8
+    lis r6 ha16(adder.11)
+    addi r6 r6 lo16(adder.11)
+    sw r6 r5 0
+    sw r2 r5 4
+    or r2 r5 r0
+    jr r31

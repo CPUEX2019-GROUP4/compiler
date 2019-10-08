@@ -1,9 +1,3 @@
-f.6:
-    addi r2 r2 123
-    jr r31
-g.8:
-    lw r2 r30 4
-    jr r31
 _min_caml_start: # main entry point
 #    main program starts
     or r2 r4 r0
@@ -46,3 +40,9 @@ _min_caml_start: # main entry point
     lw r31 r3 4
     or r31 r0 r31
 #    main program ends
+f.6:
+    addi r2 r2 123
+    jr r31
+g.8:
+    lw r2 r30 4
+    jr r31
