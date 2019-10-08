@@ -1,1 +1,1 @@
-PowerPC/simm.ml
+MIPS/simm.ml

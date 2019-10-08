@@ -1,60 +1,48 @@
-	.text
-	.globl _min_caml_start
-	.align 2
 f.10:
 	li	r2, 123
-	blr
+	jr r31
 g.12:
 	li	r2, 456
-	blr
+	jr r31
 h.14:
 	li	r2, 789
-	blr
+	jr r31
 _min_caml_start: # main entry point
-	mflr	r0
-	stmw	r30, -8(r1)
-	stw	r0, 8(r1)
-	stwu	r1, -96(r1)
 #	main program starts
-	mflr	r31
-	stw	r31, 4(r3)
-	addi	r3, r3, 8
-	bl	f.10
-	subi	r3, r3, 8
-	lwz	r31, 4(r3)
-	mtlr	r31
-	stw	r2, 0(r3)
+	or r31 r0 r31
+	sw r31 r3 4
+	addi r3 r3 8
+	jal f.10
+	subi r3 r3 8
+	lw r31 r3 4
+	or r31 r0 r31
+	sw r2 r3 0
 	cmpwi	cr7, r2, 0
 	bgt	cr7, ble_else.27
-	mflr	r31
-	stw	r31, 4(r3)
-	addi	r3, r3, 8
-	bl	g.12
-	subi	r3, r3, 8
-	lwz	r31, 4(r3)
-	mtlr	r31
+	or r31 r0 r31
+	sw r31 r3 4
+	addi r3 r3 8
+	jal g.12
+	subi r3 r3 8
+	lw r31 r3 4
+	or r31 r0 r31
 	b	ble_cont.28
 ble_else.27:
-	mflr	r31
-	stw	r31, 4(r3)
-	addi	r3, r3, 8
-	bl	h.14
-	subi	r3, r3, 8
-	lwz	r31, 4(r3)
-	mtlr	r31
+	or r31 r0 r31
+	sw r31 r3 4
+	addi r3 r3 8
+	jal h.14
+	subi r3 r3 8
+	lw r31 r3 4
+	or r31 r0 r31
 ble_cont.28:
-	lwz	r5, 0(r3)
-	add	r2, r2, r5
-	mflr	r31
-	stw	r31, 4(r3)
-	addi	r3, r3, 8
-	bl	min_caml_print_int
-	subi	r3, r3, 8
-	lwz	r31, 4(r3)
-	mtlr	r31
+	lw r5 r3 0
+	add r2 r2 r5
+	or r31 r0 r31
+	sw r31 r3 4
+	addi r3 r3 8
+	jal min_caml_print_int
+	subi r3 r3 8
+	lw r31 r3 4
+	or r31 r0 r31
 #	main program ends
-	lwz	r1, 0(r1)
-	lwz	r0, 8(r1)
-	mtlr	r0
-	lmw	r30, -8(r1)
-	blr

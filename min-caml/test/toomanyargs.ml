@@ -1,1 +1,1 @@
-PowerPC/toomanyargs.ml
+MIPS/toomanyargs.ml

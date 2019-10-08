@@ -1,1 +1,1 @@
-PowerPC/regAlloc.ml
+MIPS/regAlloc.ml

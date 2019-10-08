@@ -1,1 +1,1 @@
-PowerPC/globals.s
+MIPS/globals.s

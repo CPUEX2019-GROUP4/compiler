@@ -1,1 +1,1 @@
-PowerPC/manyargs.ml
+MIPS/manyargs.ml

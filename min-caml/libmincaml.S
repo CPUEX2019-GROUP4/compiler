@@ -1,1 +1,1 @@
-PowerPC/libmincaml.S
+MIPS/libmincaml.S

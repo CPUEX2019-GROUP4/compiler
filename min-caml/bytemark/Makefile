@@ -1,1 +1,1 @@
-PowerPC/Makefile
+MIPS/Makefile

@@ -1,1 +1,1 @@
-PowerPC/asm.mli
+MIPS/asm.mli
