@@ -32,7 +32,7 @@ let reg r =
 let load_label r label =
   let r' = reg r in
   Printf.sprintf
-    "    lis %s ha16(%s)\n    addi %s %s lo16(%s)\n"
+    "    lui %s ha16(%s)\n    ori %s %s lo16(%s)\n"          (********************)
     r' label r' r' label
 
 (* 関数呼び出しのために引数を並べ替える(register shuffling) (caml2html: emit_shuffle) *)
@@ -59,7 +59,7 @@ let rec g oc = function (* 命令列のアセンブリ生成 (caml2html: emit_g) *)
 and g' oc = function (* 各命令のアセンブリ生成 (caml2html: emit_gprime) *)
   (* 末尾でなかったら計算結果をdestにセット (caml2html: emit_nontail) *)
   | NonTail(_), Nop -> ()
-  | NonTail(x), Li(i) when -32768 <= i && i < 32768 -> Printf.fprintf oc "    li    %s, %d\n" (reg x) i
+  | NonTail(x), Li(i) when -32768 <= i && i < 32768 -> Printf.fprintf oc "    ori %s r0 %d\n" (reg x) i   (**********)
   | NonTail(x), Li(i) ->
       let n = i lsr 16 in
       let m = i lxor (n lsl 16) in
@@ -189,7 +189,7 @@ and g' oc = function (* 各命令のアセンブリ生成 (caml2html: emit_gprime) *)
       g'_args oc [] ys zs;
       Printf.fprintf oc "    j %s\n" x     (*****************)
   | NonTail(a), CallCls(x, ys, zs) ->
-      Printf.fprintf oc "    mflr    %s\n" (reg reg_tmp);
+      Printf.fprintf oc "    mv %s r31\n" (reg reg_tmp);   (***************)
       g'_args oc [(x, reg_cl)] ys zs;
       let ss = stacksize () in
       Printf.fprintf oc "    sw %s %s %d\n" (reg reg_tmp) (reg reg_sp) (ss - 4);    (**************)
@@ -218,7 +218,7 @@ and g' oc = function (* 各命令のアセンブリ生成 (caml2html: emit_gprime) *)
       else if List.mem a allfregs && a <> fregs.(0) then
         Printf.fprintf oc "    fmr    %s, %s\n" (reg a) (reg fregs.(0));
       Printf.fprintf oc "    or r31 r0 %s\n" (reg reg_tmp) (******************)
-and g'_tail_if oc e1 e2 b bn rx ry =
+and g'_tail_if oc e1 e2 b bn rx ry =               (**************************)
   let b_else = Id.genid (b ^ "_else") in
   Printf.fprintf oc "    bne %s %s %s\n" rx ry b_else;
   let stackset_back = !stackset in
@@ -226,7 +226,7 @@ and g'_tail_if oc e1 e2 b bn rx ry =
   Printf.fprintf oc "%s:\n" b_else;
   stackset := stackset_back;
   g oc (Tail, e2)
-and g'_non_tail_if oc dest e1 e2 b bn rx ry =
+and g'_non_tail_if oc dest e1 e2 b bn rx ry =      (*********************************)
   let b_else = Id.genid (b ^ "_else") in
   let b_cont = Id.genid (b ^ "_cont") in
   Printf.fprintf oc "    bne %s %s %s\n" rx ry b_else;

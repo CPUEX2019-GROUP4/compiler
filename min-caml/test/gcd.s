@@ -1,6 +1,6 @@
 _min_caml_start: # main entry point
 #    main program starts
-    li    r2, 21600
+    ori r2 r0 21600
     lui r5 5
     ori r5 r5 9820
     or r31 r0 r31

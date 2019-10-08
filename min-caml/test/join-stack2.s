@@ -34,8 +34,8 @@ ble_cont.24:
     or r31 r0 r31
 #    main program ends
 f.9:
-    li    r2, 123
+    ori r2 r0 123
     jr r31
 g.11:
-    li    r2, 456
+    ori r2 r0 456
     jr r31

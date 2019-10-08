@@ -18,9 +18,9 @@ l.44:    # 1.230000
     .long    1072934420
 _min_caml_start: # main entry point
 #    main program starts
-    li    r2, 3
-    lis r31 ha16(l.44)
-    addi r31 r31 lo16(l.44)
+    ori r2 r0 3
+    lui r31 ha16(l.44)
+    ori r31 r31 lo16(l.44)
     lfd f0 0(r31)
     or r31 r0 r31
     sw r31 r3 4
@@ -29,9 +29,9 @@ _min_caml_start: # main entry point
     subi r3 r3 8
     lw r31 r3 4
     or r31 r0 r31
-    li    r5, 3
-    lis r31 ha16(l.45)
-    addi r31 r31 lo16(l.45)
+    ori r5 r0 3
+    lui r31 ha16(l.45)
+    ori r31 r31 lo16(l.45)
     lfd f0 0(r31)
     sw r2 r3 0
     or r31 r0 r31
@@ -43,13 +43,13 @@ _min_caml_start: # main entry point
     lw r31 r3 4
     or r5 r0 r2
     or r31 r0 r31
-    lis r31 ha16(l.46)
-    addi r31 r31 lo16(l.46)
+    lui r31 ha16(l.46)
+    ori r31 r31 lo16(l.46)
     lfd f0 0(r31)
-    lis r31 ha16(l.47)
-    addi r31 r31 lo16(l.47)
+    lui r31 ha16(l.47)
+    ori r31 r31 lo16(l.47)
     lfd f1 0(r31)
-    li    r6, 2
+    ori r6 r0 2
     lw r2 r3 0
     stfd    f0, 8(r3)
     or r31 r0 r31

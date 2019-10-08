@@ -47,11 +47,11 @@ beq_cont.32:
     or r31 r0 r31
 #    main program ends
 f.12:
-    li    r2, 123
+    ori r2 r0 123
     jr r31
 g.14:
-    li    r2, 456
+    ori r2 r0 456
     jr r31
 h.16:
-    li    r2, 789
+    ori r2 r0 789
     jr r31

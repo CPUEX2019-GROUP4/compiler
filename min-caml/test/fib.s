@@ -1,4 +1,6 @@
-    ori r2 r2 4
+_min_caml_start: # main entry point
+#    main program starts
+    ori r2 r0 4
     or r31 r0 r31
     sw r31 r3 4
     addi r3 r3 8

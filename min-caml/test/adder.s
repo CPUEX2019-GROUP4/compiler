@@ -1,6 +1,6 @@
 _min_caml_start: # main entry point
 #    main program starts
-    li    r2, 3
+    ori r2 r0 3
     or r31 r0 r31
     sw r31 r3 4
     addi r3 r3 8
@@ -9,8 +9,8 @@ _min_caml_start: # main entry point
     lw r31 r3 4
     or r30 r0 r2
     or r31 r0 r31
-    li    r2, 7
-    mflr    r31
+    ori r2 r0 7
+    mv r31 r31
     sw r31 r3 4
     addi r3 r3 8
     lw r31 r30 0
@@ -34,8 +34,8 @@ adder.11:
 make_adder.5:
     or r5 r4 r0
     addi r4 r4 8
-    lis r6 ha16(adder.11)
-    addi r6 r6 lo16(adder.11)
+    lui r6 ha16(adder.11)
+    ori r6 r6 lo16(adder.11)
     sw r6 r5 0
     sw r2 r5 4
     or r2 r5 r0

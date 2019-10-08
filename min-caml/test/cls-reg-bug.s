@@ -1,15 +1,15 @@
 _min_caml_start: # main entry point
 #    main program starts
-    li    r2, 1
-    li    r5, 2
-    li    r6, 3
-    li    r7, 4
-    li    r8, 5
-    li    r9, 6
-    li    r10, 7
-    li    r11, 8
-    li    r12, 9
-    li    r13, 10
+    ori r2 r0 1
+    ori r5 r0 2
+    ori r6 r0 3
+    ori r7 r0 4
+    ori r8 r0 5
+    ori r9 r0 6
+    ori r10 r0 7
+    ori r11 r0 8
+    ori r12 r0 9
+    ori r13 r0 10
     or r14 r4 r0
     addi r4 r4 40
     sw r13 r14 36
@@ -88,8 +88,8 @@ h.26:
     lw r2 r2 0
     or r30 r4 r0
     addi r4 r4 48
-    lis r14 ha16(g.52)
-    addi r14 r14 lo16(g.52)
+    lui r14 ha16(g.52)
+    ori r14 r14 lo16(g.52)
     sw r14 r30 0
     sw r6 r30 40
     sw r7 r30 36
@@ -101,7 +101,7 @@ h.26:
     sw r13 r30 12
     sw r5 r30 8
     sw r2 r30 4
-    li    r2, 1
+    ori r2 r0 1
     lw r29 r30 0
     or r26 r0 r29
     jr r26

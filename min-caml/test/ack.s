@@ -1,7 +1,7 @@
 _min_caml_start: # main entry point
 #    main program starts
-    li    r2, 3
-    li    r5, 10
+    ori r2 r0 3
+    ori r5 r0 10
     or r31 r0 r31
     sw r31 r3 4
     addi r3 r3 8
@@ -28,7 +28,7 @@ ble_else.34:
     slt r28 r28 r5
     bne r0 r28 ble_else.35
     subi r2 r2 1
-    li    r5, 1
+    ori r5 r0 1
     j ack.15
 ble_else.35:
     subi r6 r2 1

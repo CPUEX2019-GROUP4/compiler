@@ -2,11 +2,11 @@ _min_caml_start: # main entry point
 #    main program starts
     or r30 r4 r0
     addi r4 r4 8
-    lis r2 ha16(f.9)
-    addi r2 r2 lo16(f.9)
+    lui r2 ha16(f.9)
+    ori r2 r2 lo16(f.9)
     sw r2 r30 0
-    li    r2, 9
-    mflr    r31
+    ori r2 r0 9
+    mv r31 r31
     sw r31 r3 4
     addi r3 r3 8
     lw r31 r30 0
@@ -28,7 +28,7 @@ f.9:
     subi r3 r3 16
     lw r31 r3 12
     or r31 r0 r31
-    li    r2, 1
+    ori r2 r0 1
     lw r5 r3 4
     or r31 r0 r31
     sw r31 r3 12
