@@ -17,13 +17,12 @@ external (>=) : int -> int -> bool = "%greaterequal"
 
 external (+) : int -> int -> int = "%addint"
 external (-) : int -> int -> int = "%subint"
-*)
 external ( * ) : int -> int -> int = "%mulint"
 external (/) : int -> int -> int = "%divint"
-
+*)
 (* logic *)
-external xor : bool -> bool -> bool = "%notequal"
 (*
+external xor : bool -> bool -> bool = "%notequal"
 external not : bool -> bool = "%boolnot"
 *)
 (* float (2) *)
