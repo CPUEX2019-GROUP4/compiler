@@ -5,16 +5,22 @@ open Type
 }
 
 (* 正規表現の略記 *)
-let space = [' ' '\t' '\n' '\r']
+let space = [' ' '\t' '\r']
 let digit = ['0'-'9']
 let lower = ['a'-'z']
 let upper = ['A'-'Z']
 
 rule token = parse
 | '\n'
-    { Lexing.new_line lexbuf; token lexbuf }
+    { Lexing.new_line lexbuf; token lexbuf }   (***** 変更箇所 ********)
 | space+
     { token lexbuf }
+| '*' space* '4'
+    { MUL4 }
+| '/' space* '2'
+    { DIV2 }
+| '/' space* "10"
+    { DIV10 }
 | "(*"
     { comment lexbuf; (* ネストしたコメントのためのトリック *)
       token lexbuf }
@@ -85,7 +91,7 @@ rule token = parse
 | lower (digit|lower|upper|'_')* (* 他の「予約語」より後でないといけない *)
     { IDENT(Lexing.lexeme lexbuf) }
 | _
-    { failwith
+    { failwith    (**** エラー出力 (unknown token) ********)
         (Printf.sprintf "%s line %d:%d-%d \x1b[31mError:\x1b[0m: unknown token %s "
            (Lexing.lexeme_start_p lexbuf).pos_fname
            (Lexing.lexeme_start_p lexbuf).pos_lnum
@@ -99,7 +105,7 @@ rule token = parse
     }
 and comment = parse
 | '\n'
-    { Lexing.new_line lexbuf; comment lexbuf }
+    { Lexing.new_line lexbuf; comment lexbuf }   (****** 変更箇所 *******)
 | "*)"
     { () }
 | "(*"

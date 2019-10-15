@@ -1,39 +1,37 @@
-	.text
-	.globl _min_caml_start
-	.align 2
+.data
+.balign	8
+.text
 sum.8:
-	cmpwi	cr7, r5, 0
-	bgt	cr7, ble_else.19
-	blr
-ble_else.19:
-	add	r2, r2, r5
-	subi	r5, r5, 1
-	b	sum.8
-_min_caml_start: # main entry point
-	mflr	r0
-	stmw	r30, -8(r1)
-	stw	r0, 8(r1)
-	stwu	r1, -96(r1)
-#	main program starts
-	li	r2, 0
-	li	r5, 10000
-	mflr	r31
-	stw	r31, 4(r3)
-	addi	r3, r3, 8
-	bl	sum.8
-	subi	r3, r3, 8
-	lwz	r31, 4(r3)
-	mtlr	r31
-	mflr	r31
-	stw	r31, 4(r3)
-	addi	r3, r3, 8
-	bl	min_caml_print_int
-	subi	r3, r3, 8
-	lwz	r31, 4(r3)
-	mtlr	r31
-#	main program ends
-	lwz	r1, 0(r1)
-	lwz	r0, 8(r1)
-	mtlr	r0
-	lmw	r30, -8(r1)
-	blr
+	cmpl	$0, %ebx
+	jg	jle_else.19
+	ret
+jle_else.19:
+	addl	%ebx, %eax
+	subl	$1, %ebx
+	jmp	sum.8
+.globl	min_caml_start
+min_caml_start:
+.globl	_min_caml_start
+_min_caml_start: # for cygwin
+	pushl	%eax
+	pushl	%ebx
+	pushl	%ecx
+	pushl	%edx
+	pushl	%esi
+	pushl	%edi
+	pushl	%ebp
+	movl	32(%esp),%ebp
+	movl	36(%esp),%eax
+	movl	%eax,min_caml_hp
+	movl	$0, %eax
+	movl	$10000, %ebx
+	call	sum.8
+	call	min_caml_print_int
+	popl	%ebp
+	popl	%edi
+	popl	%esi
+	popl	%edx
+	popl	%ecx
+	popl	%ebx
+	popl	%eax
+	ret

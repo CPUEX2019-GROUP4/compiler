@@ -8,6 +8,9 @@ let addtyp x = (x, Type.gentyp ())
 %token <bool> BOOL
 %token <int> INT
 %token <float> FLOAT
+%token MUL4   /** added **/
+%token DIV2   /** added **/
+%token DIV10  /** added **/
 %token NOT
 %token MINUS
 %token PLUS
@@ -89,6 +92,12 @@ exp: /* (* 一般の式 (caml2html: parser_exp) *) */
     { Add($1, $3) }
 | exp MINUS exp
     { Sub($1, $3) }
+| exp MUL4  /** added **/
+    { Mul4 $1 }
+| exp DIV2  /** added **/
+    { Div2 $1 }
+| exp DIV10  /** added **/
+    { Div10 $1 }
 | exp EQUAL exp
     { Eq($1, $3) }
 | exp LESS_GREATER exp
@@ -137,7 +146,7 @@ exp: /* (* 一般の式 (caml2html: parser_exp) *) */
     %prec prec_app
     { Array($2, $3) }
 | error
-    { failwith
+    { failwith       (******* エラー出力 *******)
         (Printf.sprintf "%s line %d:%d-%d \x1b[31mParse Error:\x1b[0m"
            (Parsing.symbol_start_pos ()).pos_fname
            (Parsing.symbol_start_pos ()).pos_lnum

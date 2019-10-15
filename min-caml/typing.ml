@@ -27,6 +27,9 @@ let rec deref_term = function
   | Neg(e) -> Neg(deref_term e)
   | Add(e1, e2) -> Add(deref_term e1, deref_term e2)
   | Sub(e1, e2) -> Sub(deref_term e1, deref_term e2)
+  | Mul4(e) -> Mul4(deref_term e)
+  | Div2(e) -> Div2(deref_term e)
+  | Div10(e) -> Div10(deref_term e)
   | Eq(e1, e2) -> Eq(deref_term e1, deref_term e2)
   | LE(e1, e2) -> LE(deref_term e1, deref_term e2)
   | FNeg(e) -> FNeg(deref_term e)
@@ -97,6 +100,15 @@ let rec g env e = (* 型推論ルーチン (caml2html: typing_g) *)
         unify Type.Int (g env e1);
         unify Type.Int (g env e2);
         Type.Int
+    | Mul4(e) ->
+        unify Type.Int (g env e);
+        Type.Int
+    | Div2(e) ->
+        unify Type.Int (g env e);
+        Type.Int
+    | Div10(e) ->
+        unify Type.Int (g env e);
+        Type.Int
     | FNeg(e) ->
         unify Type.Float (g env e);
         Type.Float
@@ -151,7 +163,8 @@ let rec g env e = (* 型推論ルーチン (caml2html: typing_g) *)
   with Unify(t1, t2) -> raise (Error(deref_term e, deref_typ t1, deref_typ t2))
 
 let f e =
-  (* syntax print *)
+  (* 問1 syntax print (unify する前に print) *)
+  print_string "----- syntax.print -----";
   Syntax.print e 0;
   (****************)
 
@@ -164,13 +177,12 @@ let f e =
   (try unify Type.Unit (g M.empty e)
   with 
   | Unify _ -> failwith "top level does not have type unit"
-  | Error (term,typ1,typ2) ->
-      print_string "\x1b[4m";
+  | Error (term,typ1,typ2) ->    (****   問 2  変更箇所    ****)
+      print_string "\x1b[4m";   (****    下線    ****)
       print_newline ();
-      (* 下線引く!!!!!!!!!!!!!!!!!!!!! *)
       print term 0;
       print_newline ();
-      print_string "\x1b[0;31mError:\x1b[0m This expression has type ";
+      print_string "\x1b[0;31mError:\x1b[0m This expression has type ";   (****    this expression has type ...    ****)
       Type.print typ2;
       print_string " but an expression was expected of type ";
       Type.print typ1;

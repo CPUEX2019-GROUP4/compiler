@@ -7,6 +7,9 @@ type t = (* MinCamlの構文を表現するデータ型 (caml2html: syntax_t) *)
   | Neg of t
   | Add of t * t
   | Sub of t * t
+  | Mul4 of t
+  | Div2 of t
+  | Div10 of t
   | FNeg of t
   | FAdd of t * t
   | FSub of t * t
@@ -29,9 +32,12 @@ and fundef = { name : Id.t * Type.t; args : (Id.t * Type.t) list; body : t }
 let rec indent n =
   if n = 0 then () else (print_string "  "; indent (n-1))
 
+
+
+(* abbribiation *)
 let p = print_string
 
-
+(** print 関数 **)
 let rec print e i =
   print_newline ();
   indent i;
@@ -42,6 +48,9 @@ let rec print e i =
   | Float x -> p "FLOAT "; print_float x
   | Not x -> p "NOT"; print x (i + 1)
   | Neg x -> p "NEG"; print x (i + 1)
+  | Mul4 x -> p "MULTIPLE 4"; print x (i + 1)
+  | Div2 x -> p "DIVIDE BY 2"; print x (i + 1)
+  | Div10 x -> p "DIVIDE BY 10"; print x (i + 1)
   | Add (x, y) -> p "ADD"; print x (i + 1); print y (i + 1)
   | Sub (x, y) -> p "SUB"; print x (i + 1); print y (i + 1)
   | FNeg x -> p "NEG"; print x (i + 1)

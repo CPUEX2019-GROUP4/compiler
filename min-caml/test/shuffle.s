@@ -1,85 +1,69 @@
-	.text
-	.globl _min_caml_start
-	.align 2
+.data
+.balign	8
+.text
 foo.12:
-	stw	r9, 0(r3)
-	stw	r8, 4(r3)
-	stw	r7, 8(r3)
-	stw	r6, 12(r3)
-	stw	r5, 16(r3)
-	mflr	r31
-	stw	r31, 20(r3)
-	addi	r3, r3, 24
-	bl	min_caml_print_int
-	subi	r3, r3, 24
-	lwz	r31, 20(r3)
-	mtlr	r31
-	lwz	r2, 16(r3)
-	mflr	r31
-	stw	r31, 20(r3)
-	addi	r3, r3, 24
-	bl	min_caml_print_int
-	subi	r3, r3, 24
-	lwz	r31, 20(r3)
-	mtlr	r31
-	lwz	r2, 12(r3)
-	mflr	r31
-	stw	r31, 20(r3)
-	addi	r3, r3, 24
-	bl	min_caml_print_int
-	subi	r3, r3, 24
-	lwz	r31, 20(r3)
-	mtlr	r31
-	lwz	r2, 8(r3)
-	mflr	r31
-	stw	r31, 20(r3)
-	addi	r3, r3, 24
-	bl	min_caml_print_int
-	subi	r3, r3, 24
-	lwz	r31, 20(r3)
-	mtlr	r31
-	lwz	r2, 4(r3)
-	mflr	r31
-	stw	r31, 20(r3)
-	addi	r3, r3, 24
-	bl	min_caml_print_int
-	subi	r3, r3, 24
-	lwz	r31, 20(r3)
-	mtlr	r31
-	lwz	r2, 0(r3)
-	b	min_caml_print_int
+	movl	%edi, 0(%ebp)
+	movl	%esi, 4(%ebp)
+	movl	%edx, 8(%ebp)
+	movl	%ecx, 12(%ebp)
+	movl	%ebx, 16(%ebp)
+	addl	$24, %ebp
+	call	min_caml_print_int
+	subl	$24, %ebp
+	movl	16(%ebp), %eax
+	addl	$24, %ebp
+	call	min_caml_print_int
+	subl	$24, %ebp
+	movl	12(%ebp), %eax
+	addl	$24, %ebp
+	call	min_caml_print_int
+	subl	$24, %ebp
+	movl	8(%ebp), %eax
+	addl	$24, %ebp
+	call	min_caml_print_int
+	subl	$24, %ebp
+	movl	4(%ebp), %eax
+	addl	$24, %ebp
+	call	min_caml_print_int
+	subl	$24, %ebp
+	movl	0(%ebp), %eax
+	jmp	min_caml_print_int
 bar.19:
-	mr	r29, r9
-	mr	r9, r6
-	mr	r6, r7
-	mr	r7, r8
-	mr	r8, r29
-	mr	r29, r5
-	mr	r5, r2
-	mr	r2, r29
-	b	foo.12
-_min_caml_start: # main entry point
-	mflr	r0
-	stmw	r30, -8(r1)
-	stw	r0, 8(r1)
-	stwu	r1, -96(r1)
-#	main program starts
-	li	r2, 1
-	li	r5, 2
-	li	r6, 3
-	li	r7, 4
-	li	r8, 5
-	li	r9, 6
-	mflr	r31
-	stw	r31, 4(r3)
-	addi	r3, r3, 8
-	bl	bar.19
-	subi	r3, r3, 8
-	lwz	r31, 4(r3)
-	mtlr	r31
-#	main program ends
-	lwz	r1, 0(r1)
-	lwz	r0, 8(r1)
-	mtlr	r0
-	lmw	r30, -8(r1)
-	blr
+	movl	%edi, 0(%ebp)
+	movl	%ecx, %edi
+	movl	%edx, %ecx
+	movl	%esi, %edx
+	movl	0(%ebp), %esi
+	movl	%ebx, 0(%ebp)
+	movl	%eax, %ebx
+	movl	0(%ebp), %eax
+	jmp	foo.12
+.globl	min_caml_start
+min_caml_start:
+.globl	_min_caml_start
+_min_caml_start: # for cygwin
+	pushl	%eax
+	pushl	%ebx
+	pushl	%ecx
+	pushl	%edx
+	pushl	%esi
+	pushl	%edi
+	pushl	%ebp
+	movl	32(%esp),%ebp
+	movl	36(%esp),%eax
+	movl	%eax,min_caml_hp
+	movl	$1, %eax
+	movl	$2, %ebx
+	movl	$3, %ecx
+	movl	$4, %edx
+	movl	$5, %esi
+	movl	$6, %edi
+	call	bar.19
+	popl	%ebp
+	popl	%edi
+	popl	%esi
+	popl	%edx
+	popl	%ecx
+	popl	%ebx
+	popl	%eax
+	ret

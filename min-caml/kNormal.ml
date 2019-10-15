@@ -7,6 +7,9 @@ type t = (* K正規化後の式 (caml2html: knormal_t) *)
   | Neg of Id.t
   | Add of Id.t * Id.t
   | Sub of Id.t * Id.t
+  | Mul4 of Id.t
+  | Div2 of Id.t
+  | Div10 of Id.t
   | FNeg of Id.t
   | FAdd of Id.t * Id.t
   | FSub of Id.t * Id.t
@@ -28,7 +31,7 @@ and fundef = { name : Id.t * Type.t; args : (Id.t * Type.t) list; body : t }
 
 let rec fv = function (* 式に出現する（自由な）変数 (caml2html: knormal_fv) *)
   | Unit | Int(_) | Float(_) | ExtArray(_) -> S.empty
-  | Neg(x) | FNeg(x) -> S.singleton x
+  | Neg(x) | FNeg(x) | Mul4(x) | Div2(x) | Div10(x) -> S.singleton x
   | Add(x, y) | Sub(x, y) | FAdd(x, y) | FSub(x, y) | FMul(x, y) | FDiv(x, y) | Get(x, y) -> S.of_list [x; y]
   | IfEq(x, y, e1, e2) | IfLE(x, y, e1, e2) -> S.add x (S.add y (S.union (fv e1) (fv e2)))
   | Let((x, t), e1, e2) -> S.union (fv e1) (S.remove x (fv e2))
@@ -66,6 +69,15 @@ let rec g env = function (* K正規化ルーチン本体 (caml2html: knormal_g) *)
       insert_let (g env e1)
         (fun x -> insert_let (g env e2)
             (fun y -> Sub(x, y), Type.Int))
+  | Syntax.Mul4(e) ->
+      insert_let (g env e)
+        (fun x -> Mul4(x), Type.Int)
+  | Syntax.Div2(e) ->
+      insert_let (g env e)
+        (fun x -> Div2(x), Type.Int)
+  | Syntax.Div10(e) ->
+      insert_let (g env e)
+        (fun x -> Div10(x), Type.Int)
   | Syntax.FNeg(e) ->
       insert_let (g env e)
         (fun x -> FNeg(x), Type.Float)
@@ -177,7 +189,7 @@ let rec g env = function (* K正規化ルーチン本体 (caml2html: knormal_g) *)
                 (fun z -> Put(x, y, z), Type.Unit)))
 
 
-
+(** abbriviation **)
 let p = print_string
 let rec indent n =
   if n = 0 then () else (p "  "; indent (n-1))
@@ -186,6 +198,7 @@ let rec p_rec xs j =
   | [] -> ()
   | y::ys -> print_newline (); indent j; p y; p_rec ys j
 
+(** print 関数 **)
 let rec print e i =
   indent i;
   let j = i + 1 in
@@ -196,6 +209,9 @@ let rec print e i =
   | Neg x      -> p ("neg " ^ x)
   | Add (x,y)  -> p ("add " ^ x ^ " " ^ y)
   | Sub (x,y)  -> p ("sub " ^ x ^ " " ^ y)
+  | Mul4 x      -> p ("mul " ^ x ^ " 4")
+  | Div2 x      -> p ("div " ^ x ^ " 2")
+  | Div10 x      -> p ("div " ^ x ^ " 10")
   | FNeg  x    -> p ("fneg " ^ x)
   | FAdd (x,y) -> p ("fadd " ^ x ^ " " ^ y)
   | FSub (x,y) -> p ("fsub " ^ x ^ " " ^ y)
@@ -231,6 +247,7 @@ let rec print e i =
 
 
 let f e = let return = fst (g M.empty e) in
-(print_newline (); print_newline (); p "KNormal.print"; print_newline (); print return 0; print_newline ());
+(* print before returning. *)
+(print_newline (); print_newline (); p "----- kNormal.print -----"; print_newline (); print return 0; print_newline ());
   return
 

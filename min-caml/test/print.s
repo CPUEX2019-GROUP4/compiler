@@ -1,27 +1,31 @@
-_min_caml_start: # main entry point
-#	main program starts
-	li	r2, 123
-	or r31 r0 r31
-	sw r31 r3 4
-	addi r3 r3 8
-	jal min_caml_print_int
-	subi r3 r3 8
-	lw r31 r3 4
-	or r31 r0 r31
-	li	r2, -456
-	or r31 r0 r31
-	sw r31 r3 4
-	addi r3 r3 8
-	jal min_caml_print_int
-	subi r3 r3 8
-	lw r31 r3 4
-	or r31 r0 r31
-	li	r2, 789
-	or r31 r0 r31
-	sw r31 r3 4
-	addi r3 r3 8
-	jal min_caml_print_int
-	subi r3 r3 8
-	lw r31 r3 4
-	or r31 r0 r31
-#	main program ends
+.data
+.balign	8
+.text
+.globl	min_caml_start
+min_caml_start:
+.globl	_min_caml_start
+_min_caml_start: # for cygwin
+	pushl	%eax
+	pushl	%ebx
+	pushl	%ecx
+	pushl	%edx
+	pushl	%esi
+	pushl	%edi
+	pushl	%ebp
+	movl	32(%esp),%ebp
+	movl	36(%esp),%eax
+	movl	%eax,min_caml_hp
+	movl	$123, %eax
+	call	min_caml_print_int
+	movl	$-456, %eax
+	call	min_caml_print_int
+	movl	$789, %eax
+	call	min_caml_print_int
+	popl	%ebp
+	popl	%edi
+	popl	%esi
+	popl	%edx
+	popl	%ecx
+	popl	%ebx
+	popl	%eax
+	ret
