@@ -1,9 +1,12 @@
 (* float (1) *)
+(*
 external fequal : float -> float -> bool = "%equal"
 external fless : float -> float -> bool = "%lessthan"
 
 let fispos x = x > 0.0
 let fisneg x = x < 0.0
+* 移植ずみ
+*)
 let fiszero x = (x = 0.0)
 
 (* int *)
@@ -26,8 +29,11 @@ external xor : bool -> bool -> bool = "%notequal"
 external not : bool -> bool = "%boolnot"
 *)
 (* float (2) *)
+(*
 let fhalf x = x *. 0.5
 let fsqr x = x *. x
+* 移植ずみ
+*)
 (*
 external (+.) : float -> float -> float = "%addfloat"
 external (-.) : float -> float -> float = "%subfloat"

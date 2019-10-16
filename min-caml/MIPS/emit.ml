@@ -101,11 +101,11 @@ and g' oc = function (* 各命令のアセンブリ生成 (caml2html: emit_gprime) *)
   | NonTail(x), FMul(y, z) -> Printf.fprintf oc "    fmul %s %s %s\n" (reg x) (reg y) (reg z)    (****************)
   | NonTail(x), FDiv(y, z) -> Printf.fprintf oc "    fdiv %s %s %s\n" (reg x) (reg y) (reg z)    (****************)
   | NonTail(x), Lfd(y, V(z)) ->
-      Printf.fprintf oc "    add r27 %s %s\n" (reg y) (reg z) (***************)
+      Printf.fprintf oc "    add r27 %s %s\n" (reg y) (reg z); (***************)
       Printf.fprintf oc "    lwcZ %s r27 0\n" (reg x) (***************)
   | NonTail(x), Lfd(y, C(z)) -> Printf.fprintf oc "    lwcZ %s %s %d\n" (reg x) (reg y) z        (****************)
   | NonTail(_), Stfd(x, y, V(z)) ->
-      Printf.fprintf oc "    add r27 %s %s\n" (reg y) (reg z)    (***********)
+      Printf.fprintf oc "    add r27 %s %s\n" (reg y) (reg z);    (***********)
       Printf.fprintf oc "    swcZ %s r27 0\n" (reg x)                  (***********)
   | NonTail(_), Stfd(x, y, C(z)) -> Printf.fprintf oc "    swcZ %s %s %d\n" (reg x) (reg y) z    (****************)
   | NonTail(_), Comment(s) -> Printf.fprintf oc "#    %s\n" s      (*************)
@@ -160,7 +160,7 @@ and g' oc = function (* 各命令のアセンブリ生成 (caml2html: emit_gprime) *)
   | Tail, IfFEq(x, y, e1, e2) ->
       Printf.fprintf oc "    fcmpu cr7, %s, %s # program dead by if $f = $f\n then ..." (reg x) (reg y); (*******)
       (*  g'_tail_if oc e1 e2 "beq" "bne" "r0" "r0"   *)
-  | Tail, IfFLE(x, y, e1, e2) ->
+  | Tail, IfFLt(x, y, e1, e2) ->
       Printf.fprintf oc "    fclt %s %s\n" (reg x) (reg y);   (********************)
 
       let b_else = Id.genid ("float_ble" ^ "_else") in
@@ -192,7 +192,7 @@ and g' oc = function (* 各命令のアセンブリ生成 (caml2html: emit_gprime) *)
   | NonTail(z), IfFEq(x, y, e1, e2) ->
       Printf.fprintf oc "    fcmpu    cr7, %s, %s #program dead by if $f = $f then ...\n" (reg x) (reg y);     (*******)
       (* g'_non_tail_if oc (NonTail(z)) e1 e2 "beq" "bne" "r0" "r0" *)
-  | NonTail(z), IfFLE(x, y, e1, e2) ->
+  | NonTail(z), IfFLt(x, y, e1, e2) ->
       Printf.fprintf oc "    fclt %s, %s\n" (reg x) (reg y);     (*****************)
 
       let dest = (NonTail(z)) in

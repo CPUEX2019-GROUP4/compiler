@@ -12,7 +12,7 @@ let rec target' src (dest, t) = function
       assert (t = Type.Float);
       false, [dest]
   | IfEq(_, _, e1, e2) | IfLE(_, _, e1, e2) | IfGE(_, _, e1, e2)
-  | IfFEq(_, _, e1, e2) | IfFLE(_, _, e1, e2) ->
+  | IfFEq(_, _, e1, e2) | IfFLt(_, _, e1, e2) ->
       let c1, rs1 = target src (dest, t) e1 in
       let c2, rs2 = target src (dest, t) e2 in
       c1 && c2, rs1 @ rs2

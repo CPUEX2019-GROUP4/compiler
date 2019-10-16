@@ -27,7 +27,9 @@ let light_dirvec =
   (v3, consts)
 in
 
-
+let fhalf x = x *. 0.5 in
+let fsqr x = x *. x in
+let fless a b = a <. b in
 (******************************************************************************
    ユーティリティー
  *****************************************************************************)
@@ -35,7 +37,7 @@ in
 (* 符号 *)
 let rec sgn x =
   if fiszero x then 0.0
-  else if fispos x then 1.0
+  else if x >. 0.0 then 1.0
   else -1.0
 in
 
@@ -612,7 +614,7 @@ let rec read_nth_object n =
       xyz.(1) <- read_float ();
       xyz.(2) <- read_float ();
 
-      let m_invert = fisneg (read_float ()) in (* 10 *)
+      let m_invert = (read_float ()) <. 0.0 in (* 10 *)
 
       let reflparam = Array.create 2 0.0 in
       reflparam.(0) <- read_float (); (* diffuse *)
@@ -747,7 +749,7 @@ in
 let rec solver_rect_surface m dirvec b0 b1 b2 i0 i1 i2  =
   if fiszero dirvec.(i0) then false else
   let abc = o_param_abc m in
-  let d = fneg_cond (xor (o_isinvert m) (fisneg dirvec.(i0))) abc.(i0) in
+  let d = fneg_cond (xor (o_isinvert m) (dirvec.(i0) <. 0.0)) abc.(i0) in
 
   let d2 = (d -. b0) /. dirvec.(i0) in
   if fless (fabs (d2 *. dirvec.(i1) +. b1)) abc.(i1) then
@@ -773,7 +775,7 @@ let rec solver_surface m dirvec b0 b1 b2 =
   (* 平面は極性が負に統一されている *)
   let abc = o_param_abc m in
   let d = veciprod dirvec abc in
-  if fispos d then (
+  if d >. 0.0 then (
     solver_dist.(0) <- fneg (veciprod2 abc b0 b1 b2) /. d;
     1
    ) else 0
@@ -838,7 +840,7 @@ let rec solver_second m dirvec b0 b1 b2 =
     (* 判別式 *)
     let d = fsqr bb -. aa *. cc in
 
-    if fispos d then (
+    if d >. 0.0 then (
       let sd = sqrt d in
       let t1 = if o_isinvert m then sd else fneg sd in
       (solver_dist.(0) <- (t1 -. bb) /.  aa; 1)
@@ -915,7 +917,7 @@ in
 
 (**** solver_surfaceのdirvecテーブル使用高速版 ******)
 let rec solver_surface_fast m dconst b0 b1 b2 =
-  if fisneg dconst.(0) then (
+  if dconst.(0) <. 0.0 then (
     solver_dist.(0) <-
       dconst.(1) *. b0 +. dconst.(2) *. b1 +. dconst.(3) *. b2;
     1
@@ -933,7 +935,7 @@ let rec solver_second_fast m dconst b0 b1 b2 =
     let cc0 = quadratic m b0 b1 b2 in
     let cc = if o_form m = 3 then cc0 -. 1.0 else cc0 in
     let d = (fsqr neg_bb) -. aa *. cc in
-    if fispos d then (
+    if d >. 0.0 then (
       if o_isinvert m then
 	solver_dist.(0) <- (neg_bb +. sqrt d) *. dconst.(4)
       else
@@ -964,7 +966,7 @@ in
 
 (* solver_surfaceのdirvec+startテーブル使用高速版 *)
 let rec solver_surface_fast2 m dconst sconst b0 b1 b2 =
-  if fisneg dconst.(0) then (
+  if dconst.(0) <. 0.0 then (
     solver_dist.(0) <- dconst.(0) *. sconst.(3);
     1
    ) else 0
@@ -980,7 +982,7 @@ let rec solver_second_fast2 m dconst sconst b0 b1 b2 =
     let neg_bb = dconst.(1) *. b0 +. dconst.(2) *. b1 +. dconst.(3) *. b2 in
     let cc = sconst.(3) in
     let d = (fsqr neg_bb) -. aa *. cc in
-    if fispos d then (
+    if d >. 0.0 then (
       if o_isinvert m then
 	solver_dist.(0) <- (neg_bb +. sqrt d) *. dconst.(4)
       else
@@ -1019,20 +1021,20 @@ let rec setup_rect_table vec m =
     const.(1) <- 0.0
   else (
     (* 面の X 座標 *)
-    const.(0) <- fneg_cond (xor (o_isinvert m) (fisneg vec.(0))) (o_param_a m);
+    const.(0) <- fneg_cond (xor (o_isinvert m) (vec.(0) <. 0.0)) (o_param_a m);
     (* 方向ベクトルを何倍すればX方向に1進むか *)
     const.(1) <- 1.0 /. vec.(0)
   );
   if fiszero vec.(1) then (* ZX平面 : YZ平面と同様*)
     const.(3) <- 0.0
   else (
-    const.(2) <- fneg_cond (xor (o_isinvert m) (fisneg vec.(1))) (o_param_b m);
+    const.(2) <- fneg_cond (xor (o_isinvert m) (vec.(1) <. 0.0)) (o_param_b m);
     const.(3) <- 1.0 /. vec.(1)
   );
   if fiszero vec.(2) then (* XY平面 : YZ平面と同様*)
     const.(5) <- 0.0
   else (
-    const.(4) <- fneg_cond (xor (o_isinvert m) (fisneg vec.(2))) (o_param_c m);
+    const.(4) <- fneg_cond (xor (o_isinvert m) (vec.(2) <. 0.0)) (o_param_c m);
     const.(5) <- 1.0 /. vec.(2)
   );
   const
@@ -1044,7 +1046,7 @@ let rec setup_surface_table vec m =
   let d =
     vec.(0) *. o_param_a m +. vec.(1) *. o_param_b m +. vec.(2) *. o_param_c m
   in
-  if fispos d then (
+  if d >. 0.0 then (
     (* 方向ベクトルを何倍すれば平面の垂直方向に 1 進むか *)
     const.(0) <- -1.0 /. d;
     (* ある点の平面からの距離が方向ベクトル何個分かを導く3次一形式の係数 *)
@@ -1156,14 +1158,14 @@ in
 (* 平面 *)
 let rec is_plane_outside m p0 p1 p2 =
   let w = veciprod2 (o_param_abc m) p0 p1 p2 in
-  not (xor (o_isinvert m) (fisneg w))
+  not (xor (o_isinvert m) (w <. 0.0))
 in
 
 (* 2次曲面 *)
 let rec is_second_outside m p0 p1 p2 =
   let w = quadratic m p0 p1 p2 in
   let w2 = if o_form m = 3 then w -. 1.0 else w in
-  not (xor (o_isinvert m) (fisneg w2))
+  not (xor (o_isinvert m) (w2 <. 0.0))
 in
 
 (* 物体の中心座標に平行移動した上で、適切な補助関数を呼ぶ *)
@@ -1592,7 +1594,7 @@ let rec utexture m p =
     in
     let w10 = w8 -. (floor w8) in
     let w11 = 0.15 -. (fsqr (0.5 -. w9)) -. (fsqr (0.5 -. w10)) in
-    let w12 = if fisneg w11 then 0.0 else w11 in
+    let w12 = if w11 <. 0.0 then 0.0 else w11 in
     texture_color.(2) <- (255.0 *. w12) /. 0.3
    )
   else ()
@@ -1606,12 +1608,12 @@ in
 let rec add_light bright hilight hilight_scale =
 
   (* 拡散光 *)
-  if fispos bright then
+  if bright >. 0.0 then
     vecaccum rgb bright texture_color
   else ();
 
   (* 不完全鏡面反射 cos ^4 モデル *)
-  if fispos hilight then (
+  if hilight >. 0.0 then (
     let ihl = fsqr (fsqr hilight) *. hilight_scale in
     rgb.(0) <- rgb.(0) +. ihl;
     rgb.(1) <- rgb.(1) +. ihl;
@@ -1720,7 +1722,7 @@ let rec trace_ray nref energy dirvec pixel dist =
       if nref <> 0 then (
 	let hl = fneg (veciprod dirvec light) in
         (* 90°を超える場合は0 (光なし) *)
-	if fispos hl then
+	if hl >. 0.0 then
 	  (
 	   (* ハイライト強度は角度の cos^3 に比例 *)
 	   let ihl = fsqr hl *. hl *. energy *. beam.(0) in
@@ -1753,7 +1755,7 @@ let rec trace_diffuse_ray dirvec energy =
     (* その物体が放射する光の強さを求める。直接光源光のみを計算 *)
     if not (shadow_check_one_or_matrix 0 or_net.(0)) then
       let br =  fneg (veciprod nvector light) in
-      let bright = (if fispos br then br else 0.0) in
+      let bright = (if br >. 0.0 then br else 0.0) in
       vecaccum diffuse_ray (energy *. bright *. o_diffuse obj) texture_color
     else ()
   else ()
@@ -1767,7 +1769,7 @@ let rec iter_trace_diffuse_rays dirvec_group nvector org index =
 
     (* 配列の 2n 番目と 2n+1 番目には互いに逆向の方向ベクトルが入っている
        法線ベクトルと同じ向きの物を選んで使う *)
-    if fisneg p then
+    if p <. 0.0 then
       trace_diffuse_ray dirvec_group.(index + 1) (p /. -150.0)
     else
       trace_diffuse_ray dirvec_group.(index) (p /. 150.0);

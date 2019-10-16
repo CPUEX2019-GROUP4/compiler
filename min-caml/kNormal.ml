@@ -17,6 +17,7 @@ type t = (* K正規化後の式 (caml2html: knormal_t) *)
   | FDiv of Id.t * Id.t
   | IfEq of Id.t * Id.t * t * t (* 比較 + 分岐 (caml2html: knormal_branch) *)
   | IfLE of Id.t * Id.t * t * t (* 比較 + 分岐 *)
+  | IfFLt of Id.t * Id.t * t * t (* float 比較 + 分岐 *)
   | Let of (Id.t * Type.t) * t * t
   | Var of Id.t
   | LetRec of fundef * t
@@ -33,7 +34,7 @@ let rec fv = function (* 式に出現する（自由な）変数 (caml2html: knormal_fv) *)
   | Unit | Int(_) | Float(_) | ExtArray(_) -> S.empty
   | Neg(x) | FNeg(x) | Mul4(x) | Div2(x) | Div10(x) -> S.singleton x
   | Add(x, y) | Sub(x, y) | FAdd(x, y) | FSub(x, y) | FMul(x, y) | FDiv(x, y) | Get(x, y) -> S.of_list [x; y]
-  | IfEq(x, y, e1, e2) | IfLE(x, y, e1, e2) -> S.add x (S.add y (S.union (fv e1) (fv e2)))
+  | IfEq(x, y, e1, e2) | IfLE(x, y, e1, e2) | IfFLt(x, y, e1, e2)-> S.add x (S.add y (S.union (fv e1) (fv e2)))
   | Let((x, t), e1, e2) -> S.union (fv e1) (S.remove x (fv e2))
   | Var(x) -> S.singleton x
   | LetRec({ name = (x, t); args = yts; body = e1 }, e2) ->
@@ -97,7 +98,7 @@ let rec g env = function (* K正規化ルーチン本体 (caml2html: knormal_g) *)
       insert_let (g env e1)
         (fun x -> insert_let (g env e2)
             (fun y -> FDiv(x, y), Type.Float))
-  | Syntax.Eq _ | Syntax.LE _ as cmp ->
+  | Syntax.Eq _ | Syntax.LE _ | Syntax.FLt _ as cmp ->
       g env (Syntax.If(cmp, Syntax.Bool(true), Syntax.Bool(false)))
   | Syntax.If(Syntax.Not(e1), e2, e3) -> g env (Syntax.If(e1, e3, e2)) (* notによる分岐を変換 (caml2html: knormal_not) *)
   | Syntax.If(Syntax.Eq(e1, e2), e3, e4) ->
@@ -114,6 +115,13 @@ let rec g env = function (* K正規化ルーチン本体 (caml2html: knormal_g) *)
               let e3', t3 = g env e3 in
               let e4', t4 = g env e4 in
               IfLE(x, y, e3', e4'), t3))
+  | Syntax.If(Syntax.FLt(e1,e2),e3,e4) -> (***********************)
+      insert_let (g env e1)
+        (fun x -> insert_let (g env e2)
+            (fun y ->
+              let e3', t3 = g env e3 in
+              let e4', t4 = g env e4 in
+              IfFLt(x, y, e3', e4'), t3))
   | Syntax.If(e1, e2, e3) -> g env (Syntax.If(Syntax.Eq(e1, Syntax.Bool(false)), e3, e2)) (* 比較のない分岐を変換 (caml2html: knormal_if) *)
   | Syntax.Let((x, t), e1, e2) ->
       let e1', t1 = g env e1 in
@@ -220,6 +228,8 @@ let rec print e i =
   | IfEq (a,b,e1,e2) -> p ("if " ^ a ^ " == " ^ b); print_newline ();
                         print e1 j; print_newline (); print e2 j
   | IfLE (a,b,e1,e2) -> p ("if " ^ a ^ " <= " ^ b); print_newline ();
+                        print e1 j; print_newline (); print e2 j
+  | IfFLt (a,b,e1,e2) -> p ("if " ^ a ^ " <. " ^ b); print_newline ();
                         print e1 j; print_newline (); print e2 j
   | Let ((name,typ),e1,e2) -> p ("let " ^ name ^ " : "); Type.print typ; p " ="; print_newline ();
                               print e1 j; print_newline (); indent i; p "in"; print_newline ();

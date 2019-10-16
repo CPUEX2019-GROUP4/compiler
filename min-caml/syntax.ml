@@ -17,6 +17,7 @@ type t = (* MinCamlの構文を表現するデータ型 (caml2html: syntax_t) *)
   | FDiv of t * t
   | Eq of t * t
   | LE of t * t
+  | FLt of t * t
   | If of t * t * t
   | Let of (Id.t * Type.t) * t * t
   | Var of Id.t
@@ -60,6 +61,7 @@ let rec print e i =
   | FDiv (x, y) -> p "FDIV"; print x (i + 1); print y (i + 1)
   | Eq  (x, y) -> p "EQ"; print x (i + 1); print y (i + 1)
   | LE (x, y) -> p "LE"; print x (i + 1); print y (i + 1)
+  | FLt (x, y) -> p "FLt"; print x (i + 1); print y (i + 1)
   | If (x, y, z) -> p "IF"; print x (i + 1); print y (i + 1); print z (i + 1)
   | Let ((x, t), y, z) -> p ("LET " ^ x ^ " ("); Type.print t; p ")";
                           print y (i + 1); print z (i + 1)

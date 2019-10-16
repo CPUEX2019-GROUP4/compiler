@@ -62,6 +62,10 @@ rule token = parse
     { LESS }
 | '>'
     { GREATER }
+| "<."
+    { LESS_DOT }
+| ">."
+    { GREATER_DOT }
 | "if"
     { IF }
 | "then"
