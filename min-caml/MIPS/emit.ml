@@ -68,7 +68,7 @@ and g' oc = function (* 各命令のアセンブリ生成 (caml2html: emit_gprime) *)
       Printf.fprintf oc "    ori %s %s %d\n" r r m     (*****************)
   | NonTail(x), FLi(Id.L(l)) ->
       let s = load_label (reg reg_tmp) l in
-      Printf.fprintf oc "%s    lfd %s 0(%s)\n" s (reg x) (reg reg_tmp)
+      Printf.fprintf oc "%s    lfd %s %s 0\n" s (reg x) (reg reg_tmp)    (***** what is this ??????????? *******)
   | NonTail(x), SetL(Id.L(y)) ->
       let s = load_label x y in
       Printf.fprintf oc "%s" s
@@ -94,16 +94,20 @@ and g' oc = function (* 各命令のアセンブリ生成 (caml2html: emit_gprime) *)
   | NonTail(_), Stw(x, y, C(z)) -> Printf.fprintf oc "    sw %s %s %d\n" (reg x) (reg y) z       (************)
 
   | NonTail(x), FMr(y) when x = y -> ()
-  | NonTail(x), FMr(y) -> Printf.fprintf oc "    fmr    %s, %s\n" (reg x) (reg y)
-  | NonTail(x), FNeg(y) -> Printf.fprintf oc "    fneg    %s, %s\n" (reg x) (reg y)
+  | NonTail(x), FMr(y) -> Printf.fprintf oc "    fmv %s %s\n" (reg x) (reg y)                    (****************)
+  | NonTail(x), FNeg(y) -> Printf.fprintf oc "    fneg %s %s\n" (reg x) (reg y)                  (****************)
   | NonTail(x), FAdd(y, z) -> Printf.fprintf oc "    fadd %s %s %s\n" (reg x) (reg y) (reg z)    (****************)
   | NonTail(x), FSub(y, z) -> Printf.fprintf oc "    fsub %s %s %s\n" (reg x) (reg y) (reg z)    (****************)
   | NonTail(x), FMul(y, z) -> Printf.fprintf oc "    fmul %s %s %s\n" (reg x) (reg y) (reg z)    (****************)
   | NonTail(x), FDiv(y, z) -> Printf.fprintf oc "    fdiv %s %s %s\n" (reg x) (reg y) (reg z)    (****************)
-  | NonTail(x), Lfd(y, V(z)) -> Printf.fprintf oc "    lfdx    %s, %s, %s\n" (reg x) (reg y) (reg z)
-  | NonTail(x), Lfd(y, C(z)) -> Printf.fprintf oc "    lfd    %s, %d(%s)\n" (reg x) z (reg y)
-  | NonTail(_), Stfd(x, y, V(z)) -> Printf.fprintf oc "    stfdx    %s, %s, %s\n" (reg x) (reg y) (reg z)
-  | NonTail(_), Stfd(x, y, C(z)) -> Printf.fprintf oc "    stfd    %s, %d(%s)\n" (reg x) z (reg y)
+  | NonTail(x), Lfd(y, V(z)) ->
+      Printf.fprintf oc "    add r27 %s %s\n" (reg y) (reg z) (***************)
+      Printf.fprintf oc "    lwcZ %s r27 0\n" (reg x) (***************)
+  | NonTail(x), Lfd(y, C(z)) -> Printf.fprintf oc "    lwcZ %s %s %d\n" (reg x) (reg y) z        (****************)
+  | NonTail(_), Stfd(x, y, V(z)) ->
+      Printf.fprintf oc "    add r27 %s %s\n" (reg y) (reg z)    (***********)
+      Printf.fprintf oc "    swcZ %s r27 0\n" (reg x)                  (***********)
+  | NonTail(_), Stfd(x, y, C(z)) -> Printf.fprintf oc "    swcZ %s %s %d\n" (reg x) (reg y) z    (****************)
   | NonTail(_), Comment(s) -> Printf.fprintf oc "#    %s\n" s      (*************)
   (* 退避の仮想命令の実装 (caml2html: emit_save) *)
   | NonTail(_), Save(x, y) when List.mem x allregs && not (S.mem y !stackset) ->
@@ -111,14 +115,14 @@ and g' oc = function (* 各命令のアセンブリ生成 (caml2html: emit_gprime) *)
       Printf.fprintf oc "    sw %s %s %d\n" (reg x) (reg reg_sp) (offset y)      (*****************)
   | NonTail(_), Save(x, y) when List.mem x allfregs && not (S.mem y !stackset) ->
       savef y;
-      Printf.fprintf oc "    stfd    %s, %d(%s)\n" (reg x) (offset y) (reg reg_sp)
+      Printf.fprintf oc "    swcZ %s %s %d\n" (reg x) (reg reg_sp) (offset y)  (**** sfd store double *****)
   | NonTail(_), Save(x, y) -> assert (S.mem y !stackset); ()
   (* 復帰の仮想命令の実装 (caml2html: emit_restore) *)
   | NonTail(x), Restore(y) when List.mem x allregs ->
       Printf.fprintf oc "    lw %s %s %d\n" (reg x) (reg reg_sp) (offset y)      (*************)
   | NonTail(x), Restore(y) ->
       assert (List.mem x allfregs);
-      Printf.fprintf oc "    lfd    %s, %d(%s)\n" (reg x) (offset y) (reg reg_sp)
+      Printf.fprintf oc "    lwcZ %s %s %d\n" (reg x) (reg reg_sp) (offset y)  (**** lfd load double ****)
   (* 末尾だったら計算結果を第一レジスタにセットしてリターン (caml2html: emit_tailret) *)
   | Tail, (Nop | Stw _ | Stfd _ | Comment _ | Save _ as exp) ->
       g' oc (NonTail(Id.gentmp Type.Unit), exp);
@@ -228,7 +232,7 @@ and g' oc = function (* 各命令のアセンブリ生成 (caml2html: emit_gprime) *)
       if List.mem a allregs && a <> regs.(0) then
         Printf.fprintf oc "    or %s r0 %s\n" (reg a) (reg regs.(0))  (***************)
       else if List.mem a allfregs && a <> fregs.(0) then
-        Printf.fprintf oc "    fmr    %s, %s\n" (reg a) (reg fregs.(0));
+        Printf.fprintf oc "    fmv %s %s\n" (reg a) (reg fregs.(0));   (**************)
       Printf.fprintf oc "    or r31 r0 %s\n" (reg reg_tmp)      (************)
   | (NonTail(a), CallDir(Id.L(x), ys, zs)) ->
       Printf.fprintf oc "    or %s r0 r31\n" (reg reg_tmp);     (************)
@@ -242,7 +246,7 @@ and g' oc = function (* 各命令のアセンブリ生成 (caml2html: emit_gprime) *)
       if List.mem a allregs && a <> regs.(0) then
         Printf.fprintf oc "    or %s r0 %s\n" (reg a) (reg regs.(0))   (******************)
       else if List.mem a allfregs && a <> fregs.(0) then
-        Printf.fprintf oc "    fmr    %s, %s\n" (reg a) (reg fregs.(0));
+        Printf.fprintf oc "    fmv %s %s\n" (reg a) (reg fregs.(0)); (*********************)
       Printf.fprintf oc "    or r31 r0 %s\n" (reg reg_tmp) (******************)
 and g'_tail_if oc e1 e2 b bn rx ry =               (**************************)
   let b_else = Id.genid (b ^ "_else") in
@@ -281,7 +285,7 @@ and g'_args oc x_reg_cl ys zs =
       (0, [])
       zs in
   List.iter
-    (fun (z, fr) -> Printf.fprintf oc "    fmr    %s, %s\n" (reg fr) (reg z))
+    (fun (z, fr) -> Printf.fprintf oc "    fmv  %s %s\n" (reg fr) (reg z))  (****************)
     (shuffle reg_fsw zfrs)
 
 let h oc { name = Id.L(x); args = _; fargs = _; body = e; ret = _ } =
