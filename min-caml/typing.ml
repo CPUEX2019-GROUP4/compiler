@@ -117,7 +117,9 @@ let rec g env e = (* 型推論ルーチン (caml2html: typing_g) *)
         unify Type.Float (g env e2);
         Type.Float
     | Eq(e1, e2) | LE(e1, e2) ->
-        unify (g env e1) (g env e2);
+        (* unify (g env e1) (g env e2); *)    (**** eq は 両辺 int に限定した ****)
+        unify Type.Int  (g env e1);
+        unify Type.Int (g env e2);
         Type.Bool
     | If(e1, e2, e3) ->
         unify (g env e1) Type.Bool;

@@ -1,311 +1,417 @@
-.data
-.balign	8
-l.345:	# 12.000000
-	.long	0x0
-	.long	0x40280000
-l.343:	# 11.000000
-	.long	0x0
-	.long	0x40260000
-l.341:	# 10.000000
-	.long	0x0
-	.long	0x40240000
-l.339:	# 9.000000
-	.long	0x0
-	.long	0x40220000
-l.337:	# 8.000000
-	.long	0x0
-	.long	0x40200000
-l.335:	# 7.000000
-	.long	0x0
-	.long	0x401c0000
-l.333:	# 6.000000
-	.long	0x0
-	.long	0x40180000
-l.331:	# 5.000000
-	.long	0x0
-	.long	0x40140000
-l.329:	# 4.000000
-	.long	0x0
-	.long	0x40100000
-l.327:	# 3.000000
-	.long	0x0
-	.long	0x40080000
-l.325:	# 2.000000
-	.long	0x0
-	.long	0x40000000
-l.323:	# 1.000000
-	.long	0x0
-	.long	0x3ff00000
-l.320:	# 0.000000
-	.long	0x0
-	.long	0x0
-.text
+    .data
+    .literal8
+    .align 3
+l.364:    # 12.000000
+    .long    0
+    .long    1076363264
+    .align 3
+l.361:    # 11.000000
+    .long    0
+    .long    1076232192
+    .align 3
+l.358:    # 10.000000
+    .long    0
+    .long    1076101120
+    .align 3
+l.355:    # 9.000000
+    .long    0
+    .long    1075970048
+    .align 3
+l.352:    # 8.000000
+    .long    0
+    .long    1075838976
+    .align 3
+l.349:    # 7.000000
+    .long    0
+    .long    1075576832
+    .align 3
+l.346:    # 6.000000
+    .long    0
+    .long    1075314688
+    .align 3
+l.343:    # 5.000000
+    .long    0
+    .long    1075052544
+    .align 3
+l.340:    # 4.000000
+    .long    0
+    .long    1074790400
+    .align 3
+l.337:    # 3.000000
+    .long    0
+    .long    1074266112
+    .align 3
+l.334:    # 2.000000
+    .long    0
+    .long    1073741824
+    .align 3
+l.331:    # 1.000000
+    .long    0
+    .long    1072693248
+    .align 3
+l.328:    # 0.000000
+    .long    0
+    .long    0
+#    main program starts
+    ori r2 r0 0
+    lui r31 ha16(l.328)
+    ori r31 r31 lo16(l.328)
+    lfd f0 0(r31)
+    or r31 r0 r31
+    sw r31 r3 4
+    addi r3 r3 8
+    jal min_caml_create_float_array
+    subi r3 r3 8
+    lw r31 r3 4
+    or r6 r0 r2
+    or r31 r0 r31
+    ori r2 r0 2
+    ori r5 r0 3
+    sw r6 r3 0
+    or r31 r0 r31
+    sw r31 r3 4
+    addi r3 r3 8
+    jal make.173
+    subi r3 r3 8
+    lw r31 r3 4
+    or r31 r0 r31
+    ori r5 r0 3
+    ori r6 r0 2
+    lw r7 r3 0
+    sw r2 r3 4
+    or r31 r0 r31
+    mv r2 r5
+    mv r5 r6
+    mv r6 r7
+    sw r31 r3 12
+    addi r3 r3 16
+    jal make.173
+    subi r3 r3 16
+    lw r31 r3 12
+    or r31 r0 r31
+    ori r5 r0 2
+    ori r6 r0 2
+    lw r7 r3 0
+    sw r2 r3 8
+    or r31 r0 r31
+    mv r2 r5
+    mv r5 r6
+    mv r6 r7
+    sw r31 r3 12
+    addi r3 r3 16
+    jal make.173
+    subi r3 r3 16
+    lw r31 r3 12
+    or r9 r0 r2
+    or r31 r0 r31
+    lw r7 r3 4
+    lw r2 r7 0
+    lui r31 ha16(l.331)
+    ori r31 r31 lo16(l.331)
+    lfd f0 0(r31)
+    stfd    f0, 0(r2)
+    lw r2 r7 0
+    lui r31 ha16(l.334)
+    ori r31 r31 lo16(l.334)
+    lfd f0 0(r31)
+    stfd    f0, 8(r2)
+    lw r2 r7 0
+    lui r31 ha16(l.337)
+    ori r31 r31 lo16(l.337)
+    lfd f0 0(r31)
+    stfd    f0, 16(r2)
+    lw r2 r7 4
+    lui r31 ha16(l.340)
+    ori r31 r31 lo16(l.340)
+    lfd f0 0(r31)
+    stfd    f0, 0(r2)
+    lw r2 r7 4
+    lui r31 ha16(l.343)
+    ori r31 r31 lo16(l.343)
+    lfd f0 0(r31)
+    stfd    f0, 8(r2)
+    lw r2 r7 4
+    lui r31 ha16(l.346)
+    ori r31 r31 lo16(l.346)
+    lfd f0 0(r31)
+    stfd    f0, 16(r2)
+    lw r8 r3 8
+    lw r2 r8 0
+    lui r31 ha16(l.349)
+    ori r31 r31 lo16(l.349)
+    lfd f0 0(r31)
+    stfd    f0, 0(r2)
+    lw r2 r8 0
+    lui r31 ha16(l.352)
+    ori r31 r31 lo16(l.352)
+    lfd f0 0(r31)
+    stfd    f0, 8(r2)
+    lw r2 r8 4
+    lui r31 ha16(l.355)
+    ori r31 r31 lo16(l.355)
+    lfd f0 0(r31)
+    stfd    f0, 0(r2)
+    lw r2 r8 4
+    lui r31 ha16(l.358)
+    ori r31 r31 lo16(l.358)
+    lfd f0 0(r31)
+    stfd    f0, 8(r2)
+    lw r2 r8 8
+    lui r31 ha16(l.361)
+    ori r31 r31 lo16(l.361)
+    lfd f0 0(r31)
+    stfd    f0, 0(r2)
+    lw r2 r8 8
+    lui r31 ha16(l.364)
+    ori r31 r31 lo16(l.364)
+    lfd f0 0(r31)
+    stfd    f0, 8(r2)
+    ori r2 r0 2
+    ori r5 r0 3
+    ori r6 r0 2
+    sw r9 r3 12
+    or r31 r0 r31
+    sw r31 r3 20
+    addi r3 r3 24
+    jal mul.161
+    subi r3 r3 24
+    lw r31 r3 20
+    or r31 r0 r31
+    lw r2 r3 12
+    lw r5 r2 0
+    lfd    f0, 0(r5)
+    or r31 r0 r31
+    sw r31 r3 20
+    addi r3 r3 24
+    jal min_caml_truncate
+    subi r3 r3 24
+    lw r31 r3 20
+    or r31 r0 r31
+    or r31 r0 r31
+    sw r31 r3 20
+    addi r3 r3 24
+    jal min_caml_print_int
+    subi r3 r3 24
+    lw r31 r3 20
+    or r31 r0 r31
+    or r31 r0 r31
+    sw r31 r3 20
+    addi r3 r3 24
+    jal min_caml_print_newline
+    subi r3 r3 24
+    lw r31 r3 20
+    or r31 r0 r31
+    lw r2 r3 12
+    lw r5 r2 0
+    lfd    f0, 8(r5)
+    or r31 r0 r31
+    sw r31 r3 20
+    addi r3 r3 24
+    jal min_caml_truncate
+    subi r3 r3 24
+    lw r31 r3 20
+    or r31 r0 r31
+    or r31 r0 r31
+    sw r31 r3 20
+    addi r3 r3 24
+    jal min_caml_print_int
+    subi r3 r3 24
+    lw r31 r3 20
+    or r31 r0 r31
+    or r31 r0 r31
+    sw r31 r3 20
+    addi r3 r3 24
+    jal min_caml_print_newline
+    subi r3 r3 24
+    lw r31 r3 20
+    or r31 r0 r31
+    lw r2 r3 12
+    lw r5 r2 4
+    lfd    f0, 0(r5)
+    or r31 r0 r31
+    sw r31 r3 20
+    addi r3 r3 24
+    jal min_caml_truncate
+    subi r3 r3 24
+    lw r31 r3 20
+    or r31 r0 r31
+    or r31 r0 r31
+    sw r31 r3 20
+    addi r3 r3 24
+    jal min_caml_print_int
+    subi r3 r3 24
+    lw r31 r3 20
+    or r31 r0 r31
+    or r31 r0 r31
+    sw r31 r3 20
+    addi r3 r3 24
+    jal min_caml_print_newline
+    subi r3 r3 24
+    lw r31 r3 20
+    or r31 r0 r31
+    lw r2 r3 12
+    lw r2 r2 4
+    lfd    f0, 8(r2)
+    or r31 r0 r31
+    sw r31 r3 20
+    addi r3 r3 24
+    jal min_caml_truncate
+    subi r3 r3 24
+    lw r31 r3 20
+    or r31 r0 r31
+    or r31 r0 r31
+    sw r31 r3 20
+    addi r3 r3 24
+    jal min_caml_print_int
+    subi r3 r3 24
+    lw r31 r3 20
+    or r31 r0 r31
+    or r31 r0 r31
+    sw r31 r3 20
+    addi r3 r3 24
+    jal min_caml_print_newline
+    subi r3 r3 24
+    lw r31 r3 20
+    or r31 r0 r31
+#    main program ends
 loop3.140:
-	cmpl	$0, %ebx
-	jl	jge_else.382
-	movl	%esi, 0(%ebp)
-	movl	(%edi,%eax,4), %esi
-	movl	%edi, 4(%ebp)
-	movl	(%edi,%eax,4), %edi
-	movsd	(%edi,%ecx,8), %xmm0
-	movl	(%edx,%eax,4), %edi
-	movsd	(%edi,%ebx,8), %xmm1
-	movl	0(%ebp), %edi
-	movl	(%edi,%ebx,4), %edi
-	movsd	(%edi,%ecx,8), %xmm2
-	mulsd	%xmm2, %xmm1
-	addsd	%xmm1, %xmm0
-	movsd	%xmm0, (%esi,%ecx,8)
-	subl	$1, %ebx
-	movl	0(%ebp), %esi
-	movl	4(%ebp), %edi
-	jmp	loop3.140
-jge_else.382:
-	ret
+    slti r28 r5 0
+    bne r0 r28 bge_else.406
+    sllv r10 r2 2
+ #shift    add r27 r9 r10
+    lw r10 r27 0
+    sllv r11 r2 2
+ #shift    add r27 r9 r11
+    lw r11 r27 0
+    sllv r12 r6 3
+ #shift    lfdx    f0, r11, r12
+    sllv r11 r2 2
+ #shift    add r27 r7 r11
+    lw r11 r27 0
+    sllv r12 r5 3
+ #shift    lfdx    f1, r11, r12
+    sllv r11 r5 2
+ #shift    add r27 r8 r11
+    lw r11 r27 0
+    sllv r12 r6 3
+ #shift    lfdx    f2, r11, r12
+    fmul f1 f1 f2
+    fadd f0 f0 f1
+    sllv r11 r6 3
+ #shift    stfdx    f0, r10, r11
+    subi r5 r5 1
+    j loop3.140
+bge_else.406:
+    jr r31
 loop2.147:
-	cmpl	$0, %ecx
-	jl	jge_else.384
-	movl	%ebx, 0(%ebp)
-	subl	$1, %ebx
-	movl	%edi, 4(%ebp)
-	movl	%esi, 8(%ebp)
-	movl	%edx, 12(%ebp)
-	movl	%eax, 16(%ebp)
-	movl	%ecx, 20(%ebp)
-	addl	$24, %ebp
-	call	loop3.140
-	subl	$24, %ebp
-	movl	20(%ebp), %eax
-	movl	%eax, %ecx
-	subl	$1, %ecx
-	movl	16(%ebp), %eax
-	movl	0(%ebp), %ebx
-	movl	12(%ebp), %edx
-	movl	8(%ebp), %esi
-	movl	4(%ebp), %edi
-	jmp	loop2.147
-jge_else.384:
-	ret
+    slti r28 r6 0
+    bne r0 r28 bge_else.408
+    subi r10 r5 1
+    sw r9 r3 0
+    sw r8 r3 4
+    sw r7 r3 8
+    sw r5 r3 12
+    sw r2 r3 16
+    sw r6 r3 20
+    or r31 r0 r31
+    mv r5 r10
+    sw r31 r3 28
+    addi r3 r3 32
+    jal loop3.140
+    subi r3 r3 32
+    lw r31 r3 28
+    or r31 r0 r31
+    lw r2 r3 20
+    subi r6 r2 1
+    lw r2 r3 16
+    lw r5 r3 12
+    lw r7 r3 8
+    lw r8 r3 4
+    lw r9 r3 0
+    j loop2.147
+bge_else.408:
+    jr r31
 loop1.154:
-	cmpl	$0, %eax
-	jl	jge_else.386
-	movl	%ecx, 0(%ebp)
-	subl	$1, %ecx
-	movl	%edi, 4(%ebp)
-	movl	%esi, 8(%ebp)
-	movl	%edx, 12(%ebp)
-	movl	%ebx, 16(%ebp)
-	movl	%eax, 20(%ebp)
-	addl	$24, %ebp
-	call	loop2.147
-	subl	$24, %ebp
-	movl	20(%ebp), %eax
-	subl	$1, %eax
-	movl	16(%ebp), %ebx
-	movl	0(%ebp), %ecx
-	movl	12(%ebp), %edx
-	movl	8(%ebp), %esi
-	movl	4(%ebp), %edi
-	jmp	loop1.154
-jge_else.386:
-	ret
+    slti r28 r2 0
+    bne r0 r28 bge_else.410
+    subi r10 r6 1
+    sw r9 r3 0
+    sw r8 r3 4
+    sw r7 r3 8
+    sw r6 r3 12
+    sw r5 r3 16
+    sw r2 r3 20
+    or r31 r0 r31
+    mv r6 r10
+    sw r31 r3 28
+    addi r3 r3 32
+    jal loop2.147
+    subi r3 r3 32
+    lw r31 r3 28
+    or r31 r0 r31
+    lw r2 r3 20
+    subi r2 r2 1
+    lw r5 r3 16
+    lw r6 r3 12
+    lw r7 r3 8
+    lw r8 r3 4
+    lw r9 r3 0
+    j loop1.154
+bge_else.410:
+    jr r31
 mul.161:
-	subl	$1, %eax
-	jmp	loop1.154
+    subi r2 r2 1
+    j loop1.154
 init.169:
-	cmpl	$0, %eax
-	jl	jge_else.388
-	movl	$l.320, %edx
-	movsd	0(%edx), %xmm0
-	movl	%ebx, 0(%ebp)
-	movl	%eax, 4(%ebp)
-	movl	%ecx, 8(%ebp)
-	movl	%ebx, %eax
-	addl	$16, %ebp
-	call	min_caml_create_float_array
-	subl	$16, %ebp
-	movl	4(%ebp), %ebx
-	movl	8(%ebp), %ecx
-	movl	%eax, (%ecx,%ebx,4)
-	movl	%ebx, %eax
-	subl	$1, %eax
-	movl	0(%ebp), %ebx
-	jmp	init.169
-jge_else.388:
-	ret
+    slti r28 r2 0
+    bne r0 r28 bge_else.412
+    lui r31 ha16(l.328)
+    ori r31 r31 lo16(l.328)
+    lfd f0 0(r31)
+    sw r5 r3 0
+    sw r6 r3 4
+    sw r2 r3 8
+    or r31 r0 r31
+    mv r2 r5
+    sw r31 r3 12
+    addi r3 r3 16
+    jal min_caml_create_float_array
+    subi r3 r3 16
+    lw r31 r3 12
+    or r31 r0 r31
+    lw r5 r3 8
+    sllv r6 r5 2
+ #shift    lw r7 r3 4
+    add r27 r7 r6
+    sw r2 r27 0
+    subi r2 r5 1
+    lw r5 r3 0
+    mv r6 r7
+    j init.169
+bge_else.412:
+    jr r31
 make.173:
-	movl	%ebx, 0(%ebp)
-	movl	%eax, 4(%ebp)
-	movl	%ecx, %ebx
-	addl	$8, %ebp
-	call	min_caml_create_array
-	subl	$8, %ebp
-	movl	%eax, %ecx
-	movl	4(%ebp), %eax
-	subl	$1, %eax
-	movl	0(%ebp), %ebx
-	movl	%ecx, 8(%ebp)
-	addl	$16, %ebp
-	call	init.169
-	subl	$16, %ebp
-	movl	8(%ebp), %eax
-	ret
-.globl	min_caml_start
-min_caml_start:
-.globl	_min_caml_start
-_min_caml_start: # for cygwin
-	pushl	%eax
-	pushl	%ebx
-	pushl	%ecx
-	pushl	%edx
-	pushl	%esi
-	pushl	%edi
-	pushl	%ebp
-	movl	32(%esp),%ebp
-	movl	36(%esp),%eax
-	movl	%eax,min_caml_hp
-	movl	$0, %eax
-	movl	$l.320, %ebx
-	movsd	0(%ebx), %xmm0
-	call	min_caml_create_float_array
-	movl	%eax, %ecx
-	movl	$2, %eax
-	movl	$3, %ebx
-	movl	%ecx, 0(%ebp)
-	addl	$8, %ebp
-	call	make.173
-	subl	$8, %ebp
-	movl	$3, %ebx
-	movl	$2, %ecx
-	movl	0(%ebp), %edx
-	movl	%eax, 4(%ebp)
-	movl	%ebx, %eax
-	movl	%ecx, %ebx
-	movl	%edx, %ecx
-	addl	$8, %ebp
-	call	make.173
-	subl	$8, %ebp
-	movl	$2, %ebx
-	movl	$2, %ecx
-	movl	0(%ebp), %edx
-	movl	%eax, 8(%ebp)
-	movl	%ebx, %eax
-	movl	%ecx, %ebx
-	movl	%edx, %ecx
-	addl	$16, %ebp
-	call	make.173
-	subl	$16, %ebp
-	movl	%eax, %edi
-	movl	4(%ebp), %edx
-	movl	0(%edx), %eax
-	movl	$l.323, %ebx
-	movsd	0(%ebx), %xmm0
-	movsd	%xmm0, 0(%eax)
-	movl	0(%edx), %eax
-	movl	$l.325, %ebx
-	movsd	0(%ebx), %xmm0
-	movsd	%xmm0, 8(%eax)
-	movl	0(%edx), %eax
-	movl	$l.327, %ebx
-	movsd	0(%ebx), %xmm0
-	movsd	%xmm0, 16(%eax)
-	movl	4(%edx), %eax
-	movl	$l.329, %ebx
-	movsd	0(%ebx), %xmm0
-	movsd	%xmm0, 0(%eax)
-	movl	4(%edx), %eax
-	movl	$l.331, %ebx
-	movsd	0(%ebx), %xmm0
-	movsd	%xmm0, 8(%eax)
-	movl	4(%edx), %eax
-	movl	$l.333, %ebx
-	movsd	0(%ebx), %xmm0
-	movsd	%xmm0, 16(%eax)
-	movl	8(%ebp), %esi
-	movl	0(%esi), %eax
-	movl	$l.335, %ebx
-	movsd	0(%ebx), %xmm0
-	movsd	%xmm0, 0(%eax)
-	movl	0(%esi), %eax
-	movl	$l.337, %ebx
-	movsd	0(%ebx), %xmm0
-	movsd	%xmm0, 8(%eax)
-	movl	4(%esi), %eax
-	movl	$l.339, %ebx
-	movsd	0(%ebx), %xmm0
-	movsd	%xmm0, 0(%eax)
-	movl	4(%esi), %eax
-	movl	$l.341, %ebx
-	movsd	0(%ebx), %xmm0
-	movsd	%xmm0, 8(%eax)
-	movl	8(%esi), %eax
-	movl	$l.343, %ebx
-	movsd	0(%ebx), %xmm0
-	movsd	%xmm0, 0(%eax)
-	movl	8(%esi), %eax
-	movl	$l.345, %ebx
-	movsd	0(%ebx), %xmm0
-	movsd	%xmm0, 8(%eax)
-	movl	$2, %eax
-	movl	$3, %ebx
-	movl	$2, %ecx
-	movl	%edi, 12(%ebp)
-	addl	$16, %ebp
-	call	mul.161
-	subl	$16, %ebp
-	movl	12(%ebp), %eax
-	movl	0(%eax), %ebx
-	movsd	0(%ebx), %xmm0
-	addl	$16, %ebp
-	call	min_caml_truncate
-	subl	$16, %ebp
-	addl	$16, %ebp
-	call	min_caml_print_int
-	subl	$16, %ebp
-	addl	$16, %ebp
-	call	min_caml_print_newline
-	subl	$16, %ebp
-	movl	12(%ebp), %eax
-	movl	0(%eax), %ebx
-	movsd	8(%ebx), %xmm0
-	addl	$16, %ebp
-	call	min_caml_truncate
-	subl	$16, %ebp
-	addl	$16, %ebp
-	call	min_caml_print_int
-	subl	$16, %ebp
-	addl	$16, %ebp
-	call	min_caml_print_newline
-	subl	$16, %ebp
-	movl	12(%ebp), %eax
-	movl	4(%eax), %ebx
-	movsd	0(%ebx), %xmm0
-	addl	$16, %ebp
-	call	min_caml_truncate
-	subl	$16, %ebp
-	addl	$16, %ebp
-	call	min_caml_print_int
-	subl	$16, %ebp
-	addl	$16, %ebp
-	call	min_caml_print_newline
-	subl	$16, %ebp
-	movl	12(%ebp), %eax
-	movl	4(%eax), %eax
-	movsd	8(%eax), %xmm0
-	addl	$16, %ebp
-	call	min_caml_truncate
-	subl	$16, %ebp
-	addl	$16, %ebp
-	call	min_caml_print_int
-	subl	$16, %ebp
-	addl	$16, %ebp
-	call	min_caml_print_newline
-	subl	$16, %ebp
-	popl	%ebp
-	popl	%edi
-	popl	%esi
-	popl	%edx
-	popl	%ecx
-	popl	%ebx
-	popl	%eax
-	ret
+    sw r5 r3 0
+    sw r2 r3 4
+    or r31 r0 r31
+    mv r5 r6
+    sw r31 r3 12
+    addi r3 r3 16
+    jal min_caml_create_array
+    subi r3 r3 16
+    lw r31 r3 12
+    or r6 r0 r2
+    or r31 r0 r31
+    lw r2 r3 4
+    subi r2 r2 1
+    lw r5 r3 0
+    sw r6 r3 8
+    or r31 r0 r31
+    sw r31 r3 12
+    addi r3 r3 16
+    jal init.169
+    subi r3 r3 16
+    lw r31 r3 12
+    or r31 r0 r31
+    lw r2 r3 8
+    jr r31

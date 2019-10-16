@@ -1,49 +1,44 @@
-.data
-.balign	8
-.text
+#    main program starts
+    ori r2 r0 10
+    ori r5 r0 3
+    or r31 r0 r31
+    sw r31 r3 4
+    addi r3 r3 8
+    jal min_caml_create_array
+    subi r3 r3 8
+    lw r31 r3 4
+    or r31 r0 r31
+    lui r5 1
+    ori r5 r5 2354
+    lw r6 r2 0
+    ori r28 r0 3
+    bne r6 r28 beq_else.33
+    sw r5 r3 0
+    sw r2 r3 4
+    or r31 r0 r31
+    sw r31 r3 12
+    addi r3 r3 16
+    jal f.13
+    subi r3 r3 16
+    lw r31 r3 12
+    or r31 r0 r31
+    lw r5 r3 4
+    lw r5 r5 4
+    add r2 r2 r5
+    lw r5 r3 0
+    add r2 r2 r5
+    b beq_cont.34
+beq_else.33:
+    ori r2 r0 7
+beq_cont.34:
+    or r31 r0 r31
+    sw r31 r3 12
+    addi r3 r3 16
+    jal min_caml_print_int
+    subi r3 r3 16
+    lw r31 r3 12
+    or r31 r0 r31
+#    main program ends
 f.13:
-	movl	$12345, %eax
-	ret
-.globl	min_caml_start
-min_caml_start:
-.globl	_min_caml_start
-_min_caml_start: # for cygwin
-	pushl	%eax
-	pushl	%ebx
-	pushl	%ecx
-	pushl	%edx
-	pushl	%esi
-	pushl	%edi
-	pushl	%ebp
-	movl	32(%esp),%ebp
-	movl	36(%esp),%eax
-	movl	%eax,min_caml_hp
-	movl	$10, %eax
-	movl	$3, %ebx
-	call	min_caml_create_array
-	movl	0(%eax), %ebx
-	cmpl	$3, %ebx
-	jne	je_else.30
-	movl	%eax, 0(%ebp)
-	addl	$8, %ebp
-	call	f.13
-	subl	$8, %ebp
-	movl	0(%ebp), %ebx
-	movl	4(%ebx), %ebx
-	addl	%ebx, %eax
-	addl	$67890, %eax
-	jmp	je_cont.31
-je_else.30:
-	movl	$7, %eax
-je_cont.31:
-	addl	$8, %ebp
-	call	min_caml_print_int
-	subl	$8, %ebp
-	popl	%ebp
-	popl	%edi
-	popl	%esi
-	popl	%edx
-	popl	%ecx
-	popl	%ebx
-	popl	%eax
-	ret
+    ori r2 r0 12345
+    jr r31

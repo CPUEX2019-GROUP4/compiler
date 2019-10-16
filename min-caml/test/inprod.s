@@ -28,7 +28,6 @@ l.64:    # 1.000000
 l.63:    # 1000000.000000
     .long    0
     .long    1093567616
-_min_caml_start: # main entry point
 #    main program starts
     lui r31 ha16(l.63)
     ori r31 r31 lo16(l.63)
@@ -70,7 +69,7 @@ _min_caml_start: # main entry point
     lw r31 r3 12
     or r31 r0 r31
     lfd    f1, 0(r3)
-    fmul    f0, f1, f0
+    fmul f0 f1 f0
     or r31 r0 r31
     sw r31 r3 12
     addi r3 r3 16
@@ -115,7 +114,7 @@ inprod.29:
     lw r31 r3 20
     or r31 r0 r31
     lfd    f1, 8(r3)
-    fmul    f0, f1, f0
+    fmul f0 f1 f0
     lw r2 r3 0
     stfd    f0, 16(r3)
     or r31 r0 r31
@@ -135,9 +134,9 @@ inprod.29:
     lw r31 r3 36
     or r31 r0 r31
     lfd    f1, 24(r3)
-    fmul    f0, f1, f0
+    fmul f0 f1 f0
     lfd    f1, 16(r3)
-    fadd    f0, f1, f0
+    fadd f0 f1 f0
     lw r2 r3 0
     stfd    f0, 32(r3)
     or r31 r0 r31
@@ -157,7 +156,7 @@ inprod.29:
     lw r31 r3 52
     or r31 r0 r31
     lfd    f1, 40(r3)
-    fmul    f0, f1, f0
+    fmul f0 f1 f0
     lfd    f1, 32(r3)
-    fadd    f0, f1, f0
+    fadd f0 f1 f0
     jr r31

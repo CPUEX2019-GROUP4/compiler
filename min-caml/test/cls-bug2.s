@@ -1,4 +1,3 @@
-_min_caml_start: # main entry point
 #    main program starts
     or r30 r4 r0
     addi r4 r4 8

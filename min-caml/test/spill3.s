@@ -1,183 +1,111 @@
-.data
-.balign	8
-.text
+#    main program starts
+    ori r2 r0 0
+    or r31 r0 r31
+    sw r31 r3 4
+    addi r3 r3 8
+    jal f.56
+    subi r3 r3 8
+    lw r31 r3 4
+    or r31 r0 r31
+    or r31 r0 r31
+    sw r31 r3 4
+    addi r3 r3 8
+    jal min_caml_print_int
+    subi r3 r3 8
+    lw r31 r3 4
+    or r31 r0 r31
+#    main program ends
 f.56:
-	movl	%eax, %ebx
-	addl	$1, %ebx
-	movl	%ebx, %ecx
-	addl	$1, %ecx
-	movl	%ecx, %edx
-	addl	$1, %edx
-	movl	%edx, %esi
-	addl	$1, %esi
-	movl	%esi, %edi
-	addl	$1, %edi
-	movl	%eax, 0(%ebp)
-	movl	%edi, %eax
-	addl	$1, %eax
-	movl	%eax, 4(%ebp)
-	addl	$1, %eax
-	movl	%eax, 8(%ebp)
-	addl	$1, %eax
-	movl	%eax, 12(%ebp)
-	addl	$1, %eax
-	movl	%eax, 16(%ebp)
-	addl	$1, %eax
-	movl	%eax, 20(%ebp)
-	addl	$1, %eax
-	movl	%eax, 24(%ebp)
-	addl	$1, %eax
-	movl	%eax, 28(%ebp)
-	addl	$1, %eax
-	movl	%eax, 32(%ebp)
-	addl	$1, %eax
-	movl	%eax, 36(%ebp)
-	addl	$1, %eax
-	movl	%eax, 40(%ebp)
-	addl	$1, %eax
-	movl	%eax, 44(%ebp)
-	addl	$1, %eax
-	movl	%eax, 48(%ebp)
-	addl	$1, %eax
-	movl	%eax, 52(%ebp)
-	addl	%ebx, %eax
-	movl	%eax, 56(%ebp)
-	addl	%ecx, %eax
-	movl	%eax, 60(%ebp)
-	addl	%edx, %eax
-	movl	%eax, 64(%ebp)
-	addl	%esi, %eax
-	movl	%eax, 68(%ebp)
-	addl	%edi, %eax
-	movl	%eax, 72(%ebp)
-	movl	%edi, 76(%ebp)
-	movl	4(%ebp), %edi
-	addl	%edi, %eax
-	movl	%eax, 80(%ebp)
-	movl	8(%ebp), %edi
-	addl	%edi, %eax
-	movl	%eax, 84(%ebp)
-	movl	12(%ebp), %edi
-	addl	%edi, %eax
-	movl	%eax, 88(%ebp)
-	movl	16(%ebp), %edi
-	addl	%edi, %eax
-	movl	%eax, 92(%ebp)
-	movl	20(%ebp), %edi
-	addl	%edi, %eax
-	movl	%eax, 96(%ebp)
-	movl	24(%ebp), %edi
-	addl	%edi, %eax
-	movl	%eax, 100(%ebp)
-	movl	28(%ebp), %edi
-	addl	%edi, %eax
-	movl	%eax, 104(%ebp)
-	movl	32(%ebp), %edi
-	addl	%edi, %eax
-	movl	%eax, 108(%ebp)
-	movl	36(%ebp), %edi
-	addl	%edi, %eax
-	movl	%eax, 112(%ebp)
-	movl	40(%ebp), %edi
-	addl	%edi, %eax
-	movl	%eax, 116(%ebp)
-	movl	44(%ebp), %edi
-	addl	%edi, %eax
-	movl	%eax, 120(%ebp)
-	movl	48(%ebp), %edi
-	addl	%edi, %eax
-	movl	0(%ebp), %edi
-	addl	%eax, %edi
-	addl	%ecx, %ebx
-	addl	%edx, %ebx
-	addl	%esi, %ebx
-	movl	76(%ebp), %ecx
-	addl	%ecx, %ebx
-	movl	4(%ebp), %ecx
-	addl	%ecx, %ebx
-	movl	8(%ebp), %ecx
-	addl	%ecx, %ebx
-	movl	12(%ebp), %ecx
-	addl	%ecx, %ebx
-	movl	16(%ebp), %ecx
-	addl	%ecx, %ebx
-	movl	20(%ebp), %ecx
-	addl	%ecx, %ebx
-	movl	24(%ebp), %ecx
-	addl	%ecx, %ebx
-	movl	28(%ebp), %ecx
-	addl	%ecx, %ebx
-	movl	32(%ebp), %ecx
-	addl	%ecx, %ebx
-	movl	36(%ebp), %ecx
-	addl	%ecx, %ebx
-	movl	40(%ebp), %ecx
-	addl	%ecx, %ebx
-	movl	44(%ebp), %ecx
-	addl	%ecx, %ebx
-	movl	48(%ebp), %ecx
-	addl	%ecx, %ebx
-	movl	52(%ebp), %ecx
-	addl	%ecx, %ebx
-	movl	56(%ebp), %ecx
-	addl	%ecx, %ebx
-	movl	60(%ebp), %ecx
-	addl	%ecx, %ebx
-	movl	64(%ebp), %ecx
-	addl	%ecx, %ebx
-	movl	68(%ebp), %ecx
-	addl	%ecx, %ebx
-	movl	72(%ebp), %ecx
-	addl	%ecx, %ebx
-	movl	80(%ebp), %ecx
-	addl	%ecx, %ebx
-	movl	84(%ebp), %ecx
-	addl	%ecx, %ebx
-	movl	88(%ebp), %ecx
-	addl	%ecx, %ebx
-	movl	92(%ebp), %ecx
-	addl	%ecx, %ebx
-	movl	96(%ebp), %ecx
-	addl	%ecx, %ebx
-	movl	100(%ebp), %ecx
-	addl	%ecx, %ebx
-	movl	104(%ebp), %ecx
-	addl	%ecx, %ebx
-	movl	108(%ebp), %ecx
-	addl	%ecx, %ebx
-	movl	112(%ebp), %ecx
-	addl	%ecx, %ebx
-	movl	116(%ebp), %ecx
-	addl	%ecx, %ebx
-	movl	120(%ebp), %ecx
-	addl	%ecx, %ebx
-	addl	%eax, %ebx
-	addl	%edi, %ebx
-	movl	0(%ebp), %eax
-	addl	%ebx, %eax
-	ret
-.globl	min_caml_start
-min_caml_start:
-.globl	_min_caml_start
-_min_caml_start: # for cygwin
-	pushl	%eax
-	pushl	%ebx
-	pushl	%ecx
-	pushl	%edx
-	pushl	%esi
-	pushl	%edi
-	pushl	%ebp
-	movl	32(%esp),%ebp
-	movl	36(%esp),%eax
-	movl	%eax,min_caml_hp
-	movl	$0, %eax
-	call	f.56
-	call	min_caml_print_int
-	popl	%ebp
-	popl	%edi
-	popl	%esi
-	popl	%edx
-	popl	%ecx
-	popl	%ebx
-	popl	%eax
-	ret
+    addi r5 r2 1
+    addi r6 r5 1
+    addi r7 r6 1
+    addi r8 r7 1
+    addi r9 r8 1
+    addi r10 r9 1
+    addi r11 r10 1
+    addi r12 r11 1
+    addi r13 r12 1
+    addi r14 r13 1
+    addi r15 r14 1
+    addi r16 r15 1
+    addi r17 r16 1
+    addi r18 r17 1
+    addi r19 r18 1
+    addi r20 r19 1
+    addi r21 r20 1
+    addi r22 r21 1
+    add r23 r22 r5
+    add r24 r23 r6
+    add r25 r24 r7
+    add r26 r25 r8
+    add r27 r26 r9
+    add r28 r27 r10
+    add r29 r28 r11
+    add r30 r29 r12
+    sw r30 r3 0
+    add r30 r30 r13
+    sw r30 r3 4
+    add r30 r30 r14
+    sw r30 r3 8
+    add r30 r30 r15
+    sw r30 r3 12
+    add r30 r30 r16
+    sw r30 r3 16
+    add r30 r30 r17
+    sw r30 r3 20
+    add r30 r30 r18
+    sw r30 r3 24
+    add r30 r30 r19
+    sw r30 r3 28
+    add r30 r30 r20
+    sw r30 r3 32
+    add r30 r30 r21
+    sw r2 r3 36
+    add r2 r30 r2
+    add r5 r5 r6
+    add r5 r5 r7
+    add r5 r5 r8
+    add r5 r5 r9
+    add r5 r5 r10
+    add r5 r5 r11
+    add r5 r5 r12
+    add r5 r5 r13
+    add r5 r5 r14
+    add r5 r5 r15
+    add r5 r5 r16
+    add r5 r5 r17
+    add r5 r5 r18
+    add r5 r5 r19
+    add r5 r5 r20
+    add r5 r5 r21
+    add r5 r5 r22
+    add r5 r5 r23
+    add r5 r5 r24
+    add r5 r5 r25
+    add r5 r5 r26
+    add r5 r5 r27
+    add r5 r5 r28
+    add r5 r5 r29
+    lw r6 r3 0
+    add r5 r5 r6
+    lw r6 r3 4
+    add r5 r5 r6
+    lw r6 r3 8
+    add r5 r5 r6
+    lw r6 r3 12
+    add r5 r5 r6
+    lw r6 r3 16
+    add r5 r5 r6
+    lw r6 r3 20
+    add r5 r5 r6
+    lw r6 r3 24
+    add r5 r5 r6
+    lw r6 r3 28
+    add r5 r5 r6
+    lw r6 r3 32
+    add r5 r5 r6
+    add r5 r5 r30
+    add r2 r5 r2
+    lw r5 r3 36
+    add r2 r2 r5
+    jr r31

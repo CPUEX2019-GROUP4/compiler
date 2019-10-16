@@ -1,4 +1,3 @@
-_min_caml_start: # main entry point
 #    main program starts
     ori r2 r0 1
     ori r5 r0 2

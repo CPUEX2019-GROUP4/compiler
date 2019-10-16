@@ -1,76 +1,80 @@
-.data
-.balign	8
-l.32:	# -7.890000
-	.long	0x28f5c28f
-	.long	0xc01f8f5c
-l.30:	# 4.560000
-	.long	0xa3d70a3d
-	.long	0x40123d70
-l.28:	# 1.230000
-	.long	0x7ae147ae
-	.long	0x3ff3ae14
-.text
-.globl	min_caml_start
-min_caml_start:
-.globl	_min_caml_start
-_min_caml_start: # for cygwin
-	pushl	%eax
-	pushl	%ebx
-	pushl	%ecx
-	pushl	%edx
-	pushl	%esi
-	pushl	%edi
-	pushl	%ebp
-	movl	32(%esp),%ebp
-	movl	36(%esp),%eax
-	movl	%eax,min_caml_hp
-	movl	$l.28, %eax
-	movsd	0(%eax), %xmm0
-	call	min_caml_truncate
-	movl	$l.30, %ebx
-	movsd	0(%ebx), %xmm0
-	movl	%eax, 0(%ebp)
-	addl	$8, %ebp
-	call	min_caml_truncate
-	subl	$8, %ebp
-	movl	$l.32, %ebx
-	movsd	0(%ebx), %xmm0
-	movl	%eax, 4(%ebp)
-	addl	$8, %ebp
-	call	min_caml_truncate
-	subl	$8, %ebp
-	cmpl	$0, %eax
-	jl	jge_else.37
-	movl	0(%ebp), %ebx
-	jmp	jge_cont.38
-jge_else.37:
-	movl	4(%ebp), %ebx
-jge_cont.38:
-	movl	0(%ebp), %ecx
-	cmpl	$0, %ecx
-	jg	jle_else.39
-	movl	4(%ebp), %edx
-	jmp	jle_cont.40
-jle_else.39:
-	movl	%eax, %edx
-jle_cont.40:
-	addl	%edx, %ebx
-	movl	4(%ebp), %edx
-	cmpl	$0, %edx
-	jl	jge_else.41
-	jmp	jge_cont.42
-jge_else.41:
-	movl	%ecx, %eax
-jge_cont.42:
-	addl	%ebx, %eax
-	addl	$8, %ebp
-	call	min_caml_print_int
-	subl	$8, %ebp
-	popl	%ebp
-	popl	%edi
-	popl	%esi
-	popl	%edx
-	popl	%ecx
-	popl	%ebx
-	popl	%eax
-	ret
+    .data
+    .literal8
+    .align 3
+l.30:    # -7.890000
+    .long    687194767
+    .long    -1071673508
+    .align 3
+l.29:    # 4.560000
+    .long    -1546188227
+    .long    1074937200
+    .align 3
+l.28:    # 1.230000
+    .long    2061584302
+    .long    1072934420
+#    main program starts
+    lui r31 ha16(l.28)
+    ori r31 r31 lo16(l.28)
+    lfd f0 0(r31)
+    or r31 r0 r31
+    sw r31 r3 4
+    addi r3 r3 8
+    jal min_caml_truncate
+    subi r3 r3 8
+    lw r31 r3 4
+    or r31 r0 r31
+    lui r31 ha16(l.29)
+    ori r31 r31 lo16(l.29)
+    lfd f0 0(r31)
+    sw r2 r3 0
+    or r31 r0 r31
+    sw r31 r3 4
+    addi r3 r3 8
+    jal min_caml_truncate
+    subi r3 r3 8
+    lw r31 r3 4
+    or r31 r0 r31
+    lui r31 ha16(l.30)
+    ori r31 r31 lo16(l.30)
+    lfd f0 0(r31)
+    sw r2 r3 4
+    or r31 r0 r31
+    sw r31 r3 12
+    addi r3 r3 16
+    jal min_caml_truncate
+    subi r3 r3 16
+    lw r31 r3 12
+    or r31 r0 r31
+    slti r28 r2 0
+    bne r0 r28 bge_else.34
+    lw r5 r3 0
+    b bge_cont.35
+bge_else.34:
+    lw r5 r3 4
+bge_cont.35:
+    lw r6 r3 0
+    ori r28 r0 0
+    slt r28 r28 r6
+    bne r0 r28 ble_else.36
+    lw r7 r3 4
+    b ble_cont.37
+ble_else.36:
+    or r7 r2 r0
+ble_cont.37:
+    add r5 r5 r7
+    lw r7 r3 4
+    slti r28 r7 0
+    bne r0 r28 bge_else.38
+    b bge_cont.39
+bge_else.38:
+    or r2 r6 r0
+bge_cont.39:
+    add r2 r5 r2
+    or r31 r0 r31
+    sw r31 r3 12
+    addi r3 r3 16
+    jal min_caml_print_int
+    subi r3 r3 16
+    lw r31 r3 12
+    or r31 r0 r31
+#    main program ends

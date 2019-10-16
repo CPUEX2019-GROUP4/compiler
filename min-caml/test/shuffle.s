@@ -1,69 +1,72 @@
-.data
-.balign	8
-.text
+#    main program starts
+    ori r2 r0 1
+    ori r5 r0 2
+    ori r6 r0 3
+    ori r7 r0 4
+    ori r8 r0 5
+    ori r9 r0 6
+    or r31 r0 r31
+    sw r31 r3 4
+    addi r3 r3 8
+    jal bar.19
+    subi r3 r3 8
+    lw r31 r3 4
+    or r31 r0 r31
+#    main program ends
 foo.12:
-	movl	%edi, 0(%ebp)
-	movl	%esi, 4(%ebp)
-	movl	%edx, 8(%ebp)
-	movl	%ecx, 12(%ebp)
-	movl	%ebx, 16(%ebp)
-	addl	$24, %ebp
-	call	min_caml_print_int
-	subl	$24, %ebp
-	movl	16(%ebp), %eax
-	addl	$24, %ebp
-	call	min_caml_print_int
-	subl	$24, %ebp
-	movl	12(%ebp), %eax
-	addl	$24, %ebp
-	call	min_caml_print_int
-	subl	$24, %ebp
-	movl	8(%ebp), %eax
-	addl	$24, %ebp
-	call	min_caml_print_int
-	subl	$24, %ebp
-	movl	4(%ebp), %eax
-	addl	$24, %ebp
-	call	min_caml_print_int
-	subl	$24, %ebp
-	movl	0(%ebp), %eax
-	jmp	min_caml_print_int
+    sw r9 r3 0
+    sw r8 r3 4
+    sw r7 r3 8
+    sw r6 r3 12
+    sw r5 r3 16
+    or r31 r0 r31
+    sw r31 r3 20
+    addi r3 r3 24
+    jal min_caml_print_int
+    subi r3 r3 24
+    lw r31 r3 20
+    or r31 r0 r31
+    lw r2 r3 16
+    or r31 r0 r31
+    sw r31 r3 20
+    addi r3 r3 24
+    jal min_caml_print_int
+    subi r3 r3 24
+    lw r31 r3 20
+    or r31 r0 r31
+    lw r2 r3 12
+    or r31 r0 r31
+    sw r31 r3 20
+    addi r3 r3 24
+    jal min_caml_print_int
+    subi r3 r3 24
+    lw r31 r3 20
+    or r31 r0 r31
+    lw r2 r3 8
+    or r31 r0 r31
+    sw r31 r3 20
+    addi r3 r3 24
+    jal min_caml_print_int
+    subi r3 r3 24
+    lw r31 r3 20
+    or r31 r0 r31
+    lw r2 r3 4
+    or r31 r0 r31
+    sw r31 r3 20
+    addi r3 r3 24
+    jal min_caml_print_int
+    subi r3 r3 24
+    lw r31 r3 20
+    or r31 r0 r31
+    lw r2 r3 0
+    j min_caml_print_int
 bar.19:
-	movl	%edi, 0(%ebp)
-	movl	%ecx, %edi
-	movl	%edx, %ecx
-	movl	%esi, %edx
-	movl	0(%ebp), %esi
-	movl	%ebx, 0(%ebp)
-	movl	%eax, %ebx
-	movl	0(%ebp), %eax
-	jmp	foo.12
-.globl	min_caml_start
-min_caml_start:
-.globl	_min_caml_start
-_min_caml_start: # for cygwin
-	pushl	%eax
-	pushl	%ebx
-	pushl	%ecx
-	pushl	%edx
-	pushl	%esi
-	pushl	%edi
-	pushl	%ebp
-	movl	32(%esp),%ebp
-	movl	36(%esp),%eax
-	movl	%eax,min_caml_hp
-	movl	$1, %eax
-	movl	$2, %ebx
-	movl	$3, %ecx
-	movl	$4, %edx
-	movl	$5, %esi
-	movl	$6, %edi
-	call	bar.19
-	popl	%ebp
-	popl	%edi
-	popl	%esi
-	popl	%edx
-	popl	%ecx
-	popl	%ebx
-	popl	%eax
-	ret
+    mv r29 r9
+    mv r9 r6
+    mv r6 r7
+    mv r7 r8
+    mv r8 r29
+    mv r29 r5
+    mv r5 r2
+    mv r2 r29
+    j foo.12

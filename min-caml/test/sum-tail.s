@@ -1,37 +1,27 @@
-.data
-.balign	8
-.text
+#    main program starts
+    ori r2 r0 0
+    ori r5 r0 10000
+    or r31 r0 r31
+    sw r31 r3 4
+    addi r3 r3 8
+    jal sum.8
+    subi r3 r3 8
+    lw r31 r3 4
+    or r31 r0 r31
+    or r31 r0 r31
+    sw r31 r3 4
+    addi r3 r3 8
+    jal min_caml_print_int
+    subi r3 r3 8
+    lw r31 r3 4
+    or r31 r0 r31
+#    main program ends
 sum.8:
-	cmpl	$0, %ebx
-	jg	jle_else.19
-	ret
-jle_else.19:
-	addl	%ebx, %eax
-	subl	$1, %ebx
-	jmp	sum.8
-.globl	min_caml_start
-min_caml_start:
-.globl	_min_caml_start
-_min_caml_start: # for cygwin
-	pushl	%eax
-	pushl	%ebx
-	pushl	%ecx
-	pushl	%edx
-	pushl	%esi
-	pushl	%edi
-	pushl	%ebp
-	movl	32(%esp),%ebp
-	movl	36(%esp),%eax
-	movl	%eax,min_caml_hp
-	movl	$0, %eax
-	movl	$10000, %ebx
-	call	sum.8
-	call	min_caml_print_int
-	popl	%ebp
-	popl	%edi
-	popl	%esi
-	popl	%edx
-	popl	%ecx
-	popl	%ebx
-	popl	%eax
-	ret
+    ori r28 r0 0
+    slt r28 r28 r5
+    bne r0 r28 ble_else.19
+    jr r31
+ble_else.19:
+    add r2 r2 r5
+    subi r5 r5 1
+    j sum.8

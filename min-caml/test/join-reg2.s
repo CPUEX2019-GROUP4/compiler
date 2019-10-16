@@ -1,4 +1,3 @@
-_min_caml_start: # main entry point
 #    main program starts
     or r31 r0 r31
     sw r31 r3 4

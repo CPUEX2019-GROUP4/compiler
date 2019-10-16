@@ -16,7 +16,6 @@ l.45:    # 4.560000
 l.44:    # 1.230000
     .long    2061584302
     .long    1072934420
-_min_caml_start: # main entry point
 #    main program starts
     ori r2 r0 3
     lui r31 ha16(l.44)
@@ -61,7 +60,7 @@ _min_caml_start: # main entry point
     lw r31 r3 20
     or r31 r0 r31
     lfd    f1, 8(r3)
-    fmul    f0, f1, f0
+    fmul f0 f1 f0
     or r31 r0 r31
     sw r31 r3 20
     addi r3 r3 24
@@ -84,8 +83,8 @@ inprod.18:
  #shift    lfdx    f1, r2, r7
     sllv r7 r6 3
  #shift    lfdx    f2, r5, r7
-    fmul    f1, f1, f2
-    fadd    f0, f0, f1
+    fmul f1 f1 f2
+    fadd f0 f0 f1
     subi r6 r6 1
     j inprod.18
 bge_else.52:
