@@ -1,22 +1,22 @@
 #    main program starts
-    ori r2 r0 0
-    or r31 r0 r31
-    sw r31 r3 4
-    addi r3 r3 8
+    ori r1 r0 0
+    sw r31 r29 4
+    addi r29 r29 8
     jal f.56
-    subi r3 r3 8
-    lw r31 r3 4
-    or r31 r0 r31
-    or r31 r0 r31
-    sw r31 r3 4
-    addi r3 r3 8
-    jal min_caml_print_int
-    subi r3 r3 8
-    lw r31 r3 4
-    or r31 r0 r31
+    subi r29 r29 8
+    lw r31 r29 4
+    sw r31 r29 4
+    addi r29 r29 8
+nop
+#    jal min_caml_print_int
+#    subi r29 r29 8
+#    lw r31 r29 4
 #    main program ends
 f.56:
-    addi r5 r2 1
+    addi r2 r1 1
+    addi r3 r2 1
+    addi r4 r3 1
+    addi r5 r4 1
     addi r6 r5 1
     addi r7 r6 1
     addi r8 r7 1
@@ -31,81 +31,82 @@ f.56:
     addi r17 r16 1
     addi r18 r17 1
     addi r19 r18 1
-    addi r20 r19 1
-    addi r21 r20 1
-    addi r22 r21 1
+    add r20 r19 r2
+    add r21 r20 r3
+    add r22 r21 r4
     add r23 r22 r5
     add r24 r23 r6
     add r25 r24 r7
-    add r26 r25 r8
-    add r27 r26 r9
-    add r28 r27 r10
-    add r29 r28 r11
-    add r30 r29 r12
-    sw r30 r3 0
-    add r30 r30 r13
-    sw r30 r3 4
-    add r30 r30 r14
-    sw r30 r3 8
-    add r30 r30 r15
-    sw r30 r3 12
-    add r30 r30 r16
-    sw r30 r3 16
-    add r30 r30 r17
-    sw r30 r3 20
-    add r30 r30 r18
-    sw r30 r3 24
-    add r30 r30 r19
-    sw r30 r3 28
-    add r30 r30 r20
-    sw r30 r3 32
-    add r30 r30 r21
-    sw r2 r3 36
-    add r2 r30 r2
-    add r5 r5 r6
-    add r5 r5 r7
-    add r5 r5 r8
-    add r5 r5 r9
-    add r5 r5 r10
-    add r5 r5 r11
-    add r5 r5 r12
-    add r5 r5 r13
-    add r5 r5 r14
-    add r5 r5 r15
-    add r5 r5 r16
-    add r5 r5 r17
-    add r5 r5 r18
-    add r5 r5 r19
-    add r5 r5 r20
-    add r5 r5 r21
-    add r5 r5 r22
-    add r5 r5 r23
-    add r5 r5 r24
-    add r5 r5 r25
-    add r5 r5 r26
-    add r5 r5 r27
-    add r5 r5 r28
-    add r5 r5 r29
-    lw r6 r3 0
-    add r5 r5 r6
-    lw r6 r3 4
-    add r5 r5 r6
-    lw r6 r3 8
-    add r5 r5 r6
-    lw r6 r3 12
-    add r5 r5 r6
-    lw r6 r3 16
-    add r5 r5 r6
-    lw r6 r3 20
-    add r5 r5 r6
-    lw r6 r3 24
-    add r5 r5 r6
-    lw r6 r3 28
-    add r5 r5 r6
-    lw r6 r3 32
-    add r5 r5 r6
-    add r5 r5 r30
-    add r2 r5 r2
-    lw r5 r3 36
+    sw r25 r29 0
+    add r25 r25 r8
+    sw r25 r29 4
+    add r25 r25 r9
+    sw r25 r29 8
+    add r25 r25 r10
+    sw r25 r29 12
+    add r25 r25 r11
+    sw r25 r29 16
+    add r25 r25 r12
+    sw r25 r29 20
+    add r25 r25 r13
+    sw r25 r29 24
+    add r25 r25 r14
+    sw r25 r29 28
+    add r25 r25 r15
+    sw r25 r29 32
+    add r25 r25 r16
+    sw r25 r29 36
+    add r25 r25 r17
+    sw r25 r29 40
+    add r25 r25 r18
+    sw r1 r29 44
+    add r1 r25 r1
+    add r2 r2 r3
+    add r2 r2 r4
     add r2 r2 r5
+    add r2 r2 r6
+    add r2 r2 r7
+    add r2 r2 r8
+    add r2 r2 r9
+    add r2 r2 r10
+    add r2 r2 r11
+    add r2 r2 r12
+    add r2 r2 r13
+    add r2 r2 r14
+    add r2 r2 r15
+    add r2 r2 r16
+    add r2 r2 r17
+    add r2 r2 r18
+    add r2 r2 r19
+    add r2 r2 r20
+    add r2 r2 r21
+    add r2 r2 r22
+    add r2 r2 r23
+    add r2 r2 r24
+    lw r3 r29 0
+    add r2 r2 r3
+    lw r3 r29 4
+    add r2 r2 r3
+    lw r3 r29 8
+    add r2 r2 r3
+    lw r3 r29 12
+    add r2 r2 r3
+    lw r3 r29 16
+    add r2 r2 r3
+    lw r3 r29 20
+    add r2 r2 r3
+    lw r3 r29 24
+    add r2 r2 r3
+    lw r3 r29 28
+    add r2 r2 r3
+    lw r3 r29 32
+    add r2 r2 r3
+    lw r3 r29 36
+    add r2 r2 r3
+    lw r3 r29 40
+    add r2 r2 r3
+    add r2 r2 r25
+    add r1 r2 r1
+    lw r2 r29 44
+    add r1 r1 r2
     jr r31

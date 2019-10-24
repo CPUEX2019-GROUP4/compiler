@@ -143,7 +143,7 @@ and g' oc = function (* 各命令のアセンブリ生成 (caml2html: emit_gprime) *)
       g'_tail_if oc e2 e1 "beq" "bne" (reg x) (reg y)
   | Tail, IfEq(x, C(y), e1, e2) ->
       Printf.fprintf oc "    ori r28 r0 %d\n" y;
-      g'_tail_if oc e2 e1 "beq" "bne" (reg x) "r28"
+      g'_tail_if oc e1 e2 "beq" "bne" (reg x) "r28"
   | Tail, IfLE(x, V(y), e1, e2) ->
       Printf.fprintf oc "    slt r28 %s %s\n" (reg y) (reg x);
       g'_tail_if oc e1 e2 "beq" "bne" "r0" "r28"
@@ -202,7 +202,7 @@ and g' oc = function (* 各命令のアセンブリ生成 (caml2html: emit_gprime) *)
       let stackset_back = !stackset in
       g oc (dest, e1);
       let stackset1 = !stackset in
-      Printf.fprintf oc "    b %s\n" b_cont;
+      Printf.fprintf oc "    j %s\n" b_cont;
       Printf.fprintf oc "%s:\n" b_else;
       stackset := stackset_back;
       g oc (dest, e2);
@@ -219,7 +219,11 @@ and g' oc = function (* 各命令のアセンブリ生成 (caml2html: emit_gprime) *)
       g'_args oc [] ys zs;
       Printf.fprintf oc "    j %s\n" x     (*****************)
   | NonTail(a), CallCls(x, ys, zs) ->
-      Printf.fprintf oc "    mv %s r31\n" (reg reg_tmp);   (***************)
+      (if "r31" <> (reg reg_tmp) then
+        Printf.fprintf oc "    mv %s r31\n" (reg reg_tmp)   (***************)
+      else
+        ()
+      );
       g'_args oc [(x, reg_cl)] ys zs;
       let ss = stacksize () in
       Printf.fprintf oc "    sw %s %s %d\n" (reg reg_tmp) (reg reg_sp) (ss - 4);    (**************)
@@ -233,9 +237,17 @@ and g' oc = function (* 各命令のアセンブリ生成 (caml2html: emit_gprime) *)
         Printf.fprintf oc "    or %s r0 %s\n" (reg a) (reg regs.(0))  (***************)
       else if List.mem a allfregs && a <> fregs.(0) then
         Printf.fprintf oc "    fmv %s %s\n" (reg a) (reg fregs.(0));   (**************)
-      Printf.fprintf oc "    or r31 r0 %s\n" (reg reg_tmp)      (************)
+      (if "r31" <> (reg reg_tmp) then
+        Printf.fprintf oc "    or r31 r0 %s\n" (reg reg_tmp)      (************)
+      else
+        ()
+      );
   | (NonTail(a), CallDir(Id.L(x), ys, zs)) ->
-      Printf.fprintf oc "    or %s r0 r31\n" (reg reg_tmp);     (************)
+      (if "r31" <> (reg reg_tmp) then
+        Printf.fprintf oc "    or %s r0 r31\n" (reg reg_tmp)(************)
+      else
+        ()
+      );
       g'_args oc [] ys zs;
       let ss = stacksize () in
       Printf.fprintf oc "    sw %s %s %d\n" (reg reg_tmp) (reg reg_sp) (ss - 4);   (************)
@@ -247,7 +259,11 @@ and g' oc = function (* 各命令のアセンブリ生成 (caml2html: emit_gprime) *)
         Printf.fprintf oc "    or %s r0 %s\n" (reg a) (reg regs.(0))   (******************)
       else if List.mem a allfregs && a <> fregs.(0) then
         Printf.fprintf oc "    fmv %s %s\n" (reg a) (reg fregs.(0)); (*********************)
-      Printf.fprintf oc "    or r31 r0 %s\n" (reg reg_tmp) (******************)
+      (if "r31" <> (reg reg_tmp) then
+        Printf.fprintf oc "    or r31 r0 %s\n" (reg reg_tmp) (******************)
+      else
+        ()
+      );
 and g'_tail_if oc e1 e2 b bn rx ry =               (**************************)
   let b_else = Id.genid (b ^ "_else") in
   Printf.fprintf oc "    bne %s %s %s\n" rx ry b_else;
@@ -263,8 +279,11 @@ and g'_non_tail_if oc dest e1 e2 b bn rx ry =      (****************************
   let stackset_back = !stackset in
   g oc (dest, e1);
   let stackset1 = !stackset in
-  Printf.fprintf oc "    b %s\n" b_cont;
+  Printf.fprintf oc "    j %s\n" b_cont;
   Printf.fprintf oc "%s:\n" b_else;
+  (*
+   * (* for debug *)      Printf.fprintf oc "    or r0 r0 r0#wowwow\n";
+   *)
   stackset := stackset_back;
   g oc (dest, e2);
   Printf.fprintf oc "%s:\n" b_cont;

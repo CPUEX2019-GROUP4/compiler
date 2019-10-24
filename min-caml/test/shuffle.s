@@ -1,72 +1,60 @@
 #    main program starts
-    ori r2 r0 1
-    ori r5 r0 2
-    ori r6 r0 3
-    ori r7 r0 4
-    ori r8 r0 5
-    ori r9 r0 6
-    or r31 r0 r31
-    sw r31 r3 4
-    addi r3 r3 8
+    ori r1 r0 1
+    ori r2 r0 2
+    ori r3 r0 3
+    ori r4 r0 4
+    ori r5 r0 5
+    ori r6 r0 6
+    sw r31 r29 4
+    addi r29 r29 8
     jal bar.19
-    subi r3 r3 8
-    lw r31 r3 4
-    or r31 r0 r31
+    subi r29 r29 8
+    lw r31 r29 4
 #    main program ends
 foo.12:
-    sw r9 r3 0
-    sw r8 r3 4
-    sw r7 r3 8
-    sw r6 r3 12
-    sw r5 r3 16
-    or r31 r0 r31
-    sw r31 r3 20
-    addi r3 r3 24
+    sw r6 r29 0
+    sw r5 r29 4
+    sw r4 r29 8
+    sw r3 r29 12
+    sw r2 r29 16
+    sw r31 r29 20
+    addi r29 r29 24
     jal min_caml_print_int
-    subi r3 r3 24
-    lw r31 r3 20
-    or r31 r0 r31
-    lw r2 r3 16
-    or r31 r0 r31
-    sw r31 r3 20
-    addi r3 r3 24
+    subi r29 r29 24
+    lw r31 r29 20
+    lw r1 r29 16
+    sw r31 r29 20
+    addi r29 r29 24
     jal min_caml_print_int
-    subi r3 r3 24
-    lw r31 r3 20
-    or r31 r0 r31
-    lw r2 r3 12
-    or r31 r0 r31
-    sw r31 r3 20
-    addi r3 r3 24
+    subi r29 r29 24
+    lw r31 r29 20
+    lw r1 r29 12
+    sw r31 r29 20
+    addi r29 r29 24
     jal min_caml_print_int
-    subi r3 r3 24
-    lw r31 r3 20
-    or r31 r0 r31
-    lw r2 r3 8
-    or r31 r0 r31
-    sw r31 r3 20
-    addi r3 r3 24
+    subi r29 r29 24
+    lw r31 r29 20
+    lw r1 r29 8
+    sw r31 r29 20
+    addi r29 r29 24
     jal min_caml_print_int
-    subi r3 r3 24
-    lw r31 r3 20
-    or r31 r0 r31
-    lw r2 r3 4
-    or r31 r0 r31
-    sw r31 r3 20
-    addi r3 r3 24
+    subi r29 r29 24
+    lw r31 r29 20
+    lw r1 r29 4
+    sw r31 r29 20
+    addi r29 r29 24
     jal min_caml_print_int
-    subi r3 r3 24
-    lw r31 r3 20
-    or r31 r0 r31
-    lw r2 r3 0
+    subi r29 r29 24
+    lw r31 r29 20
+    lw r1 r29 0
     j min_caml_print_int
 bar.19:
-    mv r29 r9
-    mv r9 r6
-    mv r6 r7
-    mv r7 r8
-    mv r8 r29
-    mv r29 r5
-    mv r5 r2
-    mv r2 r29
+    mv r24 r6
+    mv r6 r3
+    mv r3 r4
+    mv r4 r5
+    mv r5 r24
+    mv r24 r2
+    mv r2 r1
+    mv r1 r24
     j foo.12

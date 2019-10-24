@@ -31,132 +31,114 @@ l.63:    # 1000000.000000
 #    main program starts
     lui r31 ha16(l.63)
     ori r31 r31 lo16(l.63)
-    lfd f0 0(r31)
+    lfd f0 r31 0
     lui r31 ha16(l.64)
     ori r31 r31 lo16(l.64)
-    lfd f1 0(r31)
+    lfd f1 r31 0
     lui r31 ha16(l.65)
     ori r31 r31 lo16(l.65)
-    lfd f2 0(r31)
+    lfd f2 r31 0
     lui r31 ha16(l.66)
     ori r31 r31 lo16(l.66)
-    lfd f3 0(r31)
-    or r2 r4 r0
-    addi r4 r4 24
-    stfd    f3, 16(r2)
-    stfd    f2, 8(r2)
-    stfd    f1, 0(r2)
+    lfd f3 r31 0
+    or r1 r30 r0
+    addi r30 r30 24
+    swcZ f3 r1 16
+    swcZ f2 r1 8
+    swcZ f1 r1 0
     lui r31 ha16(l.71)
     ori r31 r31 lo16(l.71)
-    lfd f1 0(r31)
+    lfd f1 r31 0
     lui r31 ha16(l.72)
     ori r31 r31 lo16(l.72)
-    lfd f2 0(r31)
+    lfd f2 r31 0
     lui r31 ha16(l.73)
     ori r31 r31 lo16(l.73)
-    lfd f3 0(r31)
-    or r5 r4 r0
-    addi r4 r4 24
-    stfd    f3, 16(r5)
-    stfd    f2, 8(r5)
-    stfd    f1, 0(r5)
-    stfd    f0, 0(r3)
-    or r31 r0 r31
-    sw r31 r3 12
-    addi r3 r3 16
+    lfd f3 r31 0
+    or r2 r30 r0
+    addi r30 r30 24
+    swcZ f3 r2 16
+    swcZ f2 r2 8
+    swcZ f1 r2 0
+    swcZ f0 r29 0
+    sw r31 r29 12
+    addi r29 r29 16
     jal inprod.29
-    subi r3 r3 16
-    lw r31 r3 12
-    or r31 r0 r31
-    lfd    f1, 0(r3)
+    subi r29 r29 16
+    lw r31 r29 12
+    lwcZ f1 r29 0
     fmul f0 f1 f0
-    or r31 r0 r31
-    sw r31 r3 12
-    addi r3 r3 16
+    sw r31 r29 12
+    addi r29 r29 16
     jal min_caml_truncate
-    subi r3 r3 16
-    lw r31 r3 12
-    or r31 r0 r31
-    or r31 r0 r31
-    sw r31 r3 12
-    addi r3 r3 16
+    subi r29 r29 16
+    lw r31 r29 12
+    sw r31 r29 12
+    addi r29 r29 16
     jal min_caml_print_int
-    subi r3 r3 16
-    lw r31 r3 12
-    or r31 r0 r31
+    subi r29 r29 16
+    lw r31 r29 12
 #    main program ends
 getx.23:
-    lfd    f0, 0(r2)
+    lwcZ f0 r1 0
     jr r31
 gety.25:
-    lfd    f0, 8(r2)
+    lwcZ f0 r1 8
     jr r31
 getz.27:
-    lfd    f0, 16(r2)
+    lwcZ f0 r1 16
     jr r31
 inprod.29:
-    sw r2 r3 0
-    sw r5 r3 4
-    or r31 r0 r31
-    sw r31 r3 12
-    addi r3 r3 16
+    sw r1 r29 0
+    sw r2 r29 4
+    sw r31 r29 12
+    addi r29 r29 16
     jal getx.23
-    subi r3 r3 16
-    lw r31 r3 12
-    or r31 r0 r31
-    lw r2 r3 4
-    stfd    f0, 8(r3)
-    or r31 r0 r31
-    sw r31 r3 20
-    addi r3 r3 24
+    subi r29 r29 16
+    lw r31 r29 12
+    lw r1 r29 4
+    swcZ f0 r29 8
+    sw r31 r29 20
+    addi r29 r29 24
     jal getx.23
-    subi r3 r3 24
-    lw r31 r3 20
-    or r31 r0 r31
-    lfd    f1, 8(r3)
+    subi r29 r29 24
+    lw r31 r29 20
+    lwcZ f1 r29 8
     fmul f0 f1 f0
-    lw r2 r3 0
-    stfd    f0, 16(r3)
-    or r31 r0 r31
-    sw r31 r3 28
-    addi r3 r3 32
+    lw r1 r29 0
+    swcZ f0 r29 16
+    sw r31 r29 28
+    addi r29 r29 32
     jal gety.25
-    subi r3 r3 32
-    lw r31 r3 28
-    or r31 r0 r31
-    lw r2 r3 4
-    stfd    f0, 24(r3)
-    or r31 r0 r31
-    sw r31 r3 36
-    addi r3 r3 40
+    subi r29 r29 32
+    lw r31 r29 28
+    lw r1 r29 4
+    swcZ f0 r29 24
+    sw r31 r29 36
+    addi r29 r29 40
     jal gety.25
-    subi r3 r3 40
-    lw r31 r3 36
-    or r31 r0 r31
-    lfd    f1, 24(r3)
+    subi r29 r29 40
+    lw r31 r29 36
+    lwcZ f1 r29 24
     fmul f0 f1 f0
-    lfd    f1, 16(r3)
+    lwcZ f1 r29 16
     fadd f0 f1 f0
-    lw r2 r3 0
-    stfd    f0, 32(r3)
-    or r31 r0 r31
-    sw r31 r3 44
-    addi r3 r3 48
+    lw r1 r29 0
+    swcZ f0 r29 32
+    sw r31 r29 44
+    addi r29 r29 48
     jal getz.27
-    subi r3 r3 48
-    lw r31 r3 44
-    or r31 r0 r31
-    lw r2 r3 4
-    stfd    f0, 40(r3)
-    or r31 r0 r31
-    sw r31 r3 52
-    addi r3 r3 56
+    subi r29 r29 48
+    lw r31 r29 44
+    lw r1 r29 4
+    swcZ f0 r29 40
+    sw r31 r29 52
+    addi r29 r29 56
     jal getz.27
-    subi r3 r3 56
-    lw r31 r3 52
-    or r31 r0 r31
-    lfd    f1, 40(r3)
+    subi r29 r29 56
+    lw r31 r29 52
+    lwcZ f1 r29 40
     fmul f0 f1 f0
-    lfd    f1, 32(r3)
+    lwcZ f1 r29 32
     fadd f0 f1 f0
     jr r31
