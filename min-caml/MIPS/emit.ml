@@ -67,7 +67,7 @@ and g' oc = function (* 各命令のアセンブリ生成 (caml2html: emit_gprime) *)
       Printf.fprintf oc "    lui %s %d\n" r n;          (*****************)
       Printf.fprintf oc "    ori %s %s %d\n" r r m     (*****************)
   | NonTail(x), FLi(Id.L(l)) ->
-      let s = load_label (reg reg_tmp) l in
+      let s = load_label (reg reg_tmp) l in                              (***** load float immidiate ***********)
       Printf.fprintf oc "%s    lfd %s %s 0\n" s (reg x) (reg reg_tmp)    (***** what is this ??????????? *******)
   | NonTail(x), SetL(Id.L(y)) ->
       let s = load_label x y in
@@ -82,7 +82,7 @@ and g' oc = function (* 各命令のアセンブリ生成 (caml2html: emit_gprime) *)
   | NonTail(x), Sub(y, C(z)) -> Printf.fprintf oc "    subi %s %s %d\n" (reg x) (reg y) z         (************)
   (* slw 左論理シフト *)
   | NonTail(x), Slw(y, V(z)) -> Printf.fprintf oc "    sll %s %s %s\n" (reg x) (reg y) (reg z)    (************)
-  | NonTail(x), Slw(y, C(z)) -> Printf.fprintf oc "    sllv %s %s %d\n #shift" (reg x) (reg y) z         (************)
+  | NonTail(x), Slw(y, C(z)) -> Printf.fprintf oc "    sllv %s %s %d #shift\n" (reg x) (reg y) z         (************)
   (* division *)
   | NonTail(x), Div2(y) -> Printf.fprintf oc "    div2 %s r0 %s\n" (reg x) (reg y)                 (************)
   | NonTail(x), Div10(y) -> Printf.fprintf oc "    div10 %s r0 %s\n" (reg x) (reg y)                 (************)
