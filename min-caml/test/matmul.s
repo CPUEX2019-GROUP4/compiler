@@ -1,53 +1,53 @@
     .data
     .literal8
     .align 3
-l.371:    # 12.000000
-    .long    0
-    .long    1076363264
+l.371:    # 12.010000
+    .long    10486
+    .long    16704
     .align 3
 l.368:    # 11.000000
     .long    0
-    .long    1076232192
+    .long    16688
     .align 3
 l.365:    # 10.000000
     .long    0
-    .long    1076101120
+    .long    16672
     .align 3
 l.362:    # 9.000000
     .long    0
-    .long    1075970048
+    .long    16656
     .align 3
 l.359:    # 8.000000
     .long    0
-    .long    1075838976
+    .long    16640
     .align 3
 l.356:    # 7.000000
     .long    0
-    .long    1075576832
+    .long    16608
     .align 3
 l.353:    # 6.000000
     .long    0
-    .long    1075314688
+    .long    16576
     .align 3
 l.350:    # 5.000000
     .long    0
-    .long    1075052544
+    .long    16544
     .align 3
 l.347:    # 4.000000
     .long    0
-    .long    1074790400
+    .long    16512
     .align 3
 l.344:    # 3.000000
     .long    0
-    .long    1074266112
+    .long    16448
     .align 3
 l.341:    # 2.000000
     .long    0
-    .long    1073741824
+    .long    16384
     .align 3
 l.338:    # 1.000000
     .long    0
-    .long    1072693248
+    .long    16256
     .align 3
 l.331:    # 0.000000
     .long    0
