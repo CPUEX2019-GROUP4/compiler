@@ -8,8 +8,10 @@ type token =
   | MUL4
   | DIV2
   | DIV10
-  | MINUS_DOT
+  | FLOAT_TO_INT
+  | INT_TO_FLOAT
   | PLUS_DOT
+  | MINUS_DOT
   | AST_DOT
   | SLASH_DOT
   | EQUAL

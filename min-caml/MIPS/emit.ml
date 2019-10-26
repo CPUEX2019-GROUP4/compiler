@@ -86,6 +86,9 @@ and g' oc = function (* 各命令のアセンブリ生成 (caml2html: emit_gprime) *)
   (* division *)
   | NonTail(x), Div2(y) -> Printf.fprintf oc "    div2 %s r0 %s\n" (reg x) (reg y)                 (************)
   | NonTail(x), Div10(y) -> Printf.fprintf oc "    div10 %s r0 %s\n" (reg x) (reg y)                 (************)
+  (* ftoi, itof *)
+  | NonTail(x), FtoI(y) -> Printf.fprintf oc "    ftoi %s %s\n" (reg x) (reg y)                 (************)
+  | NonTail(x), ItoF(y) -> Printf.fprintf oc "    itof %s %s\n" (reg x) (reg y)                 (************)
   (* lwz ロード *)
   | NonTail(x), Lwz(y, V(z)) -> Printf.fprintf oc "    add r27 %s %s\n    lw %s r27 0\n" (reg y) (reg z) (reg x) (****************)
   | NonTail(x), Lwz(y, C(z)) -> Printf.fprintf oc "    lw %s %s %d\n" (reg x) (reg y) z          (************)
@@ -127,10 +130,10 @@ and g' oc = function (* 各命令のアセンブリ生成 (caml2html: emit_gprime) *)
   | Tail, (Nop | Stw _ | Stfd _ | Comment _ | Save _ as exp) ->
       g' oc (NonTail(Id.gentmp Type.Unit), exp);
       Printf.fprintf oc "    jr r31\n";     (***********************)
-  | Tail, (Li _ | SetL _ | Mr _ | Neg _ | Add _ | Sub _ | Slw _ | Div2 _ | Div10 _ | Lwz _ as exp) ->
+  | Tail, (Li _ | SetL _ | Mr _ | Neg _ | Add _ | Sub _ | Slw _ | Div2 _ | Div10 _ | Lwz _ | FtoI _ as exp) ->
       g' oc (NonTail(regs.(0)), exp);
       Printf.fprintf oc "    jr r31\n";      (*******************)
-  | Tail, (FLi _ | FMr _ | FNeg _ | FAdd _ | FSub _ | FMul _ | FDiv _ | Lfd _ as exp) ->
+  | Tail, (FLi _ | FMr _ | FNeg _ | FAdd _ | FSub _ | FMul _ | FDiv _ | Lfd _ | ItoF _ as exp) ->
       g' oc (NonTail(fregs.(0)), exp);
       Printf.fprintf oc "    jr r31\n";           (*******************)
   | Tail, (Restore(x) as exp) ->

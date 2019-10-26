@@ -125,6 +125,8 @@ and g' dest cont regenv = function (* 各命令のレジスタ割り当て (caml2html: regal
   | Slw(x, y') -> (Ans(Slw(find x Type.Int regenv, find' y' regenv)), regenv)
   | Div2(x) -> (Ans(Div2(find x Type.Int regenv)), regenv)
   | Div10(x) -> (Ans(Div10(find x Type.Int regenv)), regenv)
+  | FtoI(x) -> (Ans(FtoI(find x Type.Float regenv)), regenv)  (***)
+  | ItoF(x) -> (Ans(ItoF(find x Type.Int regenv)), regenv)  (***)
   | Lwz(x, y') -> (Ans(Lwz(find x Type.Int regenv, find' y' regenv)), regenv)
   | Stw(x, y, z') -> (Ans(Stw(find x Type.Int regenv, find y Type.Int regenv, find' z' regenv)), regenv)
   | FMr(x) -> (Ans(FMr(find x Type.Float regenv)), regenv)
@@ -139,7 +141,8 @@ and g' dest cont regenv = function (* 各命令のレジスタ割り当て (caml2html: regal
   | IfLE(x, y', e1, e2) as exp -> g'_if dest cont regenv exp (fun e1' e2' -> IfLE(find x Type.Int regenv, find' y' regenv, e1', e2')) e1 e2
   | IfGE(x, y', e1, e2) as exp -> g'_if dest cont regenv exp (fun e1' e2' -> IfGE(find x Type.Int regenv, find' y' regenv, e1', e2')) e1 e2
   | IfFEq(x, y, e1, e2) as exp -> g'_if dest cont regenv exp (fun e1' e2' -> IfFEq(find x Type.Float regenv, find y Type.Float regenv, e1', e2')) e1 e2
-  | IfFLE(x, y, e1, e2) as exp -> g'_if dest cont regenv exp (fun e1' e2' -> IfFLE(find x Type.Float regenv, find y Type.Float regenv, e1', e2')) e1 e2
+  (*| IfFLE(x, y, e1, e2) as exp -> g'_if dest cont regenv exp (fun e1' e2' -> IfFLE(find x Type.Float regenv, find y Type.Float regenv, e1', e2')) e1 e2*)
+  | IfFLt(x, y, e1, e2) as exp -> g'_if dest cont regenv exp (fun e1' e2' -> IfFLt(find x Type.Float regenv, find y Type.Float regenv, e1', e2')) e1 e2
   | CallCls(x, ys, zs) as exp ->
       if List.length ys > Array.length regs - 2 || List.length zs > Array.length fregs - 1 then
         failwith (Format.sprintf "cannot allocate registers for arugments to %s" x)

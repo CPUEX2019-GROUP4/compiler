@@ -9,6 +9,8 @@ type t =
   | Mul4 of Id.t
   | Div2 of Id.t
   | Div10 of Id.t
+  | FtoI of Id.t
+  | ItoF of Id.t
   | FNeg of Id.t
   | FAdd of Id.t * Id.t
   | FSub of Id.t * Id.t

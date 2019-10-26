@@ -9,13 +9,12 @@
     lw r31 r29 4
     sw r31 r29 4
     addi r29 r29 8
-    nop
-#    jal min_caml_print_int
-#    subi r29 r29 8
-#    lw r31 r29 4
+    jal min_caml_print_int
+    subi r29 r29 8
+    lw r31 r29 4
 #    main program ends
 gcd.7:
-    ori r28 r0 0 #wow!
+    ori r28 r0 0
     bne r1 r28 beq_else.17
     or r1 r2 r0
     jr r31

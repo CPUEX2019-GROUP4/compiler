@@ -3,51 +3,51 @@
     .align 3
 l.364:    # 12.000000
     .long    0
-    .long    1076363264
+    .long    16704
     .align 3
 l.361:    # 11.000000
     .long    0
-    .long    1076232192
+    .long    16688
     .align 3
 l.358:    # 10.000000
     .long    0
-    .long    1076101120
+    .long    16672
     .align 3
 l.355:    # 9.000000
     .long    0
-    .long    1075970048
+    .long    16656
     .align 3
 l.352:    # 8.000000
     .long    0
-    .long    1075838976
+    .long    16640
     .align 3
 l.349:    # 7.000000
     .long    0
-    .long    1075576832
+    .long    16608
     .align 3
 l.346:    # 6.000000
     .long    0
-    .long    1075314688
+    .long    16576
     .align 3
 l.343:    # 5.000000
     .long    0
-    .long    1075052544
+    .long    16544
     .align 3
 l.340:    # 4.000000
     .long    0
-    .long    1074790400
+    .long    16512
     .align 3
 l.337:    # 3.000000
     .long    0
-    .long    1074266112
+    .long    16448
     .align 3
 l.334:    # 2.000000
     .long    0
-    .long    1073741824
+    .long    16384
     .align 3
 l.331:    # 1.000000
     .long    0
-    .long    1072693248
+    .long    16256
     .align 3
 l.328:    # 0.000000
     .long    0
@@ -243,31 +243,31 @@ l.328:    # 0.000000
 loop3.140:
     slti r28 r2 0
     bne r0 r28 bge_else.406
-    sllv r7 r1 2
- #shift    add r27 r6 r7
+    sllv r7 r1 2 #shift
+    add r27 r6 r7
     lw r7 r27 0
-    sllv r8 r1 2
- #shift    add r27 r6 r8
+    sllv r8 r1 2 #shift
+    add r27 r6 r8
     lw r8 r27 0
-    sllv r9 r3 3
- #shift    add r27 r8 r9
+    sllv r9 r3 3 #shift
+    add r27 r8 r9
     lwcZ f0 r27 0
-    sllv r8 r1 2
- #shift    add r27 r4 r8
+    sllv r8 r1 2 #shift
+    add r27 r4 r8
     lw r8 r27 0
-    sllv r9 r2 3
- #shift    add r27 r8 r9
+    sllv r9 r2 3 #shift
+    add r27 r8 r9
     lwcZ f1 r27 0
-    sllv r8 r2 2
- #shift    add r27 r5 r8
+    sllv r8 r2 2 #shift
+    add r27 r5 r8
     lw r8 r27 0
-    sllv r9 r3 3
- #shift    add r27 r8 r9
+    sllv r9 r3 3 #shift
+    add r27 r8 r9
     lwcZ f2 r27 0
     fmul f1 f1 f2
     fadd f0 f0 f1
-    sllv r8 r3 3
- #shift    add r27 r7 r8
+    sllv r8 r3 3 #shift
+    add r27 r7 r8
     swcZ f0 r27 0
     subi r2 r2 1
     j loop3.140
@@ -344,8 +344,8 @@ init.169:
     subi r29 r29 16
     lw r31 r29 12
     lw r2 r29 8
-    sllv r3 r2 2
- #shift    lw r4 r29 4
+    sllv r3 r2 2 #shift
+    lw r4 r29 4
     add r27 r4 r3
     sw r1 r27 0
     subi r1 r2 1

@@ -2,16 +2,16 @@
     .literal8
     .align 3
 l.30:    # -7.890000
-    .long    687194767
-    .long    -1071673508
+    .long    31457
+    .long    -16132
     .align 3
 l.29:    # 4.560000
-    .long    -1546188227
-    .long    1074937200
+    .long    -5243
+    .long    16529
     .align 3
 l.28:    # 1.230000
-    .long    2061584302
-    .long    1072934420
+    .long    28836
+    .long    16285
 #    main program starts
     lui r31 ha16(l.28)
     ori r31 r31 lo16(l.28)
