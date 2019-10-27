@@ -11,6 +11,7 @@ type t = (* MinCamlの構文を表現するデータ型 (caml2html: syntax_t) *)
   | Div2 of t
   | Div10 of t
   | FNeg of t
+  | FZero of t
   | FAdd of t * t
   | FSub of t * t
   | FMul of t * t
@@ -55,6 +56,7 @@ let rec print e i =
   | Add (x, y) -> p "ADD"; print x (i + 1); print y (i + 1)
   | Sub (x, y) -> p "SUB"; print x (i + 1); print y (i + 1)
   | FNeg x -> p "NEG"; print x (i + 1)
+  | FZero x -> p "FZero?"; print x (i + 1)
   | FAdd (x, y) -> p "FADD"; print x (i + 1); print y (i + 1)
   | FSub (x, y) -> p "FSUB"; print x (i + 1); print y (i + 1)
   | FMul (x, y) -> p "FMUL"; print x (i + 1); print y (i + 1)

@@ -14,6 +14,7 @@ let addtyp x = (x, Type.gentyp ())
 %token MUL4   /** added **/
 %token DIV2   /** added **/
 %token DIV10  /** added **/
+%token FZERO  /** added **/
 %token MINUS_DOT
 %token PLUS_DOT
 %token AST_DOT
@@ -137,6 +138,8 @@ exp: /* (* ∞Ï»Ã§Œº∞ (caml2html: parser_exp) *) */
 | LET REC fundef IN exp
     %prec prec_let
     { LetRec($3, $5) }
+| FZERO exp /*(* =0 *)*/
+    { FZero($2) }
 | simple_exp actual_args
     %prec prec_app
     { App($1, $2) }

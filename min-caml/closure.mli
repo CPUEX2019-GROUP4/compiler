@@ -10,6 +10,7 @@ type t =
   | Div2 of Id.t
   | Div10 of Id.t
   | FNeg of Id.t
+  | FZero of Id.t
   | FAdd of Id.t * Id.t
   | FSub of Id.t * Id.t
   | FMul of Id.t * Id.t

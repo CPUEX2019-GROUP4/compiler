@@ -8,6 +8,7 @@ type token =
   | MUL4
   | DIV2
   | DIV10
+  | FZERO
   | MINUS_DOT
   | PLUS_DOT
   | AST_DOT
