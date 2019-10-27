@@ -8,7 +8,7 @@ and exp = (* 一つ一つの命令に対応する式 (caml2html: sparcasm_exp) *)
   | Nop
   | Li of int
   (* load immidiate *)
-  | FLi of Id.l
+  | FLi of float
   (* load float *)
   | SetL of Id.l
   | Mr of Id.t

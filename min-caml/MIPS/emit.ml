@@ -66,9 +66,15 @@ and g' oc = function (* 各命令のアセンブリ生成 (caml2html: emit_gprime) *)
       let r = reg x in
       Printf.fprintf oc "    lui %s %d\n" r n;          (*****************)
       Printf.fprintf oc "    ori %s %s %d\n" r r m     (*****************)
-  | NonTail(x), FLi(Id.L(l)) ->
+  | NonTail(x), FLi(f) ->
+      (*
       let s = load_label (reg reg_tmp) l in                              (***** load float immidiate ***********)
-      Printf.fprintf oc "%s    lfd %s %s 0\n" s (reg x) (reg reg_tmp)    (***** what is this ??????????? *******)
+      *)
+      let n = gethi_f f in
+      let m = getlo_f f in
+      let r = reg x in
+      Printf.fprintf oc "    flui %s %d\n" r (Int32.to_int n);          (*****************)
+      Printf.fprintf oc "    fori %s %s %d\n" r r (Int32.to_int m)     (*****************)
   | NonTail(x), SetL(Id.L(y)) ->
       let s = load_label x y in
       Printf.fprintf oc "%s" s
@@ -315,6 +321,7 @@ let h oc { name = Id.L(x); args = _; fargs = _; body = e; ret = _ } =
 
 let f oc (Prog(data, fundefs, e)) =
   Format.eprintf "generating assembly...@.";
+  (* data
   if data <> [] then
     (Printf.fprintf oc "    .data\n    .literal8\n";
      List.iter
@@ -324,6 +331,7 @@ let f oc (Prog(data, fundefs, e)) =
          Printf.fprintf oc "    .long    %ld\n" (gethi_f d);
          Printf.fprintf oc "    .long    %ld\n" (getlo_f d))
        data);
+  *)
   (* DELEATED
   Printf.fprintf oc "    .text\n";
   Printf.fprintf oc "    .globl _min_caml_start\n";

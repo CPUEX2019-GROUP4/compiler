@@ -34,7 +34,8 @@ let expand xts ini addf addi =
 let rec g env = function (* 式の仮想マシンコード生成 (caml2html: virtual_g) *)
   | Closure.Unit -> Ans(Nop)
   | Closure.Int(i) -> Ans(Li(i))
-  | Closure.Float(d) ->
+  | Closure.Float(d) -> (* Float of float *)
+      (*
       let l =
         try
           (* すでに定数テーブルにあったら再利用 *)
@@ -44,7 +45,8 @@ let rec g env = function (* 式の仮想マシンコード生成 (caml2html: virtual_g) *)
           let l = Id.L(Id.genid "l") in
           data := (l, d) :: !data;
           l in
-      Ans(FLi(l))
+      *)
+      Ans(FLi(d))
   | Closure.Neg(x) -> Ans(Neg(x))
   | Closure.Add(x, y) -> Ans(Add(x, V(y)))
   | Closure.Sub(x, y) -> Ans(Sub(x, V(y)))
