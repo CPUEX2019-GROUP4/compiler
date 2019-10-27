@@ -3,31 +3,31 @@
     .align 3
 l.73:    # 6.000000
     .long    0
-    .long    1075314688
+    .long    16576
     .align 3
 l.72:    # 5.000000
     .long    0
-    .long    1075052544
+    .long    16544
     .align 3
 l.71:    # 4.000000
     .long    0
-    .long    1074790400
+    .long    16512
     .align 3
 l.66:    # 3.000000
     .long    0
-    .long    1074266112
+    .long    16448
     .align 3
 l.65:    # 2.000000
     .long    0
-    .long    1073741824
+    .long    16384
     .align 3
 l.64:    # 1.000000
     .long    0
-    .long    1072693248
+    .long    16256
     .align 3
 l.63:    # 1000000.000000
-    .long    0
-    .long    1093567616
+    .long    9216
+    .long    18804
 #    main program starts
     lui r31 ha16(l.63)
     ori r31 r31 lo16(l.63)

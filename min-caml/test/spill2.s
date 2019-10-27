@@ -61,10 +61,9 @@ beq_else.77:
 beq_cont.78:
     sw r31 r29 4
     addi r29 r29 8
-    nop
-#    jal min_caml_print_int
-#    subi r29 r29 8
-#    lw r31 r29 4
+    jal min_caml_print_int
+    subi r29 r29 8
+    lw r31 r29 4
 #    main program ends
 f.26:
     ori r1 r0 12345

@@ -2,16 +2,16 @@
     .literal8
     .align 3
 l.44:    # 1000000.000000
-    .long    0
-    .long    1093567616
+    .long    9216
+    .long    18804
     .align 3
 l.43:    # 4.560000
-    .long    -1546188227
-    .long    1074937200
+    .long    -5243
+    .long    16529
     .align 3
 l.42:    # 1.230000
-    .long    2061584302
-    .long    1072934420
+    .long    28836
+    .long    16285
     .align 3
 l.39:    # 0.000000
     .long    0
@@ -65,11 +65,11 @@ l.39:    # 0.000000
 inprod.17:
     slti r28 r3 0
     bne r0 r28 bge_else.50
-    sllv r4 r3 3
- #shift    add r27 r1 r4
+    sllv r4 r3 3 #shift
+    add r27 r1 r4
     lwcZ f0 r27 0
-    sllv r4 r3 3
- #shift    add r27 r2 r4
+    sllv r4 r3 3 #shift
+    add r27 r2 r4
     lwcZ f1 r27 0
     fmul f0 f0 f1
     subi r3 r3 1

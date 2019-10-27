@@ -10,6 +10,8 @@ type t = (* MinCamlの構文を表現するデータ型 (caml2html: syntax_t) *)
   | Mul4 of t
   | Div2 of t
   | Div10 of t
+  | ItoF of t
+  | FtoI of t
   | FNeg of t
   | FAdd of t * t
   | FSub of t * t
@@ -52,6 +54,8 @@ let rec print e i =
   | Mul4 x -> p "MULTIPLE 4"; print x (i + 1)
   | Div2 x -> p "DIVIDE BY 2"; print x (i + 1)
   | Div10 x -> p "DIVIDE BY 10"; print x (i + 1)
+  | FtoI x -> p "float_to_int"; print x (i + 1)
+  | ItoF x -> p "int_to_float"; print x (i + 1)
   | Add (x, y) -> p "ADD"; print x (i + 1); print y (i + 1)
   | Sub (x, y) -> p "SUB"; print x (i + 1); print y (i + 1)
   | FNeg x -> p "NEG"; print x (i + 1)

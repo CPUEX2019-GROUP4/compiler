@@ -29,10 +29,9 @@ ble_cont.31:
     add r1 r1 r2
     sw r31 r29 4
     addi r29 r29 8
-nop
-#    jal min_caml_print_int
-#    subi r29 r29 8
-#    lw r31 r29 4
+    jal min_caml_print_int
+    subi r29 r29 8
+    lw r31 r29 4
 #    main program ends
 f.12:
     ori r1 r0 123

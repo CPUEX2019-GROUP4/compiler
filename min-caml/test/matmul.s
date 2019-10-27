@@ -257,31 +257,31 @@ loop3.282:
     lw r6 r25 4
     slti r28 r1 0
     bne r0 r28 bge_else.408
-    sllv r7 r3 2
- #shift    add r27 r4 r7
+    sllv r7 r3 2 #shift
+    add r27 r4 r7
     lw r7 r27 0
-    sllv r8 r3 2
- #shift    add r27 r4 r8
+    sllv r8 r3 2 #shift
+    add r27 r4 r8
     lw r4 r27 0
-    sllv r8 r2 3
- #shift    add r27 r4 r8
+    sllv r8 r2 3 #shift
+    add r27 r4 r8
     lwcZ f0 r27 0
-    sllv r3 r3 2
- #shift    add r27 r6 r3
+    sllv r3 r3 2 #shift
+    add r27 r6 r3
     lw r3 r27 0
-    sllv r4 r1 3
- #shift    add r27 r3 r4
+    sllv r4 r1 3 #shift
+    add r27 r3 r4
     lwcZ f1 r27 0
-    sllv r3 r1 2
- #shift    add r27 r5 r3
+    sllv r3 r1 2 #shift
+    add r27 r5 r3
     lw r3 r27 0
-    sllv r4 r2 3
- #shift    add r27 r3 r4
+    sllv r4 r2 3 #shift
+    add r27 r3 r4
     lwcZ f2 r27 0
     fmul f1 f1 f2
     fadd f0 f0 f1
-    sllv r2 r2 3
- #shift    add r27 r7 r2
+    sllv r2 r2 3 #shift
+    add r27 r7 r2
     swcZ f0 r27 0
     subi r1 r1 1
     lw r24 r25 0
@@ -398,8 +398,8 @@ init.256:
     subi r29 r29 16
     lw r31 r29 12
     lw r2 r29 8
-    sllv r3 r2 2
- #shift    lw r4 r29 4
+    sllv r3 r2 2 #shift
+    lw r4 r29 4
     add r27 r4 r3
     sw r1 r27 0
     subi r1 r2 1

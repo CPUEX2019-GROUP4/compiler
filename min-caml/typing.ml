@@ -30,6 +30,8 @@ let rec deref_term = function
   | Mul4(e) -> Mul4(deref_term e)
   | Div2(e) -> Div2(deref_term e)
   | Div10(e) -> Div10(deref_term e)
+  | FtoI(e) -> FtoI(deref_term e)
+  | ItoF(e) -> ItoF(deref_term e)
   | Eq(e1, e2) -> Eq(deref_term e1, deref_term e2)
   | LE(e1, e2) -> LE(deref_term e1, deref_term e2)
   | FLt(e1, e2) -> FLt(deref_term e1, deref_term e2)
@@ -110,6 +112,12 @@ let rec g env e = (* 型推論ルーチン (caml2html: typing_g) *)
     | Div10(e) ->
         unify Type.Int (g env e);
         Type.Int
+    | FtoI(e) ->
+        unify Type.Float (g env e);
+        Type.Int
+    | ItoF(e) ->
+        unify Type.Int (g env e);
+        Type.Float
     | FNeg(e) ->
         unify Type.Float (g env e);
         Type.Float
