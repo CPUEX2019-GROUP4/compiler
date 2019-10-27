@@ -12,5 +12,5 @@ sleep 1
 cp test/$1.s ../simulator/simulator/sim/mips_test.s
 cd ../simulator/simulator/sim/
 ./test.sh mips_test.s
-echo "out.txt\n------"
+echo "----- out.txt ------"
 cat out.txt

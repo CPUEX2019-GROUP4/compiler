@@ -26,7 +26,8 @@ let light_dirvec =
   let consts = Array.create 60 dummyf2 in
   (v3, consts)
 in
-
+let rec fabs f = if f <. 0.0 then -. f else f in
+let rec floor f = (int_of_float (float_of_int f))
 let rec fhalf x = x *. 0.5 in
 let rec fsqr x = x *. x in
 let rec fless a b = a <. b in
@@ -43,7 +44,7 @@ in
 
 (* 条件付き符号反転 *)
 let rec fneg_cond cond x =
-  if cond then x else fneg x
+  if cond then x else -. x
 in
 
 (* (x+y) mod 5 *)
@@ -519,11 +520,11 @@ let rec read_screen_settings _ =
   (* スクリーン面X方向のベクトル *)
   screenx_dir.(0) <- cos_v2;
   screenx_dir.(1) <- 0.0;
-  screenx_dir.(2) <- fneg sin_v2;
+  screenx_dir.(2) <- -. sin_v2;
   (* スクリーン面Y方向のベクトル *)
-  screeny_dir.(0) <- fneg sin_v1 *. sin_v2;
-  screeny_dir.(1) <- fneg cos_v1;
-  screeny_dir.(2) <- fneg sin_v1 *. cos_v2;
+  screeny_dir.(0) <- -. sin_v1 *. sin_v2;
+  screeny_dir.(1) <- -. cos_v1;
+  screeny_dir.(2) <- -. sin_v1 *. cos_v2;
   (* 視点位置ベクトル(絶対座標) *)
   viewpoint.(0) <- screen.(0) -. screenz_dir.(0);
   viewpoint.(1) <- screen.(1) -. screenz_dir.(1);
@@ -539,7 +540,7 @@ let rec read_light _ =
   (* 光線関係 *)
   let l1 = rad (read_float ()) in
   let sl1 = sin l1 in
-  light.(1) <- fneg sl1;
+  light.(1) <- -. sl1;
   let l2 = rad (read_float ()) in
   let cl1 = cos l1 in
   let sl2 = sin l2 in
@@ -571,7 +572,7 @@ let rec rotate_quadratic_matrix abc rot =
   let m11 = sin_x *. sin_y *. sin_z +. cos_x *. cos_z in
   let m12 = cos_x *. sin_y *. sin_z -. sin_x *. cos_z in
 
-  let m20 = fneg sin_y in
+  let m20 = -. sin_y in
   let m21 = sin_x *. cos_y in
   let m22 = cos_x *. cos_y in
 
@@ -776,7 +777,7 @@ let rec solver_surface m dirvec b0 b1 b2 =
   let abc = o_param_abc m in
   let d = veciprod dirvec abc in
   if d >. 0.0 then (
-    solver_dist.(0) <- fneg (veciprod2 abc b0 b1 b2) /. d;
+    solver_dist.(0) <- -. (veciprod2 abc b0 b1 b2) /. d;
     1
    ) else 0
 in
@@ -842,7 +843,7 @@ let rec solver_second m dirvec b0 b1 b2 =
 
     if d >. 0.0 then (
       let sd = sqrt d in
-      let t1 = if o_isinvert m then sd else fneg sd in
+      let t1 = if o_isinvert m then sd else -. sd in
       (solver_dist.(0) <- (t1 -. bb) /.  aa; 1)
      )
     else
@@ -1050,9 +1051,9 @@ let rec setup_surface_table vec m =
     (* 方向ベクトルを何倍すれば平面の垂直方向に 1 進むか *)
     const.(0) <- -1.0 /. d;
     (* ある点の平面からの距離が方向ベクトル何個分かを導く3次一形式の係数 *)
-    const.(1) <- fneg (o_param_a m /. d);
-    const.(2) <- fneg (o_param_b m /. d);
-    const.(3) <- fneg (o_param_c m /. d)
+    const.(1) <- -. (o_param_a m /. d);
+    const.(2) <- -. (o_param_b m /. d);
+    const.(3) <- -. (o_param_c m /. d)
    ) else
     const.(0) <- 0.0;
   const
@@ -1064,9 +1065,9 @@ let rec setup_second_table v m =
   let const = Array.create 5 0.0 in
 
   let aa = quadratic m v.(0) v.(1) v.(2) in
-  let c1 = fneg (v.(0) *. o_param_a m) in
-  let c2 = fneg (v.(1) *. o_param_b m) in
-  let c3 = fneg (v.(2) *. o_param_c m) in
+  let c1 = -. (v.(0) *. o_param_a m) in
+  let c2 = -. (v.(1) *. o_param_b m) in
+  let c3 = -. (v.(2) *. o_param_c m) in
 
   const.(0) <- aa;  (* 2次方程式の a 係数 *)
 
@@ -1477,15 +1478,15 @@ let rec get_nvector_rect dirvec =
   let rectside = intsec_rectside.(0) in
   (* solver の返り値はぶつかった面の方向を示す *)
   vecbzero nvector;
-  nvector.(rectside-1) <- fneg (sgn (dirvec.(rectside-1)))
+  nvector.(rectside-1) <- -. (sgn (dirvec.(rectside-1)))
 in
 
 (* 平面 *)
 let rec get_nvector_plane m =
   (* m_invert は常に true のはず *)
-  nvector.(0) <- fneg (o_param_a m); (* if m_invert then fneg m_a else m_a *)
-  nvector.(1) <- fneg (o_param_b m);
-  nvector.(2) <- fneg (o_param_c m)
+  nvector.(0) <- -. (o_param_a m); (* if m_invert then -. m_a else m_a *)
+  nvector.(1) <- -. (o_param_b m);
+  nvector.(2) <- -. (o_param_c m)
 in
 
 (* 2次曲面 :  grad x^t A x = 2 A x を正規化する *)
@@ -1691,8 +1692,8 @@ let rec trace_ray nref energy dirvec pixel dist =
 
       (* 光源光が直接届く場合、RGB成分にこれを加味する *)
       if not (shadow_check_one_or_matrix 0 or_net.(0)) then
-        let bright = fneg (veciprod nvector light) *. diffuse in
-        let hilight = fneg (veciprod dirvec light) in
+        let bright = -. (veciprod nvector light) *. diffuse in
+        let hilight = -. (veciprod dirvec light) in
         add_light bright hilight hilight_scale
       else ();
 
@@ -1720,7 +1721,7 @@ let rec trace_ray nref energy dirvec pixel dist =
       surface_ids.(nref) <- -1;
 
       if nref <> 0 then (
-	let hl = fneg (veciprod dirvec light) in
+	let hl = -. (veciprod dirvec light) in
         (* 90°を超える場合は0 (光なし) *)
 	if hl >. 0.0 then
 	  (
@@ -1754,7 +1755,7 @@ let rec trace_diffuse_ray dirvec energy =
 
     (* その物体が放射する光の強さを求める。直接光源光のみを計算 *)
     if not (shadow_check_one_or_matrix 0 or_net.(0)) then
-      let br =  fneg (veciprod nvector light) in
+      let br =  -. (veciprod nvector light) in
       let bright = (if br >. 0.0 then br else 0.0) in
       vecaccum diffuse_ray (energy *. bright *. o_diffuse obj) texture_color
     else ()
@@ -2151,11 +2152,11 @@ let rec calc_dirvec icount x y rx ry group_id index =
     (* 立方体的に対称に分布させる *)
     let dgroup = dirvecs.(group_id) in
     vecset (d_vec dgroup.(index))    vx vy vz;
-    vecset (d_vec dgroup.(index+40)) vx vz (fneg vy);
-    vecset (d_vec dgroup.(index+80)) vz (fneg vx) (fneg vy);
-    vecset (d_vec dgroup.(index+1)) (fneg vx) (fneg vy) (fneg vz);
-    vecset (d_vec dgroup.(index+41)) (fneg vx) (fneg vz) vy;
-    vecset (d_vec dgroup.(index+81)) (fneg vz) vx vy
+    vecset (d_vec dgroup.(index+40)) vx vz (-. vy);
+    vecset (d_vec dgroup.(index+80)) vz (-. vx) (-. vy);
+    vecset (d_vec dgroup.(index+1)) (-. vx) (-. vy) (-. vz);
+    vecset (d_vec dgroup.(index+41)) (-. vx) (-. vz) vy;
+    vecset (d_vec dgroup.(index+81)) (-. vz) vx vy
    ) else
     let x2 = adjust_position y rx in
     calc_dirvec (icount + 1) x2 (adjust_position x2 ry) rx ry group_id index
@@ -2252,9 +2253,9 @@ let rec setup_rect_reflection obj_id obj =
   let sid = obj_id * 4 in                                 (** here !!!!!!!!!!! **)
   let nr = n_reflections.(0) in
   let br = 1.0 -. o_diffuse obj in
-  let n0 = fneg light.(0) in
-  let n1 = fneg light.(1) in
-  let n2 = fneg light.(2) in
+  let n0 = -. light.(0) in
+  let n1 = -. light.(1) in
+  let n2 = -. light.(2) in
   add_reflection nr (sid+1) br light.(0) n1 n2;
   add_reflection (nr+1) (sid+2) br n0 light.(1) n2;
   add_reflection (nr+2) (sid+3) br n0 n1 light.(2);
