@@ -1,60 +1,24 @@
-    .data
-    .literal8
-    .align 3
-l.73:    # 6.000000
-    .long    0
-    .long    16576
-    .align 3
-l.72:    # 5.000000
-    .long    0
-    .long    16544
-    .align 3
-l.71:    # 4.000000
-    .long    0
-    .long    16512
-    .align 3
-l.66:    # 3.000000
-    .long    0
-    .long    16448
-    .align 3
-l.65:    # 2.000000
-    .long    0
-    .long    16384
-    .align 3
-l.64:    # 1.000000
-    .long    0
-    .long    16256
-    .align 3
-l.63:    # 1000000.000000
-    .long    9216
-    .long    18804
+    ori r30 r0 1024
 #    main program starts
-    lui r31 ha16(l.63)
-    ori r31 r31 lo16(l.63)
-    lfd f0 r31 0
-    lui r31 ha16(l.64)
-    ori r31 r31 lo16(l.64)
-    lfd f1 r31 0
-    lui r31 ha16(l.65)
-    ori r31 r31 lo16(l.65)
-    lfd f2 r31 0
-    lui r31 ha16(l.66)
-    ori r31 r31 lo16(l.66)
-    lfd f3 r31 0
+    flui f0 9216
+    fori f0 f0 18804
+    flui f1 0
+    fori f1 f1 16256
+    flui f2 0
+    fori f2 f2 16384
+    flui f3 0
+    fori f3 f3 16448
     or r1 r30 r0
     addi r30 r30 24
     swcZ f3 r1 16
     swcZ f2 r1 8
     swcZ f1 r1 0
-    lui r31 ha16(l.71)
-    ori r31 r31 lo16(l.71)
-    lfd f1 r31 0
-    lui r31 ha16(l.72)
-    ori r31 r31 lo16(l.72)
-    lfd f2 r31 0
-    lui r31 ha16(l.73)
-    ori r31 r31 lo16(l.73)
-    lfd f3 r31 0
+    flui f1 0
+    fori f1 f1 16512
+    flui f2 0
+    fori f2 f2 16544
+    flui f3 0
+    fori f3 f3 16576
     or r2 r30 r0
     addi r30 r30 24
     swcZ f3 r2 16

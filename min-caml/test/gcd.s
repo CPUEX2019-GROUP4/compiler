@@ -1,3 +1,4 @@
+    ori r30 r0 1024
 #    main program starts
     ori r1 r0 21600
     lui r2 5

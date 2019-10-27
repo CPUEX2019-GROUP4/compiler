@@ -323,7 +323,7 @@ let h oc { name = Id.L(x); args = _; fargs = _; body = e; ret = _ } =
   stackmap := [];
   g oc (Tail, e)
 
-let f oc (Prog(data, fundefs, e)) =
+let f oc (Prog(fundefs, e)) =
   Format.eprintf "generating assembly...@.";
   (* data
   if data <> [] then

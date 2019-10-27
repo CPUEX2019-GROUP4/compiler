@@ -1,3 +1,4 @@
+    ori r30 r0 1024
 #    main program starts
     or r25 r30 r0
     addi r30 r30 8

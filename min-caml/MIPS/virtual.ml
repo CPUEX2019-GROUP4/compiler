@@ -2,7 +2,7 @@
 
 open Asm
 
-let data = ref [] (* 浮動小数点数の定数テーブル (caml2html: virtual_data) *)
+(*let data = ref [] (* 浮動小数点数の定数テーブル (caml2html: virtual_data) *)*)
 
 let classify xts ini addf addi =
   List.fold_left
@@ -167,7 +167,8 @@ let h { Closure.name = (Id.L(x), t); Closure.args = yts; Closure.formal_fv = zts
 
 (* プログラム全体の仮想マシンコード生成 (caml2html: virtual_f) *)
 let f (Closure.Prog(fundefs, e)) =
-  data := [];
+  (*data := [];*)
   let fundefs = List.map h fundefs in
   let e = g M.empty e in
-  Prog(!data, fundefs, e)
+  Prog(fundefs, e)
+(*  Prog(!data, fundefs, e)*)

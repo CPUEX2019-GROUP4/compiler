@@ -1,62 +1,8 @@
-    .data
-    .literal8
-    .align 3
-l.371:    # 12.010000
-    .long    10486
-    .long    16704
-    .align 3
-l.368:    # 11.000000
-    .long    0
-    .long    16688
-    .align 3
-l.365:    # 10.000000
-    .long    0
-    .long    16672
-    .align 3
-l.362:    # 9.000000
-    .long    0
-    .long    16656
-    .align 3
-l.359:    # 8.000000
-    .long    0
-    .long    16640
-    .align 3
-l.356:    # 7.000000
-    .long    0
-    .long    16608
-    .align 3
-l.353:    # 6.000000
-    .long    0
-    .long    16576
-    .align 3
-l.350:    # 5.000000
-    .long    0
-    .long    16544
-    .align 3
-l.347:    # 4.000000
-    .long    0
-    .long    16512
-    .align 3
-l.344:    # 3.000000
-    .long    0
-    .long    16448
-    .align 3
-l.341:    # 2.000000
-    .long    0
-    .long    16384
-    .align 3
-l.338:    # 1.000000
-    .long    0
-    .long    16256
-    .align 3
-l.331:    # 0.000000
-    .long    0
-    .long    0
+    ori r30 r0 1024
 #    main program starts
     ori r1 r0 0
-    lui r31 ha16(l.331)
-    ori r31 r31 lo16(l.331)
-    lfd f0 r31 0
+    flui f0 0
+    fori f0 f0 0
     sw r31 r29 4
     addi r29 r29 8
     jal min_caml_create_float_array
@@ -107,65 +53,53 @@ l.331:    # 0.000000
     or r6 r0 r1
     lw r4 r29 4
     lw r1 r4 0
-    lui r31 ha16(l.338)
-    ori r31 r31 lo16(l.338)
-    lfd f0 r31 0
+    flui f0 0
+    fori f0 f0 16256
     swcZ f0 r1 0
     lw r1 r4 0
-    lui r31 ha16(l.341)
-    ori r31 r31 lo16(l.341)
-    lfd f0 r31 0
+    flui f0 0
+    fori f0 f0 16384
     swcZ f0 r1 8
     lw r1 r4 0
-    lui r31 ha16(l.344)
-    ori r31 r31 lo16(l.344)
-    lfd f0 r31 0
+    flui f0 0
+    fori f0 f0 16448
     swcZ f0 r1 16
     lw r1 r4 4
-    lui r31 ha16(l.347)
-    ori r31 r31 lo16(l.347)
-    lfd f0 r31 0
+    flui f0 0
+    fori f0 f0 16512
     swcZ f0 r1 0
     lw r1 r4 4
-    lui r31 ha16(l.350)
-    ori r31 r31 lo16(l.350)
-    lfd f0 r31 0
+    flui f0 0
+    fori f0 f0 16544
     swcZ f0 r1 8
     lw r1 r4 4
-    lui r31 ha16(l.353)
-    ori r31 r31 lo16(l.353)
-    lfd f0 r31 0
+    flui f0 0
+    fori f0 f0 16576
     swcZ f0 r1 16
     lw r5 r29 8
     lw r1 r5 0
-    lui r31 ha16(l.356)
-    ori r31 r31 lo16(l.356)
-    lfd f0 r31 0
+    flui f0 0
+    fori f0 f0 16608
     swcZ f0 r1 0
     lw r1 r5 0
-    lui r31 ha16(l.359)
-    ori r31 r31 lo16(l.359)
-    lfd f0 r31 0
+    flui f0 0
+    fori f0 f0 16640
     swcZ f0 r1 8
     lw r1 r5 4
-    lui r31 ha16(l.362)
-    ori r31 r31 lo16(l.362)
-    lfd f0 r31 0
+    flui f0 0
+    fori f0 f0 16656
     swcZ f0 r1 0
     lw r1 r5 4
-    lui r31 ha16(l.365)
-    ori r31 r31 lo16(l.365)
-    lfd f0 r31 0
+    flui f0 0
+    fori f0 f0 16672
     swcZ f0 r1 8
     lw r1 r5 8
-    lui r31 ha16(l.368)
-    ori r31 r31 lo16(l.368)
-    lfd f0 r31 0
+    flui f0 0
+    fori f0 f0 16688
     swcZ f0 r1 0
     lw r1 r5 8
-    lui r31 ha16(l.371)
-    ori r31 r31 lo16(l.371)
-    lfd f0 r31 0
+    flui f0 10486
+    fori f0 f0 16704
     swcZ f0 r1 8
     ori r1 r0 2
     ori r2 r0 3
@@ -256,7 +190,7 @@ loop3.282:
     lw r5 r25 8
     lw r6 r25 4
     slti r28 r1 0
-    bne r0 r28 bge_else.408
+    bne r0 r28 bge_else.395
     sllv r7 r3 2 #shift
     add r27 r4 r7
     lw r7 r27 0
@@ -287,7 +221,7 @@ loop3.282:
     lw r24 r25 0
     or r26 r0 r24
     jr r26
-bge_else.408:
+bge_else.395:
     jr r31
 loop2.274:
     lw r2 r25 20
@@ -296,7 +230,7 @@ loop2.274:
     lw r5 r25 8
     lw r6 r25 4
     slti r28 r1 0
-    bne r0 r28 bge_else.410
+    bne r0 r28 bge_else.397
     or r7 r30 r0
     addi r30 r30 24
     lui r8 ha16(loop3.282)
@@ -325,7 +259,7 @@ loop2.274:
     lw r24 r25 0
     or r26 r0 r24
     jr r26
-bge_else.410:
+bge_else.397:
     jr r31
 loop1.269:
     lw r2 r25 20
@@ -334,7 +268,7 @@ loop1.269:
     lw r5 r25 8
     lw r6 r25 4
     slti r28 r1 0
-    bne r0 r28 bge_else.412
+    bne r0 r28 bge_else.399
     or r7 r30 r0
     addi r30 r30 24
     lui r8 ha16(loop2.274)
@@ -363,7 +297,7 @@ loop1.269:
     lw r24 r25 0
     or r26 r0 r24
     jr r26
-bge_else.412:
+bge_else.399:
     jr r31
 mul.140:
     or r25 r30 r0
@@ -384,10 +318,9 @@ init.256:
     lw r2 r25 8
     lw r3 r25 4
     slti r28 r1 0
-    bne r0 r28 bge_else.414
-    lui r31 ha16(l.331)
-    ori r31 r31 lo16(l.331)
-    lfd f0 r31 0
+    bne r0 r28 bge_else.401
+    flui f0 0
+    fori f0 f0 0
     sw r25 r29 0
     sw r3 r29 4
     sw r1 r29 8
@@ -407,7 +340,7 @@ init.256:
     lw r24 r25 0
     or r26 r0 r24
     jr r26
-bge_else.414:
+bge_else.401:
     jr r31
 make.148:
     lw r3 r25 4

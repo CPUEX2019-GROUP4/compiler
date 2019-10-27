@@ -1,38 +1,22 @@
-    .data
-    .literal8
-    .align 3
-l.30:    # -7.890000
-    .long    31457
-    .long    -16132
-    .align 3
-l.29:    # 4.560000
-    .long    -5243
-    .long    16529
-    .align 3
-l.28:    # 1.230000
-    .long    28836
-    .long    16285
+    ori r30 r0 1024
 #    main program starts
-    lui r31 ha16(l.28)
-    ori r31 r31 lo16(l.28)
-    lfd f0 r31 0
+    flui f0 28836
+    fori f0 f0 16285
     sw r31 r29 4
     addi r29 r29 8
     jal min_caml_truncate
     subi r29 r29 8
     lw r31 r29 4
-    lui r31 ha16(l.29)
-    ori r31 r31 lo16(l.29)
-    lfd f0 r31 0
+    flui f0 -5243
+    fori f0 f0 16529
     sw r1 r29 0
     sw r31 r29 4
     addi r29 r29 8
     jal min_caml_truncate
     subi r29 r29 8
     lw r31 r29 4
-    lui r31 ha16(l.30)
-    ori r31 r31 lo16(l.30)
-    lfd f0 r31 0
+    flui f0 31457
+    fori f0 f0 -16132
     sw r1 r29 4
     sw r31 r29 12
     addi r29 r29 16
@@ -40,29 +24,29 @@ l.28:    # 1.230000
     subi r29 r29 16
     lw r31 r29 12
     slti r28 r1 0
-    bne r0 r28 bge_else.34
+    bne r0 r28 bge_else.31
     lw r2 r29 0
-    j bge_cont.35
-bge_else.34:
+    j bge_cont.32
+bge_else.31:
     lw r2 r29 4
-bge_cont.35:
+bge_cont.32:
     lw r3 r29 0
     ori r28 r0 0
     slt r28 r28 r3
-    bne r0 r28 ble_else.36
+    bne r0 r28 ble_else.33
     lw r4 r29 4
-    j ble_cont.37
-ble_else.36:
+    j ble_cont.34
+ble_else.33:
     or r4 r1 r0
-ble_cont.37:
+ble_cont.34:
     add r2 r2 r4
     lw r4 r29 4
     slti r28 r4 0
-    bne r0 r28 bge_else.38
-    j bge_cont.39
-bge_else.38:
+    bne r0 r28 bge_else.35
+    j bge_cont.36
+bge_else.35:
     or r1 r3 r0
-bge_cont.39:
+bge_cont.36:
     add r1 r2 r1
     sw r31 r29 12
     addi r29 r29 16
