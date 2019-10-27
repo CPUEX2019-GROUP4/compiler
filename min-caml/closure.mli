@@ -12,6 +12,7 @@ type t =
   | FtoI of Id.t
   | ItoF of Id.t
   | FNeg of Id.t
+  | FZero of Id.t
   | FAdd of Id.t * Id.t
   | FSub of Id.t * Id.t
   | FMul of Id.t * Id.t
