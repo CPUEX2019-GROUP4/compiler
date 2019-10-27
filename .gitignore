@@ -1,3 +1,5 @@
 TeX/
 power*
 simulator/
+min-caml/*.cm*
+min-caml/test/*.ans
