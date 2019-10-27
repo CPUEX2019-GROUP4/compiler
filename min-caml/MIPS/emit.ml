@@ -140,11 +140,7 @@ and g' oc = function (* 各命令のアセンブリ生成 (caml2html: emit_gprime) *)
   | Tail, (Li _ | SetL _ | Mr _ | Neg _ | Add _ | Sub _ | Slw _ | Div2 _ | Div10 _ | Lwz _ | FtoI _ as exp) ->
       g' oc (NonTail(regs.(0)), exp);
       Printf.fprintf oc "    jr r31\n";      (*******************)
-<<<<<<< HEAD
-  | Tail, (FLi _ | FMr _ | FNeg _ | FAdd _ | FSub _ | FMul _ | FDiv _ | Lfd _ | ItoF _ as exp) ->
-=======
-  | Tail, (FLi _ | FMr _ | FNeg _ | FZero _ | FAdd _ | FSub _ | FMul _ | FDiv _ | Lfd _ as exp) ->
->>>>>>> fcz
+  | Tail, (FLi _ | FMr _ | FNeg _ | FZero _ | FAdd _ | FSub _ | FMul _ | FDiv _ | Lfd _ | ItoF _ as exp) ->
       g' oc (NonTail(fregs.(0)), exp);
       Printf.fprintf oc "    jr r31\n";           (*******************)
   | Tail, (Restore(x) as exp) ->

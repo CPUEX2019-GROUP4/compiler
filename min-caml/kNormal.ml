@@ -35,11 +35,7 @@ and fundef = { name : Id.t * Type.t; args : (Id.t * Type.t) list; body : t }
 
 let rec fv = function (* 式に出現する（自由な）変数 (caml2html: knormal_fv) *)
   | Unit | Int(_) | Float(_) | ExtArray(_) -> S.empty
-<<<<<<< HEAD
-  | Neg(x) | FNeg(x) | Mul4(x) | Div2(x) | Div10(x) | FtoI(x) | ItoF(x) -> S.singleton x
-=======
-  | Neg(x) | FNeg(x) | Mul4(x) | Div2(x) | Div10(x) | FZero(x) -> S.singleton x
->>>>>>> fcz
+  | Neg(x) | FNeg(x) | FZero(x) | Mul4(x) | Div2(x) | Div10(x) | FtoI(x) | ItoF(x) -> S.singleton x
   | Add(x, y) | Sub(x, y) | FAdd(x, y) | FSub(x, y) | FMul(x, y) | FDiv(x, y) | Get(x, y) -> S.of_list [x; y]
   | IfEq(x, y, e1, e2) | IfLE(x, y, e1, e2) | IfFLt(x, y, e1, e2)-> S.add x (S.add y (S.union (fv e1) (fv e2)))
   | Let((x, t), e1, e2) -> S.union (fv e1) (S.remove x (fv e2))

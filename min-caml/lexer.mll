@@ -82,15 +82,12 @@ rule token = parse
     { COMMA }
 | '_'
     { IDENT(Id.gentmp Type.Unit) }
-<<<<<<< HEAD
 | "int_of_float"
     { FLOAT_TO_INT }
 | "float_of_int"
     { INT_TO_FLOAT }
-=======
 | "fiszero"
     { FZERO }
->>>>>>> fcz
 | "Array.create" | "Array.make" (* [XX] ad hoc *)
     { ARRAY_CREATE }
 | '.'
