@@ -31,6 +31,7 @@ type t = (* MinCamlの構文を表現するデータ型 (caml2html: syntax_t) *)
   | Array of t * t
   | Get of t * t
   | Put of t * t * t
+  | Out of t * int
 and fundef = { name : Id.t * Type.t; args : (Id.t * Type.t) list; body : t }
 
 let rec indent n =
@@ -42,13 +43,7 @@ let rec indent n =
 let p = print_string
 
 (** print 関数 **)
-let rec print e i =
-  print_newline ();
-  indent i;
-  match e with
-  | Unit -> p "UNIT"
-  | Bool x -> (p "BOOL "; p (if x then "true" else "false"))
-  | Int x -> p "INT "; print_int x
+let rec print e i = print_newline (); indent i; match e with | Unit -> p "UNIT" | Bool x -> (p "BOOL "; p (if x then "true" else "false")) | Int x -> p "INT "; print_int x
   | Float x -> p "FLOAT "; print_float x
   | Not x -> p "NOT"; print x (i + 1)
   | Neg x -> p "NEG"; print x (i + 1)
@@ -70,7 +65,7 @@ let rec print e i =
   | FLt (x, y) -> p "FLt"; print x (i + 1); print y (i + 1)
   | If (x, y, z) -> p "IF"; print x (i + 1); print y (i + 1); print z (i + 1)
   | Let ((x, t), y, z) -> p ("LET " ^ x ^ " ("); Type.print t; p ")";
-                          print y (i + 1); print z (i + 1)
+                          print y (i + 1); print z (i)
   | Var x -> p ("VAR " ^ x)
   | LetRec (f, x) ->
  (* fundef =
@@ -83,7 +78,7 @@ let rec print e i =
       indent (i + 1);
       Type.print_args f.args;
       print f.body (i + 1);
-      print x (i + 1)
+      print x (i)
   | App (x, ys) -> p "APP"; print x (i + 1) ; prints ys (i + 1)
   | Tuple xs -> p "TUPLE"; prints xs (i + 1)
   | LetTuple (xs, y, z) ->
@@ -93,6 +88,7 @@ let rec print e i =
   | Array (x, y) -> p "ARRAY"; print x (i + 1); print y (i + 1)
   | Get   (x, y) -> p "GET"; print x (i + 1); print y (i + 1)
   | Put   (x, y, z) -> p "PUT"; print x (i + 1); print y (i + 1); print z (i + 1)
+  | Out (x, y) -> p "OUT"; print x (i + 1); indent i; print_int y
 and prints xs i =
   match xs with
   | [] -> ()

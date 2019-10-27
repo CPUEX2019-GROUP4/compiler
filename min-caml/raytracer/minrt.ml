@@ -27,9 +27,9 @@ let light_dirvec =
   (v3, consts)
 in
 
-let fhalf x = x *. 0.5 in
-let fsqr x = x *. x in
-let fless a b = a <. b in
+let rec fhalf x = x *. 0.5 in
+let rec fsqr x = x *. x in
+let rec fless a b = a <. b in
 (******************************************************************************
    ユーティリティー
  *****************************************************************************)
@@ -2320,6 +2320,6 @@ let rec rt size_x size_y =
 )
 in
 
-let _ = rt 512 512
-
-in ()
+let a = rt 512 512
+(*let _ = rt 512 512*)
+in a

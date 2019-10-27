@@ -31,11 +31,12 @@ type t = (* K正規化後の式 (caml2html: knormal_t) *)
   | Put of Id.t * Id.t * Id.t
   | ExtArray of Id.t
   | ExtFunApp of Id.t * Id.t list
+  | Out of Id.t * int
 and fundef = { name : Id.t * Type.t; args : (Id.t * Type.t) list; body : t }
 
 let rec fv = function (* 式に出現する（自由な）変数 (caml2html: knormal_fv) *)
   | Unit | Int(_) | Float(_) | ExtArray(_) -> S.empty
-  | Neg(x) | FNeg(x) | FZero(x) | Mul4(x) | Div2(x) | Div10(x) | FtoI(x) | ItoF(x) -> S.singleton x
+  | Neg(x) | FNeg(x) | FZero(x) | Mul4(x) | Div2(x) | Div10(x) | FtoI(x) | ItoF(x) | Out(x,_) -> S.singleton x
   | Add(x, y) | Sub(x, y) | FAdd(x, y) | FSub(x, y) | FMul(x, y) | FDiv(x, y) | Get(x, y) -> S.of_list [x; y]
   | IfEq(x, y, e1, e2) | IfLE(x, y, e1, e2) | IfFLt(x, y, e1, e2)-> S.add x (S.add y (S.union (fv e1) (fv e2)))
   | Let((x, t), e1, e2) -> S.union (fv e1) (S.remove x (fv e2))
@@ -207,6 +208,9 @@ let rec g env = function (* K正規化ルーチン本体 (caml2html: knormal_g) *)
         (fun x -> insert_let (g env e2)
             (fun y -> insert_let (g env e3)
                 (fun z -> Put(x, y, z), Type.Unit)))
+  | Syntax.Out(e, n) ->
+      insert_let (g env e)
+        (fun x -> Out(x, n), Type.Unit)
 
 
 (** abbriviation **)
@@ -267,6 +271,7 @@ let rec print e i =
   | Put (x,y,z) -> p (x^".("^y^") <- "^z)
   | ExtArray x -> p ("extarray " ^ x)
   | ExtFunApp (f,x) -> p ("extfunapp"); print_newline (); indent j; p f; p_rec x j
+  | Out (x,y)  -> p ("out " ^ x ^ " "); print_int y
 
 
 

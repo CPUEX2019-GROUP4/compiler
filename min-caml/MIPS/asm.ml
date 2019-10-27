@@ -44,6 +44,7 @@ and exp = (* 一つ一つの命令に対応する式 (caml2html: sparcasm_exp) *)
   | CallDir of Id.l * Id.t list * Id.t list
   | Save of Id.t * Id.t (* レジスタ変数の値をスタック変数へ保存 (caml2html: sparcasm_save) *)
   | Restore of Id.t (* スタック変数から値を復元 (caml2html: sparcasm_restore) *)
+  | Out of Id.t * int
 type fundef = { name : Id.l; args : Id.t list; fargs : Id.t list; body : t; ret : Type.t }
 (* プログラム全体 = 浮動小数点数テーブル + トップレベル関数 + メインの式 (caml2html: sparcasm_prog) *)
 type prog = Prog of fundef list * t
@@ -78,7 +79,7 @@ let rec remove_and_uniq xs = function
 let fv_id_or_imm = function V(x) -> [x] | _ -> []
 let rec fv_exp = function
   | Nop | Li(_) | FLi(_) | SetL(_) | Comment(_) | Restore(_) -> []
-  | Mr(x) | Neg(x) | FMr(x) | FNeg(x) | FZero(x) | Save(x, _) | Div2(x) | Div10(x) | FtoI(x) | ItoF(x)-> [x]
+  | Mr(x) | Neg(x) | FMr(x) | FNeg(x) | FZero(x) | Save(x, _) | Div2(x) | Div10(x) | FtoI(x) | ItoF(x) | Out(x,_) -> [x]
   | Add(x, y') | Sub(x, y') | Slw(x, y') | Lfd(x, y') | Lwz(x, y') -> x :: fv_id_or_imm y'
   | Stw(x, y, z') | Stfd(x, y, z') -> x :: y :: fv_id_or_imm z'
   | FAdd(x, y) | FSub(x, y) | FMul(x, y) | FDiv(x, y) -> [x; y]

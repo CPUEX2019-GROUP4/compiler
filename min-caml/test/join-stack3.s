@@ -1,4 +1,4 @@
-    ori r30 r0 1024
+    lui r30 2
 #    main program starts
     sw r31 r29 4
     addi r29 r29 8

@@ -1,4 +1,4 @@
-    ori r30 r0 1024
+    lui r30 2
 #    main program starts
     ori r1 r0 10
     ori r2 r0 1

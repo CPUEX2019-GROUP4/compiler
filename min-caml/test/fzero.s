@@ -1,7 +1,7 @@
-    ori r30 r0 1024
+    lui r30 2
 #    main program starts
-    flui f0 0
-    fori f0 f0 16448
+    # 3.000000
+    flui f0 16448
     fcz r1 f0
     ori r28 r0 0
     bne r1 r28 beq_else.10

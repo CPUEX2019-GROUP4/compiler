@@ -88,6 +88,8 @@ rule token = parse
     { INT_TO_FLOAT }
 | "fiszero"
     { FZERO }
+| "out"
+    { OUT }
 | "Array.create" | "Array.make" (* [XX] ad hoc *)
     { ARRAY_CREATE }
 | '.'

@@ -1,24 +1,25 @@
-    ori r30 r0 1024
+    lui r30 2
 #    main program starts
-    flui f0 9216
-    fori f0 f0 18804
-    flui f1 0
-    fori f1 f1 16256
-    flui f2 0
-    fori f2 f2 16384
-    flui f3 0
-    fori f3 f3 16448
+    # 1000000.000000
+    flui f0 18804
+    fori f0 f0 9216
+    # 1.000000
+    flui f1 16256
+    # 2.000000
+    flui f2 16384
+    # 3.000000
+    flui f3 16448
     or r1 r30 r0
     addi r30 r30 24
     swcZ f3 r1 16
     swcZ f2 r1 8
     swcZ f1 r1 0
-    flui f1 0
-    fori f1 f1 16512
-    flui f2 0
-    fori f2 f2 16544
-    flui f3 0
-    fori f3 f3 16576
+    # 4.000000
+    flui f1 16512
+    # 5.000000
+    flui f2 16544
+    # 6.000000
+    flui f3 16576
     or r2 r30 r0
     addi r30 r30 24
     swcZ f3 r2 16

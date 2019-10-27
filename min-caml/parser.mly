@@ -16,6 +16,7 @@ let addtyp x = (x, Type.gentyp ())
 %token DIV10  /** added **/
 %token FLOAT_TO_INT INT_TO_FLOAT  /** added **/
 %token FZERO  /** added **/
+%token OUT  /** added **/
 %token MINUS_DOT
 %token PLUS_DOT
 %token MINUS_DOT
@@ -55,6 +56,7 @@ let addtyp x = (x, Type.gentyp ())
 %nonassoc prec_tuple
 %left COMMA
 %left EQUAL LESS_GREATER LESS GREATER LESS_EQUAL GREATER_EQUAL
+%left OUT  /** added **/
 %left PLUS MINUS PLUS_DOT MINUS_DOT
 %left AST_DOT SLASH_DOT
 %right prec_unary_minus
@@ -146,6 +148,8 @@ exp: /* (* ∞Ï»Ã§Œº∞ (caml2html: parser_exp) *) */
     { ItoF($2) }
 | FZERO exp /*(* =0 *)*/
     { FZero($2) }
+| OUT INT exp
+    { Out($3,$2) }
 | simple_exp actual_args
     %prec prec_app
     { App($1, $2) }

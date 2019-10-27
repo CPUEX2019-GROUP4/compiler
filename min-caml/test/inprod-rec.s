@@ -1,16 +1,18 @@
-    ori r30 r0 1024
+    lui r30 2
 #    main program starts
     ori r1 r0 3
-    flui f0 28836
-    fori f0 f0 16285
+    # 1.230000
+    flui f0 16285
+    fori f0 f0 28836
     sw r31 r29 4
     addi r29 r29 8
     jal min_caml_create_float_array
     subi r29 r29 8
     lw r31 r29 4
     ori r2 r0 3
-    flui f0 -5243
-    fori f0 f0 16529
+    # 4.560000
+    flui f0 16529
+    fori f0 f0 -5243
     sw r1 r29 0
     mv r1 r2
     sw r31 r29 4
@@ -19,8 +21,9 @@
     subi r29 r29 8
     lw r31 r29 4
     or r2 r0 r1
-    flui f0 9216
-    fori f0 f0 18804
+    # 1000000.000000
+    flui f0 18804
+    fori f0 f0 9216
     ori r3 r0 2
     lw r1 r29 0
     swcZ f0 r29 8
@@ -45,10 +48,10 @@
 inprod.17:
     slti r28 r3 0
     bne r0 r28 bge_else.46
-    sllv r4 r3 3 #shift
+    sll r4 r3 3
     add r27 r1 r4
     lwcZ f0 r27 0
-    sllv r4 r3 3 #shift
+    sll r4 r3 3
     add r27 r2 r4
     lwcZ f1 r27 0
     fmul f0 f0 f1
@@ -63,6 +66,6 @@ inprod.17:
     fadd f0 f1 f0
     jr r31
 bge_else.46:
+    # 0.000000
     flui f0 0
-    fori f0 f0 0
     jr r31

@@ -1,22 +1,25 @@
-    ori r30 r0 1024
+    lui r30 2
 #    main program starts
-    flui f0 28836
-    fori f0 f0 16285
+    # 1.230000
+    flui f0 16285
+    fori f0 f0 28836
     sw r31 r29 4
     addi r29 r29 8
     jal min_caml_truncate
     subi r29 r29 8
     lw r31 r29 4
-    flui f0 -5243
-    fori f0 f0 16529
+    # 4.560000
+    flui f0 16529
+    fori f0 f0 -5243
     sw r1 r29 0
     sw r31 r29 4
     addi r29 r29 8
     jal min_caml_truncate
     subi r29 r29 8
     lw r31 r29 4
-    flui f0 31457
-    fori f0 f0 -16132
+    # -7.890000
+    flui f0 -16132
+    fori f0 f0 31457
     sw r1 r29 4
     sw r31 r29 12
     addi r29 r29 16
