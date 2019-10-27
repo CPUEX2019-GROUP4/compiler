@@ -140,7 +140,7 @@ and g' oc = function (* 各命令のアセンブリ生成 (caml2html: emit_gprime) *)
       | _ -> assert false);
       Printf.fprintf oc "    jr r31\n";     (****************)
   | Tail, IfEq(x, V(y), e1, e2) ->                       (******** from here *********)
-      g'_tail_if oc e2 e1 "beq" "bne" (reg x) (reg y)
+      g'_tail_if oc e1 e2 "beq" "bne" (reg x) (reg y)
   | Tail, IfEq(x, C(y), e1, e2) ->
       Printf.fprintf oc "    ori r28 r0 %d\n" y;
       g'_tail_if oc e1 e2 "beq" "bne" (reg x) "r28"
@@ -341,6 +341,7 @@ let f oc (Prog(data, fundefs, e)) =
   Printf.fprintf oc "    stw    r0, 8(r1)\n";
   Printf.fprintf oc "    stwu    r1, -96(r1)\n";
   *)
+  Printf.fprintf oc "    ori r30 r0 1024\n";
   Printf.fprintf oc "#    main program starts\n";
   stackset := S.empty;
   stackmap := [];
