@@ -7,7 +7,8 @@ cd min-caml
 make min-caml
 make test/$1.s
 make test/$1.ans
-vim test/$1.s
+# vim test/$1.s
+cat libmincaml.S >> test/$1.s
 sleep 1
 cp test/$1.s ../simulator/simulator/sim/mips_test.s
 cd ../simulator/simulator/sim/
