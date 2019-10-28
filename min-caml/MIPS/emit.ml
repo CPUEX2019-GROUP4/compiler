@@ -59,7 +59,7 @@ let rec g oc = function (* 命令列のアセンブリ生成 (caml2html: emit_g) *)
 and g' oc = function (* 各命令のアセンブリ生成 (caml2html: emit_gprime) *)
   (* 末尾でなかったら計算結果をdestにセット (caml2html: emit_nontail) *)
   | NonTail(_), Nop -> ()
-  | NonTail(x), Li(i) when -32768 <= i && i < 32768 -> Printf.fprintf oc "    ori %s r0 %d\n" (reg x) i   (**********)
+  | NonTail(x), Li(i) when -32768 <= i && i < 32768 -> Printf.fprintf oc "    addi %s r0 %d\n" (reg x) i   (**********)
   | NonTail(x), Li(i) ->
       let n = i lsr 16 in
       let m = i lxor (n lsl 16) in

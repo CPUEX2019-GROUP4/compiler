@@ -1,15 +1,7 @@
-#    main program ends
+# print_int
 min_caml_print_int:
-    slti r28 r1 0
-    bne r0 r28 print_int_bge_else.1
-    j print_int_bge_cont
-print_int_bge_else.1:
-    addi r2 r0 45
-    out r2 0
-    sub r1 r0 r1
-print_int_bge_cont:
     slti r28 r1 10
-    bne r0 r28 print_int_bge_else.0
+    bne r0 r28 print_int_bge_else.25
     div10 r2 r1
     sw r1 r29 0
     sw r2 r29 4
@@ -27,7 +19,7 @@ print_int_bge_cont:
     sub r1 r2 r1
     out r1 48
     jr r31
-print_int_bge_else.0:
+print_int_bge_else.25:
     out r1 48
     jr r31
 # print_char

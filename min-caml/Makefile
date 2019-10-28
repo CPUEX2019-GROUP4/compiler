@@ -42,7 +42,7 @@ do_test: $(TESTS:%=test/%.cmp)
 ## 適宜コメントアウトすればよさそう
 TRASH = \
 		$(TESTS:%=test/%) $(TESTS:%=test/%.res) $(TESTS:%=test/%.ans) $(TESTS:%=test/%.cmp) raytracer/minrt.s
-##$(TESTS:%=test/%.s) \
+	#$(TESTS:%=test/%.s) \
 
 test/%.s: $(RESULT) test/%.ml
 	./$(RESULT) test/$*
