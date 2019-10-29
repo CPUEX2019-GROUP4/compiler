@@ -8,10 +8,9 @@
     jal fsin.57
     subi r29 r29 8
     lw r31 r29 4
-    ftoi r1 f0
     sw r31 r29 4
     addi r29 r29 8
-    jal min_caml_print_int
+    jal min_caml_p
     subi r29 r29 8
     lw r31 r29 4
 nop
@@ -19,8 +18,7 @@ nop
 reduction_2pi_sub1.45:
     fclt f0 f1
     bc1f float_ble_else.133
-    fneg f0 f1
-    fneg f0 f0
+    fmv f0 f1
     jr r31
 float_ble_else.133:
     flui f2 16384
@@ -62,7 +60,6 @@ reduction_2pi.51:
     subi r29 r29 16
     lw r31 r29 12
     fneg f1 f0
-    fneg f1 f1
     lwcZ f0 r29 0
     j reduction_2pi_sub2.48
 kernel_sin.53:
@@ -149,7 +146,10 @@ float_ble_cont.140:
     swcZ f0 r1 0
     j float_ble_cont.142
 float_ble_else.141:
-    fneg f0 f0
+    flui f1 16457
+    # 3.141593
+    fori f1 f1 4059
+    fsub f0 f0 f1
     addi r1 r0 0
     lw r2 r29 0
     bne r2 r1 beq_else.143
