@@ -320,7 +320,7 @@ and g'_args oc x_reg_cl ys zs =
       (0, [])
       zs in
   List.iter
-    (fun (z, fr) -> Printf.fprintf oc "    fmv  %s %s\n" (reg fr) (reg z) (reg fr) (reg fr))  (************)
+    (fun (z, fr) -> Printf.fprintf oc "    fmv  %s %s\n" (reg fr) (reg z))  (************)
     (shuffle reg_fsw zfrs)
 
 let h oc { name = Id.L(x); args = _; fargs = _; body = e; ret = _ } =
