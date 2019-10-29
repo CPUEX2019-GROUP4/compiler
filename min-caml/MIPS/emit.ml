@@ -73,8 +73,8 @@ and g' oc = function (* 各命令のアセンブリ生成 (caml2html: emit_gprime) *)
       let n = Int32.to_int (gethi_f f) in
       let m = Int32.to_int (getlo_f f) in
       let r = reg x in
-      Printf.fprintf oc "    # %f\n" f;          (*****************)
       Printf.fprintf oc "    flui %s %d\n" r m;          (*****************)
+      Printf.fprintf oc "    # %f\n" f;          (*****************)
       if n <> 0 then
         Printf.fprintf oc "    fori %s %s %d\n" r r n     (*****************)
       else
@@ -107,7 +107,7 @@ and g' oc = function (* 各命令のアセンブリ生成 (caml2html: emit_gprime) *)
   | NonTail(_), Stw(x, y, C(z)) -> Printf.fprintf oc "    sw %s %s %d\n" (reg x) (reg y) z       (************)
 
   | NonTail(x), FMr(y) when x = y -> ()
-  | NonTail(x), FMr(y) -> Printf.fprintf oc "    fmv %s %s\n" (reg x) (reg y)                    (****************)
+  | NonTail(x), FMr(y) -> Printf.fprintf oc "    fmv %s %s\n" (reg x) (reg y)                (**************)
   | NonTail(x), FNeg(y) -> Printf.fprintf oc "    fneg %s %s\n" (reg x) (reg y)                  (****************)
   | NonTail(x), FZero(y) -> Printf.fprintf oc "    fcz %s %s\n" (reg x) (reg y)                  (****************)
   | NonTail(x), FAdd(y, z) -> Printf.fprintf oc "    fadd %s %s %s\n" (reg x) (reg y) (reg z)    (****************)
@@ -209,7 +209,7 @@ and g' oc = function (* 各命令のアセンブリ生成 (caml2html: emit_gprime) *)
       Printf.fprintf oc "    fcmpu    cr7, %s, %s #program dead by if $f = $f then ...\n" (reg x) (reg y);     (*******)
       (* g'_non_tail_if oc (NonTail(z)) e1 e2 "beq" "bne" "r0" "r0" *)
   | NonTail(z), IfFLt(x, y, e1, e2) ->
-      Printf.fprintf oc "    fclt %s, %s\n" (reg x) (reg y);     (*****************)
+      Printf.fprintf oc "    fclt %s %s\n" (reg x) (reg y);     (*****************)
 
       let dest = (NonTail(z)) in
       let b_else = Id.genid ("float_ble" ^ "_else") in
@@ -252,7 +252,7 @@ and g' oc = function (* 各命令のアセンブリ生成 (caml2html: emit_gprime) *)
       if List.mem a allregs && a <> regs.(0) then
         Printf.fprintf oc "    or %s r0 %s\n" (reg a) (reg regs.(0))  (***************)
       else if List.mem a allfregs && a <> fregs.(0) then
-        Printf.fprintf oc "    fmv %s %s\n" (reg a) (reg fregs.(0));   (**************)
+        Printf.fprintf oc "    fmv %s %s\n" (reg a) (reg fregs.(0));   (************)
       (if "r31" <> (reg reg_tmp) then
         Printf.fprintf oc "    or r31 r0 %s\n" (reg reg_tmp)      (************)
       else
@@ -274,7 +274,7 @@ and g' oc = function (* 各命令のアセンブリ生成 (caml2html: emit_gprime) *)
       if List.mem a allregs && a <> regs.(0) then
         Printf.fprintf oc "    or %s r0 %s\n" (reg a) (reg regs.(0))   (******************)
       else if List.mem a allfregs && a <> fregs.(0) then
-        Printf.fprintf oc "    fmv %s %s\n" (reg a) (reg fregs.(0)); (*********************)
+        Printf.fprintf oc "    fneg %s %s\n" (reg a) (reg fregs.(0)); (************)
       (if "r31" <> (reg reg_tmp) then
         Printf.fprintf oc "    or r31 r0 %s\n" (reg reg_tmp) (******************)
       else
@@ -320,7 +320,7 @@ and g'_args oc x_reg_cl ys zs =
       (0, [])
       zs in
   List.iter
-    (fun (z, fr) -> Printf.fprintf oc "    fmv  %s %s\n" (reg fr) (reg z))  (****************)
+    (fun (z, fr) -> Printf.fprintf oc "    fmv  %s %s\n" (reg fr) (reg z) (reg fr) (reg fr))  (************)
     (shuffle reg_fsw zfrs)
 
 let h oc { name = Id.L(x); args = _; fargs = _; body = e; ret = _ } =

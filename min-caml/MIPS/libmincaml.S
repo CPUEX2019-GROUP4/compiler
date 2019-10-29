@@ -1,4 +1,5 @@
-#    main program ends
+#    library
+# print_int
 min_caml_print_int:
     slti r28 r1 0
     bne r0 r28 print_int_bge_else.1

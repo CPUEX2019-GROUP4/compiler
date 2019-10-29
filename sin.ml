@@ -1,10 +1,10 @@
 let rec reduction_2pi_sub1 a p =
-  if a >. p then reduction_2pi_sub1 a (2.0 *. p) else p
+  if a > p then reduction_2pi_sub1 a (2.0 *. p) else p
 in
 let rec reduction_2pi_sub2 a p =
-  if a >. 6.28318530717958 then
+  if a > 6.28318530717958 then
     let a =
-      if a >. p then
+      if a > p then
         a -. p
       else
         a +. 0.0
@@ -33,24 +33,23 @@ let rec kernel_cos a =
   1.0 -. (0.5 *. a2) +. (0.04166368 *. a4) -. (0.0013695068 *. a6)
 in
 let rec fsin a =
-  let flag = a >. 0.0 in
-  let a = if a <. 0.0 then -. a else a +. 0.0 in
+  let flag = a > 0.0 in
+  let a = if a < 0.0 then -. a else a in
   let a = reduction_2pi a in
   let (a, flag) =
-    if a >. 3.141592653589793238 then
+    if a > 3.141592653589793238 then
       (-.a, not flag)
     else
       (a +. 0.0, flag) in
-  let a = if a >. 1.5707963267948966 then
+  let a = if a > 1.5707963267948966 then
     3.141592653589793238 -. a
   else
     a +. 0.0
   in
-  let a = if a <. 0.7853981633974483 then
+  let a = if a < 0.7853981633974483 then
     kernel_cos (1.5707963267948966 -. a)
   else
     kernel_sin a
   in
   if flag then a +. 0.0 else -. a
-in (print_int (int_of_float (fsin 3.14159265358979)))
-
+in ((fsin (3.1415926535897932 /. 2.0)))
