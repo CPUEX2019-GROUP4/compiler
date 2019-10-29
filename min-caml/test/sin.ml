@@ -54,12 +54,28 @@ let rec fsin a =
   if flag then a +. 0.0 else -. a
 in
 
+let rec fcos a =
+  (* abs *)
+  let a = if a <.0.0 then -. a else a +. 0.0 in
+  (* 2pi *)
+  let a = reduction_2pi a in
+  (* pi *)
+  let (a, flag) =
+    if a >.3.141592653589793238 then
+      (a -. 3.141592653589793238, false)
+    else (a, true) in
+  (* pi/2 *)
+  let (a, flag) =
+    if a >.1.5707963267948966 then
+      (3.141592653589793 -. a, not flag)
+    else (a +. 0.0, flag) in
+  (* pi/4 *)
+  let a =
+    if a >.0.7853981633974483 then
+      kernel_cos a
+    else kernel_sin (1.5707963267948966 -. a) in
+  if flag then a +. 0.0 else -. a
+in
 
 
-
-
-
-
-
-
-(p (fsin 3.1415927))
+(print_int (int_of_float (fcos 3.1415927)))
