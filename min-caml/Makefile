@@ -34,7 +34,7 @@ shuffle spill spill2 spill3 join-stack join-stack2 join-stack3 \
 join-reg join-reg2 non-tail-if non-tail-if2 \
 inprod inprod-rec inprod-loop matmul matmul-flat \
 manyargs mul4 itof fzero print_int print_char fabs float_test \
-fadd fmin fmul fdiv unknown
+fadd fmin fmul fdiv unknown finv
 
 do_test: $(TESTS:%=test/%.cmp)
 

@@ -6,3 +6,4 @@ min-caml/*.cm*
 min-caml/*.o
 min-caml/test/*.ans
 min-caml/test/*.s
+gomi/
