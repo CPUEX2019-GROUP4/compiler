@@ -55,6 +55,8 @@ let rec deref_term = function
   | Get(e1, e2) -> Get(deref_term e1, deref_term e2)
   | Put(e1, e2, e3) -> Put(deref_term e1, deref_term e2, deref_term e3)
   | Out(e1, n) -> Out(deref_term e1, n)
+  | Unknown(x,t1,t2,e1) ->
+      Unknown(x,t1,t2,deref_term e1)
   | e -> e
 
 let rec occur r1 = function (* occur check (caml2html: typing_occur) *)
@@ -183,6 +185,20 @@ let rec g env e = (* 型推論ルーチン (caml2html: typing_g) *)
     | Out(e1, _) ->
         ignore (g env e1);
         Type.Unit
+    | Unknown(_,t1,t2,e1) ->
+        (print_string t1;
+        print_string t2);
+      let t1' =
+        (if t1 = "unit" then Type.Unit else
+          if t1 = "int" then Type.Int else
+            if t1 = "bool" then Type.Bool else Type.Float)
+      in
+      let t2' =
+        (if t2 = "unit" then Type.Unit else
+          if t2 = "int" then Type.Int else
+            if t2 = "bool" then Type.Bool else Type.Float)
+      in
+      (unify t1' (g env e1)); t2'
   with Unify(t1, t2) -> raise (Error(deref_term e, deref_typ t1, deref_typ t2))
 
 let f e =

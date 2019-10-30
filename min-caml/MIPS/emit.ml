@@ -139,6 +139,8 @@ and g' oc = function (* 各命令のアセンブリ生成 (caml2html: emit_gprime) *)
       Printf.fprintf oc "    lwcZ %s %s %d\n" (reg x) (reg reg_sp) (offset y)  (**** lfd load double ****)
   (* 入出力 *)
   | NonTail(_), Out(y, z) -> Printf.fprintf oc "    out %s %d\n" (reg y) z         (************)
+  (* Unknown instruction *)
+  | NonTail(x), Unknown(f,t1,t2,y) -> Printf.fprintf oc "    %s %s %s\n    #unknown instruction\n" f (reg x) (reg y)   (************)
   (* 末尾だったら計算結果を第一レジスタにセットしてリターン (caml2html: emit_tailret) *)
   | Tail, (Nop | Stw _ | Stfd _ | Comment _ | Save _ | Out _ as exp) ->
       g' oc (NonTail(Id.gentmp Type.Unit), exp);
@@ -148,6 +150,12 @@ and g' oc = function (* 各命令のアセンブリ生成 (caml2html: emit_gprime) *)
       Printf.fprintf oc "    jr r31\n";      (*******************)
   | Tail, (FLi _ | FMr _ | FNeg _ | FZero _ | FAdd _ | FSub _ | FMul _ | FDiv _ | Lfd _ | ItoF _ as exp) ->
       g' oc (NonTail(fregs.(0)), exp);
+      Printf.fprintf oc "    jr r31\n";           (*******************)
+  | Tail, (Unknown(_,_,t2,_) as exp) ->
+      (match t2 with
+      | Type.Unit ->            g' oc (NonTail(Id.gentmp Type.Unit), exp)
+      | Type.Bool | Type.Int -> g' oc (NonTail(regs.(0)), exp)
+      | Type.Float ->           g' oc (NonTail(fregs.(0)), exp));
       Printf.fprintf oc "    jr r31\n";           (*******************)
   | Tail, (Restore(x) as exp) ->
       (match locate x with

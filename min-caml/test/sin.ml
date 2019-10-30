@@ -78,4 +78,4 @@ let rec fcos a =
 in
 
 
-(print_int (int_of_float (fcos 3.1415927)))
+(print_int (int_of_float ((fcos 3.1415927)+.(fsin 3.14159265358979)  )))

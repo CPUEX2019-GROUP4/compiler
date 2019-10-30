@@ -1,6 +1,7 @@
 TeX/
 power*
 simulator/
+float_lib/
 min-caml/*.cm*
 min-caml/*.o
 min-caml/test/*.ans

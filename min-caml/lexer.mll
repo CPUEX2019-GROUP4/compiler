@@ -90,6 +90,8 @@ rule token = parse
     { FZERO }
 | "out"
     { OUT }
+| "UNKNOWN"
+    { UNKNOWN }
 | "Array.create" | "Array.make" (* [XX] ad hoc *)
     { ARRAY_CREATE }
 | '.'

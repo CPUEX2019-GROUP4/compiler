@@ -32,11 +32,12 @@ type t = (* K正規化後の式 (caml2html: knormal_t) *)
   | ExtArray of Id.t
   | ExtFunApp of Id.t * Id.t list
   | Out of Id.t * int
+  | Unknown of Id.t * Type.t * Type.t * Id.t
 and fundef = { name : Id.t * Type.t; args : (Id.t * Type.t) list; body : t }
 
 let rec fv = function (* 式に出現する（自由な）変数 (caml2html: knormal_fv) *)
   | Unit | Int(_) | Float(_) | ExtArray(_) -> S.empty
-  | Neg(x) | FNeg(x) | FZero(x) | Mul4(x) | Div2(x) | Div10(x) | FtoI(x) | ItoF(x) | Out(x,_) -> S.singleton x
+  | Neg(x) | FNeg(x) | FZero(x) | Mul4(x) | Div2(x) | Div10(x) | FtoI(x) | ItoF(x) | Out(x,_) | Unknown(_,_,_,x) -> S.singleton x
   | Add(x, y) | Sub(x, y) | FAdd(x, y) | FSub(x, y) | FMul(x, y) | FDiv(x, y) | Get(x, y) -> S.of_list [x; y]
   | IfEq(x, y, e1, e2) | IfLE(x, y, e1, e2) | IfFLt(x, y, e1, e2)-> S.add x (S.add y (S.union (fv e1) (fv e2)))
   | Let((x, t), e1, e2) -> S.union (fv e1) (S.remove x (fv e2))
@@ -211,6 +212,21 @@ let rec g env = function (* K正規化ルーチン本体 (caml2html: knormal_g) *)
   | Syntax.Out(e, n) ->
       insert_let (g env e)
         (fun x -> Out(x, n), Type.Unit)
+  | Syntax.Unknown(f,t1,t2,e) ->
+      let t1' =
+        match t1 with
+        | "unit" -> Type.Unit
+        | "int" -> Type.Int
+        | "bool" -> Type.Bool
+        | "float" -> Type.Float in
+      let t2' =
+        match t2 with
+        | "unit" -> Type.Unit
+        | "int" -> Type.Int
+        | "bool" -> Type.Bool
+        | "float" -> Type.Float in
+      insert_let (g env e)
+        (fun x -> Unknown(f,t1',t2',x), t2')
 
 
 (** abbriviation **)
@@ -272,6 +288,7 @@ let rec print e i =
   | ExtArray x -> p ("extarray " ^ x)
   | ExtFunApp (f,x) -> p ("extfunapp"); print_newline (); indent j; p f; p_rec x j
   | Out (x,y)  -> p ("out " ^ x ^ " "); print_int y
+  | Unknown (x,_,_,y)  -> p ("unknown " ^ x ^ " " ^ y)
 
 
 

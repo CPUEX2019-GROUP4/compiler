@@ -32,6 +32,7 @@ type t = (* MinCamlの構文を表現するデータ型 (caml2html: syntax_t) *)
   | Get of t * t
   | Put of t * t * t
   | Out of t * int
+  | Unknown of Id.t * Id.t * Id.t * t
 and fundef = { name : Id.t * Type.t; args : (Id.t * Type.t) list; body : t }
 
 let rec indent n =
@@ -89,6 +90,7 @@ let rec print e i = print_newline (); indent i; match e with | Unit -> p "UNIT" 
   | Get   (x, y) -> p "GET"; print x (i + 1); print y (i + 1)
   | Put   (x, y, z) -> p "PUT"; print x (i + 1); print y (i + 1); print z (i + 1)
   | Out (x, y) -> p "OUT"; print x (i + 1); indent i; print_int y
+  | Unknown (x,_,_,y) -> p "UNKNOWN APP"; indent (i+1); p x; print y (i + 1);
 and prints xs i =
   match xs with
   | [] -> ()
