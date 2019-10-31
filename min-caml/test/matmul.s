@@ -1,8 +1,8 @@
     lui r30 2
 #    main program starts
     addi r1 r0 0
-    # 0.000000
     flui f0 0
+    # 0.000000
     sw r31 r29 4
     addi r29 r29 8
     jal min_caml_create_float_array
@@ -53,53 +53,53 @@
     or r6 r0 r1
     lw r4 r29 4
     lw r1 r4 0
-    # 1.000000
     flui f0 16256
+    # 1.000000
     swcZ f0 r1 0
     lw r1 r4 0
-    # 2.000000
     flui f0 16384
+    # 2.000000
     swcZ f0 r1 8
     lw r1 r4 0
-    # 3.000000
     flui f0 16448
+    # 3.000000
     swcZ f0 r1 16
     lw r1 r4 4
-    # 4.000000
     flui f0 16512
+    # 4.000000
     swcZ f0 r1 0
     lw r1 r4 4
-    # 5.000000
     flui f0 16544
+    # 5.000000
     swcZ f0 r1 8
     lw r1 r4 4
-    # 6.000000
     flui f0 16576
+    # 6.000000
     swcZ f0 r1 16
     lw r5 r29 8
     lw r1 r5 0
-    # 7.000000
     flui f0 16608
+    # 7.000000
     swcZ f0 r1 0
     lw r1 r5 0
-    # 8.000000
     flui f0 16640
+    # 8.000000
     swcZ f0 r1 8
     lw r1 r5 4
-    # 9.000000
     flui f0 16656
+    # 9.000000
     swcZ f0 r1 0
     lw r1 r5 4
-    # 10.000000
     flui f0 16672
+    # 10.000000
     swcZ f0 r1 8
     lw r1 r5 8
-    # 11.000000
     flui f0 16688
+    # 11.000000
     swcZ f0 r1 0
     lw r1 r5 8
-    # 12.010000
     flui f0 16704
+    # 12.010000
     fori f0 f0 10486
     swcZ f0 r1 8
     addi r1 r0 2
@@ -321,8 +321,8 @@ init.256:
     lw r3 r25 4
     slti r28 r1 0
     bne r0 r28 bge_else.401
-    # 0.000000
     flui f0 0
+    # 0.000000
     sw r25 r29 0
     sw r3 r29 4
     sw r1 r29 8
@@ -374,40 +374,4 @@ make.148:
     subi r29 r29 16
     lw r31 r29 12
     lw r1 r29 8
-    jr r31
-#    main program ends
-min_caml_print_int:
-    slti r28 r1 0
-    bne r0 r28 print_int_bge_else.1
-    j print_int_bge_cont
-print_int_bge_else.1:
-    addi r2 r0 45
-    out r2 0
-    sub r1 r0 r1
-print_int_bge_cont:
-    slti r28 r1 10
-    bne r0 r28 print_int_bge_else.0
-    div10 r2 r1
-    sw r1 r29 0
-    sw r2 r29 4
-    mv r1 r2
-    sw r31 r29 12
-    addi r29 r29 16
-    jal min_caml_print_int
-    subi r29 r29 16
-    lw r31 r29 12
-    lw r1 r29 4
-    sll r2 r1 2
-    add r1 r2 r1
-    add r1 r1 r1
-    lw r2 r29 0
-    sub r1 r2 r1
-    out r1 48
-    jr r31
-print_int_bge_else.0:
-    out r1 48
-    jr r31
-# print_char
-min_caml_print_char:
-    out r1 0
     jr r31
