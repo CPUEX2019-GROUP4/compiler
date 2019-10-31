@@ -17,6 +17,8 @@ rule token = parse
     { token lexbuf }
 | '*' space* '4'
     { MUL4 }
+| '*' space* "10"
+    { MUL10 }
 | '/' space* '2'
     { DIV2 }
 | '/' space* "10"

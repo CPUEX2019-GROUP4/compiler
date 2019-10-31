@@ -123,6 +123,7 @@ and g' dest cont regenv = function (* 各命令のレジスタ割り当て (caml2html: regal
   | Add(x, y') -> (Ans(Add(find x Type.Int regenv, find' y' regenv)), regenv)
   | Sub(x, y') -> (Ans(Sub(find x Type.Int regenv, find' y' regenv)), regenv)
   | Slw(x, y') -> (Ans(Slw(find x Type.Int regenv, find' y' regenv)), regenv)
+  | Mul10(x) -> (Ans(Mul10(find x Type.Int regenv)), regenv)
   | Div2(x) -> (Ans(Div2(find x Type.Int regenv)), regenv)
   | Div10(x) -> (Ans(Div10(find x Type.Int regenv)), regenv)
   | FtoI(x) -> (Ans(FtoI(find x Type.Float regenv)), regenv)  (***)

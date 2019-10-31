@@ -12,6 +12,7 @@ and exp =
   | Add of Id.t * id_or_imm
   | Sub of Id.t * id_or_imm
   | Slw of Id.t * id_or_imm
+  | Mul10 of Id.t
   | Div2 of Id.t
   | Div10 of Id.t
   | FtoI of Id.t

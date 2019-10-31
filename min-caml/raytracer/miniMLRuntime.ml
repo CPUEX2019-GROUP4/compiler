@@ -42,20 +42,19 @@ external (/.) : float -> float -> float = "%divfloat"
 
 external fabs : float -> float = "%absfloat"
 external fneg : float -> float = "%negfloat"
-*)
+
 external sqrt : float -> float = "sqrt_float" "sqrt" "float"
-(*
+
 external floor : float -> float = "floor_float" "floor" "float"
 external int_of_float : float -> int = "%intoffloat"
 external float_of_int : int -> float = "%floatofint"
-*)
 
 external cos : float -> float = "cos_float" "cos" "float"
 external sin : float -> float = "sin_float" "sin" "float"
 external atan : float -> float = "atan_float" "atan" "float"
-(*
-external create_array : int -> 'a -> 'a array = "caml_make_vect"
 *)
+external create_array : int -> 'a -> 'a array = "caml_make_vect"
+
 (* I/O *)
 (*
 let print_char x = Pervasives.print_char (char_of_int x)

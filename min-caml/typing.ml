@@ -28,6 +28,7 @@ let rec deref_term = function
   | Add(e1, e2) -> Add(deref_term e1, deref_term e2)
   | Sub(e1, e2) -> Sub(deref_term e1, deref_term e2)
   | Mul4(e) -> Mul4(deref_term e)
+  | Mul10(e) -> Mul10(deref_term e)
   | Div2(e) -> Div2(deref_term e)
   | Div10(e) -> Div10(deref_term e)
   | FtoI(e) -> FtoI(deref_term e)
@@ -108,6 +109,9 @@ let rec g env e = (* 型推論ルーチン (caml2html: typing_g) *)
         unify Type.Int (g env e2);
         Type.Int
     | Mul4(e) ->
+        unify Type.Int (g env e);
+        Type.Int
+    | Mul10(e) ->
         unify Type.Int (g env e);
         Type.Int
     | Div2(e) ->

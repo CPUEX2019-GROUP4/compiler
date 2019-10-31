@@ -7,6 +7,7 @@ type t =
   | Add of Id.t * Id.t
   | Sub of Id.t * Id.t
   | Mul4 of Id.t
+  | Mul10 of Id.t
   | Div2 of Id.t
   | Div10 of Id.t
   | FtoI of Id.t

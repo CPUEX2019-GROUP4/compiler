@@ -12,6 +12,7 @@ let addtyp x = (x, Type.gentyp ())
 %token MINUS
 %token PLUS
 %token MUL4   /** added **/
+%token MUL10   /** added **/
 %token DIV2   /** added **/
 %token DIV10  /** added **/
 %token FLOAT_TO_INT INT_TO_FLOAT  /** added **/
@@ -103,6 +104,8 @@ exp: /* (* ∞Ï»Ã§Œº∞ (caml2html: parser_exp) *) */
     { Sub($1, $3) }
 | exp MUL4  /** added **/
     { Mul4 $1 }
+| exp MUL10  /** added **/
+    { Mul10 $1 }
 | exp DIV2  /** added **/
     { Div2 $1 }
 | exp DIV10  /** added **/
