@@ -20,12 +20,6 @@
 (******************************************************************************
    Global 勝手に持ってきた
  *****************************************************************************)
-let light_dirvec =
-  let dummyf2 = Array.create 0 0.0 in
-  let v3 = Array.create 3 0.0 in
-  let consts = Array.create 60 dummyf2 in
-  (v3, consts)
-in
 let rec fabs f = if f <. 0.0 then -. f else f in
 let rec floor f = (int_of_float (float_of_int f))
 let rec fhalf x = x *. 0.5 in

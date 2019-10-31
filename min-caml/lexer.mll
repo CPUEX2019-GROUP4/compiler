@@ -92,6 +92,10 @@ rule token = parse
     { FZERO }
 | "out"
     { OUT }
+| "read_int"
+    { READ_INT }
+| "read_float"
+    { READ_FLOAT }
 | "UNKNOWN"
     { UNKNOWN }
 | "Array.create" | "Array.make" (* [XX] ad hoc *)

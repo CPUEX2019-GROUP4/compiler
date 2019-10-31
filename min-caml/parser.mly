@@ -19,6 +19,8 @@ let addtyp x = (x, Type.gentyp ())
 %token FZERO  /** added **/
 %token OUT  /** added **/
 %token UNKNOWN  /** added **/
+%token READ_INT /* added */
+%token READ_FLOAT /* added */
 %token MINUS_DOT
 %token PLUS_DOT
 %token MINUS_DOT
@@ -154,6 +156,10 @@ exp: /* (* ∞Ï»Ã§Œº∞ (caml2html: parser_exp) *) */
     { FZero($2) }
 | OUT INT exp
     { Out($3,$2) }
+| READ_INT LPAREN RPAREN
+    { Unknown("read_int","unit","int",Unit)}
+| READ_FLOAT LPAREN RPAREN
+    { Unknown("read_int","unit","float",Unit)}
 | UNKNOWN IDENT IDENT IDENT exp
     { Unknown($2,$3,$4,$5) }
 | simple_exp actual_args
