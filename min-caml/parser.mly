@@ -157,9 +157,9 @@ exp: /* (* ∞Ï»Ã§Œº∞ (caml2html: parser_exp) *) */
 | OUT INT exp
     { Out($3,$2) }
 | READ_INT LPAREN RPAREN
-    { Unknown("read_int","unit","int",Unit)}
+    { Unknown("inint","unit","int",Unit)}
 | READ_FLOAT LPAREN RPAREN
-    { Unknown("read_int","unit","float",Unit)}
+    { Unknown("inflt","unit","float",Unit)}
 | UNKNOWN IDENT IDENT IDENT exp
     { Unknown($2,$3,$4,$5) }
 | simple_exp actual_args
