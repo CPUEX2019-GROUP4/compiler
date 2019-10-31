@@ -98,7 +98,7 @@ rule token = parse
     { READ_FLOAT }
 | "UNKNOWN"
     { UNKNOWN }
-| "Array.create" | "Array.make" (* [XX] ad hoc *)
+| "Array.create" | "Array.make" | "create_array" (* [XX] ad hoc *)
     { ARRAY_CREATE }
 | '.'
     { DOT }

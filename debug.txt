@@ -1,0 +1,6846 @@
+make[1]: `min-caml' is up to date.
+make[1]: `min-caml.top' is up to date.
+cat MIPS/lib.ml > raytracer/galois.ml
+cat raytracer/globals.ml >> raytracer/galois.ml
+cat raytracer/minrt.ml >> raytracer/galois.ml
+./min-caml raytracer/galois
+----- syntax.print -----
+LETREC floor (VAR of )
+  (x : VAR of )
+  int_to_float
+    float_to_int
+      VAR x
+LET n_objects (VAR of )
+  ARRAY
+    INT 1
+    INT 0
+LET objects (VAR of )
+  LET dummy (VAR of )
+    ARRAY
+      INT 0
+      FLOAT 0.
+  ARRAY
+    INT 60
+    TUPLE
+      INT 0
+      INT 0
+      INT 0
+      INT 0
+      VAR dummy
+      VAR dummy
+      BOOL false
+      VAR dummy
+      VAR dummy
+      VAR dummy
+      VAR dummy
+LET screen (VAR of )
+  ARRAY
+    INT 3
+    FLOAT 0.
+LET viewpoint (VAR of )
+  ARRAY
+    INT 3
+    FLOAT 0.
+LET light (VAR of )
+  ARRAY
+    INT 3
+    FLOAT 0.
+LET beam (VAR of )
+  ARRAY
+    INT 1
+    FLOAT 255.
+LET and_net (VAR of )
+  ARRAY
+    INT 50
+    ARRAY
+      INT 1
+      NEG
+        INT 1
+LET or_net (VAR of )
+  ARRAY
+    INT 1
+    ARRAY
+      INT 1
+      GET
+        VAR and_net
+        INT 0
+LET solver_dist (VAR of )
+  ARRAY
+    INT 1
+    FLOAT 0.
+LET intsec_rectside (VAR of )
+  ARRAY
+    INT 1
+    INT 0
+LET tmin (VAR of )
+  ARRAY
+    INT 1
+    FLOAT 1000000000.
+LET intersection_point (VAR of )
+  ARRAY
+    INT 3
+    FLOAT 0.
+LET intersected_object_id (VAR of )
+  ARRAY
+    INT 1
+    INT 0
+LET nvector (VAR of )
+  ARRAY
+    INT 3
+    FLOAT 0.
+LET texture_color (VAR of )
+  ARRAY
+    INT 3
+    FLOAT 0.
+LET diffuse_ray (VAR of )
+  ARRAY
+    INT 3
+    FLOAT 0.
+LET rgb (VAR of )
+  ARRAY
+    INT 3
+    FLOAT 0.
+LET image_size (VAR of )
+  ARRAY
+    INT 2
+    INT 0
+LET image_center (VAR of )
+  ARRAY
+    INT 2
+    INT 0
+LET scan_pitch (VAR of )
+  ARRAY
+    INT 1
+    FLOAT 0.
+LET startp (VAR of )
+  ARRAY
+    INT 3
+    FLOAT 0.
+LET startp_fast (VAR of )
+  ARRAY
+    INT 3
+    FLOAT 0.
+LET screenx_dir (VAR of )
+  ARRAY
+    INT 3
+    FLOAT 0.
+LET screeny_dir (VAR of )
+  ARRAY
+    INT 3
+    FLOAT 0.
+LET screenz_dir (VAR of )
+  ARRAY
+    INT 3
+    FLOAT 0.
+LET ptrace_dirvec (VAR of )
+  ARRAY
+    INT 3
+    FLOAT 0.
+LET dirvecs (VAR of )
+  LET dummyf (VAR of )
+    ARRAY
+      INT 0
+      FLOAT 0.
+  LET dummyff (VAR of )
+    ARRAY
+      INT 0
+      VAR dummyf
+  LET dummy_vs (VAR of )
+    ARRAY
+      INT 0
+      TUPLE
+        VAR dummyf
+        VAR dummyff
+  ARRAY
+    INT 5
+    VAR dummy_vs
+LET light_dirvec (VAR of )
+  LET dummyf2 (VAR of )
+    ARRAY
+      INT 0
+      FLOAT 0.
+  LET v3 (VAR of )
+    ARRAY
+      INT 3
+      FLOAT 0.
+  LET consts (VAR of )
+    ARRAY
+      INT 60
+      VAR dummyf2
+  TUPLE
+    VAR v3
+    VAR consts
+LET reflections (VAR of )
+  LET dummyf3 (VAR of )
+    ARRAY
+      INT 0
+      FLOAT 0.
+  LET dummyff3 (VAR of )
+    ARRAY
+      INT 0
+      VAR dummyf3
+  LET dummydv (VAR of )
+    TUPLE
+      VAR dummyf3
+      VAR dummyff3
+  ARRAY
+    INT 180
+    TUPLE
+      INT 0
+      VAR dummydv
+      FLOAT 0.
+LET n_reflections (VAR of )
+  ARRAY
+    INT 1
+    INT 0
+LETREC xor (VAR of )
+  (x : VAR of ), (y : VAR of )
+  IF
+    VAR x
+    NOT
+      VAR y
+    VAR y
+LETREC fabs (VAR of )
+  (f : VAR of )
+  IF
+    FLt
+      VAR f
+      FLOAT 0.
+    NEG
+      VAR f
+    VAR f
+LETREC fhalf (VAR of )
+  (x : VAR of )
+  FMUL
+    VAR x
+    FLOAT 0.5
+LETREC fsqr (VAR of )
+  (x : VAR of )
+  FMUL
+    VAR x
+    VAR x
+LETREC fless (VAR of )
+  (a : VAR of ), (b : VAR of )
+  FLt
+    VAR a
+    VAR b
+LETREC sgn (VAR of )
+  (x : VAR of )
+  IF
+    FZero?
+      VAR x
+    FLOAT 0.
+    IF
+      NOT
+        FLt
+          VAR x
+          FLOAT 0.
+      FLOAT 1.
+      FLOAT -1.
+LETREC fneg_cond (VAR of )
+  (cond : VAR of ), (x : VAR of )
+  IF
+    VAR cond
+    VAR x
+    NEG
+      VAR x
+LETREC add_mod5 (VAR of )
+  (x : VAR of ), (y : VAR of )
+  LET sum (VAR of )
+    ADD
+      VAR x
+      VAR y
+  IF
+    LE
+      INT 5
+      VAR sum
+    SUB
+      VAR sum
+      INT 5
+    VAR sum
+LETREC vecset (VAR of )
+  (v : VAR of ), (x : VAR of ), (y : VAR of ), (z : VAR of )
+  LET Tu2 (UNIT)
+    PUT
+      VAR v
+      INT 0
+      VAR x
+  LET Tu1 (UNIT)
+    PUT
+      VAR v
+      INT 1
+      VAR y
+  PUT
+    VAR v
+    INT 2
+    VAR z
+LETREC vecfill (VAR of )
+  (v : VAR of ), (elem : VAR of )
+  LET Tu4 (UNIT)
+    PUT
+      VAR v
+      INT 0
+      VAR elem
+  LET Tu3 (UNIT)
+    PUT
+      VAR v
+      INT 1
+      VAR elem
+  PUT
+    VAR v
+    INT 2
+    VAR elem
+LETREC vecbzero (VAR of )
+  (v : VAR of )
+  APP
+    VAR vecfill
+    VAR v
+    FLOAT 0.
+LETREC veccpy (VAR of )
+  (dest : VAR of ), (src : VAR of )
+  LET Tu6 (UNIT)
+    PUT
+      VAR dest
+      INT 0
+      GET
+        VAR src
+        INT 0
+  LET Tu5 (UNIT)
+    PUT
+      VAR dest
+      INT 1
+      GET
+        VAR src
+        INT 1
+  PUT
+    VAR dest
+    INT 2
+    GET
+      VAR src
+      INT 2
+LETREC vecdist2 (VAR of )
+  (p : VAR of ), (q : VAR of )
+  FADD
+    FADD
+      APP
+        VAR fsqr
+        FSUB
+          GET
+            VAR p
+            INT 0
+          GET
+            VAR q
+            INT 0
+      APP
+        VAR fsqr
+        FSUB
+          GET
+            VAR p
+            INT 1
+          GET
+            VAR q
+            INT 1
+    APP
+      VAR fsqr
+      FSUB
+        GET
+          VAR p
+          INT 2
+        GET
+          VAR q
+          INT 2
+LETREC vecunit (VAR of )
+  (v : VAR of )
+  LET il (VAR of )
+    FDIV
+      FLOAT 1.
+      APP
+        VAR sqrt
+        FADD
+          FADD
+            APP
+              VAR fsqr
+              GET
+                VAR v
+                INT 0
+            APP
+              VAR fsqr
+              GET
+                VAR v
+                INT 1
+          APP
+            VAR fsqr
+            GET
+              VAR v
+              INT 2
+  LET Tu8 (UNIT)
+    PUT
+      VAR v
+      INT 0
+      FMUL
+        GET
+          VAR v
+          INT 0
+        VAR il
+  LET Tu7 (UNIT)
+    PUT
+      VAR v
+      INT 1
+      FMUL
+        GET
+          VAR v
+          INT 1
+        VAR il
+  PUT
+    VAR v
+    INT 2
+    FMUL
+      GET
+        VAR v
+        INT 2
+      VAR il
+LETREC vecunit_sgn (VAR of )
+  (v : VAR of ), (inv : VAR of )
+  LET l (VAR of )
+    APP
+      VAR sqrt
+      FADD
+        FADD
+          APP
+            VAR fsqr
+            GET
+              VAR v
+              INT 0
+          APP
+            VAR fsqr
+            GET
+              VAR v
+              INT 1
+        APP
+          VAR fsqr
+          GET
+            VAR v
+            INT 2
+  LET il (VAR of )
+    IF
+      FZero?
+        VAR l
+      FLOAT 1.
+      IF
+        VAR inv
+        FDIV
+          FLOAT -1.
+          VAR l
+        FDIV
+          FLOAT 1.
+          VAR l
+  LET Tu10 (UNIT)
+    PUT
+      VAR v
+      INT 0
+      FMUL
+        GET
+          VAR v
+          INT 0
+        VAR il
+  LET Tu9 (UNIT)
+    PUT
+      VAR v
+      INT 1
+      FMUL
+        GET
+          VAR v
+          INT 1
+        VAR il
+  PUT
+    VAR v
+    INT 2
+    FMUL
+      GET
+        VAR v
+        INT 2
+      VAR il
+LETREC veciprod (VAR of )
+  (v : VAR of ), (w : VAR of )
+  FADD
+    FADD
+      FMUL
+        GET
+          VAR v
+          INT 0
+        GET
+          VAR w
+          INT 0
+      FMUL
+        GET
+          VAR v
+          INT 1
+        GET
+          VAR w
+          INT 1
+    FMUL
+      GET
+        VAR v
+        INT 2
+      GET
+        VAR w
+        INT 2
+LETREC veciprod2 (VAR of )
+  (v : VAR of ), (w0 : VAR of ), (w1 : VAR of ), (w2 : VAR of )
+  FADD
+    FADD
+      FMUL
+        GET
+          VAR v
+          INT 0
+        VAR w0
+      FMUL
+        GET
+          VAR v
+          INT 1
+        VAR w1
+    FMUL
+      GET
+        VAR v
+        INT 2
+      VAR w2
+LETREC vecaccum (VAR of )
+  (dest : VAR of ), (scale : VAR of ), (v : VAR of )
+  LET Tu12 (UNIT)
+    PUT
+      VAR dest
+      INT 0
+      FADD
+        GET
+          VAR dest
+          INT 0
+        FMUL
+          VAR scale
+          GET
+            VAR v
+            INT 0
+  LET Tu11 (UNIT)
+    PUT
+      VAR dest
+      INT 1
+      FADD
+        GET
+          VAR dest
+          INT 1
+        FMUL
+          VAR scale
+          GET
+            VAR v
+            INT 1
+  PUT
+    VAR dest
+    INT 2
+    FADD
+      GET
+        VAR dest
+        INT 2
+      FMUL
+        VAR scale
+        GET
+          VAR v
+          INT 2
+LETREC vecadd (VAR of )
+  (dest : VAR of ), (v : VAR of )
+  LET Tu14 (UNIT)
+    PUT
+      VAR dest
+      INT 0
+      FADD
+        GET
+          VAR dest
+          INT 0
+        GET
+          VAR v
+          INT 0
+  LET Tu13 (UNIT)
+    PUT
+      VAR dest
+      INT 1
+      FADD
+        GET
+          VAR dest
+          INT 1
+        GET
+          VAR v
+          INT 1
+  PUT
+    VAR dest
+    INT 2
+    FADD
+      GET
+        VAR dest
+        INT 2
+      GET
+        VAR v
+        INT 2
+LETREC vecmul (VAR of )
+  (dest : VAR of ), (v : VAR of )
+  LET Tu16 (UNIT)
+    PUT
+      VAR dest
+      INT 0
+      FMUL
+        GET
+          VAR dest
+          INT 0
+        GET
+          VAR v
+          INT 0
+  LET Tu15 (UNIT)
+    PUT
+      VAR dest
+      INT 1
+      FMUL
+        GET
+          VAR dest
+          INT 1
+        GET
+          VAR v
+          INT 1
+  PUT
+    VAR dest
+    INT 2
+    FMUL
+      GET
+        VAR dest
+        INT 2
+      GET
+        VAR v
+        INT 2
+LETREC vecscale (VAR of )
+  (dest : VAR of ), (scale : VAR of )
+  LET Tu18 (UNIT)
+    PUT
+      VAR dest
+      INT 0
+      FMUL
+        GET
+          VAR dest
+          INT 0
+        VAR scale
+  LET Tu17 (UNIT)
+    PUT
+      VAR dest
+      INT 1
+      FMUL
+        GET
+          VAR dest
+          INT 1
+        VAR scale
+  PUT
+    VAR dest
+    INT 2
+    FMUL
+      GET
+        VAR dest
+        INT 2
+      VAR scale
+LETREC vecaccumv (VAR of )
+  (dest : VAR of ), (v : VAR of ), (w : VAR of )
+  LET Tu20 (UNIT)
+    PUT
+      VAR dest
+      INT 0
+      FADD
+        GET
+          VAR dest
+          INT 0
+        FMUL
+          GET
+            VAR v
+            INT 0
+          GET
+            VAR w
+            INT 0
+  LET Tu19 (UNIT)
+    PUT
+      VAR dest
+      INT 1
+      FADD
+        GET
+          VAR dest
+          INT 1
+        FMUL
+          GET
+            VAR v
+            INT 1
+          GET
+            VAR w
+            INT 1
+  PUT
+    VAR dest
+    INT 2
+    FADD
+      GET
+        VAR dest
+        INT 2
+      FMUL
+        GET
+          VAR v
+          INT 2
+        GET
+          VAR w
+          INT 2
+LETREC o_texturetype (VAR of )
+  (m : VAR of )
+  (m_tex : VAR of ), (xm_shape : VAR of ), (xm_surface : VAR of ), (xm_isrot : VAR of ), (xm_abc : VAR of ), (xm_xyz : VAR of ), (xm_invert : VAR of ), (xm_surfparams : VAR of ), (xm_color : VAR of ), (xm_rot123 : VAR of ), (xm_ctbl : VAR of )
+    VAR m
+    VAR m_tex
+LETREC o_form (VAR of )
+  (m : VAR of )
+  (xm_tex : VAR of ), (m_shape : VAR of ), (xm_surface : VAR of ), (xm_isrot : VAR of ), (xm_abc : VAR of ), (xm_xyz : VAR of ), (xm_invert : VAR of ), (xm_surfparams : VAR of ), (xm_color : VAR of ), (xm_rot123 : VAR of ), (xm_ctbl : VAR of )
+    VAR m
+    VAR m_shape
+LETREC o_reflectiontype (VAR of )
+  (m : VAR of )
+  (xm_tex : VAR of ), (xm_shape : VAR of ), (m_surface : VAR of ), (xm_isrot : VAR of ), (xm_abc : VAR of ), (xm_xyz : VAR of ), (xm_invert : VAR of ), (xm_surfparams : VAR of ), (xm_color : VAR of ), (xm_rot123 : VAR of ), (xm_ctbl : VAR of )
+    VAR m
+    VAR m_surface
+LETREC o_isinvert (VAR of )
+  (m : VAR of )
+  (xm_tex : VAR of ), (xm_shape : VAR of ), (xm_surface : VAR of ), (xm_isrot : VAR of ), (xm_abc : VAR of ), (xm_xyz : VAR of ), (m_invert : VAR of ), (xm_surfparams : VAR of ), (xm_color : VAR of ), (xm_rot123 : VAR of ), (xm_ctbl : VAR of )
+    VAR m
+    VAR m_invert
+LETREC o_isrot (VAR of )
+  (m : VAR of )
+  (xm_tex : VAR of ), (xm_shape : VAR of ), (xm_surface : VAR of ), (m_isrot : VAR of ), (xm_abc : VAR of ), (xm_xyz : VAR of ), (xm_invert : VAR of ), (xm_surfparams : VAR of ), (xm_color : VAR of ), (xm_rot123 : VAR of ), (xm_ctbl : VAR of )
+    VAR m
+    VAR m_isrot
+LETREC o_param_a (VAR of )
+  (m : VAR of )
+  (xm_tex : VAR of ), (xm_shape : VAR of ), (xm_surface : VAR of ), (xm_isrot : VAR of ), (m_abc : VAR of ), (xm_xyz : VAR of ), (xm_invert : VAR of ), (xm_surfparams : VAR of ), (xm_color : VAR of ), (xm_rot123 : VAR of ), (xm_ctbl : VAR of )
+    VAR m
+    GET
+      VAR m_abc
+      INT 0
+LETREC o_param_b (VAR of )
+  (m : VAR of )
+  (xm_tex : VAR of ), (xm_shape : VAR of ), (xm_surface : VAR of ), (xm_isrot : VAR of ), (m_abc : VAR of ), (xm_xyz : VAR of ), (xm_invert : VAR of ), (xm_surfparams : VAR of ), (xm_color : VAR of ), (xm_rot123 : VAR of ), (xm_ctbl : VAR of )
+    VAR m
+    GET
+      VAR m_abc
+      INT 1
+LETREC o_param_c (VAR of )
+  (m : VAR of )
+  (xm_tex : VAR of ), (xm_shape : VAR of ), (xm_surface : VAR of ), (xm_isrot : VAR of ), (m_abc : VAR of ), (xm_xyz : VAR of ), (xm_invert : VAR of ), (xm_surfparams : VAR of ), (xm_color : VAR of ), (xm_rot123 : VAR of ), (xm_ctbl : VAR of )
+    VAR m
+    GET
+      VAR m_abc
+      INT 2
+LETREC o_param_abc (VAR of )
+  (m : VAR of )
+  (xm_tex : VAR of ), (xm_shape : VAR of ), (xm_surface : VAR of ), (xm_isrot : VAR of ), (m_abc : VAR of ), (xm_xyz : VAR of ), (xm_invert : VAR of ), (xm_surfparams : VAR of ), (xm_color : VAR of ), (xm_rot123 : VAR of ), (xm_ctbl : VAR of )
+    VAR m
+    VAR m_abc
+LETREC o_param_x (VAR of )
+  (m : VAR of )
+  (xm_tex : VAR of ), (xm_shape : VAR of ), (xm_surface : VAR of ), (xm_isrot : VAR of ), (xm_abc : VAR of ), (m_xyz : VAR of ), (xm_invert : VAR of ), (xm_surfparams : VAR of ), (xm_color : VAR of ), (xm_rot123 : VAR of ), (xm_ctbl : VAR of )
+    VAR m
+    GET
+      VAR m_xyz
+      INT 0
+LETREC o_param_y (VAR of )
+  (m : VAR of )
+  (xm_tex : VAR of ), (xm_shape : VAR of ), (xm_surface : VAR of ), (xm_isrot : VAR of ), (xm_abc : VAR of ), (m_xyz : VAR of ), (xm_invert : VAR of ), (xm_surfparams : VAR of ), (xm_color : VAR of ), (xm_rot123 : VAR of ), (xm_ctbl : VAR of )
+    VAR m
+    GET
+      VAR m_xyz
+      INT 1
+LETREC o_param_z (VAR of )
+  (m : VAR of )
+  (xm_tex : VAR of ), (xm_shape : VAR of ), (xm_surface : VAR of ), (xm_isrot : VAR of ), (xm_abc : VAR of ), (m_xyz : VAR of ), (xm_invert : VAR of ), (xm_surfparams : VAR of ), (xm_color : VAR of ), (xm_rot123 : VAR of ), (xm_ctbl : VAR of )
+    VAR m
+    GET
+      VAR m_xyz
+      INT 2
+LETREC o_diffuse (VAR of )
+  (m : VAR of )
+  (xm_tex : VAR of ), (xm_shape : VAR of ), (xm_surface : VAR of ), (xm_isrot : VAR of ), (xm_abc : VAR of ), (xm_xyz : VAR of ), (xm_invert : VAR of ), (m_surfparams : VAR of ), (xm_color : VAR of ), (xm_rot123 : VAR of ), (xm_ctbl : VAR of )
+    VAR m
+    GET
+      VAR m_surfparams
+      INT 0
+LETREC o_hilight (VAR of )
+  (m : VAR of )
+  (xm_tex : VAR of ), (xm_shape : VAR of ), (xm_surface : VAR of ), (xm_isrot : VAR of ), (xm_abc : VAR of ), (xm_xyz : VAR of ), (xm_invert : VAR of ), (m_surfparams : VAR of ), (xm_color : VAR of ), (xm_rot123 : VAR of ), (xm_ctbl : VAR of )
+    VAR m
+    GET
+      VAR m_surfparams
+      INT 1
+LETREC o_color_red (VAR of )
+  (m : VAR of )
+  (xm_tex : VAR of ), (xm_shape : VAR of ), (m_surface : VAR of ), (xm_isrot : VAR of ), (xm_abc : VAR of ), (xm_xyz : VAR of ), (xm_invert : VAR of ), (xm_surfparams : VAR of ), (m_color : VAR of ), (xm_rot123 : VAR of ), (xm_ctbl : VAR of )
+    VAR m
+    GET
+      VAR m_color
+      INT 0
+LETREC o_color_green (VAR of )
+  (m : VAR of )
+  (xm_tex : VAR of ), (xm_shape : VAR of ), (m_surface : VAR of ), (xm_isrot : VAR of ), (xm_abc : VAR of ), (xm_xyz : VAR of ), (xm_invert : VAR of ), (xm_surfparams : VAR of ), (m_color : VAR of ), (xm_rot123 : VAR of ), (xm_ctbl : VAR of )
+    VAR m
+    GET
+      VAR m_color
+      INT 1
+LETREC o_color_blue (VAR of )
+  (m : VAR of )
+  (xm_tex : VAR of ), (xm_shape : VAR of ), (m_surface : VAR of ), (xm_isrot : VAR of ), (xm_abc : VAR of ), (xm_xyz : VAR of ), (xm_invert : VAR of ), (xm_surfparams : VAR of ), (m_color : VAR of ), (xm_rot123 : VAR of ), (xm_ctbl : VAR of )
+    VAR m
+    GET
+      VAR m_color
+      INT 2
+LETREC o_param_r1 (VAR of )
+  (m : VAR of )
+  (xm_tex : VAR of ), (xm_shape : VAR of ), (xm_surface : VAR of ), (xm_isrot : VAR of ), (xm_abc : VAR of ), (xm_xyz : VAR of ), (xm_invert : VAR of ), (xm_surfparams : VAR of ), (xm_color : VAR of ), (m_rot123 : VAR of ), (xm_ctbl : VAR of )
+    VAR m
+    GET
+      VAR m_rot123
+      INT 0
+LETREC o_param_r2 (VAR of )
+  (m : VAR of )
+  (xm_tex : VAR of ), (xm_shape : VAR of ), (xm_surface : VAR of ), (xm_isrot : VAR of ), (xm_abc : VAR of ), (xm_xyz : VAR of ), (xm_invert : VAR of ), (xm_surfparams : VAR of ), (xm_color : VAR of ), (m_rot123 : VAR of ), (xm_ctbl : VAR of )
+    VAR m
+    GET
+      VAR m_rot123
+      INT 1
+LETREC o_param_r3 (VAR of )
+  (m : VAR of )
+  (xm_tex : VAR of ), (xm_shape : VAR of ), (xm_surface : VAR of ), (xm_isrot : VAR of ), (xm_abc : VAR of ), (xm_xyz : VAR of ), (xm_invert : VAR of ), (xm_surfparams : VAR of ), (xm_color : VAR of ), (m_rot123 : VAR of ), (xm_ctbl : VAR of )
+    VAR m
+    GET
+      VAR m_rot123
+      INT 2
+LETREC o_param_ctbl (VAR of )
+  (m : VAR of )
+  (xm_tex : VAR of ), (xm_shape : VAR of ), (xm_surface : VAR of ), (xm_isrot : VAR of ), (xm_abc : VAR of ), (xm_xyz : VAR of ), (xm_invert : VAR of ), (xm_surfparams : VAR of ), (xm_color : VAR of ), (xm_rot123 : VAR of ), (m_ctbl : VAR of )
+    VAR m
+    VAR m_ctbl
+LETREC p_rgb (VAR of )
+  (pixel : VAR of )
+  (m_rgb : VAR of ), (xm_isect_ps : VAR of ), (xm_sids : VAR of ), (xm_cdif : VAR of ), (xm_engy : VAR of ), (xm_r20p : VAR of ), (xm_gid : VAR of ), (xm_nvectors : VAR of )
+    VAR pixel
+    VAR m_rgb
+LETREC p_intersection_points (VAR of )
+  (pixel : VAR of )
+  (xm_rgb : VAR of ), (m_isect_ps : VAR of ), (xm_sids : VAR of ), (xm_cdif : VAR of ), (xm_engy : VAR of ), (xm_r20p : VAR of ), (xm_gid : VAR of ), (xm_nvectors : VAR of )
+    VAR pixel
+    VAR m_isect_ps
+LETREC p_surface_ids (VAR of )
+  (pixel : VAR of )
+  (xm_rgb : VAR of ), (xm_isect_ps : VAR of ), (m_sids : VAR of ), (xm_cdif : VAR of ), (xm_engy : VAR of ), (xm_r20p : VAR of ), (xm_gid : VAR of ), (xm_nvectors : VAR of )
+    VAR pixel
+    VAR m_sids
+LETREC p_calc_diffuse (VAR of )
+  (pixel : VAR of )
+  (xm_rgb : VAR of ), (xm_isect_ps : VAR of ), (xm_sids : VAR of ), (m_cdif : VAR of ), (xm_engy : VAR of ), (xm_r20p : VAR of ), (xm_gid : VAR of ), (xm_nvectors : VAR of )
+    VAR pixel
+    VAR m_cdif
+LETREC p_energy (VAR of )
+  (pixel : VAR of )
+  (xm_rgb : VAR of ), (xm_isect_ps : VAR of ), (xm_sids : VAR of ), (xm_cdif : VAR of ), (m_engy : VAR of ), (xm_r20p : VAR of ), (xm_gid : VAR of ), (xm_nvectors : VAR of )
+    VAR pixel
+    VAR m_engy
+LETREC p_received_ray_20percent (VAR of )
+  (pixel : VAR of )
+  (xm_rgb : VAR of ), (xm_isect_ps : VAR of ), (xm_sids : VAR of ), (xm_cdif : VAR of ), (xm_engy : VAR of ), (m_r20p : VAR of ), (xm_gid : VAR of ), (xm_nvectors : VAR of )
+    VAR pixel
+    VAR m_r20p
+LETREC p_group_id (VAR of )
+  (pixel : VAR of )
+  (xm_rgb : VAR of ), (xm_isect_ps : VAR of ), (xm_sids : VAR of ), (xm_cdif : VAR of ), (xm_engy : VAR of ), (xm_r20p : VAR of ), (m_gid : VAR of ), (xm_nvectors : VAR of )
+    VAR pixel
+    GET
+      VAR m_gid
+      INT 0
+LETREC p_set_group_id (VAR of )
+  (pixel : VAR of ), (id : VAR of )
+  (xm_rgb : VAR of ), (xm_isect_ps : VAR of ), (xm_sids : VAR of ), (xm_cdif : VAR of ), (xm_engy : VAR of ), (xm_r20p : VAR of ), (m_gid : VAR of ), (xm_nvectors : VAR of )
+    VAR pixel
+    PUT
+      VAR m_gid
+      INT 0
+      VAR id
+LETREC p_nvectors (VAR of )
+  (pixel : VAR of )
+  (xm_rgb : VAR of ), (xm_isect_ps : VAR of ), (xm_sids : VAR of ), (xm_cdif : VAR of ), (xm_engy : VAR of ), (xm_r20p : VAR of ), (xm_gid : VAR of ), (m_nvectors : VAR of )
+    VAR pixel
+    VAR m_nvectors
+LETREC d_vec (VAR of )
+  (d : VAR of )
+  (m_vec : VAR of ), (xm_const : VAR of )
+    VAR d
+    VAR m_vec
+LETREC d_const (VAR of )
+  (d : VAR of )
+  (dm_vec : VAR of ), (m_const : VAR of )
+    VAR d
+    VAR m_const
+LETREC r_surface_id (VAR of )
+  (r : VAR of )
+  (m_sid : VAR of ), (xm_dvec : VAR of ), (xm_br : VAR of )
+    VAR r
+    VAR m_sid
+LETREC r_dvec (VAR of )
+  (r : VAR of )
+  (xm_sid : VAR of ), (m_dvec : VAR of ), (xm_br : VAR of )
+    VAR r
+    VAR m_dvec
+LETREC r_bright (VAR of )
+  (r : VAR of )
+  (xm_sid : VAR of ), (xm_dvec : VAR of ), (m_br : VAR of )
+    VAR r
+    VAR m_br
+LETREC rad (VAR of )
+  (x : VAR of )
+  FMUL
+    VAR x
+    FLOAT 0.017453293
+LETREC read_screen_settings (VAR of )
+  (Tu21 : VAR of )
+  LET Tu35 (UNIT)
+    PUT
+      VAR screen
+      INT 0
+      UNKNOWN APP        inflt
+        UNIT
+  LET Tu34 (UNIT)
+    PUT
+      VAR screen
+      INT 1
+      UNKNOWN APP        inflt
+        UNIT
+  LET Tu33 (UNIT)
+    PUT
+      VAR screen
+      INT 2
+      UNKNOWN APP        inflt
+        UNIT
+  LET v1 (VAR of )
+    APP
+      VAR rad
+      UNKNOWN APP        inflt
+        UNIT
+  LET cos_v1 (VAR of )
+    APP
+      VAR cos
+      VAR v1
+  LET sin_v1 (VAR of )
+    APP
+      VAR sin
+      VAR v1
+  LET v2 (VAR of )
+    APP
+      VAR rad
+      UNKNOWN APP        inflt
+        UNIT
+  LET cos_v2 (VAR of )
+    APP
+      VAR cos
+      VAR v2
+  LET sin_v2 (VAR of )
+    APP
+      VAR sin
+      VAR v2
+  LET Tu32 (UNIT)
+    PUT
+      VAR screenz_dir
+      INT 0
+      FMUL
+        FMUL
+          VAR cos_v1
+          VAR sin_v2
+        FLOAT 200.
+  LET Tu31 (UNIT)
+    PUT
+      VAR screenz_dir
+      INT 1
+      FMUL
+        VAR sin_v1
+        FLOAT -200.
+  LET Tu30 (UNIT)
+    PUT
+      VAR screenz_dir
+      INT 2
+      FMUL
+        FMUL
+          VAR cos_v1
+          VAR cos_v2
+        FLOAT 200.
+  LET Tu29 (UNIT)
+    PUT
+      VAR screenx_dir
+      INT 0
+      VAR cos_v2
+  LET Tu28 (UNIT)
+    PUT
+      VAR screenx_dir
+      INT 1
+      FLOAT 0.
+  LET Tu27 (UNIT)
+    PUT
+      VAR screenx_dir
+      INT 2
+      NEG
+        VAR sin_v2
+  LET Tu26 (UNIT)
+    PUT
+      VAR screeny_dir
+      INT 0
+      FMUL
+        NEG
+          VAR sin_v1
+        VAR sin_v2
+  LET Tu25 (UNIT)
+    PUT
+      VAR screeny_dir
+      INT 1
+      NEG
+        VAR cos_v1
+  LET Tu24 (UNIT)
+    PUT
+      VAR screeny_dir
+      INT 2
+      FMUL
+        NEG
+          VAR sin_v1
+        VAR cos_v2
+  LET Tu23 (UNIT)
+    PUT
+      VAR viewpoint
+      INT 0
+      FSUB
+        GET
+          VAR screen
+          INT 0
+        GET
+          VAR screenz_dir
+          INT 0
+  LET Tu22 (UNIT)
+    PUT
+      VAR viewpoint
+      INT 1
+      FSUB
+        GET
+          VAR screen
+          INT 1
+        GET
+          VAR screenz_dir
+          INT 1
+  PUT
+    VAR viewpoint
+    INT 2
+    FSUB
+      GET
+        VAR screen
+        INT 2
+      GET
+        VAR screenz_dir
+        INT 2
+LETREC read_light (VAR of )
+  (Tu36 : VAR of )
+  LET nl (VAR of )
+    UNKNOWN APP      inint
+      UNIT
+  LET l1 (VAR of )
+    APP
+      VAR rad
+      UNKNOWN APP        inflt
+        UNIT
+  LET sl1 (VAR of )
+    APP
+      VAR sin
+      VAR l1
+  LET Tu39 (UNIT)
+    PUT
+      VAR light
+      INT 1
+      NEG
+        VAR sl1
+  LET l2 (VAR of )
+    APP
+      VAR rad
+      UNKNOWN APP        inflt
+        UNIT
+  LET cl1 (VAR of )
+    APP
+      VAR cos
+      VAR l1
+  LET sl2 (VAR of )
+    APP
+      VAR sin
+      VAR l2
+  LET Tu38 (UNIT)
+    PUT
+      VAR light
+      INT 0
+      FMUL
+        VAR cl1
+        VAR sl2
+  LET cl2 (VAR of )
+    APP
+      VAR cos
+      VAR l2
+  LET Tu37 (UNIT)
+    PUT
+      VAR light
+      INT 2
+      FMUL
+        VAR cl1
+        VAR cl2
+  PUT
+    VAR beam
+    INT 0
+    UNKNOWN APP      inflt
+      UNIT
+LETREC rotate_quadratic_matrix (VAR of )
+  (abc : VAR of ), (rot : VAR of )
+  LET cos_x (VAR of )
+    APP
+      VAR cos
+      GET
+        VAR rot
+        INT 0
+  LET sin_x (VAR of )
+    APP
+      VAR sin
+      GET
+        VAR rot
+        INT 0
+  LET cos_y (VAR of )
+    APP
+      VAR cos
+      GET
+        VAR rot
+        INT 1
+  LET sin_y (VAR of )
+    APP
+      VAR sin
+      GET
+        VAR rot
+        INT 1
+  LET cos_z (VAR of )
+    APP
+      VAR cos
+      GET
+        VAR rot
+        INT 2
+  LET sin_z (VAR of )
+    APP
+      VAR sin
+      GET
+        VAR rot
+        INT 2
+  LET m00 (VAR of )
+    FMUL
+      VAR cos_y
+      VAR cos_z
+  LET m01 (VAR of )
+    FSUB
+      FMUL
+        FMUL
+          VAR sin_x
+          VAR sin_y
+        VAR cos_z
+      FMUL
+        VAR cos_x
+        VAR sin_z
+  LET m02 (VAR of )
+    FADD
+      FMUL
+        FMUL
+          VAR cos_x
+          VAR sin_y
+        VAR cos_z
+      FMUL
+        VAR sin_x
+        VAR sin_z
+  LET m10 (VAR of )
+    FMUL
+      VAR cos_y
+      VAR sin_z
+  LET m11 (VAR of )
+    FADD
+      FMUL
+        FMUL
+          VAR sin_x
+          VAR sin_y
+        VAR sin_z
+      FMUL
+        VAR cos_x
+        VAR cos_z
+  LET m12 (VAR of )
+    FSUB
+      FMUL
+        FMUL
+          VAR cos_x
+          VAR sin_y
+        VAR sin_z
+      FMUL
+        VAR sin_x
+        VAR cos_z
+  LET m20 (VAR of )
+    NEG
+      VAR sin_y
+  LET m21 (VAR of )
+    FMUL
+      VAR sin_x
+      VAR cos_y
+  LET m22 (VAR of )
+    FMUL
+      VAR cos_x
+      VAR cos_y
+  LET ao (VAR of )
+    GET
+      VAR abc
+      INT 0
+  LET bo (VAR of )
+    GET
+      VAR abc
+      INT 1
+  LET co (VAR of )
+    GET
+      VAR abc
+      INT 2
+  LET Tu44 (UNIT)
+    PUT
+      VAR abc
+      INT 0
+      FADD
+        FADD
+          FMUL
+            VAR ao
+            APP
+              VAR fsqr
+              VAR m00
+          FMUL
+            VAR bo
+            APP
+              VAR fsqr
+              VAR m10
+        FMUL
+          VAR co
+          APP
+            VAR fsqr
+            VAR m20
+  LET Tu43 (UNIT)
+    PUT
+      VAR abc
+      INT 1
+      FADD
+        FADD
+          FMUL
+            VAR ao
+            APP
+              VAR fsqr
+              VAR m01
+          FMUL
+            VAR bo
+            APP
+              VAR fsqr
+              VAR m11
+        FMUL
+          VAR co
+          APP
+            VAR fsqr
+            VAR m21
+  LET Tu42 (UNIT)
+    PUT
+      VAR abc
+      INT 2
+      FADD
+        FADD
+          FMUL
+            VAR ao
+            APP
+              VAR fsqr
+              VAR m02
+          FMUL
+            VAR bo
+            APP
+              VAR fsqr
+              VAR m12
+        FMUL
+          VAR co
+          APP
+            VAR fsqr
+            VAR m22
+  LET Tu41 (UNIT)
+    PUT
+      VAR rot
+      INT 0
+      FMUL
+        FLOAT 2.
+        FADD
+          FADD
+            FMUL
+              FMUL
+                VAR ao
+                VAR m01
+              VAR m02
+            FMUL
+              FMUL
+                VAR bo
+                VAR m11
+              VAR m12
+          FMUL
+            FMUL
+              VAR co
+              VAR m21
+            VAR m22
+  LET Tu40 (UNIT)
+    PUT
+      VAR rot
+      INT 1
+      FMUL
+        FLOAT 2.
+        FADD
+          FADD
+            FMUL
+              FMUL
+                VAR ao
+                VAR m00
+              VAR m02
+            FMUL
+              FMUL
+                VAR bo
+                VAR m10
+              VAR m12
+          FMUL
+            FMUL
+              VAR co
+              VAR m20
+            VAR m22
+  PUT
+    VAR rot
+    INT 2
+    FMUL
+      FLOAT 2.
+      FADD
+        FADD
+          FMUL
+            FMUL
+              VAR ao
+              VAR m00
+            VAR m01
+          FMUL
+            FMUL
+              VAR bo
+              VAR m10
+            VAR m11
+        FMUL
+          FMUL
+            VAR co
+            VAR m20
+          VAR m21
+LETREC read_nth_object (VAR of )
+  (n : VAR of )
+  LET texture (VAR of )
+    UNKNOWN APP      inint
+      UNIT
+  IF
+    NOT
+      EQ
+        VAR texture
+        NEG
+          INT 1
+    LET form (VAR of )
+      UNKNOWN APP        inint
+        UNIT
+    LET refltype (VAR of )
+      UNKNOWN APP        inint
+        UNIT
+    LET isrot_p (VAR of )
+      UNKNOWN APP        inint
+        UNIT
+    LET abc (VAR of )
+      ARRAY
+        INT 3
+        FLOAT 0.
+    LET Tu63 (UNIT)
+      PUT
+        VAR abc
+        INT 0
+        UNKNOWN APP          inflt
+          UNIT
+    LET Tu62 (UNIT)
+      PUT
+        VAR abc
+        INT 1
+        UNKNOWN APP          inflt
+          UNIT
+    LET Tu61 (UNIT)
+      PUT
+        VAR abc
+        INT 2
+        UNKNOWN APP          inflt
+          UNIT
+    LET xyz (VAR of )
+      ARRAY
+        INT 3
+        FLOAT 0.
+    LET Tu60 (UNIT)
+      PUT
+        VAR xyz
+        INT 0
+        UNKNOWN APP          inflt
+          UNIT
+    LET Tu59 (UNIT)
+      PUT
+        VAR xyz
+        INT 1
+        UNKNOWN APP          inflt
+          UNIT
+    LET Tu58 (UNIT)
+      PUT
+        VAR xyz
+        INT 2
+        UNKNOWN APP          inflt
+          UNIT
+    LET m_invert (VAR of )
+      FLt
+        UNKNOWN APP          inflt
+          UNIT
+        FLOAT 0.
+    LET reflparam (VAR of )
+      ARRAY
+        INT 2
+        FLOAT 0.
+    LET Tu57 (UNIT)
+      PUT
+        VAR reflparam
+        INT 0
+        UNKNOWN APP          inflt
+          UNIT
+    LET Tu56 (UNIT)
+      PUT
+        VAR reflparam
+        INT 1
+        UNKNOWN APP          inflt
+          UNIT
+    LET color (VAR of )
+      ARRAY
+        INT 3
+        FLOAT 0.
+    LET Tu55 (UNIT)
+      PUT
+        VAR color
+        INT 0
+        UNKNOWN APP          inflt
+          UNIT
+    LET Tu54 (UNIT)
+      PUT
+        VAR color
+        INT 1
+        UNKNOWN APP          inflt
+          UNIT
+    LET Tu53 (UNIT)
+      PUT
+        VAR color
+        INT 2
+        UNKNOWN APP          inflt
+          UNIT
+    LET rotation (VAR of )
+      ARRAY
+        INT 3
+        FLOAT 0.
+    LET Tu52 (UNIT)
+      IF
+        NOT
+          EQ
+            VAR isrot_p
+            INT 0
+        LET Tu46 (UNIT)
+          PUT
+            VAR rotation
+            INT 0
+            APP
+              VAR rad
+              UNKNOWN APP                inflt
+                UNIT
+        LET Tu45 (UNIT)
+          PUT
+            VAR rotation
+            INT 1
+            APP
+              VAR rad
+              UNKNOWN APP                inflt
+                UNIT
+        PUT
+          VAR rotation
+          INT 2
+          APP
+            VAR rad
+            UNKNOWN APP              inflt
+              UNIT
+        UNIT
+    LET m_invert2 (VAR of )
+      IF
+        EQ
+          VAR form
+          INT 2
+        BOOL true
+        VAR m_invert
+    LET ctbl (VAR of )
+      ARRAY
+        INT 4
+        FLOAT 0.
+    LET obj (VAR of )
+      TUPLE
+        VAR texture
+        VAR form
+        VAR refltype
+        VAR isrot_p
+        VAR abc
+        VAR xyz
+        VAR m_invert2
+        VAR reflparam
+        VAR color
+        VAR rotation
+        VAR ctbl
+    LET Tu51 (UNIT)
+      PUT
+        VAR objects
+        VAR n
+        VAR obj
+    LET Tu50 (UNIT)
+      IF
+        EQ
+          VAR form
+          INT 3
+        LET a (VAR of )
+          GET
+            VAR abc
+            INT 0
+        LET Tu48 (UNIT)
+          PUT
+            VAR abc
+            INT 0
+            IF
+              FZero?
+                VAR a
+              FLOAT 0.
+              FDIV
+                APP
+                  VAR sgn
+                  VAR a
+                APP
+                  VAR fsqr
+                  VAR a
+        LET b (VAR of )
+          GET
+            VAR abc
+            INT 1
+        LET Tu47 (UNIT)
+          PUT
+            VAR abc
+            INT 1
+            IF
+              FZero?
+                VAR b
+              FLOAT 0.
+              FDIV
+                APP
+                  VAR sgn
+                  VAR b
+                APP
+                  VAR fsqr
+                  VAR b
+        LET c (VAR of )
+          GET
+            VAR abc
+            INT 2
+        PUT
+          VAR abc
+          INT 2
+          IF
+            FZero?
+              VAR c
+            FLOAT 0.
+            FDIV
+              APP
+                VAR sgn
+                VAR c
+              APP
+                VAR fsqr
+                VAR c
+        IF
+          EQ
+            VAR form
+            INT 2
+          APP
+            VAR vecunit_sgn
+            VAR abc
+            NOT
+              VAR m_invert
+          UNIT
+    LET Tu49 (UNIT)
+      IF
+        NOT
+          EQ
+            VAR isrot_p
+            INT 0
+        APP
+          VAR rotate_quadratic_matrix
+          VAR abc
+          VAR rotation
+        UNIT
+    BOOL true
+    BOOL false
+LETREC read_object (VAR of )
+  (n : VAR of )
+  IF
+    NOT
+      LE
+        INT 60
+        VAR n
+    IF
+      APP
+        VAR read_nth_object
+        VAR n
+      APP
+        VAR read_object
+        ADD
+          VAR n
+          INT 1
+      PUT
+        VAR n_objects
+        INT 0
+        VAR n
+    UNIT
+LETREC read_all_object (VAR of )
+  (Tu64 : VAR of )
+  APP
+    VAR read_object
+    INT 0
+LETREC read_net_item (VAR of )
+  (length : VAR of )
+  LET item (VAR of )
+    UNKNOWN APP      inint
+      UNIT
+  IF
+    EQ
+      VAR item
+      NEG
+        INT 1
+    ARRAY
+      ADD
+        VAR length
+        INT 1
+      NEG
+        INT 1
+    LET v (VAR of )
+      APP
+        VAR read_net_item
+        ADD
+          VAR length
+          INT 1
+    LET Tu65 (UNIT)
+      PUT
+        VAR v
+        VAR length
+        VAR item
+    VAR v
+LETREC read_or_network (VAR of )
+  (length : VAR of )
+  LET net (VAR of )
+    APP
+      VAR read_net_item
+      INT 0
+  IF
+    EQ
+      GET
+        VAR net
+        INT 0
+      NEG
+        INT 1
+    ARRAY
+      ADD
+        VAR length
+        INT 1
+      VAR net
+    LET v (VAR of )
+      APP
+        VAR read_or_network
+        ADD
+          VAR length
+          INT 1
+    LET Tu66 (UNIT)
+      PUT
+        VAR v
+        VAR length
+        VAR net
+    VAR v
+LETREC read_and_network (VAR of )
+  (n : VAR of )
+  LET net (VAR of )
+    APP
+      VAR read_net_item
+      INT 0
+  IF
+    EQ
+      GET
+        VAR net
+        INT 0
+      NEG
+        INT 1
+    UNIT
+    LET Tu67 (UNIT)
+      PUT
+        VAR and_net
+        VAR n
+        VAR net
+    APP
+      VAR read_and_network
+      ADD
+        VAR n
+        INT 1
+LETREC read_parameter (VAR of )
+  (Tu68 : VAR of )
+  LET Tu72 (UNIT)
+    APP
+      VAR read_screen_settings
+      UNIT
+  LET Tu71 (UNIT)
+    APP
+      VAR read_light
+      UNIT
+  LET Tu70 (UNIT)
+    APP
+      VAR read_all_object
+      UNIT
+  LET Tu69 (UNIT)
+    APP
+      VAR read_and_network
+      INT 0
+  PUT
+    VAR or_net
+    INT 0
+    APP
+      VAR read_or_network
+      INT 0
+LETREC solver_rect_surface (VAR of )
+  (m : VAR of ), (dirvec : VAR of ), (b0 : VAR of ), (b1 : VAR of ), (b2 : VAR of ), (i0 : VAR of ), (i1 : VAR of ), (i2 : VAR of )
+  IF
+    FZero?
+      GET
+        VAR dirvec
+        VAR i0
+    BOOL false
+    LET abc (VAR of )
+      APP
+        VAR o_param_abc
+        VAR m
+    LET d (VAR of )
+      APP
+        VAR fneg_cond
+        APP
+          VAR xor
+          APP
+            VAR o_isinvert
+            VAR m
+          FLt
+            GET
+              VAR dirvec
+              VAR i0
+            FLOAT 0.
+        GET
+          VAR abc
+          VAR i0
+    LET d2 (VAR of )
+      FDIV
+        FSUB
+          VAR d
+          VAR b0
+        GET
+          VAR dirvec
+          VAR i0
+    IF
+      APP
+        VAR fless
+        APP
+          VAR fabs
+          FADD
+            FMUL
+              VAR d2
+              GET
+                VAR dirvec
+                VAR i1
+            VAR b1
+        GET
+          VAR abc
+          VAR i1
+      IF
+        APP
+          VAR fless
+          APP
+            VAR fabs
+            FADD
+              FMUL
+                VAR d2
+                GET
+                  VAR dirvec
+                  VAR i2
+              VAR b2
+          GET
+            VAR abc
+            VAR i2
+        LET Tu73 (UNIT)
+          PUT
+            VAR solver_dist
+            INT 0
+            VAR d2
+        BOOL true
+        BOOL false
+      BOOL false
+LETREC solver_rect (VAR of )
+  (m : VAR of ), (dirvec : VAR of ), (b0 : VAR of ), (b1 : VAR of ), (b2 : VAR of )
+  IF
+    APP
+      VAR solver_rect_surface
+      VAR m
+      VAR dirvec
+      VAR b0
+      VAR b1
+      VAR b2
+      INT 0
+      INT 1
+      INT 2
+    INT 1
+    IF
+      APP
+        VAR solver_rect_surface
+        VAR m
+        VAR dirvec
+        VAR b1
+        VAR b2
+        VAR b0
+        INT 1
+        INT 2
+        INT 0
+      INT 2
+      IF
+        APP
+          VAR solver_rect_surface
+          VAR m
+          VAR dirvec
+          VAR b2
+          VAR b0
+          VAR b1
+          INT 2
+          INT 0
+          INT 1
+        INT 3
+        INT 0
+LETREC solver_surface (VAR of )
+  (m : VAR of ), (dirvec : VAR of ), (b0 : VAR of ), (b1 : VAR of ), (b2 : VAR of )
+  LET abc (VAR of )
+    APP
+      VAR o_param_abc
+      VAR m
+  LET d (VAR of )
+    APP
+      VAR veciprod
+      VAR dirvec
+      VAR abc
+  IF
+    NOT
+      FLt
+        VAR d
+        FLOAT 0.
+    LET Tu74 (UNIT)
+      PUT
+        VAR solver_dist
+        INT 0
+        FDIV
+          NEG
+            APP
+              VAR veciprod2
+              VAR abc
+              VAR b0
+              VAR b1
+              VAR b2
+          VAR d
+    INT 1
+    INT 0
+LETREC quadratic (VAR of )
+  (m : VAR of ), (v0 : VAR of ), (v1 : VAR of ), (v2 : VAR of )
+  LET diag_part (VAR of )
+    FADD
+      FADD
+        FMUL
+          APP
+            VAR fsqr
+            VAR v0
+          APP
+            VAR o_param_a
+            VAR m
+        FMUL
+          APP
+            VAR fsqr
+            VAR v1
+          APP
+            VAR o_param_b
+            VAR m
+      FMUL
+        APP
+          VAR fsqr
+          VAR v2
+        APP
+          VAR o_param_c
+          VAR m
+  IF
+    EQ
+      APP
+        VAR o_isrot
+        VAR m
+      INT 0
+    VAR diag_part
+    FADD
+      FADD
+        FADD
+          VAR diag_part
+          FMUL
+            FMUL
+              VAR v1
+              VAR v2
+            APP
+              VAR o_param_r1
+              VAR m
+        FMUL
+          FMUL
+            VAR v2
+            VAR v0
+          APP
+            VAR o_param_r2
+            VAR m
+      FMUL
+        FMUL
+          VAR v0
+          VAR v1
+        APP
+          VAR o_param_r3
+          VAR m
+LETREC bilinear (VAR of )
+  (m : VAR of ), (v0 : VAR of ), (v1 : VAR of ), (v2 : VAR of ), (w0 : VAR of ), (w1 : VAR of ), (w2 : VAR of )
+  LET diag_part (VAR of )
+    FADD
+      FADD
+        FMUL
+          FMUL
+            VAR v0
+            VAR w0
+          APP
+            VAR o_param_a
+            VAR m
+        FMUL
+          FMUL
+            VAR v1
+            VAR w1
+          APP
+            VAR o_param_b
+            VAR m
+      FMUL
+        FMUL
+          VAR v2
+          VAR w2
+        APP
+          VAR o_param_c
+          VAR m
+  IF
+    EQ
+      APP
+        VAR o_isrot
+        VAR m
+      INT 0
+    VAR diag_part
+    FADD
+      VAR diag_part
+      APP
+        VAR fhalf
+        FADD
+          FADD
+            FMUL
+              FADD
+                FMUL
+                  VAR v2
+                  VAR w1
+                FMUL
+                  VAR v1
+                  VAR w2
+              APP
+                VAR o_param_r1
+                VAR m
+            FMUL
+              FADD
+                FMUL
+                  VAR v0
+                  VAR w2
+                FMUL
+                  VAR v2
+                  VAR w0
+              APP
+                VAR o_param_r2
+                VAR m
+          FMUL
+            FADD
+              FMUL
+                VAR v0
+                VAR w1
+              FMUL
+                VAR v1
+                VAR w0
+            APP
+              VAR o_param_r3
+              VAR m
+LETREC solver_second (VAR of )
+  (m : VAR of ), (dirvec : VAR of ), (b0 : VAR of ), (b1 : VAR of ), (b2 : VAR of )
+  LET aa (VAR of )
+    APP
+      VAR quadratic
+      VAR m
+      GET
+        VAR dirvec
+        INT 0
+      GET
+        VAR dirvec
+        INT 1
+      GET
+        VAR dirvec
+        INT 2
+  IF
+    FZero?
+      VAR aa
+    INT 0
+    LET bb (VAR of )
+      APP
+        VAR bilinear
+        VAR m
+        GET
+          VAR dirvec
+          INT 0
+        GET
+          VAR dirvec
+          INT 1
+        GET
+          VAR dirvec
+          INT 2
+        VAR b0
+        VAR b1
+        VAR b2
+    LET cc0 (VAR of )
+      APP
+        VAR quadratic
+        VAR m
+        VAR b0
+        VAR b1
+        VAR b2
+    LET cc (VAR of )
+      IF
+        EQ
+          APP
+            VAR o_form
+            VAR m
+          INT 3
+        FSUB
+          VAR cc0
+          FLOAT 1.
+        VAR cc0
+    LET d (VAR of )
+      FSUB
+        APP
+          VAR fsqr
+          VAR bb
+        FMUL
+          VAR aa
+          VAR cc
+    IF
+      NOT
+        FLt
+          VAR d
+          FLOAT 0.
+      LET sd (VAR of )
+        APP
+          VAR sqrt
+          VAR d
+      LET t1 (VAR of )
+        IF
+          APP
+            VAR o_isinvert
+            VAR m
+          VAR sd
+          NEG
+            VAR sd
+      LET Tu75 (UNIT)
+        PUT
+          VAR solver_dist
+          INT 0
+          FDIV
+            FSUB
+              VAR t1
+              VAR bb
+            VAR aa
+      INT 1
+      INT 0
+LETREC solver (VAR of )
+  (index : VAR of ), (dirvec : VAR of ), (org : VAR of )
+  LET m (VAR of )
+    GET
+      VAR objects
+      VAR index
+  LET b0 (VAR of )
+    FSUB
+      GET
+        VAR org
+        INT 0
+      APP
+        VAR o_param_x
+        VAR m
+  LET b1 (VAR of )
+    FSUB
+      GET
+        VAR org
+        INT 1
+      APP
+        VAR o_param_y
+        VAR m
+  LET b2 (VAR of )
+    FSUB
+      GET
+        VAR org
+        INT 2
+      APP
+        VAR o_param_z
+        VAR m
+  LET m_shape (VAR of )
+    APP
+      VAR o_form
+      VAR m
+  IF
+    EQ
+      VAR m_shape
+      INT 1
+    APP
+      VAR solver_rect
+      VAR m
+      VAR dirvec
+      VAR b0
+      VAR b1
+      VAR b2
+    IF
+      EQ
+        VAR m_shape
+        INT 2
+      APP
+        VAR solver_surface
+        VAR m
+        VAR dirvec
+        VAR b0
+        VAR b1
+        VAR b2
+      APP
+        VAR solver_second
+        VAR m
+        VAR dirvec
+        VAR b0
+        VAR b1
+        VAR b2
+LETREC solver_rect_fast (VAR of )
+  (m : VAR of ), (v : VAR of ), (dconst : VAR of ), (b0 : VAR of ), (b1 : VAR of ), (b2 : VAR of )
+  LET d0 (VAR of )
+    FMUL
+      FSUB
+        GET
+          VAR dconst
+          INT 0
+        VAR b0
+      GET
+        VAR dconst
+        INT 1
+  IF
+    IF
+      APP
+        VAR fless
+        APP
+          VAR fabs
+          FADD
+            FMUL
+              VAR d0
+              GET
+                VAR v
+                INT 1
+            VAR b1
+        APP
+          VAR o_param_b
+          VAR m
+      IF
+        APP
+          VAR fless
+          APP
+            VAR fabs
+            FADD
+              FMUL
+                VAR d0
+                GET
+                  VAR v
+                  INT 2
+              VAR b2
+          APP
+            VAR o_param_c
+            VAR m
+        NOT
+          FZero?
+            GET
+              VAR dconst
+              INT 1
+        BOOL false
+      BOOL false
+    LET Tu76 (UNIT)
+      PUT
+        VAR solver_dist
+        INT 0
+        VAR d0
+    INT 1
+    LET d1 (VAR of )
+      FMUL
+        FSUB
+          GET
+            VAR dconst
+            INT 2
+          VAR b1
+        GET
+          VAR dconst
+          INT 3
+    IF
+      IF
+        APP
+          VAR fless
+          APP
+            VAR fabs
+            FADD
+              FMUL
+                VAR d1
+                GET
+                  VAR v
+                  INT 0
+              VAR b0
+          APP
+            VAR o_param_a
+            VAR m
+        IF
+          APP
+            VAR fless
+            APP
+              VAR fabs
+              FADD
+                FMUL
+                  VAR d1
+                  GET
+                    VAR v
+                    INT 2
+                VAR b2
+            APP
+              VAR o_param_c
+              VAR m
+          NOT
+            FZero?
+              GET
+                VAR dconst
+                INT 3
+          BOOL false
+        BOOL false
+      LET Tu77 (UNIT)
+        PUT
+          VAR solver_dist
+          INT 0
+          VAR d1
+      INT 2
+      LET d2 (VAR of )
+        FMUL
+          FSUB
+            GET
+              VAR dconst
+              INT 4
+            VAR b2
+          GET
+            VAR dconst
+            INT 5
+      IF
+        IF
+          APP
+            VAR fless
+            APP
+              VAR fabs
+              FADD
+                FMUL
+                  VAR d2
+                  GET
+                    VAR v
+                    INT 0
+                VAR b0
+            APP
+              VAR o_param_a
+              VAR m
+          IF
+            APP
+              VAR fless
+              APP
+                VAR fabs
+                FADD
+                  FMUL
+                    VAR d2
+                    GET
+                      VAR v
+                      INT 1
+                  VAR b1
+              APP
+                VAR o_param_b
+                VAR m
+            NOT
+              FZero?
+                GET
+                  VAR dconst
+                  INT 5
+            BOOL false
+          BOOL false
+        LET Tu78 (UNIT)
+          PUT
+            VAR solver_dist
+            INT 0
+            VAR d2
+        INT 3
+        INT 0
+LETREC solver_surface_fast (VAR of )
+  (m : VAR of ), (dconst : VAR of ), (b0 : VAR of ), (b1 : VAR of ), (b2 : VAR of )
+  IF
+    FLt
+      GET
+        VAR dconst
+        INT 0
+      FLOAT 0.
+    LET Tu79 (UNIT)
+      PUT
+        VAR solver_dist
+        INT 0
+        FADD
+          FADD
+            FMUL
+              GET
+                VAR dconst
+                INT 1
+              VAR b0
+            FMUL
+              GET
+                VAR dconst
+                INT 2
+              VAR b1
+          FMUL
+            GET
+              VAR dconst
+              INT 3
+            VAR b2
+    INT 1
+    INT 0
+LETREC solver_second_fast (VAR of )
+  (m : VAR of ), (dconst : VAR of ), (b0 : VAR of ), (b1 : VAR of ), (b2 : VAR of )
+  LET aa (VAR of )
+    GET
+      VAR dconst
+      INT 0
+  IF
+    FZero?
+      VAR aa
+    INT 0
+    LET neg_bb (VAR of )
+      FADD
+        FADD
+          FMUL
+            GET
+              VAR dconst
+              INT 1
+            VAR b0
+          FMUL
+            GET
+              VAR dconst
+              INT 2
+            VAR b1
+        FMUL
+          GET
+            VAR dconst
+            INT 3
+          VAR b2
+    LET cc0 (VAR of )
+      APP
+        VAR quadratic
+        VAR m
+        VAR b0
+        VAR b1
+        VAR b2
+    LET cc (VAR of )
+      IF
+        EQ
+          APP
+            VAR o_form
+            VAR m
+          INT 3
+        FSUB
+          VAR cc0
+          FLOAT 1.
+        VAR cc0
+    LET d (VAR of )
+      FSUB
+        APP
+          VAR fsqr
+          VAR neg_bb
+        FMUL
+          VAR aa
+          VAR cc
+    IF
+      NOT
+        FLt
+          VAR d
+          FLOAT 0.
+      LET Tu80 (UNIT)
+        IF
+          APP
+            VAR o_isinvert
+            VAR m
+          PUT
+            VAR solver_dist
+            INT 0
+            FMUL
+              FADD
+                VAR neg_bb
+                APP
+                  VAR sqrt
+                  VAR d
+              GET
+                VAR dconst
+                INT 4
+          PUT
+            VAR solver_dist
+            INT 0
+            FMUL
+              FSUB
+                VAR neg_bb
+                APP
+                  VAR sqrt
+                  VAR d
+              GET
+                VAR dconst
+                INT 4
+      INT 1
+      INT 0
+LETREC solver_fast (VAR of )
+  (index : VAR of ), (dirvec : VAR of ), (org : VAR of )
+  LET m (VAR of )
+    GET
+      VAR objects
+      VAR index
+  LET b0 (VAR of )
+    FSUB
+      GET
+        VAR org
+        INT 0
+      APP
+        VAR o_param_x
+        VAR m
+  LET b1 (VAR of )
+    FSUB
+      GET
+        VAR org
+        INT 1
+      APP
+        VAR o_param_y
+        VAR m
+  LET b2 (VAR of )
+    FSUB
+      GET
+        VAR org
+        INT 2
+      APP
+        VAR o_param_z
+        VAR m
+  LET dconsts (VAR of )
+    APP
+      VAR d_const
+      VAR dirvec
+  LET dconst (VAR of )
+    GET
+      VAR dconsts
+      VAR index
+  LET m_shape (VAR of )
+    APP
+      VAR o_form
+      VAR m
+  IF
+    EQ
+      VAR m_shape
+      INT 1
+    APP
+      VAR solver_rect_fast
+      VAR m
+      APP
+        VAR d_vec
+        VAR dirvec
+      VAR dconst
+      VAR b0
+      VAR b1
+      VAR b2
+    IF
+      EQ
+        VAR m_shape
+        INT 2
+      APP
+        VAR solver_surface_fast
+        VAR m
+        VAR dconst
+        VAR b0
+        VAR b1
+        VAR b2
+      APP
+        VAR solver_second_fast
+        VAR m
+        VAR dconst
+        VAR b0
+        VAR b1
+        VAR b2
+LETREC solver_surface_fast2 (VAR of )
+  (m : VAR of ), (dconst : VAR of ), (sconst : VAR of ), (b0 : VAR of ), (b1 : VAR of ), (b2 : VAR of )
+  IF
+    FLt
+      GET
+        VAR dconst
+        INT 0
+      FLOAT 0.
+    LET Tu81 (UNIT)
+      PUT
+        VAR solver_dist
+        INT 0
+        FMUL
+          GET
+            VAR dconst
+            INT 0
+          GET
+            VAR sconst
+            INT 3
+    INT 1
+    INT 0
+LETREC solver_second_fast2 (VAR of )
+  (m : VAR of ), (dconst : VAR of ), (sconst : VAR of ), (b0 : VAR of ), (b1 : VAR of ), (b2 : VAR of )
+  LET aa (VAR of )
+    GET
+      VAR dconst
+      INT 0
+  IF
+    FZero?
+      VAR aa
+    INT 0
+    LET neg_bb (VAR of )
+      FADD
+        FADD
+          FMUL
+            GET
+              VAR dconst
+              INT 1
+            VAR b0
+          FMUL
+            GET
+              VAR dconst
+              INT 2
+            VAR b1
+        FMUL
+          GET
+            VAR dconst
+            INT 3
+          VAR b2
+    LET cc (VAR of )
+      GET
+        VAR sconst
+        INT 3
+    LET d (VAR of )
+      FSUB
+        APP
+          VAR fsqr
+          VAR neg_bb
+        FMUL
+          VAR aa
+          VAR cc
+    IF
+      NOT
+        FLt
+          VAR d
+          FLOAT 0.
+      LET Tu82 (UNIT)
+        IF
+          APP
+            VAR o_isinvert
+            VAR m
+          PUT
+            VAR solver_dist
+            INT 0
+            FMUL
+              FADD
+                VAR neg_bb
+                APP
+                  VAR sqrt
+                  VAR d
+              GET
+                VAR dconst
+                INT 4
+          PUT
+            VAR solver_dist
+            INT 0
+            FMUL
+              FSUB
+                VAR neg_bb
+                APP
+                  VAR sqrt
+                  VAR d
+              GET
+                VAR dconst
+                INT 4
+      INT 1
+      INT 0
+LETREC solver_fast2 (VAR of )
+  (index : VAR of ), (dirvec : VAR of )
+  LET m (VAR of )
+    GET
+      VAR objects
+      VAR index
+  LET sconst (VAR of )
+    APP
+      VAR o_param_ctbl
+      VAR m
+  LET b0 (VAR of )
+    GET
+      VAR sconst
+      INT 0
+  LET b1 (VAR of )
+    GET
+      VAR sconst
+      INT 1
+  LET b2 (VAR of )
+    GET
+      VAR sconst
+      INT 2
+  LET dconsts (VAR of )
+    APP
+      VAR d_const
+      VAR dirvec
+  LET dconst (VAR of )
+    GET
+      VAR dconsts
+      VAR index
+  LET m_shape (VAR of )
+    APP
+      VAR o_form
+      VAR m
+  IF
+    EQ
+      VAR m_shape
+      INT 1
+    APP
+      VAR solver_rect_fast
+      VAR m
+      APP
+        VAR d_vec
+        VAR dirvec
+      VAR dconst
+      VAR b0
+      VAR b1
+      VAR b2
+    IF
+      EQ
+        VAR m_shape
+        INT 2
+      APP
+        VAR solver_surface_fast2
+        VAR m
+        VAR dconst
+        VAR sconst
+        VAR b0
+        VAR b1
+        VAR b2
+      APP
+        VAR solver_second_fast2
+        VAR m
+        VAR dconst
+        VAR sconst
+        VAR b0
+        VAR b1
+        VAR b2
+LETREC setup_rect_table (VAR of )
+  (vec : VAR of ), (m : VAR of )
+  LET const (VAR of )
+    ARRAY
+      INT 6
+      FLOAT 0.
+  LET Tu88 (UNIT)
+    IF
+      FZero?
+        GET
+          VAR vec
+          INT 0
+      PUT
+        VAR const
+        INT 1
+        FLOAT 0.
+      LET Tu83 (UNIT)
+        PUT
+          VAR const
+          INT 0
+          APP
+            VAR fneg_cond
+            APP
+              VAR xor
+              APP
+                VAR o_isinvert
+                VAR m
+              FLt
+                GET
+                  VAR vec
+                  INT 0
+                FLOAT 0.
+            APP
+              VAR o_param_a
+              VAR m
+      PUT
+        VAR const
+        INT 1
+        FDIV
+          FLOAT 1.
+          GET
+            VAR vec
+            INT 0
+  LET Tu87 (UNIT)
+    IF
+      FZero?
+        GET
+          VAR vec
+          INT 1
+      PUT
+        VAR const
+        INT 3
+        FLOAT 0.
+      LET Tu84 (UNIT)
+        PUT
+          VAR const
+          INT 2
+          APP
+            VAR fneg_cond
+            APP
+              VAR xor
+              APP
+                VAR o_isinvert
+                VAR m
+              FLt
+                GET
+                  VAR vec
+                  INT 1
+                FLOAT 0.
+            APP
+              VAR o_param_b
+              VAR m
+      PUT
+        VAR const
+        INT 3
+        FDIV
+          FLOAT 1.
+          GET
+            VAR vec
+            INT 1
+  LET Tu86 (UNIT)
+    IF
+      FZero?
+        GET
+          VAR vec
+          INT 2
+      PUT
+        VAR const
+        INT 5
+        FLOAT 0.
+      LET Tu85 (UNIT)
+        PUT
+          VAR const
+          INT 4
+          APP
+            VAR fneg_cond
+            APP
+              VAR xor
+              APP
+                VAR o_isinvert
+                VAR m
+              FLt
+                GET
+                  VAR vec
+                  INT 2
+                FLOAT 0.
+            APP
+              VAR o_param_c
+              VAR m
+      PUT
+        VAR const
+        INT 5
+        FDIV
+          FLOAT 1.
+          GET
+            VAR vec
+            INT 2
+  VAR const
+LETREC setup_surface_table (VAR of )
+  (vec : VAR of ), (m : VAR of )
+  LET const (VAR of )
+    ARRAY
+      INT 4
+      FLOAT 0.
+  LET d (VAR of )
+    FADD
+      FADD
+        FMUL
+          GET
+            VAR vec
+            INT 0
+          APP
+            VAR o_param_a
+            VAR m
+        FMUL
+          GET
+            VAR vec
+            INT 1
+          APP
+            VAR o_param_b
+            VAR m
+      FMUL
+        GET
+          VAR vec
+          INT 2
+        APP
+          VAR o_param_c
+          VAR m
+  LET Tu92 (UNIT)
+    IF
+      NOT
+        FLt
+          VAR d
+          FLOAT 0.
+      LET Tu91 (UNIT)
+        PUT
+          VAR const
+          INT 0
+          FDIV
+            FLOAT -1.
+            VAR d
+      LET Tu90 (UNIT)
+        PUT
+          VAR const
+          INT 1
+          NEG
+            FDIV
+              APP
+                VAR o_param_a
+                VAR m
+              VAR d
+      LET Tu89 (UNIT)
+        PUT
+          VAR const
+          INT 2
+          NEG
+            FDIV
+              APP
+                VAR o_param_b
+                VAR m
+              VAR d
+      PUT
+        VAR const
+        INT 3
+        NEG
+          FDIV
+            APP
+              VAR o_param_c
+              VAR m
+            VAR d
+      PUT
+        VAR const
+        INT 0
+        FLOAT 0.
+  VAR const
+LETREC setup_second_table (VAR of )
+  (v : VAR of ), (m : VAR of )
+  LET const (VAR of )
+    ARRAY
+      INT 5
+      FLOAT 0.
+  LET aa (VAR of )
+    APP
+      VAR quadratic
+      VAR m
+      GET
+        VAR v
+        INT 0
+      GET
+        VAR v
+        INT 1
+      GET
+        VAR v
+        INT 2
+  LET c1 (VAR of )
+    NEG
+      FMUL
+        GET
+          VAR v
+          INT 0
+        APP
+          VAR o_param_a
+          VAR m
+  LET c2 (VAR of )
+    NEG
+      FMUL
+        GET
+          VAR v
+          INT 1
+        APP
+          VAR o_param_b
+          VAR m
+  LET c3 (VAR of )
+    NEG
+      FMUL
+        GET
+          VAR v
+          INT 2
+        APP
+          VAR o_param_c
+          VAR m
+  LET Tu99 (UNIT)
+    PUT
+      VAR const
+      INT 0
+      VAR aa
+  LET Tu98 (UNIT)
+    IF
+      NOT
+        EQ
+          APP
+            VAR o_isrot
+            VAR m
+          INT 0
+      LET Tu94 (UNIT)
+        PUT
+          VAR const
+          INT 1
+          FSUB
+            VAR c1
+            APP
+              VAR fhalf
+              FADD
+                FMUL
+                  GET
+                    VAR v
+                    INT 2
+                  APP
+                    VAR o_param_r2
+                    VAR m
+                FMUL
+                  GET
+                    VAR v
+                    INT 1
+                  APP
+                    VAR o_param_r3
+                    VAR m
+      LET Tu93 (UNIT)
+        PUT
+          VAR const
+          INT 2
+          FSUB
+            VAR c2
+            APP
+              VAR fhalf
+              FADD
+                FMUL
+                  GET
+                    VAR v
+                    INT 2
+                  APP
+                    VAR o_param_r1
+                    VAR m
+                FMUL
+                  GET
+                    VAR v
+                    INT 0
+                  APP
+                    VAR o_param_r3
+                    VAR m
+      PUT
+        VAR const
+        INT 3
+        FSUB
+          VAR c3
+          APP
+            VAR fhalf
+            FADD
+              FMUL
+                GET
+                  VAR v
+                  INT 1
+                APP
+                  VAR o_param_r1
+                  VAR m
+              FMUL
+                GET
+                  VAR v
+                  INT 0
+                APP
+                  VAR o_param_r2
+                  VAR m
+      LET Tu96 (UNIT)
+        PUT
+          VAR const
+          INT 1
+          VAR c1
+      LET Tu95 (UNIT)
+        PUT
+          VAR const
+          INT 2
+          VAR c2
+      PUT
+        VAR const
+        INT 3
+        VAR c3
+  LET Tu97 (UNIT)
+    IF
+      NOT
+        FZero?
+          VAR aa
+      PUT
+        VAR const
+        INT 4
+        FDIV
+          FLOAT 1.
+          VAR aa
+      UNIT
+  VAR const
+LETREC iter_setup_dirvec_constants (VAR of )
+  (dirvec : VAR of ), (index : VAR of )
+  IF
+    LE
+      INT 0
+      VAR index
+    LET m (VAR of )
+      GET
+        VAR objects
+        VAR index
+    LET dconst (VAR of )
+      APP
+        VAR d_const
+        VAR dirvec
+    LET v (VAR of )
+      APP
+        VAR d_vec
+        VAR dirvec
+    LET m_shape (VAR of )
+      APP
+        VAR o_form
+        VAR m
+    LET Tu100 (UNIT)
+      IF
+        EQ
+          VAR m_shape
+          INT 1
+        PUT
+          VAR dconst
+          VAR index
+          APP
+            VAR setup_rect_table
+            VAR v
+            VAR m
+        IF
+          EQ
+            VAR m_shape
+            INT 2
+          PUT
+            VAR dconst
+            VAR index
+            APP
+              VAR setup_surface_table
+              VAR v
+              VAR m
+          PUT
+            VAR dconst
+            VAR index
+            APP
+              VAR setup_second_table
+              VAR v
+              VAR m
+    APP
+      VAR iter_setup_dirvec_constants
+      VAR dirvec
+      SUB
+        VAR index
+        INT 1
+    UNIT
+LETREC setup_dirvec_constants (VAR of )
+  (dirvec : VAR of )
+  APP
+    VAR iter_setup_dirvec_constants
+    VAR dirvec
+    SUB
+      GET
+        VAR n_objects
+        INT 0
+      INT 1
+LETREC setup_startp_constants (VAR of )
+  (p : VAR of ), (index : VAR of )
+  IF
+    LE
+      INT 0
+      VAR index
+    LET obj (VAR of )
+      GET
+        VAR objects
+        VAR index
+    LET sconst (VAR of )
+      APP
+        VAR o_param_ctbl
+        VAR obj
+    LET m_shape (VAR of )
+      APP
+        VAR o_form
+        VAR obj
+    LET Tu104 (UNIT)
+      PUT
+        VAR sconst
+        INT 0
+        FSUB
+          GET
+            VAR p
+            INT 0
+          APP
+            VAR o_param_x
+            VAR obj
+    LET Tu103 (UNIT)
+      PUT
+        VAR sconst
+        INT 1
+        FSUB
+          GET
+            VAR p
+            INT 1
+          APP
+            VAR o_param_y
+            VAR obj
+    LET Tu102 (UNIT)
+      PUT
+        VAR sconst
+        INT 2
+        FSUB
+          GET
+            VAR p
+            INT 2
+          APP
+            VAR o_param_z
+            VAR obj
+    LET Tu101 (UNIT)
+      IF
+        EQ
+          VAR m_shape
+          INT 2
+        PUT
+          VAR sconst
+          INT 3
+          APP
+            VAR veciprod2
+            APP
+              VAR o_param_abc
+              VAR obj
+            GET
+              VAR sconst
+              INT 0
+            GET
+              VAR sconst
+              INT 1
+            GET
+              VAR sconst
+              INT 2
+        IF
+          NOT
+            LE
+              VAR m_shape
+              INT 2
+          LET cc0 (VAR of )
+            APP
+              VAR quadratic
+              VAR obj
+              GET
+                VAR sconst
+                INT 0
+              GET
+                VAR sconst
+                INT 1
+              GET
+                VAR sconst
+                INT 2
+          PUT
+            VAR sconst
+            INT 3
+            IF
+              EQ
+                VAR m_shape
+                INT 3
+              FSUB
+                VAR cc0
+                FLOAT 1.
+              VAR cc0
+          UNIT
+    APP
+      VAR setup_startp_constants
+      VAR p
+      SUB
+        VAR index
+        INT 1
+    UNIT
+LETREC setup_startp (VAR of )
+  (p : VAR of )
+  LET Tu105 (UNIT)
+    APP
+      VAR veccpy
+      VAR startp_fast
+      VAR p
+  APP
+    VAR setup_startp_constants
+    VAR p
+    SUB
+      GET
+        VAR n_objects
+        INT 0
+      INT 1
+LETREC is_rect_outside (VAR of )
+  (m : VAR of ), (p0 : VAR of ), (p1 : VAR of ), (p2 : VAR of )
+  IF
+    IF
+      APP
+        VAR fless
+        APP
+          VAR fabs
+          VAR p0
+        APP
+          VAR o_param_a
+          VAR m
+      IF
+        APP
+          VAR fless
+          APP
+            VAR fabs
+            VAR p1
+          APP
+            VAR o_param_b
+            VAR m
+        APP
+          VAR fless
+          APP
+            VAR fabs
+            VAR p2
+          APP
+            VAR o_param_c
+            VAR m
+        BOOL false
+      BOOL false
+    APP
+      VAR o_isinvert
+      VAR m
+    NOT
+      APP
+        VAR o_isinvert
+        VAR m
+LETREC is_plane_outside (VAR of )
+  (m : VAR of ), (p0 : VAR of ), (p1 : VAR of ), (p2 : VAR of )
+  LET w (VAR of )
+    APP
+      VAR veciprod2
+      APP
+        VAR o_param_abc
+        VAR m
+      VAR p0
+      VAR p1
+      VAR p2
+  NOT
+    APP
+      VAR xor
+      APP
+        VAR o_isinvert
+        VAR m
+      FLt
+        VAR w
+        FLOAT 0.
+LETREC is_second_outside (VAR of )
+  (m : VAR of ), (p0 : VAR of ), (p1 : VAR of ), (p2 : VAR of )
+  LET w (VAR of )
+    APP
+      VAR quadratic
+      VAR m
+      VAR p0
+      VAR p1
+      VAR p2
+  LET w2 (VAR of )
+    IF
+      EQ
+        APP
+          VAR o_form
+          VAR m
+        INT 3
+      FSUB
+        VAR w
+        FLOAT 1.
+      VAR w
+  NOT
+    APP
+      VAR xor
+      APP
+        VAR o_isinvert
+        VAR m
+      FLt
+        VAR w2
+        FLOAT 0.
+LETREC is_outside (VAR of )
+  (m : VAR of ), (q0 : VAR of ), (q1 : VAR of ), (q2 : VAR of )
+  LET p0 (VAR of )
+    FSUB
+      VAR q0
+      APP
+        VAR o_param_x
+        VAR m
+  LET p1 (VAR of )
+    FSUB
+      VAR q1
+      APP
+        VAR o_param_y
+        VAR m
+  LET p2 (VAR of )
+    FSUB
+      VAR q2
+      APP
+        VAR o_param_z
+        VAR m
+  LET m_shape (VAR of )
+    APP
+      VAR o_form
+      VAR m
+  IF
+    EQ
+      VAR m_shape
+      INT 1
+    APP
+      VAR is_rect_outside
+      VAR m
+      VAR p0
+      VAR p1
+      VAR p2
+    IF
+      EQ
+        VAR m_shape
+        INT 2
+      APP
+        VAR is_plane_outside
+        VAR m
+        VAR p0
+        VAR p1
+        VAR p2
+      APP
+        VAR is_second_outside
+        VAR m
+        VAR p0
+        VAR p1
+        VAR p2
+LETREC check_all_inside (VAR of )
+  (ofs : VAR of ), (iand : VAR of ), (q0 : VAR of ), (q1 : VAR of ), (q2 : VAR of )
+  LET head (VAR of )
+    GET
+      VAR iand
+      VAR ofs
+  IF
+    EQ
+      VAR head
+      NEG
+        INT 1
+    BOOL true
+    IF
+      APP
+        VAR is_outside
+        GET
+          VAR objects
+          VAR head
+        VAR q0
+        VAR q1
+        VAR q2
+      BOOL false
+      APP
+        VAR check_all_inside
+        ADD
+          VAR ofs
+          INT 1
+        VAR iand
+        VAR q0
+        VAR q1
+        VAR q2
+LETREC shadow_check_and_group (VAR of )
+  (iand_ofs : VAR of ), (and_group : VAR of )
+  IF
+    EQ
+      GET
+        VAR and_group
+        VAR iand_ofs
+      NEG
+        INT 1
+    BOOL false
+    LET obj (VAR of )
+      GET
+        VAR and_group
+        VAR iand_ofs
+    LET t0 (VAR of )
+      APP
+        VAR solver_fast
+        VAR obj
+        VAR light_dirvec
+        VAR intersection_point
+    LET t0p (VAR of )
+      GET
+        VAR solver_dist
+        INT 0
+    IF
+      IF
+        NOT
+          EQ
+            VAR t0
+            INT 0
+        APP
+          VAR fless
+          VAR t0p
+          FLOAT -0.2
+        BOOL false
+      LET t (VAR of )
+        FADD
+          VAR t0p
+          FLOAT 0.01
+      LET q0 (VAR of )
+        FADD
+          FMUL
+            GET
+              VAR light
+              INT 0
+            VAR t
+          GET
+            VAR intersection_point
+            INT 0
+      LET q1 (VAR of )
+        FADD
+          FMUL
+            GET
+              VAR light
+              INT 1
+            VAR t
+          GET
+            VAR intersection_point
+            INT 1
+      LET q2 (VAR of )
+        FADD
+          FMUL
+            GET
+              VAR light
+              INT 2
+            VAR t
+          GET
+            VAR intersection_point
+            INT 2
+      IF
+        APP
+          VAR check_all_inside
+          INT 0
+          VAR and_group
+          VAR q0
+          VAR q1
+          VAR q2
+        BOOL true
+        APP
+          VAR shadow_check_and_group
+          ADD
+            VAR iand_ofs
+            INT 1
+          VAR and_group
+      IF
+        APP
+          VAR o_isinvert
+          GET
+            VAR objects
+            VAR obj
+        APP
+          VAR shadow_check_and_group
+          ADD
+            VAR iand_ofs
+            INT 1
+          VAR and_group
+        BOOL false
+LETREC shadow_check_one_or_group (VAR of )
+  (ofs : VAR of ), (or_group : VAR of )
+  LET head (VAR of )
+    GET
+      VAR or_group
+      VAR ofs
+  IF
+    EQ
+      VAR head
+      NEG
+        INT 1
+    BOOL false
+    LET and_group (VAR of )
+      GET
+        VAR and_net
+        VAR head
+    LET shadow_p (VAR of )
+      APP
+        VAR shadow_check_and_group
+        INT 0
+        VAR and_group
+    IF
+      VAR shadow_p
+      BOOL true
+      APP
+        VAR shadow_check_one_or_group
+        ADD
+          VAR ofs
+          INT 1
+        VAR or_group
+LETREC shadow_check_one_or_matrix (VAR of )
+  (ofs : VAR of ), (or_matrix : VAR of )
+  LET head (VAR of )
+    GET
+      VAR or_matrix
+      VAR ofs
+  LET range_primitive (VAR of )
+    GET
+      VAR head
+      INT 0
+  IF
+    EQ
+      VAR range_primitive
+      NEG
+        INT 1
+    BOOL false
+    IF
+      IF
+        EQ
+          VAR range_primitive
+          INT 99
+        BOOL true
+        LET t (VAR of )
+          APP
+            VAR solver_fast
+            VAR range_primitive
+            VAR light_dirvec
+            VAR intersection_point
+        IF
+          NOT
+            EQ
+              VAR t
+              INT 0
+          IF
+            APP
+              VAR fless
+              GET
+                VAR solver_dist
+                INT 0
+              FLOAT -0.1
+            IF
+              APP
+                VAR shadow_check_one_or_group
+                INT 1
+                VAR head
+              BOOL true
+              BOOL false
+            BOOL false
+          BOOL false
+      IF
+        APP
+          VAR shadow_check_one_or_group
+          INT 1
+          VAR head
+        BOOL true
+        APP
+          VAR shadow_check_one_or_matrix
+          ADD
+            VAR ofs
+            INT 1
+          VAR or_matrix
+      APP
+        VAR shadow_check_one_or_matrix
+        ADD
+          VAR ofs
+          INT 1
+        VAR or_matrix
+LETREC solve_each_element (VAR of )
+  (iand_ofs : VAR of ), (and_group : VAR of ), (dirvec : VAR of )
+  LET iobj (VAR of )
+    GET
+      VAR and_group
+      VAR iand_ofs
+  IF
+    EQ
+      VAR iobj
+      NEG
+        INT 1
+    UNIT
+    LET t0 (VAR of )
+      APP
+        VAR solver
+        VAR iobj
+        VAR dirvec
+        VAR startp
+    IF
+      NOT
+        EQ
+          VAR t0
+          INT 0
+      LET t0p (VAR of )
+        GET
+          VAR solver_dist
+          INT 0
+      LET Tu109 (UNIT)
+        IF
+          APP
+            VAR fless
+            FLOAT 0.
+            VAR t0p
+          IF
+            APP
+              VAR fless
+              VAR t0p
+              GET
+                VAR tmin
+                INT 0
+            LET t (VAR of )
+              FADD
+                VAR t0p
+                FLOAT 0.01
+            LET q0 (VAR of )
+              FADD
+                FMUL
+                  GET
+                    VAR dirvec
+                    INT 0
+                  VAR t
+                GET
+                  VAR startp
+                  INT 0
+            LET q1 (VAR of )
+              FADD
+                FMUL
+                  GET
+                    VAR dirvec
+                    INT 1
+                  VAR t
+                GET
+                  VAR startp
+                  INT 1
+            LET q2 (VAR of )
+              FADD
+                FMUL
+                  GET
+                    VAR dirvec
+                    INT 2
+                  VAR t
+                GET
+                  VAR startp
+                  INT 2
+            IF
+              APP
+                VAR check_all_inside
+                INT 0
+                VAR and_group
+                VAR q0
+                VAR q1
+                VAR q2
+              LET Tu108 (UNIT)
+                PUT
+                  VAR tmin
+                  INT 0
+                  VAR t
+              LET Tu107 (UNIT)
+                APP
+                  VAR vecset
+                  VAR intersection_point
+                  VAR q0
+                  VAR q1
+                  VAR q2
+              LET Tu106 (UNIT)
+                PUT
+                  VAR intersected_object_id
+                  INT 0
+                  VAR iobj
+              PUT
+                VAR intsec_rectside
+                INT 0
+                VAR t0
+              UNIT
+            UNIT
+          UNIT
+      APP
+        VAR solve_each_element
+        ADD
+          VAR iand_ofs
+          INT 1
+        VAR and_group
+        VAR dirvec
+      IF
+        APP
+          VAR o_isinvert
+          GET
+            VAR objects
+            VAR iobj
+        APP
+          VAR solve_each_element
+          ADD
+            VAR iand_ofs
+            INT 1
+          VAR and_group
+          VAR dirvec
+        UNIT
+LETREC solve_one_or_network (VAR of )
+  (ofs : VAR of ), (or_group : VAR of ), (dirvec : VAR of )
+  LET head (VAR of )
+    GET
+      VAR or_group
+      VAR ofs
+  IF
+    NOT
+      EQ
+        VAR head
+        NEG
+          INT 1
+    LET and_group (VAR of )
+      GET
+        VAR and_net
+        VAR head
+    LET Tu110 (UNIT)
+      APP
+        VAR solve_each_element
+        INT 0
+        VAR and_group
+        VAR dirvec
+    APP
+      VAR solve_one_or_network
+      ADD
+        VAR ofs
+        INT 1
+      VAR or_group
+      VAR dirvec
+    UNIT
+LETREC trace_or_matrix (VAR of )
+  (ofs : VAR of ), (or_network : VAR of ), (dirvec : VAR of )
+  LET head (VAR of )
+    GET
+      VAR or_network
+      VAR ofs
+  LET range_primitive (VAR of )
+    GET
+      VAR head
+      INT 0
+  IF
+    EQ
+      VAR range_primitive
+      NEG
+        INT 1
+    UNIT
+    LET Tu111 (UNIT)
+      IF
+        EQ
+          VAR range_primitive
+          INT 99
+        APP
+          VAR solve_one_or_network
+          INT 1
+          VAR head
+          VAR dirvec
+        LET t (VAR of )
+          APP
+            VAR solver
+            VAR range_primitive
+            VAR dirvec
+            VAR startp
+        IF
+          NOT
+            EQ
+              VAR t
+              INT 0
+          LET tp (VAR of )
+            GET
+              VAR solver_dist
+              INT 0
+          IF
+            APP
+              VAR fless
+              VAR tp
+              GET
+                VAR tmin
+                INT 0
+            APP
+              VAR solve_one_or_network
+              INT 1
+              VAR head
+              VAR dirvec
+            UNIT
+          UNIT
+    APP
+      VAR trace_or_matrix
+      ADD
+        VAR ofs
+        INT 1
+      VAR or_network
+      VAR dirvec
+LETREC judge_intersection (VAR of )
+  (dirvec : VAR of )
+  LET Tu113 (UNIT)
+    PUT
+      VAR tmin
+      INT 0
+      FLOAT 1000000000.
+  LET Tu112 (UNIT)
+    APP
+      VAR trace_or_matrix
+      INT 0
+      GET
+        VAR or_net
+        INT 0
+      VAR dirvec
+  LET t (VAR of )
+    GET
+      VAR tmin
+      INT 0
+  IF
+    APP
+      VAR fless
+      FLOAT -0.1
+      VAR t
+    APP
+      VAR fless
+      VAR t
+      FLOAT 100000000.
+    BOOL false
+LETREC solve_each_element_fast (VAR of )
+  (iand_ofs : VAR of ), (and_group : VAR of ), (dirvec : VAR of )
+  LET vec (VAR of )
+    APP
+      VAR d_vec
+      VAR dirvec
+  LET iobj (VAR of )
+    GET
+      VAR and_group
+      VAR iand_ofs
+  IF
+    EQ
+      VAR iobj
+      NEG
+        INT 1
+    UNIT
+    LET t0 (VAR of )
+      APP
+        VAR solver_fast2
+        VAR iobj
+        VAR dirvec
+    IF
+      NOT
+        EQ
+          VAR t0
+          INT 0
+      LET t0p (VAR of )
+        GET
+          VAR solver_dist
+          INT 0
+      LET Tu117 (UNIT)
+        IF
+          APP
+            VAR fless
+            FLOAT 0.
+            VAR t0p
+          IF
+            APP
+              VAR fless
+              VAR t0p
+              GET
+                VAR tmin
+                INT 0
+            LET t (VAR of )
+              FADD
+                VAR t0p
+                FLOAT 0.01
+            LET q0 (VAR of )
+              FADD
+                FMUL
+                  GET
+                    VAR vec
+                    INT 0
+                  VAR t
+                GET
+                  VAR startp_fast
+                  INT 0
+            LET q1 (VAR of )
+              FADD
+                FMUL
+                  GET
+                    VAR vec
+                    INT 1
+                  VAR t
+                GET
+                  VAR startp_fast
+                  INT 1
+            LET q2 (VAR of )
+              FADD
+                FMUL
+                  GET
+                    VAR vec
+                    INT 2
+                  VAR t
+                GET
+                  VAR startp_fast
+                  INT 2
+            IF
+              APP
+                VAR check_all_inside
+                INT 0
+                VAR and_group
+                VAR q0
+                VAR q1
+                VAR q2
+              LET Tu116 (UNIT)
+                PUT
+                  VAR tmin
+                  INT 0
+                  VAR t
+              LET Tu115 (UNIT)
+                APP
+                  VAR vecset
+                  VAR intersection_point
+                  VAR q0
+                  VAR q1
+                  VAR q2
+              LET Tu114 (UNIT)
+                PUT
+                  VAR intersected_object_id
+                  INT 0
+                  VAR iobj
+              PUT
+                VAR intsec_rectside
+                INT 0
+                VAR t0
+              UNIT
+            UNIT
+          UNIT
+      APP
+        VAR solve_each_element_fast
+        ADD
+          VAR iand_ofs
+          INT 1
+        VAR and_group
+        VAR dirvec
+      IF
+        APP
+          VAR o_isinvert
+          GET
+            VAR objects
+            VAR iobj
+        APP
+          VAR solve_each_element_fast
+          ADD
+            VAR iand_ofs
+            INT 1
+          VAR and_group
+          VAR dirvec
+        UNIT
+LETREC solve_one_or_network_fast (VAR of )
+  (ofs : VAR of ), (or_group : VAR of ), (dirvec : VAR of )
+  LET head (VAR of )
+    GET
+      VAR or_group
+      VAR ofs
+  IF
+    NOT
+      EQ
+        VAR head
+        NEG
+          INT 1
+    LET and_group (VAR of )
+      GET
+        VAR and_net
+        VAR head
+    LET Tu118 (UNIT)
+      APP
+        VAR solve_each_element_fast
+        INT 0
+        VAR and_group
+        VAR dirvec
+    APP
+      VAR solve_one_or_network_fast
+      ADD
+        VAR ofs
+        INT 1
+      VAR or_group
+      VAR dirvec
+    UNIT
+LETREC trace_or_matrix_fast (VAR of )
+  (ofs : VAR of ), (or_network : VAR of ), (dirvec : VAR of )
+  LET head (VAR of )
+    GET
+      VAR or_network
+      VAR ofs
+  LET range_primitive (VAR of )
+    GET
+      VAR head
+      INT 0
+  IF
+    EQ
+      VAR range_primitive
+      NEG
+        INT 1
+    UNIT
+    LET Tu119 (UNIT)
+      IF
+        EQ
+          VAR range_primitive
+          INT 99
+        APP
+          VAR solve_one_or_network_fast
+          INT 1
+          VAR head
+          VAR dirvec
+        LET t (VAR of )
+          APP
+            VAR solver_fast2
+            VAR range_primitive
+            VAR dirvec
+        IF
+          NOT
+            EQ
+              VAR t
+              INT 0
+          LET tp (VAR of )
+            GET
+              VAR solver_dist
+              INT 0
+          IF
+            APP
+              VAR fless
+              VAR tp
+              GET
+                VAR tmin
+                INT 0
+            APP
+              VAR solve_one_or_network_fast
+              INT 1
+              VAR head
+              VAR dirvec
+            UNIT
+          UNIT
+    APP
+      VAR trace_or_matrix_fast
+      ADD
+        VAR ofs
+        INT 1
+      VAR or_network
+      VAR dirvec
+LETREC judge_intersection_fast (VAR of )
+  (dirvec : VAR of )
+  LET Tu121 (UNIT)
+    PUT
+      VAR tmin
+      INT 0
+      FLOAT 1000000000.
+  LET Tu120 (UNIT)
+    APP
+      VAR trace_or_matrix_fast
+      INT 0
+      GET
+        VAR or_net
+        INT 0
+      VAR dirvec
+  LET t (VAR of )
+    GET
+      VAR tmin
+      INT 0
+  IF
+    APP
+      VAR fless
+      FLOAT -0.1
+      VAR t
+    APP
+      VAR fless
+      VAR t
+      FLOAT 100000000.
+    BOOL false
+LETREC get_nvector_rect (VAR of )
+  (dirvec : VAR of )
+  LET rectside (VAR of )
+    GET
+      VAR intsec_rectside
+      INT 0
+  LET Tu122 (UNIT)
+    APP
+      VAR vecbzero
+      VAR nvector
+  PUT
+    VAR nvector
+    SUB
+      VAR rectside
+      INT 1
+    NEG
+      APP
+        VAR sgn
+        GET
+          VAR dirvec
+          SUB
+            VAR rectside
+            INT 1
+LETREC get_nvector_plane (VAR of )
+  (m : VAR of )
+  LET Tu124 (UNIT)
+    PUT
+      VAR nvector
+      INT 0
+      NEG
+        APP
+          VAR o_param_a
+          VAR m
+  LET Tu123 (UNIT)
+    PUT
+      VAR nvector
+      INT 1
+      NEG
+        APP
+          VAR o_param_b
+          VAR m
+  PUT
+    VAR nvector
+    INT 2
+    NEG
+      APP
+        VAR o_param_c
+        VAR m
+LETREC get_nvector_second (VAR of )
+  (m : VAR of )
+  LET p0 (VAR of )
+    FSUB
+      GET
+        VAR intersection_point
+        INT 0
+      APP
+        VAR o_param_x
+        VAR m
+  LET p1 (VAR of )
+    FSUB
+      GET
+        VAR intersection_point
+        INT 1
+      APP
+        VAR o_param_y
+        VAR m
+  LET p2 (VAR of )
+    FSUB
+      GET
+        VAR intersection_point
+        INT 2
+      APP
+        VAR o_param_z
+        VAR m
+  LET d0 (VAR of )
+    FMUL
+      VAR p0
+      APP
+        VAR o_param_a
+        VAR m
+  LET d1 (VAR of )
+    FMUL
+      VAR p1
+      APP
+        VAR o_param_b
+        VAR m
+  LET d2 (VAR of )
+    FMUL
+      VAR p2
+      APP
+        VAR o_param_c
+        VAR m
+  LET Tu129 (UNIT)
+    IF
+      EQ
+        APP
+          VAR o_isrot
+          VAR m
+        INT 0
+      LET Tu126 (UNIT)
+        PUT
+          VAR nvector
+          INT 0
+          VAR d0
+      LET Tu125 (UNIT)
+        PUT
+          VAR nvector
+          INT 1
+          VAR d1
+      PUT
+        VAR nvector
+        INT 2
+        VAR d2
+      LET Tu128 (UNIT)
+        PUT
+          VAR nvector
+          INT 0
+          FADD
+            VAR d0
+            APP
+              VAR fhalf
+              FADD
+                FMUL
+                  VAR p1
+                  APP
+                    VAR o_param_r3
+                    VAR m
+                FMUL
+                  VAR p2
+                  APP
+                    VAR o_param_r2
+                    VAR m
+      LET Tu127 (UNIT)
+        PUT
+          VAR nvector
+          INT 1
+          FADD
+            VAR d1
+            APP
+              VAR fhalf
+              FADD
+                FMUL
+                  VAR p0
+                  APP
+                    VAR o_param_r3
+                    VAR m
+                FMUL
+                  VAR p2
+                  APP
+                    VAR o_param_r1
+                    VAR m
+      PUT
+        VAR nvector
+        INT 2
+        FADD
+          VAR d2
+          APP
+            VAR fhalf
+            FADD
+              FMUL
+                VAR p0
+                APP
+                  VAR o_param_r2
+                  VAR m
+              FMUL
+                VAR p1
+                APP
+                  VAR o_param_r1
+                  VAR m
+  APP
+    VAR vecunit_sgn
+    VAR nvector
+    APP
+      VAR o_isinvert
+      VAR m
+LETREC get_nvector (VAR of )
+  (m : VAR of ), (dirvec : VAR of )
+  LET m_shape (VAR of )
+    APP
+      VAR o_form
+      VAR m
+  IF
+    EQ
+      VAR m_shape
+      INT 1
+    APP
+      VAR get_nvector_rect
+      VAR dirvec
+    IF
+      EQ
+        VAR m_shape
+        INT 2
+      APP
+        VAR get_nvector_plane
+        VAR m
+      APP
+        VAR get_nvector_second
+        VAR m
+LETREC utexture (VAR of )
+  (m : VAR of ), (p : VAR of )
+  LET m_tex (VAR of )
+    APP
+      VAR o_texturetype
+      VAR m
+  LET Tu134 (UNIT)
+    PUT
+      VAR texture_color
+      INT 0
+      APP
+        VAR o_color_red
+        VAR m
+  LET Tu133 (UNIT)
+    PUT
+      VAR texture_color
+      INT 1
+      APP
+        VAR o_color_green
+        VAR m
+  LET Tu132 (UNIT)
+    PUT
+      VAR texture_color
+      INT 2
+      APP
+        VAR o_color_blue
+        VAR m
+  IF
+    EQ
+      VAR m_tex
+      INT 1
+    LET w1 (VAR of )
+      FSUB
+        GET
+          VAR p
+          INT 0
+        APP
+          VAR o_param_x
+          VAR m
+    LET flag1 (VAR of )
+      LET d1 (VAR of )
+        FMUL
+          APP
+            VAR floor
+            FMUL
+              VAR w1
+              FLOAT 0.05
+          FLOAT 20.
+      APP
+        VAR fless
+        FSUB
+          VAR w1
+          VAR d1
+        FLOAT 10.
+    LET w3 (VAR of )
+      FSUB
+        GET
+          VAR p
+          INT 2
+        APP
+          VAR o_param_z
+          VAR m
+    LET flag2 (VAR of )
+      LET d2 (VAR of )
+        FMUL
+          APP
+            VAR floor
+            FMUL
+              VAR w3
+              FLOAT 0.05
+          FLOAT 20.
+      APP
+        VAR fless
+        FSUB
+          VAR w3
+          VAR d2
+        FLOAT 10.
+    PUT
+      VAR texture_color
+      INT 1
+      IF
+        VAR flag1
+        IF
+          VAR flag2
+          FLOAT 255.
+          FLOAT 0.
+        IF
+          VAR flag2
+          FLOAT 0.
+          FLOAT 255.
+    IF
+      EQ
+        VAR m_tex
+        INT 2
+      LET w2 (VAR of )
+        APP
+          VAR fsqr
+          APP
+            VAR sin
+            FMUL
+              GET
+                VAR p
+                INT 1
+              FLOAT 0.25
+      LET Tu130 (UNIT)
+        PUT
+          VAR texture_color
+          INT 0
+          FMUL
+            FLOAT 255.
+            VAR w2
+      PUT
+        VAR texture_color
+        INT 1
+        FMUL
+          FLOAT 255.
+          FSUB
+            FLOAT 1.
+            VAR w2
+      IF
+        EQ
+          VAR m_tex
+          INT 3
+        LET w1 (VAR of )
+          FSUB
+            GET
+              VAR p
+              INT 0
+            APP
+              VAR o_param_x
+              VAR m
+        LET w3 (VAR of )
+          FSUB
+            GET
+              VAR p
+              INT 2
+            APP
+              VAR o_param_z
+              VAR m
+        LET w2 (VAR of )
+          FDIV
+            APP
+              VAR sqrt
+              FADD
+                APP
+                  VAR fsqr
+                  VAR w1
+                APP
+                  VAR fsqr
+                  VAR w3
+            FLOAT 10.
+        LET w4 (VAR of )
+          FMUL
+            FSUB
+              VAR w2
+              APP
+                VAR floor
+                VAR w2
+            FLOAT 3.1415927
+        LET cws (VAR of )
+          APP
+            VAR fsqr
+            APP
+              VAR cos
+              VAR w4
+        LET Tu131 (UNIT)
+          PUT
+            VAR texture_color
+            INT 1
+            FMUL
+              VAR cws
+              FLOAT 255.
+        PUT
+          VAR texture_color
+          INT 2
+          FMUL
+            FSUB
+              FLOAT 1.
+              VAR cws
+            FLOAT 255.
+        IF
+          EQ
+            VAR m_tex
+            INT 4
+          LET w1 (VAR of )
+            FMUL
+              FSUB
+                GET
+                  VAR p
+                  INT 0
+                APP
+                  VAR o_param_x
+                  VAR m
+              APP
+                VAR sqrt
+                APP
+                  VAR o_param_a
+                  VAR m
+          LET w3 (VAR of )
+            FMUL
+              FSUB
+                GET
+                  VAR p
+                  INT 2
+                APP
+                  VAR o_param_z
+                  VAR m
+              APP
+                VAR sqrt
+                APP
+                  VAR o_param_c
+                  VAR m
+          LET w4 (VAR of )
+            FADD
+              APP
+                VAR fsqr
+                VAR w1
+              APP
+                VAR fsqr
+                VAR w3
+          LET w7 (VAR of )
+            IF
+              APP
+                VAR fless
+                APP
+                  VAR fabs
+                  VAR w1
+                FLOAT 0.0001
+              FLOAT 15.
+              LET w5 (VAR of )
+                APP
+                  VAR fabs
+                  FDIV
+                    VAR w3
+                    VAR w1
+              FDIV
+                FMUL
+                  APP
+                    VAR atan
+                    VAR w5
+                  FLOAT 30.
+                FLOAT 3.1415927
+          LET w9 (VAR of )
+            FSUB
+              VAR w7
+              APP
+                VAR floor
+                VAR w7
+          LET w2 (VAR of )
+            FMUL
+              FSUB
+                GET
+                  VAR p
+                  INT 1
+                APP
+                  VAR o_param_y
+                  VAR m
+              APP
+                VAR sqrt
+                APP
+                  VAR o_param_b
+                  VAR m
+          LET w8 (VAR of )
+            IF
+              APP
+                VAR fless
+                APP
+                  VAR fabs
+                  VAR w4
+                FLOAT 0.0001
+              FLOAT 15.
+              LET w6 (VAR of )
+                APP
+                  VAR fabs
+                  FDIV
+                    VAR w2
+                    VAR w4
+              FDIV
+                FMUL
+                  APP
+                    VAR atan
+                    VAR w6
+                  FLOAT 30.
+                FLOAT 3.1415927
+          LET w10 (VAR of )
+            FSUB
+              VAR w8
+              APP
+                VAR floor
+                VAR w8
+          LET w11 (VAR of )
+            FSUB
+              FSUB
+                FLOAT 0.15
+                APP
+                  VAR fsqr
+                  FSUB
+                    FLOAT 0.5
+                    VAR w9
+              APP
+                VAR fsqr
+                FSUB
+                  FLOAT 0.5
+                  VAR w10
+          LET w12 (VAR of )
+            IF
+              FLt
+                VAR w11
+                FLOAT 0.
+              FLOAT 0.
+              VAR w11
+          PUT
+            VAR texture_color
+            INT 2
+            FDIV
+              FMUL
+                FLOAT 255.
+                VAR w12
+              FLOAT 0.3
+          UNIT
+LETREC add_light (VAR of )
+  (bright : VAR of ), (hilight : VAR of ), (hilight_scale : VAR of )
+  LET Tu137 (UNIT)
+    IF
+      NOT
+        FLt
+          VAR bright
+          FLOAT 0.
+      APP
+        VAR vecaccum
+        VAR rgb
+        VAR bright
+        VAR texture_color
+      UNIT
+  IF
+    NOT
+      FLt
+        VAR hilight
+        FLOAT 0.
+    LET ihl (VAR of )
+      FMUL
+        APP
+          VAR fsqr
+          APP
+            VAR fsqr
+            VAR hilight
+        VAR hilight_scale
+    LET Tu136 (UNIT)
+      PUT
+        VAR rgb
+        INT 0
+        FADD
+          GET
+            VAR rgb
+            INT 0
+          VAR ihl
+    LET Tu135 (UNIT)
+      PUT
+        VAR rgb
+        INT 1
+        FADD
+          GET
+            VAR rgb
+            INT 1
+          VAR ihl
+    PUT
+      VAR rgb
+      INT 2
+      FADD
+        GET
+          VAR rgb
+          INT 2
+        VAR ihl
+    UNIT
+LETREC trace_reflections (VAR of )
+  (index : VAR of ), (diffuse : VAR of ), (hilight_scale : VAR of ), (dirvec : VAR of )
+  IF
+    LE
+      INT 0
+      VAR index
+    LET rinfo (VAR of )
+      GET
+        VAR reflections
+        VAR index
+    LET dvec (VAR of )
+      APP
+        VAR r_dvec
+        VAR rinfo
+    LET Tu138 (UNIT)
+      IF
+        APP
+          VAR judge_intersection_fast
+          VAR dvec
+        LET surface_id (VAR of )
+          ADD
+            MULTIPLE 4
+              GET
+                VAR intersected_object_id
+                INT 0
+            GET
+              VAR intsec_rectside
+              INT 0
+        IF
+          EQ
+            VAR surface_id
+            APP
+              VAR r_surface_id
+              VAR rinfo
+          IF
+            NOT
+              APP
+                VAR shadow_check_one_or_matrix
+                INT 0
+                GET
+                  VAR or_net
+                  INT 0
+            LET p (VAR of )
+              APP
+                VAR veciprod
+                VAR nvector
+                APP
+                  VAR d_vec
+                  VAR dvec
+            LET scale (VAR of )
+              APP
+                VAR r_bright
+                VAR rinfo
+            LET bright (VAR of )
+              FMUL
+                FMUL
+                  VAR scale
+                  VAR diffuse
+                VAR p
+            LET hilight (VAR of )
+              FMUL
+                VAR scale
+                APP
+                  VAR veciprod
+                  VAR dirvec
+                  APP
+                    VAR d_vec
+                    VAR dvec
+            APP
+              VAR add_light
+              VAR bright
+              VAR hilight
+              VAR hilight_scale
+            UNIT
+          UNIT
+        UNIT
+    APP
+      VAR trace_reflections
+      SUB
+        VAR index
+        INT 1
+      VAR diffuse
+      VAR hilight_scale
+      VAR dirvec
+    UNIT
+LETREC trace_ray (VAR of )
+  (nref : VAR of ), (energy : VAR of ), (dirvec : VAR of ), (pixel : VAR of ), (dist : VAR of )
+  IF
+    LE
+      VAR nref
+      INT 4
+    LET surface_ids (VAR of )
+      APP
+        VAR p_surface_ids
+        VAR pixel
+    IF
+      APP
+        VAR judge_intersection
+        VAR dirvec
+      LET obj_id (VAR of )
+        GET
+          VAR intersected_object_id
+          INT 0
+      LET obj (VAR of )
+        GET
+          VAR objects
+          VAR obj_id
+      LET m_surface (VAR of )
+        APP
+          VAR o_reflectiontype
+          VAR obj
+      LET diffuse (VAR of )
+        FMUL
+          APP
+            VAR o_diffuse
+            VAR obj
+          VAR energy
+      LET Tu152 (UNIT)
+        APP
+          VAR get_nvector
+          VAR obj
+          VAR dirvec
+      LET Tu151 (UNIT)
+        APP
+          VAR veccpy
+          VAR startp
+          VAR intersection_point
+      LET Tu150 (UNIT)
+        APP
+          VAR utexture
+          VAR obj
+          VAR intersection_point
+      LET Tu149 (UNIT)
+        PUT
+          VAR surface_ids
+          VAR nref
+          ADD
+            MULTIPLE 4
+              VAR obj_id
+            GET
+              VAR intsec_rectside
+              INT 0
+      LET intersection_points (VAR of )
+        APP
+          VAR p_intersection_points
+          VAR pixel
+      LET Tu148 (UNIT)
+        APP
+          VAR veccpy
+          GET
+            VAR intersection_points
+            VAR nref
+          VAR intersection_point
+      LET calc_diffuse (VAR of )
+        APP
+          VAR p_calc_diffuse
+          VAR pixel
+      LET Tu147 (UNIT)
+        IF
+          APP
+            VAR fless
+            APP
+              VAR o_diffuse
+              VAR obj
+            FLOAT 0.5
+          PUT
+            VAR calc_diffuse
+            VAR nref
+            BOOL false
+          LET Tu141 (UNIT)
+            PUT
+              VAR calc_diffuse
+              VAR nref
+              BOOL true
+          LET energya (VAR of )
+            APP
+              VAR p_energy
+              VAR pixel
+          LET Tu140 (UNIT)
+            APP
+              VAR veccpy
+              GET
+                VAR energya
+                VAR nref
+              VAR texture_color
+          LET Tu139 (UNIT)
+            APP
+              VAR vecscale
+              GET
+                VAR energya
+                VAR nref
+              FMUL
+                FDIV
+                  FLOAT 1.
+                  FLOAT 256.
+                VAR diffuse
+          LET nvectors (VAR of )
+            APP
+              VAR p_nvectors
+              VAR pixel
+          APP
+            VAR veccpy
+            GET
+              VAR nvectors
+              VAR nref
+            VAR nvector
+      LET w (VAR of )
+        FMUL
+          FLOAT -2.
+          APP
+            VAR veciprod
+            VAR dirvec
+            VAR nvector
+      LET Tu146 (UNIT)
+        APP
+          VAR vecaccum
+          VAR dirvec
+          VAR w
+          VAR nvector
+      LET hilight_scale (VAR of )
+        FMUL
+          VAR energy
+          APP
+            VAR o_hilight
+            VAR obj
+      LET Tu145 (UNIT)
+        IF
+          NOT
+            APP
+              VAR shadow_check_one_or_matrix
+              INT 0
+              GET
+                VAR or_net
+                INT 0
+          LET bright (VAR of )
+            FMUL
+              NEG
+                APP
+                  VAR veciprod
+                  VAR nvector
+                  VAR light
+              VAR diffuse
+          LET hilight (VAR of )
+            NEG
+              APP
+                VAR veciprod
+                VAR dirvec
+                VAR light
+          APP
+            VAR add_light
+            VAR bright
+            VAR hilight
+            VAR hilight_scale
+          UNIT
+      LET Tu144 (UNIT)
+        APP
+          VAR setup_startp
+          VAR intersection_point
+      LET Tu143 (UNIT)
+        APP
+          VAR trace_reflections
+          SUB
+            GET
+              VAR n_reflections
+              INT 0
+            INT 1
+          VAR diffuse
+          VAR hilight_scale
+          VAR dirvec
+      IF
+        APP
+          VAR fless
+          FLOAT 0.1
+          VAR energy
+        LET Tu142 (UNIT)
+          IF
+            NOT
+              LE
+                INT 4
+                VAR nref
+            PUT
+              VAR surface_ids
+              ADD
+                VAR nref
+                INT 1
+              NEG
+                INT 1
+            UNIT
+        IF
+          EQ
+            VAR m_surface
+            INT 2
+          LET energy2 (VAR of )
+            FMUL
+              VAR energy
+              FSUB
+                FLOAT 1.
+                APP
+                  VAR o_diffuse
+                  VAR obj
+          APP
+            VAR trace_ray
+            ADD
+              VAR nref
+              INT 1
+            VAR energy2
+            VAR dirvec
+            VAR pixel
+            FADD
+              VAR dist
+              GET
+                VAR tmin
+                INT 0
+          UNIT
+        UNIT
+      LET Tu155 (UNIT)
+        PUT
+          VAR surface_ids
+          VAR nref
+          NEG
+            INT 1
+      IF
+        NOT
+          EQ
+            VAR nref
+            INT 0
+        LET hl (VAR of )
+          NEG
+            APP
+              VAR veciprod
+              VAR dirvec
+              VAR light
+        IF
+          NOT
+            FLt
+              VAR hl
+              FLOAT 0.
+          LET ihl (VAR of )
+            FMUL
+              FMUL
+                FMUL
+                  APP
+                    VAR fsqr
+                    VAR hl
+                  VAR hl
+                VAR energy
+              GET
+                VAR beam
+                INT 0
+          LET Tu154 (UNIT)
+            PUT
+              VAR rgb
+              INT 0
+              FADD
+                GET
+                  VAR rgb
+                  INT 0
+                VAR ihl
+          LET Tu153 (UNIT)
+            PUT
+              VAR rgb
+              INT 1
+              FADD
+                GET
+                  VAR rgb
+                  INT 1
+                VAR ihl
+          PUT
+            VAR rgb
+            INT 2
+            FADD
+              GET
+                VAR rgb
+                INT 2
+              VAR ihl
+          UNIT
+        UNIT
+    UNIT
+LETREC trace_diffuse_ray (VAR of )
+  (dirvec : VAR of ), (energy : VAR of )
+  IF
+    APP
+      VAR judge_intersection_fast
+      VAR dirvec
+    LET obj (VAR of )
+      GET
+        VAR objects
+        GET
+          VAR intersected_object_id
+          INT 0
+    LET Tu157 (UNIT)
+      APP
+        VAR get_nvector
+        VAR obj
+        APP
+          VAR d_vec
+          VAR dirvec
+    LET Tu156 (UNIT)
+      APP
+        VAR utexture
+        VAR obj
+        VAR intersection_point
+    IF
+      NOT
+        APP
+          VAR shadow_check_one_or_matrix
+          INT 0
+          GET
+            VAR or_net
+            INT 0
+      LET br (VAR of )
+        NEG
+          APP
+            VAR veciprod
+            VAR nvector
+            VAR light
+      LET bright (VAR of )
+        IF
+          NOT
+            FLt
+              VAR br
+              FLOAT 0.
+          VAR br
+          FLOAT 0.
+      APP
+        VAR vecaccum
+        VAR diffuse_ray
+        FMUL
+          FMUL
+            VAR energy
+            VAR bright
+          APP
+            VAR o_diffuse
+            VAR obj
+        VAR texture_color
+      UNIT
+    UNIT
+LETREC iter_trace_diffuse_rays (VAR of )
+  (dirvec_group : VAR of ), (nvector : VAR of ), (org : VAR of ), (index : VAR of )
+  IF
+    LE
+      INT 0
+      VAR index
+    LET p (VAR of )
+      APP
+        VAR veciprod
+        APP
+          VAR d_vec
+          GET
+            VAR dirvec_group
+            VAR index
+        VAR nvector
+    LET Tu158 (UNIT)
+      IF
+        FLt
+          VAR p
+          FLOAT 0.
+        APP
+          VAR trace_diffuse_ray
+          GET
+            VAR dirvec_group
+            ADD
+              VAR index
+              INT 1
+          FDIV
+            VAR p
+            FLOAT -150.
+        APP
+          VAR trace_diffuse_ray
+          GET
+            VAR dirvec_group
+            VAR index
+          FDIV
+            VAR p
+            FLOAT 150.
+    APP
+      VAR iter_trace_diffuse_rays
+      VAR dirvec_group
+      VAR nvector
+      VAR org
+      SUB
+        VAR index
+        INT 2
+    UNIT
+LETREC trace_diffuse_rays (VAR of )
+  (dirvec_group : VAR of ), (nvector : VAR of ), (org : VAR of )
+  LET Tu159 (UNIT)
+    APP
+      VAR setup_startp
+      VAR org
+  APP
+    VAR iter_trace_diffuse_rays
+    VAR dirvec_group
+    VAR nvector
+    VAR org
+    INT 118
+LETREC trace_diffuse_ray_80percent (VAR of )
+  (group_id : VAR of ), (nvector : VAR of ), (org : VAR of )
+  LET Tu163 (UNIT)
+    IF
+      NOT
+        EQ
+          VAR group_id
+          INT 0
+      APP
+        VAR trace_diffuse_rays
+        GET
+          VAR dirvecs
+          INT 0
+        VAR nvector
+        VAR org
+      UNIT
+  LET Tu162 (UNIT)
+    IF
+      NOT
+        EQ
+          VAR group_id
+          INT 1
+      APP
+        VAR trace_diffuse_rays
+        GET
+          VAR dirvecs
+          INT 1
+        VAR nvector
+        VAR org
+      UNIT
+  LET Tu161 (UNIT)
+    IF
+      NOT
+        EQ
+          VAR group_id
+          INT 2
+      APP
+        VAR trace_diffuse_rays
+        GET
+          VAR dirvecs
+          INT 2
+        VAR nvector
+        VAR org
+      UNIT
+  LET Tu160 (UNIT)
+    IF
+      NOT
+        EQ
+          VAR group_id
+          INT 3
+      APP
+        VAR trace_diffuse_rays
+        GET
+          VAR dirvecs
+          INT 3
+        VAR nvector
+        VAR org
+      UNIT
+  IF
+    NOT
+      EQ
+        VAR group_id
+        INT 4
+    APP
+      VAR trace_diffuse_rays
+      GET
+        VAR dirvecs
+        INT 4
+      VAR nvector
+      VAR org
+    UNIT
+LETREC calc_diffuse_using_1point (VAR of )
+  (pixel : VAR of ), (nref : VAR of )
+  LET ray20p (VAR of )
+    APP
+      VAR p_received_ray_20percent
+      VAR pixel
+  LET nvectors (VAR of )
+    APP
+      VAR p_nvectors
+      VAR pixel
+  LET intersection_points (VAR of )
+    APP
+      VAR p_intersection_points
+      VAR pixel
+  LET energya (VAR of )
+    APP
+      VAR p_energy
+      VAR pixel
+  LET Tu165 (UNIT)
+    APP
+      VAR veccpy
+      VAR diffuse_ray
+      GET
+        VAR ray20p
+        VAR nref
+  LET Tu164 (UNIT)
+    APP
+      VAR trace_diffuse_ray_80percent
+      APP
+        VAR p_group_id
+        VAR pixel
+      GET
+        VAR nvectors
+        VAR nref
+      GET
+        VAR intersection_points
+        VAR nref
+  APP
+    VAR vecaccumv
+    VAR rgb
+    GET
+      VAR energya
+      VAR nref
+    VAR diffuse_ray
+LETREC calc_diffuse_using_5points (VAR of )
+  (x : VAR of ), (prev : VAR of ), (cur : VAR of ), (next : VAR of ), (nref : VAR of )
+  LET r_up (VAR of )
+    APP
+      VAR p_received_ray_20percent
+      GET
+        VAR prev
+        VAR x
+  LET r_left (VAR of )
+    APP
+      VAR p_received_ray_20percent
+      GET
+        VAR cur
+        SUB
+          VAR x
+          INT 1
+  LET r_center (VAR of )
+    APP
+      VAR p_received_ray_20percent
+      GET
+        VAR cur
+        VAR x
+  LET r_right (VAR of )
+    APP
+      VAR p_received_ray_20percent
+      GET
+        VAR cur
+        ADD
+          VAR x
+          INT 1
+  LET r_down (VAR of )
+    APP
+      VAR p_received_ray_20percent
+      GET
+        VAR next
+        VAR x
+  LET Tu170 (UNIT)
+    APP
+      VAR veccpy
+      VAR diffuse_ray
+      GET
+        VAR r_up
+        VAR nref
+  LET Tu169 (UNIT)
+    APP
+      VAR vecadd
+      VAR diffuse_ray
+      GET
+        VAR r_left
+        VAR nref
+  LET Tu168 (UNIT)
+    APP
+      VAR vecadd
+      VAR diffuse_ray
+      GET
+        VAR r_center
+        VAR nref
+  LET Tu167 (UNIT)
+    APP
+      VAR vecadd
+      VAR diffuse_ray
+      GET
+        VAR r_right
+        VAR nref
+  LET Tu166 (UNIT)
+    APP
+      VAR vecadd
+      VAR diffuse_ray
+      GET
+        VAR r_down
+        VAR nref
+  LET energya (VAR of )
+    APP
+      VAR p_energy
+      GET
+        VAR cur
+        VAR x
+  APP
+    VAR vecaccumv
+    VAR rgb
+    GET
+      VAR energya
+      VAR nref
+    VAR diffuse_ray
+LETREC do_without_neighbors (VAR of )
+  (pixel : VAR of ), (nref : VAR of )
+  IF
+    LE
+      VAR nref
+      INT 4
+    LET surface_ids (VAR of )
+      APP
+        VAR p_surface_ids
+        VAR pixel
+    IF
+      LE
+        INT 0
+        GET
+          VAR surface_ids
+          VAR nref
+      LET calc_diffuse (VAR of )
+        APP
+          VAR p_calc_diffuse
+          VAR pixel
+      LET Tu171 (UNIT)
+        IF
+          GET
+            VAR calc_diffuse
+            VAR nref
+          APP
+            VAR calc_diffuse_using_1point
+            VAR pixel
+            VAR nref
+          UNIT
+      APP
+        VAR do_without_neighbors
+        VAR pixel
+        ADD
+          VAR nref
+          INT 1
+      UNIT
+    UNIT
+LETREC neighbors_exist (VAR of )
+  (x : VAR of ), (y : VAR of ), (next : VAR of )
+  IF
+    NOT
+      LE
+        GET
+          VAR image_size
+          INT 1
+        ADD
+          VAR y
+          INT 1
+    IF
+      NOT
+        LE
+          VAR y
+          INT 0
+      IF
+        NOT
+          LE
+            GET
+              VAR image_size
+              INT 0
+            ADD
+              VAR x
+              INT 1
+        IF
+          NOT
+            LE
+              VAR x
+              INT 0
+          BOOL true
+          BOOL false
+        BOOL false
+      BOOL false
+    BOOL false
+LETREC get_surface_id (VAR of )
+  (pixel : VAR of ), (index : VAR of )
+  LET surface_ids (VAR of )
+    APP
+      VAR p_surface_ids
+      VAR pixel
+  GET
+    VAR surface_ids
+    VAR index
+LETREC neighbors_are_available (VAR of )
+  (x : VAR of ), (prev : VAR of ), (cur : VAR of ), (next : VAR of ), (nref : VAR of )
+  LET sid_center (VAR of )
+    APP
+      VAR get_surface_id
+      GET
+        VAR cur
+        VAR x
+      VAR nref
+  IF
+    EQ
+      APP
+        VAR get_surface_id
+        GET
+          VAR prev
+          VAR x
+        VAR nref
+      VAR sid_center
+    IF
+      EQ
+        APP
+          VAR get_surface_id
+          GET
+            VAR next
+            VAR x
+          VAR nref
+        VAR sid_center
+      IF
+        EQ
+          APP
+            VAR get_surface_id
+            GET
+              VAR cur
+              SUB
+                VAR x
+                INT 1
+            VAR nref
+          VAR sid_center
+        IF
+          EQ
+            APP
+              VAR get_surface_id
+              GET
+                VAR cur
+                ADD
+                  VAR x
+                  INT 1
+              VAR nref
+            VAR sid_center
+          BOOL true
+          BOOL false
+        BOOL false
+      BOOL false
+    BOOL false
+LETREC try_exploit_neighbors (VAR of )
+  (x : VAR of ), (y : VAR of ), (prev : VAR of ), (cur : VAR of ), (next : VAR of ), (nref : VAR of )
+  LET pixel (VAR of )
+    GET
+      VAR cur
+      VAR x
+  IF
+    LE
+      VAR nref
+      INT 4
+    IF
+      LE
+        INT 0
+        APP
+          VAR get_surface_id
+          VAR pixel
+          VAR nref
+      IF
+        APP
+          VAR neighbors_are_available
+          VAR x
+          VAR prev
+          VAR cur
+          VAR next
+          VAR nref
+        LET calc_diffuse (VAR of )
+          APP
+            VAR p_calc_diffuse
+            VAR pixel
+        LET Tu172 (UNIT)
+          IF
+            GET
+              VAR calc_diffuse
+              VAR nref
+            APP
+              VAR calc_diffuse_using_5points
+              VAR x
+              VAR prev
+              VAR cur
+              VAR next
+              VAR nref
+            UNIT
+        APP
+          VAR try_exploit_neighbors
+          VAR x
+          VAR y
+          VAR prev
+          VAR cur
+          VAR next
+          ADD
+            VAR nref
+            INT 1
+        APP
+          VAR do_without_neighbors
+          GET
+            VAR cur
+            VAR x
+          VAR nref
+      UNIT
+    UNIT
+LETREC write_ppm_header (VAR of )
+  (Tu173 : VAR of )
+  LET Tu181 (UNIT)
+    APP
+      VAR print_char
+      INT 80
+  LET Tu180 (UNIT)
+    APP
+      VAR print_char
+      ADD
+        INT 48
+        INT 3
+  LET Tu179 (UNIT)
+    APP
+      VAR print_char
+      INT 10
+  LET Tu178 (UNIT)
+    APP
+      VAR print_int
+      GET
+        VAR image_size
+        INT 0
+  LET Tu177 (UNIT)
+    APP
+      VAR print_char
+      INT 32
+  LET Tu176 (UNIT)
+    APP
+      VAR print_int
+      GET
+        VAR image_size
+        INT 1
+  LET Tu175 (UNIT)
+    APP
+      VAR print_char
+      INT 32
+  LET Tu174 (UNIT)
+    APP
+      VAR print_int
+      INT 255
+  APP
+    VAR print_char
+    INT 10
+LETREC write_rgb_element (VAR of )
+  (x : VAR of )
+  LET ix (VAR of )
+    float_to_int
+      VAR x
+  LET elem (VAR of )
+    IF
+      NOT
+        LE
+          VAR ix
+          INT 255
+      INT 255
+      IF
+        NOT
+          LE
+            INT 0
+            VAR ix
+        INT 0
+        VAR ix
+  APP
+    VAR print_int
+    VAR elem
+LETREC write_rgb (VAR of )
+  (Tu182 : VAR of )
+  LET Tu187 (UNIT)
+    APP
+      VAR write_rgb_element
+      GET
+        VAR rgb
+        INT 0
+  LET Tu186 (UNIT)
+    APP
+      VAR print_char
+      INT 32
+  LET Tu185 (UNIT)
+    APP
+      VAR write_rgb_element
+      GET
+        VAR rgb
+        INT 1
+  LET Tu184 (UNIT)
+    APP
+      VAR print_char
+      INT 32
+  LET Tu183 (UNIT)
+    APP
+      VAR write_rgb_element
+      GET
+        VAR rgb
+        INT 2
+  APP
+    VAR print_char
+    INT 10
+LETREC pretrace_diffuse_rays (VAR of )
+  (pixel : VAR of ), (nref : VAR of )
+  IF
+    LE
+      VAR nref
+      INT 4
+    LET sid (VAR of )
+      APP
+        VAR get_surface_id
+        VAR pixel
+        VAR nref
+    IF
+      LE
+        INT 0
+        VAR sid
+      LET calc_diffuse (VAR of )
+        APP
+          VAR p_calc_diffuse
+          VAR pixel
+      LET Tu190 (UNIT)
+        IF
+          GET
+            VAR calc_diffuse
+            VAR nref
+          LET group_id (VAR of )
+            APP
+              VAR p_group_id
+              VAR pixel
+          LET Tu189 (UNIT)
+            APP
+              VAR vecbzero
+              VAR diffuse_ray
+          LET nvectors (VAR of )
+            APP
+              VAR p_nvectors
+              VAR pixel
+          LET intersection_points (VAR of )
+            APP
+              VAR p_intersection_points
+              VAR pixel
+          LET Tu188 (UNIT)
+            APP
+              VAR trace_diffuse_rays
+              GET
+                VAR dirvecs
+                VAR group_id
+              GET
+                VAR nvectors
+                VAR nref
+              GET
+                VAR intersection_points
+                VAR nref
+          LET ray20p (VAR of )
+            APP
+              VAR p_received_ray_20percent
+              VAR pixel
+          APP
+            VAR veccpy
+            GET
+              VAR ray20p
+              VAR nref
+            VAR diffuse_ray
+          UNIT
+      APP
+        VAR pretrace_diffuse_rays
+        VAR pixel
+        ADD
+          VAR nref
+          INT 1
+      UNIT
+    UNIT
+LETREC pretrace_pixels (VAR of )
+  (line : VAR of ), (x : VAR of ), (group_id : VAR of ), (lc0 : VAR of ), (lc1 : VAR of ), (lc2 : VAR of )
+  IF
+    LE
+      INT 0
+      VAR x
+    LET xdisp (VAR of )
+      FMUL
+        GET
+          VAR scan_pitch
+          INT 0
+        int_to_float
+          SUB
+            VAR x
+            GET
+              VAR image_center
+              INT 0
+    LET Tu200 (UNIT)
+      PUT
+        VAR ptrace_dirvec
+        INT 0
+        FADD
+          FMUL
+            VAR xdisp
+            GET
+              VAR screenx_dir
+              INT 0
+          VAR lc0
+    LET Tu199 (UNIT)
+      PUT
+        VAR ptrace_dirvec
+        INT 1
+        FADD
+          FMUL
+            VAR xdisp
+            GET
+              VAR screenx_dir
+              INT 1
+          VAR lc1
+    LET Tu198 (UNIT)
+      PUT
+        VAR ptrace_dirvec
+        INT 2
+        FADD
+          FMUL
+            VAR xdisp
+            GET
+              VAR screenx_dir
+              INT 2
+          VAR lc2
+    LET Tu197 (UNIT)
+      APP
+        VAR vecunit_sgn
+        VAR ptrace_dirvec
+        BOOL false
+    LET Tu196 (UNIT)
+      APP
+        VAR vecbzero
+        VAR rgb
+    LET Tu195 (UNIT)
+      APP
+        VAR veccpy
+        VAR startp
+        VAR viewpoint
+    LET Tu194 (UNIT)
+      APP
+        VAR trace_ray
+        INT 0
+        FLOAT 1.
+        VAR ptrace_dirvec
+        GET
+          VAR line
+          VAR x
+        FLOAT 0.
+    LET Tu193 (UNIT)
+      APP
+        VAR veccpy
+        APP
+          VAR p_rgb
+          GET
+            VAR line
+            VAR x
+        VAR rgb
+    LET Tu192 (UNIT)
+      APP
+        VAR p_set_group_id
+        GET
+          VAR line
+          VAR x
+        VAR group_id
+    LET Tu191 (UNIT)
+      APP
+        VAR pretrace_diffuse_rays
+        GET
+          VAR line
+          VAR x
+        INT 0
+    APP
+      VAR pretrace_pixels
+      VAR line
+      SUB
+        VAR x
+        INT 1
+      APP
+        VAR add_mod5
+        VAR group_id
+        INT 1
+      VAR lc0
+      VAR lc1
+      VAR lc2
+    UNIT
+LETREC pretrace_line (VAR of )
+  (line : VAR of ), (y : VAR of ), (group_id : VAR of )
+  LET ydisp (VAR of )
+    FMUL
+      GET
+        VAR scan_pitch
+        INT 0
+      int_to_float
+        SUB
+          VAR y
+          GET
+            VAR image_center
+            INT 1
+  LET lc0 (VAR of )
+    FADD
+      FMUL
+        VAR ydisp
+        GET
+          VAR screeny_dir
+          INT 0
+      GET
+        VAR screenz_dir
+        INT 0
+  LET lc1 (VAR of )
+    FADD
+      FMUL
+        VAR ydisp
+        GET
+          VAR screeny_dir
+          INT 1
+      GET
+        VAR screenz_dir
+        INT 1
+  LET lc2 (VAR of )
+    FADD
+      FMUL
+        VAR ydisp
+        GET
+          VAR screeny_dir
+          INT 2
+      GET
+        VAR screenz_dir
+        INT 2
+  APP
+    VAR pretrace_pixels
+    VAR line
+    SUB
+      GET
+        VAR image_size
+        INT 0
+      INT 1
+    VAR group_id
+    VAR lc0
+    VAR lc1
+    VAR lc2
+LETREC scan_pixel (VAR of )
+  (x : VAR of ), (y : VAR of ), (prev : VAR of ), (cur : VAR of ), (next : VAR of )
+  IF
+    NOT
+      LE
+        GET
+          VAR image_size
+          INT 0
+        VAR x
+    LET Tu203 (UNIT)
+      APP
+        VAR veccpy
+        VAR rgb
+        APP
+          VAR p_rgb
+          GET
+            VAR cur
+            VAR x
+    LET Tu202 (UNIT)
+      IF
+        APP
+          VAR neighbors_exist
+          VAR x
+          VAR y
+          VAR next
+        APP
+          VAR try_exploit_neighbors
+          VAR x
+          VAR y
+          VAR prev
+          VAR cur
+          VAR next
+          INT 0
+        APP
+          VAR do_without_neighbors
+          GET
+            VAR cur
+            VAR x
+          INT 0
+    LET Tu201 (UNIT)
+      APP
+        VAR write_rgb
+        UNIT
+    APP
+      VAR scan_pixel
+      ADD
+        VAR x
+        INT 1
+      VAR y
+      VAR prev
+      VAR cur
+      VAR next
+    UNIT
+LETREC scan_line (VAR of )
+  (y : VAR of ), (prev : VAR of ), (cur : VAR of ), (next : VAR of ), (group_id : VAR of )
+  IF
+    NOT
+      LE
+        GET
+          VAR image_size
+          INT 1
+        VAR y
+    LET Tu205 (UNIT)
+      IF
+        NOT
+          LE
+            SUB
+              GET
+                VAR image_size
+                INT 1
+              INT 1
+            VAR y
+        APP
+          VAR pretrace_line
+          VAR next
+          ADD
+            VAR y
+            INT 1
+          VAR group_id
+        UNIT
+    LET Tu204 (UNIT)
+      APP
+        VAR scan_pixel
+        INT 0
+        VAR y
+        VAR prev
+        VAR cur
+        VAR next
+    APP
+      VAR scan_line
+      ADD
+        VAR y
+        INT 1
+      VAR cur
+      VAR next
+      VAR prev
+      APP
+        VAR add_mod5
+        VAR group_id
+        INT 2
+    UNIT
+LETREC create_float5x3array (VAR of )
+  (Tu206 : VAR of )
+  LET vec (VAR of )
+    ARRAY
+      INT 3
+      FLOAT 0.
+  LET array (VAR of )
+    ARRAY
+      INT 5
+      VAR vec
+  LET Tu210 (UNIT)
+    PUT
+      VAR array
+      INT 1
+      ARRAY
+        INT 3
+        FLOAT 0.
+  LET Tu209 (UNIT)
+    PUT
+      VAR array
+      INT 2
+      ARRAY
+        INT 3
+        FLOAT 0.
+  LET Tu208 (UNIT)
+    PUT
+      VAR array
+      INT 3
+      ARRAY
+        INT 3
+        FLOAT 0.
+  LET Tu207 (UNIT)
+    PUT
+      VAR array
+      INT 4
+      ARRAY
+        INT 3
+        FLOAT 0.
+  VAR array
+LETREC create_pixel (VAR of )
+  (Tu211 : VAR of )
+  LET m_rgb (VAR of )
+    ARRAY
+      INT 3
+      FLOAT 0.
+  LET m_isect_ps (VAR of )
+    APP
+      VAR create_float5x3array
+      UNIT
+  LET m_sids (VAR of )
+    ARRAY
+      INT 5
+      INT 0
+  LET m_cdif (VAR of )
+    ARRAY
+      INT 5
+      BOOL false
+  LET m_engy (VAR of )
+    APP
+      VAR create_float5x3array
+      UNIT
+  LET m_r20p (VAR of )
+    APP
+      VAR create_float5x3array
+      UNIT
+  LET m_gid (VAR of )
+    ARRAY
+      INT 1
+      INT 0
+  LET m_nvectors (VAR of )
+    APP
+      VAR create_float5x3array
+      UNIT
+  TUPLE
+    VAR m_rgb
+    VAR m_isect_ps
+    VAR m_sids
+    VAR m_cdif
+    VAR m_engy
+    VAR m_r20p
+    VAR m_gid
+    VAR m_nvectors
+LETREC init_line_elements (VAR of )
+  (line : VAR of ), (n : VAR of )
+  IF
+    LE
+      INT 0
+      VAR n
+    LET Tu212 (UNIT)
+      PUT
+        VAR line
+        VAR n
+        APP
+          VAR create_pixel
+          UNIT
+    APP
+      VAR init_line_elements
+      VAR line
+      SUB
+        VAR n
+        INT 1
+    VAR line
+LETREC create_pixelline (VAR of )
+  (Tu213 : VAR of )
+  LET line (VAR of )
+    ARRAY
+      GET
+        VAR image_size
+        INT 0
+      APP
+        VAR create_pixel
+        UNIT
+  APP
+    VAR init_line_elements
+    VAR line
+    SUB
+      GET
+        VAR image_size
+        INT 0
+      INT 2
+LETREC tan (VAR of )
+  (x : VAR of )
+  FDIV
+    APP
+      VAR sin
+      VAR x
+    APP
+      VAR cos
+      VAR x
+LETREC adjust_position (VAR of )
+  (h : VAR of ), (ratio : VAR of )
+  LET l (VAR of )
+    APP
+      VAR sqrt
+      FADD
+        FMUL
+          VAR h
+          VAR h
+        FLOAT 0.1
+  LET tan_h (VAR of )
+    FDIV
+      FLOAT 1.
+      VAR l
+  LET theta_h (VAR of )
+    APP
+      VAR atan
+      VAR tan_h
+  LET tan_m (VAR of )
+    APP
+      VAR tan
+      FMUL
+        VAR theta_h
+        VAR ratio
+  FMUL
+    VAR tan_m
+    VAR l
+LETREC calc_dirvec (VAR of )
+  (icount : VAR of ), (x : VAR of ), (y : VAR of ), (rx : VAR of ), (ry : VAR of ), (group_id : VAR of ), (index : VAR of )
+  IF
+    LE
+      INT 5
+      VAR icount
+    LET l (VAR of )
+      APP
+        VAR sqrt
+        FADD
+          FADD
+            APP
+              VAR fsqr
+              VAR x
+            APP
+              VAR fsqr
+              VAR y
+          FLOAT 1.
+    LET vx (VAR of )
+      FDIV
+        VAR x
+        VAR l
+    LET vy (VAR of )
+      FDIV
+        VAR y
+        VAR l
+    LET vz (VAR of )
+      FDIV
+        FLOAT 1.
+        VAR l
+    LET dgroup (VAR of )
+      GET
+        VAR dirvecs
+        VAR group_id
+    LET Tu218 (UNIT)
+      APP
+        VAR vecset
+        APP
+          VAR d_vec
+          GET
+            VAR dgroup
+            VAR index
+        VAR vx
+        VAR vy
+        VAR vz
+    LET Tu217 (UNIT)
+      APP
+        VAR vecset
+        APP
+          VAR d_vec
+          GET
+            VAR dgroup
+            ADD
+              VAR index
+              INT 40
+        VAR vx
+        VAR vz
+        NEG
+          VAR vy
+    LET Tu216 (UNIT)
+      APP
+        VAR vecset
+        APP
+          VAR d_vec
+          GET
+            VAR dgroup
+            ADD
+              VAR index
+              INT 80
+        VAR vz
+        NEG
+          VAR vx
+        NEG
+          VAR vy
+    LET Tu215 (UNIT)
+      APP
+        VAR vecset
+        APP
+          VAR d_vec
+          GET
+            VAR dgroup
+            ADD
+              VAR index
+              INT 1
+        NEG
+          VAR vx
+        NEG
+          VAR vy
+        NEG
+          VAR vz
+    LET Tu214 (UNIT)
+      APP
+        VAR vecset
+        APP
+          VAR d_vec
+          GET
+            VAR dgroup
+            ADD
+              VAR index
+              INT 41
+        NEG
+          VAR vx
+        NEG
+          VAR vz
+        VAR vy
+    APP
+      VAR vecset
+      APP
+        VAR d_vec
+        GET
+          VAR dgroup
+          ADD
+            VAR index
+            INT 81
+      NEG
+        VAR vz
+      VAR vx
+      VAR vy
+    LET x2 (VAR of )
+      APP
+        VAR adjust_position
+        VAR y
+        VAR rx
+    APP
+      VAR calc_dirvec
+      ADD
+        VAR icount
+        INT 1
+      VAR x2
+      APP
+        VAR adjust_position
+        VAR x2
+        VAR ry
+      VAR rx
+      VAR ry
+      VAR group_id
+      VAR index
+LETREC calc_dirvecs (VAR of )
+  (col : VAR of ), (ry : VAR of ), (group_id : VAR of ), (index : VAR of )
+  IF
+    LE
+      INT 0
+      VAR col
+    LET rx (VAR of )
+      FSUB
+        FMUL
+          int_to_float
+            VAR col
+          FLOAT 0.2
+        FLOAT 0.9
+    LET Tu220 (UNIT)
+      APP
+        VAR calc_dirvec
+        INT 0
+        FLOAT 0.
+        FLOAT 0.
+        VAR rx
+        VAR ry
+        VAR group_id
+        VAR index
+    LET rx2 (VAR of )
+      FADD
+        FMUL
+          int_to_float
+            VAR col
+          FLOAT 0.2
+        FLOAT 0.1
+    LET Tu219 (UNIT)
+      APP
+        VAR calc_dirvec
+        INT 0
+        FLOAT 0.
+        FLOAT 0.
+        VAR rx2
+        VAR ry
+        VAR group_id
+        ADD
+          VAR index
+          INT 2
+    APP
+      VAR calc_dirvecs
+      SUB
+        VAR col
+        INT 1
+      VAR ry
+      APP
+        VAR add_mod5
+        VAR group_id
+        INT 1
+      VAR index
+    UNIT
+LETREC calc_dirvec_rows (VAR of )
+  (row : VAR of ), (group_id : VAR of ), (index : VAR of )
+  IF
+    LE
+      INT 0
+      VAR row
+    LET ry (VAR of )
+      FSUB
+        FMUL
+          int_to_float
+            VAR row
+          FLOAT 0.2
+        FLOAT 0.9
+    LET Tu221 (UNIT)
+      APP
+        VAR calc_dirvecs
+        INT 4
+        VAR ry
+        VAR group_id
+        VAR index
+    APP
+      VAR calc_dirvec_rows
+      SUB
+        VAR row
+        INT 1
+      APP
+        VAR add_mod5
+        VAR group_id
+        INT 2
+      ADD
+        VAR index
+        INT 4
+    UNIT
+LETREC create_dirvec (VAR of )
+  (Tu222 : VAR of )
+  LET v3 (VAR of )
+    ARRAY
+      INT 3
+      FLOAT 0.
+  LET consts (VAR of )
+    ARRAY
+      GET
+        VAR n_objects
+        INT 0
+      VAR v3
+  TUPLE
+    VAR v3
+    VAR consts
+LETREC create_dirvec_elements (VAR of )
+  (d : VAR of ), (index : VAR of )
+  IF
+    LE
+      INT 0
+      VAR index
+    LET Tu223 (UNIT)
+      PUT
+        VAR d
+        VAR index
+        APP
+          VAR create_dirvec
+          UNIT
+    APP
+      VAR create_dirvec_elements
+      VAR d
+      SUB
+        VAR index
+        INT 1
+    UNIT
+LETREC create_dirvecs (VAR of )
+  (index : VAR of )
+  IF
+    LE
+      INT 0
+      VAR index
+    LET Tu225 (UNIT)
+      PUT
+        VAR dirvecs
+        VAR index
+        ARRAY
+          INT 120
+          APP
+            VAR create_dirvec
+            UNIT
+    LET Tu224 (UNIT)
+      APP
+        VAR create_dirvec_elements
+        GET
+          VAR dirvecs
+          VAR index
+        INT 118
+    APP
+      VAR create_dirvecs
+      SUB
+        VAR index
+        INT 1
+    UNIT
+LETREC init_dirvec_constants (VAR of )
+  (vecset : VAR of ), (index : VAR of )
+  IF
+    LE
+      INT 0
+      VAR index
+    LET Tu226 (UNIT)
+      APP
+        VAR setup_dirvec_constants
+        GET
+          VAR vecset
+          VAR index
+    APP
+      VAR init_dirvec_constants
+      VAR vecset
+      SUB
+        VAR index
+        INT 1
+    UNIT
+LETREC init_vecset_constants (VAR of )
+  (index : VAR of )
+  IF
+    LE
+      INT 0
+      VAR index
+    LET Tu227 (UNIT)
+      APP
+        VAR init_dirvec_constants
+        GET
+          VAR dirvecs
+          VAR index
+        INT 119
+    APP
+      VAR init_vecset_constants
+      SUB
+        VAR index
+        INT 1
+    UNIT
+LETREC init_dirvecs (VAR of )
+  (Tu228 : VAR of )
+  LET Tu230 (UNIT)
+    APP
+      VAR create_dirvecs
+      INT 4
+  LET Tu229 (UNIT)
+    APP
+      VAR calc_dirvec_rows
+      INT 9
+      INT 0
+      INT 0
+  APP
+    VAR init_vecset_constants
+    INT 4
+LETREC add_reflection (VAR of )
+  (index : VAR of ), (surface_id : VAR of ), (bright : VAR of ), (v0 : VAR of ), (v1 : VAR of ), (v2 : VAR of )
+  LET dvec (VAR of )
+    APP
+      VAR create_dirvec
+      UNIT
+  LET Tu232 (UNIT)
+    APP
+      VAR vecset
+      APP
+        VAR d_vec
+        VAR dvec
+      VAR v0
+      VAR v1
+      VAR v2
+  LET Tu231 (UNIT)
+    APP
+      VAR setup_dirvec_constants
+      VAR dvec
+  PUT
+    VAR reflections
+    VAR index
+    TUPLE
+      VAR surface_id
+      VAR dvec
+      VAR bright
+LETREC setup_rect_reflection (VAR of )
+  (obj_id : VAR of ), (obj : VAR of )
+  LET sid (VAR of )
+    MULTIPLE 4
+      VAR obj_id
+  LET nr (VAR of )
+    GET
+      VAR n_reflections
+      INT 0
+  LET br (VAR of )
+    FSUB
+      FLOAT 1.
+      APP
+        VAR o_diffuse
+        VAR obj
+  LET n0 (VAR of )
+    NEG
+      GET
+        VAR light
+        INT 0
+  LET n1 (VAR of )
+    NEG
+      GET
+        VAR light
+        INT 1
+  LET n2 (VAR of )
+    NEG
+      GET
+        VAR light
+        INT 2
+  LET Tu235 (UNIT)
+    APP
+      VAR add_reflection
+      VAR nr
+      ADD
+        VAR sid
+        INT 1
+      VAR br
+      GET
+        VAR light
+        INT 0
+      VAR n1
+      VAR n2
+  LET Tu234 (UNIT)
+    APP
+      VAR add_reflection
+      ADD
+        VAR nr
+        INT 1
+      ADD
+        VAR sid
+        INT 2
+      VAR br
+      VAR n0
+      GET
+        VAR light
+        INT 1
+      VAR n2
+  LET Tu233 (UNIT)
+    APP
+      VAR add_reflection
+      ADD
+        VAR nr
+        INT 2
+      ADD
+        VAR sid
+        INT 3
+      VAR br
+      VAR n0
+      VAR n1
+      GET
+        VAR light
+        INT 2
+  PUT
+    VAR n_reflections
+    INT 0
+    ADD
+      VAR nr
+      INT 3
+LETREC setup_surface_reflection (VAR of )
+  (obj_id : VAR of ), (obj : VAR of )
+  LET sid (VAR of )
+    ADD
+      MULTIPLE 4
+        VAR obj_id
+      INT 1
+  LET nr (VAR of )
+    GET
+      VAR n_reflections
+      INT 0
+  LET br (VAR of )
+    FSUB
+      FLOAT 1.
+      APP
+        VAR o_diffuse
+        VAR obj
+  LET p (VAR of )
+    APP
+      VAR veciprod
+      VAR light
+      APP
+        VAR o_param_abc
+        VAR obj
+  LET Tu236 (UNIT)
+    APP
+      VAR add_reflection
+      VAR nr
+      VAR sid
+      VAR br
+      FSUB
+        FMUL
+          FMUL
+            FLOAT 2.
+            APP
+              VAR o_param_a
+              VAR obj
+          VAR p
+        GET
+          VAR light
+          INT 0
+      FSUB
+        FMUL
+          FMUL
+            FLOAT 2.
+            APP
+              VAR o_param_b
+              VAR obj
+          VAR p
+        GET
+          VAR light
+          INT 1
+      FSUB
+        FMUL
+          FMUL
+            FLOAT 2.
+            APP
+              VAR o_param_c
+              VAR obj
+          VAR p
+        GET
+          VAR light
+          INT 2
+  PUT
+    VAR n_reflections
+    INT 0
+    ADD
+      VAR nr
+      INT 1
+LETREC setup_reflections (VAR of )
+  (obj_id : VAR of )
+  IF
+    LE
+      INT 0
+      VAR obj_id
+    LET obj (VAR of )
+      GET
+        VAR objects
+        VAR obj_id
+    IF
+      EQ
+        APP
+          VAR o_reflectiontype
+          VAR obj
+        INT 2
+      IF
+        APP
+          VAR fless
+          APP
+            VAR o_diffuse
+            VAR obj
+          FLOAT 1.
+        LET m_shape (VAR of )
+          APP
+            VAR o_form
+            VAR obj
+        IF
+          EQ
+            VAR m_shape
+            INT 1
+          APP
+            VAR setup_rect_reflection
+            VAR obj_id
+            VAR obj
+          IF
+            EQ
+              VAR m_shape
+              INT 2
+            APP
+              VAR setup_surface_reflection
+              VAR obj_id
+              VAR obj
+            UNIT
+        UNIT
+      UNIT
+    UNIT
+LETREC rt (VAR of )
+  (size_x : VAR of ), (size_y : VAR of )
+  LET Tu248 (UNIT)
+    PUT
+      VAR image_size
+      INT 0
+      VAR size_x
+  LET Tu247 (UNIT)
+    PUT
+      VAR image_size
+      INT 1
+      VAR size_y
+  LET Tu246 (UNIT)
+    PUT
+      VAR image_center
+      INT 0
+      DIVIDE BY 2
+        VAR size_x
+  LET Tu245 (UNIT)
+    PUT
+      VAR image_center
+      INT 1
+      DIVIDE BY 2
+        VAR size_y
+  PUT
+    VAR scan_pitch
+    INT 0
+    FDIV
+      FLOAT 128.
+      int_to_float
+        LET Tu244 (UNIT)
+          VAR size_x
+        LET prev (VAR of )
+          APP
+            VAR create_pixelline
+            UNIT
+        LET cur (VAR of )
+          APP
+            VAR create_pixelline
+            UNIT
+        LET next (VAR of )
+          APP
+            VAR create_pixelline
+            UNIT
+        LET Tu243 (UNIT)
+          APP
+            VAR read_parameter
+            UNIT
+        LET Tu242 (UNIT)
+          APP
+            VAR write_ppm_header
+            UNIT
+        LET Tu241 (UNIT)
+          APP
+            VAR init_dirvecs
+            UNIT
+        LET Tu240 (UNIT)
+          APP
+            VAR veccpy
+            APP
+              VAR d_vec
+              VAR light_dirvec
+            VAR light
+        LET Tu239 (UNIT)
+          APP
+            VAR setup_dirvec_constants
+            VAR light_dirvec
+        LET Tu238 (UNIT)
+          APP
+            VAR setup_reflections
+            SUB
+              GET
+                VAR n_objects
+                INT 0
+              INT 1
+        LET Tu237 (UNIT)
+          APP
+            VAR pretrace_line
+            VAR cur
+            INT 0
+            INT 0
+        APP
+          VAR scan_line
+          INT 0
+          VAR prev
+          VAR cur
+          VAR next
+          INT 2
+LET a (VAR of )
+  APP
+    VAR rt
+    INT 512
+    INT 512
+UNITunitfloatunitfloatunitfloatunitfloatunitfloatunitintunitfloatunitfloatunitfloatunitintunitintunitintunitintunitfloatunitfloatunitfloatunitfloatunitfloatunitfloatunitfloatunitfloatunitfloatunitfloatunitfloatunitfloatunitfloatunitfloatunitfloatunitint[4m
+
+LET Tu244 (UNIT)
+  VAR size_x
+LET prev (INT)
+  APP
+    VAR create_pixelline
+    UNIT
+LET cur (INT)
+  APP
+    VAR create_pixelline
+    UNIT
+LET next (INT)
+  APP
+    VAR create_pixelline
+    UNIT
+LET Tu243 (UNIT)
+  APP
+    VAR read_parameter
+    UNIT
+LET Tu242 (UNIT)
+  APP
+    VAR write_ppm_header
+    UNIT
+LET Tu241 (UNIT)
+  APP
+    VAR init_dirvecs
+    UNIT
+LET Tu240 (UNIT)
+  APP
+    VAR veccpy
+    APP
+      VAR d_vec
+      VAR light_dirvec
+    VAR light
+LET Tu239 (UNIT)
+  APP
+    VAR setup_dirvec_constants
+    VAR light_dirvec
+LET Tu238 (UNIT)
+  APP
+    VAR setup_reflections
+    SUB
+      GET
+        VAR n_objects
+        INT 0
+      INT 1
+LET Tu237 (UNIT)
+  APP
+    VAR pretrace_line
+    VAR cur
+    INT 0
+    INT 0
+APP
+  VAR scan_line
+  INT 0
+  VAR prev
+  VAR cur
+  VAR next
+  INT 2
+[0;31mError:[0m This expression has type INT but an expression was expected of type UNIT.

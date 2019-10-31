@@ -35,7 +35,7 @@ join-reg join-reg2 non-tail-if non-tail-if2 \
 inprod inprod-rec inprod-loop matmul matmul-flat \
 manyargs mul4 itof fzero print_int print_char fabs float_test \
 fadd fmin fmul fdiv unknown finv mul10 create_array \
-read_int
+read_int unit
 
 do_test: $(TESTS:%=test/%.cmp)
 
@@ -57,8 +57,12 @@ test/%.ans: test/%.ml
 test/%.cmp: test/%.res test/%.ans
 	diff $^ > $@
 
-raytrace: $(RESULT) raytracer/minrt.ml
-	./$(RESULT) raytracer/minrt
+raytrace: $(RESULT) raytracer/minrt.ml libmincaml.S
+	cat MIPS/lib.ml > raytracer/galois.ml
+	cat raytracer/globals.ml >> raytracer/galois.ml
+	cat raytracer/minrt.ml >> raytracer/galois.ml
+	./$(RESULT) raytracer/galois
+	cat libmincaml.S >> raytracer/galois.s
 
 min-caml.html: main.mli main.ml id.ml m.ml s.ml \
 		syntax.ml type.ml parser.mly lexer.mll typing.mli typing.ml kNormal.mli kNormal.ml \
