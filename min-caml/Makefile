@@ -35,7 +35,7 @@ join-reg join-reg2 non-tail-if non-tail-if2 \
 inprod inprod-rec inprod-loop matmul matmul-flat \
 manyargs mul4 itof fzero print_int print_char fabs float_test \
 fadd fmin fmul fdiv unknown finv mul10 create_array \
-read_int unit
+read_int unit mips_test
 
 do_test: $(TESTS:%=test/%.cmp)
 

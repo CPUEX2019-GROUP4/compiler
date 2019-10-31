@@ -68,6 +68,7 @@ float_ble_cont.90:
     fneg f0 f0
     j beq_cont.92
 beq_else.91:
+    mv r0 r0
 beq_cont.92:
     # 0.437500
     flui f1 16096
@@ -116,6 +117,7 @@ float_ble_else.95:
     lwcZ f1 r29 16
     fsub f0 f1 f0
 float_ble_cont.96:
+    mv r0 r0
 float_ble_cont.94:
     lw r1 r29 0
     ori r28 r0 0

@@ -11,23 +11,19 @@ fi
 
 cd min-caml
 make min-caml
-make test/$1.s
+cp MIPS/library.ml test/mips_test.ml
+cat test/$1.ml >> test/mips_test.ml
+make test/mips_test.s
 rm test/$1.ans
 make test/$1.ans
-# vim test/$1.s
-cp test/$1.s ../simulator/simulator/sim/mips_test.s
-cp libmincaml.S ../simulator/simulator/sim/libmincaml.S
+cp test/mips_test.s ../simulator/simulator/sim/mips_test.s
 cd ../simulator/simulator/sim/
 
-if [ $2 != "false" ]; then
-  cat libmincaml.S >> mips_test.s
-fi
-
 rm out.txt
-if [ $3 != "true" ]; then
-  ./test.sh mips_test.s true
+if [ $2 != "true" ]; then
+  ./test.sh mips_test.s input.bin true
 else
-  ./test.sh mips_test.s
+  ./test.sh mips_test.s input.bin false
 fi
 
 echo "----- out.txt ------"

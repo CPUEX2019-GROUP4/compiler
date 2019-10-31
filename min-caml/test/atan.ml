@@ -16,7 +16,7 @@ let rec kernel_atan a1 =
 in
 let rec atan a =
   let flag = a >. 0.0 in
-  let a = if flag then a else -. a in
+  let a = if not flag then -. a else a in
   let b =
     if a <. 0.4375 then
       kernel_atan a

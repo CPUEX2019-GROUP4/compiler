@@ -287,7 +287,7 @@ and g' oc = function (* 各命令のアセンブリ生成 (caml2html: emit_gprime) *)
       if List.mem a allregs && a <> regs.(0) then
         Printf.fprintf oc "    or %s r0 %s\n" (reg a) (reg regs.(0))   (******************)
       else if List.mem a allfregs && a <> fregs.(0) then
-        Printf.fprintf oc "    fneg %s %s\n" (reg a) (reg fregs.(0)); (************)
+        Printf.fprintf oc "    fmv %s %s\n" (reg a) (reg fregs.(0)); (************)
       (if "r31" <> (reg reg_tmp) then
         Printf.fprintf oc "    or r31 r0 %s\n" (reg reg_tmp) (******************)
       else

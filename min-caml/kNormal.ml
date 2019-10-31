@@ -280,7 +280,7 @@ let rec print e i =
       p ("letrec " ^ name ^ " : "); Type.print typ; p " ="; print_newline ();
       indent i; p "variables : "; Type.print_args fdef.args; print_newline ();
       print fdef.body j; print_newline (); indent i; p "in";
-      print_newline (); print e j
+      print_newline (); print e i
   | App (f,xs) -> p "app"; print_newline (); indent j; p f; p_rec xs j
   | Tuple xs -> p "Tuple"; p_rec xs j
   | LetTuple (xs,y,z) ->
