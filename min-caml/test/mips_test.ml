@@ -131,6 +131,6 @@ in
 let rec floor x =
   float_of_int (int_of_float x)
 in
-let a = -. 1.65 in
-let b = atan a in
-print_int (int_of_float (b *. 1000000.))
+print_int (read_int ());
+print_int (read_int ());
+print_int (read_int ())

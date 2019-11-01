@@ -1,27 +1,23 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[129]:
-
-
+import sys
 import struct
 
-wf = open('write_test.bin', 'wb')
-filename = 'test.txt'
-
-def line_out(line):
+def line_out(line, w):
     l = line.split()
-    s = []
+   # s = []
     b = ""
     for a in l:
         if (a.isdigit()):
             b = print_int(int(a))
+            #s.append(int(a))
         else:
             b = print_float(float(a))
-            s.append(float(a))
-        s.append(b)
-        wf.write(b)
-    return s
+            #s.append(float(a))
+        #s.append(b)
+        w.write(b)
+    #return s
 
 def print_int(x):
     bytes_little = x.to_bytes(4, byteorder='little')
@@ -30,10 +26,18 @@ def print_float(x):
     b = struct.pack('<f', x)
     return b
 
-with open(filename,'r') as fi:
-    while True:
-        line = fi.readline()
-        if not line:
-            break
-        else:
-            line_out(line)
+def file_out(f, w):
+    for line in f:
+        line_out(line, w)
+
+if __name__ == '__main__':
+    #print(len(sys.argv))
+    if len(sys.argv) == 3:
+        path = sys.argv[1]
+        out = sys.argv[2]
+    with open(path) as r:
+        with open(out, "wb") as w:
+            file_out(r, w)
+    print("converted from ",path," to ",out)
+
+

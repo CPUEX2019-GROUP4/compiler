@@ -1056,7 +1056,7 @@
     subi r29 r29 152
     lw r31 r29 148
 end_of_program:
-     beq r0 r0 end_of_program
+    beq r0 r0 end_of_program
 print_int.2536:
     slti r28 r1 0
     bne r0 r28 bge_else.8758

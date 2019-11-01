@@ -6,8 +6,13 @@ min-caml/*.cm*
 min-caml/*.o
 min-caml/test/*.ans
 min-caml/test/*.s
+min-caml/raytracer/galois*
 gomi/
 data/
 program.txt
 *.ml
 commit.sh
+binary_conversion/*.bin
+binary_conversion/*.txt
+binary_conversion/Untitled.ipynb
+binary_conversion/.*
