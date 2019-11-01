@@ -8,3 +8,5 @@ min-caml/test/*.ans
 min-caml/test/*.s
 gomi/
 data/
+program.txt
+*.ml
