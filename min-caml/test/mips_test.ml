@@ -121,7 +121,7 @@ let rec atan a =
       kernel_atan a
     else
       (if a <. 2.4375 then
-        0.7853981633974483 -. (kernel_atan (a -. 1.0))
+        0.7853981633974483 +. (kernel_atan ((a -. 1.0)/.(a +. 1.0)))
       else
         1.5707963267948966 -. (kernel_atan (1.0 /. a))) +. 0.0
   in
@@ -131,6 +131,6 @@ in
 let rec floor x =
   float_of_int (int_of_float x)
 in
-let a = 0.85 in
+let a = -. 1.65 in
 let b = atan a in
-print_int (int_of_float (b *. 10000.))
+print_int (int_of_float (b *. 1000000.))

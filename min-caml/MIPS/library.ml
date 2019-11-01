@@ -121,7 +121,7 @@ let rec atan a =
       kernel_atan a
     else
       (if a <. 2.4375 then
-        0.7853981633974483 -. (kernel_atan (a -. 1.0))
+        0.7853981633974483 +. (kernel_atan ((a -. 1.0)/.(a +. 1.0)))
       else
         1.5707963267948966 -. (kernel_atan (1.0 /. a))) +. 0.0
   in

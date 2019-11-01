@@ -1,3 +1,3 @@
-let a = 0.85 in
+let a = -. 1.65 in
 let b = atan a in
-print_int (int_of_float (b *. 10000.))
+print_int (int_of_float (b *. 1000000.))
