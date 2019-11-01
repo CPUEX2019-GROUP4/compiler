@@ -58,11 +58,11 @@ test/%.cmp: test/%.res test/%.ans
 	diff $^ > $@
 
 raytrace: $(RESULT) raytracer/minrt.ml libmincaml.S
-	cat MIPS/lib.ml > raytracer/galois.ml
+	cat MIPS/library.ml > raytracer/galois.ml
 	cat raytracer/globals.ml >> raytracer/galois.ml
 	cat raytracer/minrt.ml >> raytracer/galois.ml
 	./$(RESULT) raytracer/galois
-	cat libmincaml.S >> raytracer/galois.s
+	#cat libmincaml.S >> raytracer/galois.s
 
 min-caml.html: main.mli main.ml id.ml m.ml s.ml \
 		syntax.ml type.ml parser.mly lexer.mll typing.mli typing.ml kNormal.mli kNormal.ml \

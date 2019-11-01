@@ -379,7 +379,7 @@ let f oc (Prog(fundefs, e)) =
   stackset := S.empty;
   stackmap := [];
   g oc (NonTail("_R_0"), e);
-  Printf.fprintf oc "nop\n";
+  Printf.fprintf oc "beq r0 r0 -1\n";
   Printf.fprintf oc "#    main program ends\n";
   (* Printf.fprintf oc "    mr    r3, %s\n" regs.(0); *)
   (* DELEATED

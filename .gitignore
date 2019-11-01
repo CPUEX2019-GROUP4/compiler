@@ -10,3 +10,4 @@ gomi/
 data/
 program.txt
 *.ml
+commit.sh
