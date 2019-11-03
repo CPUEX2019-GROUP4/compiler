@@ -2647,9 +2647,7 @@ beq_cont.8846:
     lw r31 r29 108
     j beq_cont.8844
 beq_else.8843:
-    mv r0 r0
 beq_cont.8844:
-    mv r0 r0
 beq_cont.8835:
     lw r1 r29 20
     ori r28 r0 0
@@ -3622,9 +3620,7 @@ beq_else.8889:
 beq_else.8891:
     addi r1 r0 0
 beq_cont.8892:
-    mv r0 r0
 beq_cont.8890:
-    mv r0 r0
 beq_cont.8888:
     ori r28 r0 0
     bne r1 r28 beq_else.8893
@@ -3705,9 +3701,7 @@ beq_else.8896:
 beq_else.8898:
     addi r1 r0 0
 beq_cont.8899:
-    mv r0 r0
 beq_cont.8897:
-    mv r0 r0
 beq_cont.8895:
     ori r28 r0 0
     bne r1 r28 beq_else.8900
@@ -3788,9 +3782,7 @@ beq_else.8903:
 beq_else.8905:
     addi r1 r0 0
 beq_cont.8906:
-    mv r0 r0
 beq_cont.8904:
-    mv r0 r0
 beq_cont.8902:
     ori r28 r0 0
     bne r1 r28 beq_else.8907
@@ -4707,7 +4699,6 @@ beq_cont.8942:
     swcZ f0 r1 32
     j beq_cont.8944
 beq_else.8943:
-    mv r0 r0
 beq_cont.8944:
     jr r31
 iter_setup_dirvec_constants.2845:
@@ -4787,7 +4778,6 @@ beq_else.8948:
     add r27 r4 r3
     sw r1 r27 0
 beq_cont.8949:
-    mv r0 r0
 beq_cont.8947:
     subi r2 r2 1
     lw r1 r29 12
@@ -4919,12 +4909,10 @@ ble_else.8954:
     fsub f0 f0 f1
     j beq_cont.8957
 beq_else.8956:
-    mv r0 r0
 beq_cont.8957:
     lw r1 r29 16
     swcZ f0 r1 24
 ble_cont.8955:
-    mv r0 r0
 beq_cont.8953:
     lw r1 r29 4
     subi r2 r1 1
@@ -5032,7 +5020,6 @@ beq_else.8962:
     subi r29 r29 56
     lw r31 r29 52
 beq_cont.8963:
-    mv r0 r0
 beq_cont.8961:
     ori r28 r0 0
     bne r1 r28 beq_else.8964
@@ -5490,11 +5477,8 @@ beq_else.8995:
 beq_else.8997:
     addi r1 r0 1
 beq_cont.8998:
-    mv r0 r0
 beq_cont.8996:
-    mv r0 r0
 beq_cont.8994:
-    mv r0 r0
 beq_cont.8992:
     ori r28 r0 0
     bne r1 r28 beq_else.8999
@@ -5682,9 +5666,7 @@ beq_else.9010:
     lw r2 r29 52
     sw r2 r1 0
 beq_cont.9011:
-    mv r0 r0
 beq_cont.9009:
-    mv r0 r0
 beq_cont.9007:
     lw r1 r29 40
     addi r1 r1 1
@@ -5807,9 +5789,7 @@ beq_else.9020:
     subi r29 r29 40
     lw r31 r29 36
 beq_cont.9021:
-    mv r0 r0
 beq_cont.9019:
-    mv r0 r0
 beq_cont.9017:
     lw r1 r29 12
     addi r1 r1 1
@@ -6024,9 +6004,7 @@ beq_else.9033:
     lw r2 r29 60
     sw r2 r1 0
 beq_cont.9034:
-    mv r0 r0
 beq_cont.9032:
-    mv r0 r0
 beq_cont.9030:
     lw r1 r29 48
     addi r1 r1 1
@@ -6147,9 +6125,7 @@ beq_else.9043:
     subi r29 r29 40
     lw r31 r29 36
 beq_cont.9044:
-    mv r0 r0
 beq_cont.9042:
-    mv r0 r0
 beq_cont.9040:
     lw r1 r29 12
     addi r1 r1 1
@@ -6620,7 +6596,6 @@ beq_else.9060:
     flui f0 17279
     # 255.000000
 beq_cont.9061:
-    mv r0 r0
 beq_cont.9057:
     lw r1 r29 4
     swcZ f0 r1 8
@@ -6984,7 +6959,6 @@ beq_cont.9071:
     # 0.000000
     j float_ble_cont.9073
 float_ble_else.9072:
-    mv r0 r0
 float_ble_cont.9073:
     flui f1 17279
     # 255.000000
@@ -7178,13 +7152,10 @@ beq_else.9081:
     lw r31 r29 100
     j beq_cont.9086
 beq_else.9085:
-    mv r0 r0
 beq_cont.9086:
     j beq_cont.9084
 beq_else.9083:
-    mv r0 r0
 beq_cont.9084:
-    mv r0 r0
 beq_cont.9082:
     lw r1 r29 4
     subi r1 r1 1
@@ -7576,7 +7547,6 @@ beq_cont.9101:
     lw r31 r29 196
     j beq_cont.9103
 beq_else.9102:
-    mv r0 r0
 beq_cont.9103:
     lw r1 r29 64
     lw r25 r29 28
@@ -10171,6 +10141,3 @@ create_float_array_cont:
     subi r2 r2 1
     addi r30 r30 8
     j create_float_array_loop
-min_caml_print_char:
-    out r1 0
-    jr r31
