@@ -63,6 +63,7 @@ raytrace: $(RESULT) raytracer/minrt.ml libmincaml.S
 	cat raytracer/minrt.ml >> raytracer/galois.ml
 	./$(RESULT) raytracer/galois
 	cat MIPS/create_array.S >> raytracer/galois.s
+	cat MIPS/print.S >> raytracer/galois.s
 
 min-caml.html: main.mli main.ml id.ml m.ml s.ml \
 		syntax.ml type.ml parser.mly lexer.mll typing.mli typing.ml kNormal.mli kNormal.ml \

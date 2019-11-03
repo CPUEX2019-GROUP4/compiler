@@ -171,13 +171,13 @@ and g' oc = function (* 各命令のアセンブリ生成 (caml2html: emit_gprime) *)
   | Tail, IfEq(x, V(y), e1, e2) ->                       (******** from here *********)
       g'_tail_if oc e1 e2 "beq" "bne" (reg x) (reg y)
   | Tail, IfEq(x, C(y), e1, e2) ->
-      Printf.fprintf oc "    ori r28 r0 %d\n" y;
+      Printf.fprintf oc "    addi r28 r0 %d\n" y;
       g'_tail_if oc e1 e2 "beq" "bne" (reg x) "r28"
   | Tail, IfLE(x, V(y), e1, e2) ->
       Printf.fprintf oc "    slt r28 %s %s\n" (reg y) (reg x);
       g'_tail_if oc e1 e2 "beq" "bne" "r0" "r28"
   | Tail, IfLE(x, C(y), e1, e2) ->
-      Printf.fprintf oc "    ori r28 r0 %d\n" y;
+      Printf.fprintf oc "    addi r28 r0 %d\n" y;
       Printf.fprintf oc "    slt r28 r28 %s\n" (reg x);
       g'_tail_if oc e1 e2 "ble" "bgt" "r0" "r28"
   | Tail, IfGE(x, V(y), e1, e2) ->
@@ -203,13 +203,13 @@ and g' oc = function (* 各命令のアセンブリ生成 (caml2html: emit_gprime) *)
   | NonTail(z), IfEq(x, V(y), e1, e2) ->                  (******** from here *********)
       g'_non_tail_if oc (NonTail(z)) e1 e2 "beq" "bne" (reg x) (reg y)
   | NonTail(z), IfEq(x, C(y), e1, e2) ->
-      Printf.fprintf oc "    ori r28 r0 %d\n" y;
+      Printf.fprintf oc "    addi r28 r0 %d\n" y;
       g'_non_tail_if oc (NonTail(z)) e1 e2 "beq" "bne" (reg x) "r28"
   | NonTail(z), IfLE(x, V(y), e1, e2) ->
       Printf.fprintf oc "    slt r28 %s %s\n" (reg y) (reg x);
       g'_non_tail_if oc (NonTail(z)) e1 e2 "ble" "bgt" "r0" "r28"
   | NonTail(z), IfLE(x, C(y), e1, e2) ->
-      Printf.fprintf oc "    ori r28 r0 %d\n" y;
+      Printf.fprintf oc "    addi r28 r0 %d\n" y;
       Printf.fprintf oc "    slt r28 r28 %s\n" (reg x);
       g'_non_tail_if oc (NonTail(z)) e1 e2 "ble" "bgt" "r0" "r28"
   | NonTail(z), IfGE(x, V(y), e1, e2) ->
@@ -379,7 +379,7 @@ let f oc (Prog(fundefs, e)) =
   stackset := S.empty;
   stackmap := [];
   g oc (NonTail("_R_0"), e);
-  Printf.fprintf oc "end_of_program:\n";
+  Printf.fprintf oc "end_of_program:\nnop\n";
   Printf.fprintf oc "     beq r0 r0 end_of_program\n";
   (* Printf.fprintf oc "    mr    r3, %s\n" regs.(0); *)
   (* DELEATED

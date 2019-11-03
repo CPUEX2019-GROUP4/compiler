@@ -12,6 +12,9 @@ def line_out(line, w):
         if (a.isdigit()):
             b = print_int(int(a))
             #s.append(int(a))
+        elif (a[0] == '-' and a[1:].isdigit()):
+            b = print_neg_int(int(a))
+            #s.append(int(a))
         else:
             b = print_float(float(a))
             #s.append(float(a))
@@ -22,9 +25,13 @@ def line_out(line, w):
 def print_int(x):
     bytes_little = x.to_bytes(4, byteorder='little')
     return bytes_little
+def print_neg_int(x):
+    bytes_little = ((1 << 32) + x).to_bytes(4, byteorder='little')
+    return bytes_little
 def print_float(x):
     b = struct.pack('<f', x)
     return b
+
 
 def file_out(f, w):
     for line in f:

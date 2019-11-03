@@ -20,4 +20,4 @@ cp out.bin ../simulator/simulator/sim/input.bin
 echo "-----simulate-----"
 cd ../simulator/simulator/sim/
 rm out.txt
-./test.sh raytrace.s input.bin false
+./test.sh raytrace.s input.bin 1

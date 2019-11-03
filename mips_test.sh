@@ -21,6 +21,10 @@ rm test/$1.ans
 make test/$1.ans
 cp test/mips_test.s ../simulator/simulator/sim/mips_test.s
 
+echo "-----cat library.s-----"
+cat MIPS/create_array.S >> ../simulator/simulator/sim/mips_test.s
+cat MIPS/print.S >> ../simulator/simulator/sim/mips_test.s
+
 # make input.bin
 echo "-----input.bin-----"
 cd ../binary_conversion
