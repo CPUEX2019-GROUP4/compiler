@@ -131,3 +131,10 @@ in
 let rec floor x =
   float_of_int (int_of_float x)
 in
+(******************************************************************************
+   Global 勝手に持ってきた
+ *****************************************************************************)
+let rec fabs f = if f <. 0.0 then (-. f) else f in
+let rec fhalf x = x *. 0.5 in
+let rec fsqr x = x *. x in
+let rec fless a b = a <. b in

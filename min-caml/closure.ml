@@ -13,7 +13,6 @@ type t = (* クロージャ変換後の式 (caml2html: closure_t) *)
   | FtoI of Id.t
   | ItoF of Id.t
   | FNeg of Id.t
-  | FZero of Id.t
   | FAdd of Id.t * Id.t
   | FSub of Id.t * Id.t
   | FMul of Id.t * Id.t
@@ -21,6 +20,7 @@ type t = (* クロージャ変換後の式 (caml2html: closure_t) *)
   | IfEq of Id.t * Id.t * t * t
   | IfLE of Id.t * Id.t * t * t
   | IfFLt of Id.t * Id.t * t * t
+  | IfFZero of Id.t * t * t
   | Let of (Id.t * Type.t) * t * t
   | Var of Id.t
   | MakeCls of (Id.t * Type.t) * closure * t
@@ -41,8 +41,9 @@ type prog = Prog of fundef list * t
 
 let rec fv = function
   | Unit | Int(_) | Float(_) | ExtArray(_) -> S.empty
-  | Neg(x) | FNeg(x) | FZero(x) | Mul4(x) | Mul10(x) | Div2(x) | Div10(x) | FtoI(x) | ItoF(x) | Out(x,_) | Unknown(_,_,_,x)-> S.singleton x
+  | Neg(x) | FNeg(x) | Mul4(x) | Mul10(x) | Div2(x) | Div10(x) | FtoI(x) | ItoF(x) | Out(x,_) | Unknown(_,_,_,x)-> S.singleton x
   | Add(x, y) | Sub(x, y) | FAdd(x, y) | FSub(x, y) | FMul(x, y) | FDiv(x, y) | Get(x, y) -> S.of_list [x; y]
+  | IfFZero(x,e1,e2) -> S.add x (S.union (fv e1) (fv e2))
   | IfEq(x, y, e1, e2)| IfLE(x, y, e1, e2) | IfFLt(x, y, e1, e2) -> S.add x (S.add y (S.union (fv e1) (fv e2)))
   | Let((x, t), e1, e2) -> S.union (fv e1) (S.remove x (fv e2))
   | Var(x) -> S.singleton x
@@ -68,7 +69,6 @@ let rec g env known = function (* クロージャ変換ルーチン本体 (caml2html: closure
   | KNormal.FtoI(x) -> FtoI(x)
   | KNormal.ItoF(x) -> ItoF(x)
   | KNormal.FNeg(x) -> FNeg(x)
-  | KNormal.FZero(x) -> FZero(x)
   | KNormal.FAdd(x, y) -> FAdd(x, y)
   | KNormal.FSub(x, y) -> FSub(x, y)
   | KNormal.FMul(x, y) -> FMul(x, y)
@@ -76,6 +76,7 @@ let rec g env known = function (* クロージャ変換ルーチン本体 (caml2html: closure
   | KNormal.IfEq(x, y, e1, e2) -> IfEq(x, y, g env known e1, g env known e2)
   | KNormal.IfLE(x, y, e1, e2) -> IfLE(x, y, g env known e1, g env known e2)
   | KNormal.IfFLt(x, y, e1, e2) -> IfFLt(x, y, g env known e1, g env known e2)
+  | KNormal.IfFZero(x, e1, e2) -> IfFZero(x, g env known e1, g env known e2)
   | KNormal.Let((x, t), e1, e2) -> Let((x, t), g env known e1, g (M.add x t env) known e2)
   | KNormal.Var(x) -> Var(x)
   | KNormal.LetRec({ KNormal.name = (x, t); KNormal.args = yts; KNormal.body = e1 }, e2) -> (* 関数定義の場合 (caml2html: closure_letrec) *)

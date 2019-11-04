@@ -24,7 +24,6 @@ and exp = (* 一つ一つの命令に対応する式 (caml2html: sparcasm_exp) *)
   | Lwz of Id.t * id_or_imm
   | Stw of Id.t * Id.t * id_or_imm
   | FMr of Id.t
-  | FZero of Id.t
   | FNeg of Id.t
   | FAdd of Id.t * Id.t
   | FSub of Id.t * Id.t
@@ -40,6 +39,7 @@ and exp = (* 一つ一つの命令に対応する式 (caml2html: sparcasm_exp) *)
   | IfFEq of Id.t * Id.t * t * t
   | IfFLE of Id.t * Id.t * t * t
   | IfFLt of Id.t * Id.t * t * t
+  | IfFZero of Id.t * t * t
   (* closure address, integer arguments, and float arguments *)
   | CallCls of Id.t * Id.t list * Id.t list
   | CallDir of Id.l * Id.t list * Id.t list
@@ -81,12 +81,16 @@ let rec remove_and_uniq xs = function
 let fv_id_or_imm = function V(x) -> [x] | _ -> []
 let rec fv_exp = function
   | Nop | Li(_) | FLi(_) | SetL(_) | Comment(_) | Restore(_) -> []
-  | Mr(x) | Neg(x) | FMr(x) | FNeg(x) | FZero(x) | Save(x, _) | Mul10(x) | Div2(x) | Div10(x) | FtoI(x) | ItoF(x) | Out(x,_) | Unknown(_,_,_,x)-> [x]
+  | Mr(x) | Neg(x) | FMr(x) | FNeg(x) | Save(x, _) | Mul10(x) | Div2(x) | Div10(x) | FtoI(x) | ItoF(x) | Out(x,_) | Unknown(_,_,_,x)-> [x]
   | Add(x, y') | Sub(x, y') | Slw(x, y') | Lfd(x, y') | Lwz(x, y') -> x :: fv_id_or_imm y'
   | Stw(x, y, z') | Stfd(x, y, z') -> x :: y :: fv_id_or_imm z'
   | FAdd(x, y) | FSub(x, y) | FMul(x, y) | FDiv(x, y) -> [x; y]
-  | IfEq(x, y', e1, e2) | IfLE(x, y', e1, e2) | IfGE(x, y', e1, e2) ->  x :: fv_id_or_imm y' @ remove_and_uniq S.empty (fv e1 @ fv e2) (* uniq here just for efficiency *)
-  | IfFEq(x, y, e1, e2) | IfFLt(x, y, e1, e2) -> x :: y :: remove_and_uniq S.empty (fv e1 @ fv e2) (* uniq here just for efficiency *)
+  | IfEq(x, y', e1, e2) | IfLE(x, y', e1, e2) | IfGE(x, y', e1, e2) ->
+      x :: fv_id_or_imm y' @ remove_and_uniq S.empty (fv e1 @ fv e2) (* uniq here just for efficiency *)
+  | IfFEq(x, y, e1, e2) | IfFLt(x, y, e1, e2) ->
+      x :: y :: remove_and_uniq S.empty (fv e1 @ fv e2) (* uniq here just for efficiency *)
+  | IfFZero(x, e1, e2) ->
+      x :: remove_and_uniq S.empty (fv e1 @ fv e2) (* uniq here just for efficiency *)
   | CallCls(x, ys, zs) -> x :: ys @ zs
   | CallDir(_, ys, zs) -> ys @ zs
 and fv = function

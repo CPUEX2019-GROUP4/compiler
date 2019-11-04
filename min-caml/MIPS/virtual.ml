@@ -57,7 +57,6 @@ let rec g env = function (* 式の仮想マシンコード生成 (caml2html: virtual_g) *)
   | Closure.FtoI(x) -> Ans(FtoI(x))
   | Closure.ItoF(x) -> Ans(ItoF(x))
   | Closure.FNeg(x) -> Ans(FNeg(x))
-  | Closure.FZero(x) -> Ans(FZero(x))
   | Closure.FAdd(x, y) -> Ans(FAdd(x, y))
   | Closure.FSub(x, y) -> Ans(FSub(x, y))
   | Closure.FMul(x, y) -> Ans(FMul(x, y))
@@ -74,6 +73,8 @@ let rec g env = function (* 式の仮想マシンコード生成 (caml2html: virtual_g) *)
       | _ -> failwith "inequality supported only for bool, int")  (*** float 削除 ***)
   | Closure.IfFLt(x, y, e1, e2) ->
       Ans(IfFLt(x, y, g env e1, g env e2))        (** added **)
+  | Closure.IfFZero(x, e1, e2) ->
+      Ans(IfFZero(x, g env e1, g env e2))        (** added **)
   | Closure.Let((x, t1), e1, e2) ->
       let e1' = g env e1 in
       let e2' = g (M.add x t1 env) e2 in

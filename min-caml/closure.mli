@@ -13,7 +13,6 @@ type t =
   | FtoI of Id.t
   | ItoF of Id.t
   | FNeg of Id.t
-  | FZero of Id.t
   | FAdd of Id.t * Id.t
   | FSub of Id.t * Id.t
   | FMul of Id.t * Id.t
@@ -21,6 +20,7 @@ type t =
   | IfEq of Id.t * Id.t * t * t
   | IfLE of Id.t * Id.t * t * t
   | IfFLt of Id.t * Id.t * t * t
+  | IfFZero of Id.t * t * t
   | Let of (Id.t * Type.t) * t * t
   | Var of Id.t
   | MakeCls of (Id.t * Type.t) * closure * t

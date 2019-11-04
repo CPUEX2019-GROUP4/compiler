@@ -114,7 +114,6 @@ and g' oc = function (* 各命令のアセンブリ生成 (caml2html: emit_gprime) *)
   | NonTail(x), FMr(y) when x = y -> ()
   | NonTail(x), FMr(y) -> Printf.fprintf oc "    fmv %s %s\n" (reg x) (reg y)                (**************)
   | NonTail(x), FNeg(y) -> Printf.fprintf oc "    fneg %s %s\n" (reg x) (reg y)                  (****************)
-  | NonTail(x), FZero(y) -> Printf.fprintf oc "    fcz %s %s\n" (reg x) (reg y)                  (****************)
   | NonTail(x), FAdd(y, z) -> Printf.fprintf oc "    fadd %s %s %s\n" (reg x) (reg y) (reg z)    (****************)
   | NonTail(x), FSub(y, z) -> Printf.fprintf oc "    fsub %s %s %s\n" (reg x) (reg y) (reg z)    (****************)
   | NonTail(x), FMul(y, z) -> Printf.fprintf oc "    fmul %s %s %s\n" (reg x) (reg y) (reg z)    (****************)
@@ -153,7 +152,7 @@ and g' oc = function (* 各命令のアセンブリ生成 (caml2html: emit_gprime) *)
   | Tail, (Li _ | SetL _ | Mr _ | Neg _ | Add _ | Sub _ | Slw _ | Mul10 _ | Div2 _ | Div10 _ | Lwz _ | FtoI _ as exp) ->
       g' oc (NonTail(regs.(0)), exp);
       Printf.fprintf oc "    jr r31\n";      (*******************)
-  | Tail, (FLi _ | FMr _ | FNeg _ | FZero _ | FAdd _ | FSub _ | FMul _ | FDiv _ | Lfd _ | ItoF _ as exp) ->
+  | Tail, (FLi _ | FMr _ | FNeg _ | FAdd _ | FSub _ | FMul _ | FDiv _ | Lfd _ | ItoF _ as exp) ->
       g' oc (NonTail(fregs.(0)), exp);
       Printf.fprintf oc "    jr r31\n";           (*******************)
   | Tail, (Unknown(_,_,t2,_) as exp) ->
@@ -200,6 +199,17 @@ and g' oc = function (* 各命令のアセンブリ生成 (caml2html: emit_gprime) *)
       stackset := stackset_back;
       g oc (Tail, e2)
 
+  | Tail, IfFZero(x, e1, e2) ->
+      Printf.fprintf oc "    fcz %s\n" (reg x);   (********************)
+
+      let b_else = Id.genid ("float_neq_0") in
+      Printf.fprintf oc "    bc1f %s\n" b_else;
+      let stackset_back = !stackset in
+      g oc (Tail, e1);
+      Printf.fprintf oc "%s:\n" b_else;
+      stackset := stackset_back;
+      g oc (Tail, e2)
+
   | NonTail(z), IfEq(x, V(y), e1, e2) ->                  (******** from here *********)
       g'_non_tail_if oc (NonTail(z)) e1 e2 "beq" "bne" (reg x) (reg y)
   | NonTail(z), IfEq(x, C(y), e1, e2) ->
@@ -227,6 +237,24 @@ and g' oc = function (* 各命令のアセンブリ生成 (caml2html: emit_gprime) *)
       let dest = (NonTail(z)) in
       let b_else = Id.genid ("float_ble" ^ "_else") in
       let b_cont = Id.genid ("float_ble" ^ "_cont") in
+      Printf.fprintf oc "    bc1f %s\n" b_else;
+      let stackset_back = !stackset in
+      g oc (dest, e1);
+      let stackset1 = !stackset in
+      Printf.fprintf oc "    j %s\n" b_cont;
+      Printf.fprintf oc "%s:\n" b_else;
+      stackset := stackset_back;
+      g oc (dest, e2);
+      Printf.fprintf oc "%s:\n" b_cont;
+      let stackset2 = !stackset in
+      stackset := S.inter stackset1 stackset2
+
+  | NonTail(z), IfFZero(x, e1, e2) ->
+      Printf.fprintf oc "    fcz %s\n" (reg x);     (*****************)
+
+      let dest = (NonTail(z)) in
+      let b_else = Id.genid ("float_eq0") in
+      let b_cont = Id.genid ("float_eq0_cont") in
       Printf.fprintf oc "    bc1f %s\n" b_else;
       let stackset_back = !stackset in
       g oc (dest, e1);

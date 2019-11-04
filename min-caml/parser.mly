@@ -114,6 +114,8 @@ exp: /* (* 一般の式 (caml2html: parser_exp) *) */
     { Div10 $1 }
 | exp EQUAL exp
     { Eq($1, $3) }
+| FZERO exp /*(* =0 *)*/
+    { FZero($2) }
 | exp LESS_GREATER exp
     { Not(Eq($1, $3)) }
 | exp LESS exp
@@ -152,8 +154,6 @@ exp: /* (* 一般の式 (caml2html: parser_exp) *) */
     { FtoI($2) }
 | INT_TO_FLOAT exp
     { ItoF($2) }
-| FZERO exp /*(* =0 *)*/
-    { FZero($2) }
 | OUT INT exp
     { Out($3,$2) }
 | READ_INT LPAREN RPAREN

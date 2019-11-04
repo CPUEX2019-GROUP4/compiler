@@ -14,7 +14,6 @@ type t = (* K正規化後の式 (caml2html: knormal_t) *)
   | FtoI of Id.t
   | ItoF of Id.t
   | FNeg of Id.t
-  | FZero of Id.t
   | FAdd of Id.t * Id.t
   | FSub of Id.t * Id.t
   | FMul of Id.t * Id.t
@@ -22,6 +21,7 @@ type t = (* K正規化後の式 (caml2html: knormal_t) *)
   | IfEq of Id.t * Id.t * t * t (* 比較 + 分岐 (caml2html: knormal_branch) *)
   | IfLE of Id.t * Id.t * t * t (* 比較 + 分岐 *)
   | IfFLt of Id.t * Id.t * t * t (* float 比較 + 分岐 *)
+  | IfFZero of Id.t * t * t
   | Let of (Id.t * Type.t) * t * t
   | Var of Id.t
   | LetRec of fundef * t
@@ -38,8 +38,9 @@ and fundef = { name : Id.t * Type.t; args : (Id.t * Type.t) list; body : t }
 
 let rec fv = function (* 式に出現する（自由な）変数 (caml2html: knormal_fv) *)
   | Unit | Int(_) | Float(_) | ExtArray(_) -> S.empty
-  | Neg(x) | FNeg(x) | FZero(x) | Mul4(x) | Mul10(x) | Div2(x) | Div10(x) | FtoI(x) | ItoF(x) | Out(x,_) | Unknown(_,_,_,x) -> S.singleton x
+  | Neg(x) | FNeg(x) | Mul4(x) | Mul10(x) | Div2(x) | Div10(x) | FtoI(x) | ItoF(x) | Out(x,_) | Unknown(_,_,_,x) -> S.singleton x
   | Add(x, y) | Sub(x, y) | FAdd(x, y) | FSub(x, y) | FMul(x, y) | FDiv(x, y) | Get(x, y) -> S.of_list [x; y]
+  | IfFZero(x,e1,e2) -> S.add x (S.union (fv e1) (fv e2))
   | IfEq(x, y, e1, e2) | IfLE(x, y, e1, e2) | IfFLt(x, y, e1, e2)-> S.add x (S.add y (S.union (fv e1) (fv e2)))
   | Let((x, t), e1, e2) -> S.union (fv e1) (S.remove x (fv e2))
   | Var(x) -> S.singleton x
@@ -97,9 +98,6 @@ let rec g env = function (* K正規化ルーチン本体 (caml2html: knormal_g) *)
   | Syntax.FNeg(e) ->
       insert_let (g env e)
         (fun x -> FNeg(x), Type.Float)
-  | Syntax.FZero(e) ->
-      insert_let (g env e)
-        (fun x -> FZero(x), Type.Bool)
   | Syntax.FAdd(e1, e2) ->
       insert_let (g env e1)
         (fun x -> insert_let (g env e2)
@@ -116,7 +114,7 @@ let rec g env = function (* K正規化ルーチン本体 (caml2html: knormal_g) *)
       insert_let (g env e1)
         (fun x -> insert_let (g env e2)
             (fun y -> FDiv(x, y), Type.Float))
-  | Syntax.Eq _ | Syntax.LE _ | Syntax.FLt _ as cmp ->
+  | Syntax.Eq _ | Syntax.LE _ | Syntax.FLt _ | Syntax.FZero _ as cmp ->
       g env (Syntax.If(cmp, Syntax.Bool(true), Syntax.Bool(false)))
   | Syntax.If(Syntax.Not(e1), e2, e3) -> g env (Syntax.If(e1, e3, e2)) (* notによる分岐を変換 (caml2html: knormal_not) *)
   | Syntax.If(Syntax.Eq(e1, e2), e3, e4) ->
@@ -140,6 +138,12 @@ let rec g env = function (* K正規化ルーチン本体 (caml2html: knormal_g) *)
               let e3', t3 = g env e3 in
               let e4', t4 = g env e4 in
               IfFLt(x, y, e3', e4'), t3))
+  | Syntax.If(Syntax.FZero(e1),e3,e4) -> (***********************)
+      insert_let (g env e1)
+            (fun y ->
+              let e3', t3 = g env e3 in
+              let e4', t4 = g env e4 in
+              IfFZero(y, e3', e4'), t3)
   | Syntax.If(e1, e2, e3) -> g env (Syntax.If(Syntax.Eq(e1, Syntax.Bool(false)), e3, e2)) (* 比較のない分岐を変換 (caml2html: knormal_if) *)
   | Syntax.Let((x, t), e1, e2) ->
       let e1', t1 = g env e1 in
@@ -260,7 +264,6 @@ let rec print e i =
   | FtoI x      -> p ("ftoi " ^ x)
   | ItoF x      -> p ("itof " ^ x)
   | FNeg  x    -> p ("fneg " ^ x)
-  | FZero  x    -> p ("=0.0? " ^ x)
   | FAdd (x,y) -> p ("fadd " ^ x ^ " " ^ y)
   | FSub (x,y) -> p ("fsub " ^ x ^ " " ^ y)
   | FMul (x,y) -> p ("fmul " ^ x ^ " " ^ y)

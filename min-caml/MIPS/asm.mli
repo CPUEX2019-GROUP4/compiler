@@ -20,7 +20,6 @@ and exp =
   | Lwz of Id.t * id_or_imm
   | Stw of Id.t * Id.t * id_or_imm
   | FMr of Id.t
-  | FZero of Id.t
   | FNeg of Id.t
   | FAdd of Id.t * Id.t
   | FSub of Id.t * Id.t
@@ -36,6 +35,7 @@ and exp =
   | IfFEq of Id.t * Id.t * t * t
   | IfFLE of Id.t * Id.t * t * t
   | IfFLt of Id.t * Id.t * t * t
+  | IfFZero of Id.t * t * t
   (* closure address, integer arguments, and float arguments *)
   | CallCls of Id.t * Id.t list * Id.t list
   | CallDir of Id.l * Id.t list * Id.t list

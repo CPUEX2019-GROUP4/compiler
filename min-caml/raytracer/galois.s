@@ -1551,42 +1551,42 @@ floor.2560:
     ftoi r1 f0
     itof f0 r1
     jr r31
-xor.2592:
-    addi r28 r0 0
-    bne r1 r28 beq_else.8802
-    or r1 r2 r0
-    jr r31
-beq_else.8802:
-    addi r28 r0 0
-    bne r2 r28 beq_else.8803
-    addi r1 r0 1
-    jr r31
-beq_else.8803:
-    addi r1 r0 0
-    jr r31
-fabs.2595:
+fabs.2562:
     flui f1 0
     # 0.000000
     fclt f0 f1
-    bc1f float_ble_else.8804
+    bc1f float_ble_else.8802
     fneg f0 f0
     jr r31
-float_ble_else.8804:
+float_ble_else.8802:
     jr r31
-fhalf.2597:
+fhalf.2564:
     flui f1 16128
     # 0.500000
     fmul f0 f0 f1
     jr r31
-fsqr.2599:
+fsqr.2566:
     fmul f0 f0 f0
     jr r31
-fless.2601:
+fless.2568:
     fclt f0 f1
-    bc1f float_ble_else.8805
+    bc1f float_ble_else.8803
     addi r1 r0 1
     jr r31
-float_ble_else.8805:
+float_ble_else.8803:
+    addi r1 r0 0
+    jr r31
+xor.2601:
+    addi r28 r0 0
+    bne r1 r28 beq_else.8804
+    or r1 r2 r0
+    jr r31
+beq_else.8804:
+    addi r28 r0 0
+    bne r2 r28 beq_else.8805
+    addi r1 r0 1
+    jr r31
+beq_else.8805:
     addi r1 r0 0
     jr r31
 sgn.2604:
@@ -1651,7 +1651,7 @@ vecunit_sgn.2630:
     sw r1 r29 4
     sw r31 r29 12
     addi r29 r29 16
-    jal fsqr.2599
+    jal fsqr.2566
     subi r29 r29 16
     lw r31 r29 12
     lw r1 r29 4
@@ -1660,7 +1660,7 @@ vecunit_sgn.2630:
     fmv  f0 f1
     sw r31 r29 20
     addi r29 r29 24
-    jal fsqr.2599
+    jal fsqr.2566
     subi r29 r29 24
     lw r31 r29 20
     lwcZ f1 r29 8
@@ -1671,7 +1671,7 @@ vecunit_sgn.2630:
     fmv  f0 f1
     sw r31 r29 28
     addi r29 r29 32
-    jal fsqr.2599
+    jal fsqr.2566
     subi r29 r29 32
     lw r31 r29 28
     lwcZ f1 r29 16
@@ -2201,7 +2201,7 @@ rotate_quadratic_matrix.2735:
     fmv  f0 f3
     sw r31 r29 148
     addi r29 r29 152
-    jal fsqr.2599
+    jal fsqr.2566
     subi r29 r29 152
     lw r31 r29 148
     lwcZ f1 r29 136
@@ -2211,7 +2211,7 @@ rotate_quadratic_matrix.2735:
     fmv  f0 f2
     sw r31 r29 156
     addi r29 r29 160
-    jal fsqr.2599
+    jal fsqr.2566
     subi r29 r29 160
     lw r31 r29 156
     lwcZ f1 r29 120
@@ -2223,7 +2223,7 @@ rotate_quadratic_matrix.2735:
     fmv  f0 f2
     sw r31 r29 164
     addi r29 r29 168
-    jal fsqr.2599
+    jal fsqr.2566
     subi r29 r29 168
     lw r31 r29 164
     lwcZ f1 r29 104
@@ -2235,7 +2235,7 @@ rotate_quadratic_matrix.2735:
     lwcZ f0 r29 96
     sw r31 r29 164
     addi r29 r29 168
-    jal fsqr.2599
+    jal fsqr.2566
     subi r29 r29 168
     lw r31 r29 164
     lwcZ f1 r29 136
@@ -2245,7 +2245,7 @@ rotate_quadratic_matrix.2735:
     fmv  f0 f2
     sw r31 r29 172
     addi r29 r29 176
-    jal fsqr.2599
+    jal fsqr.2566
     subi r29 r29 176
     lw r31 r29 172
     lwcZ f1 r29 120
@@ -2257,7 +2257,7 @@ rotate_quadratic_matrix.2735:
     fmv  f0 f2
     sw r31 r29 180
     addi r29 r29 184
-    jal fsqr.2599
+    jal fsqr.2566
     subi r29 r29 184
     lw r31 r29 180
     lwcZ f1 r29 104
@@ -2269,7 +2269,7 @@ rotate_quadratic_matrix.2735:
     lwcZ f0 r29 72
     sw r31 r29 180
     addi r29 r29 184
-    jal fsqr.2599
+    jal fsqr.2566
     subi r29 r29 184
     lw r31 r29 180
     lwcZ f1 r29 136
@@ -2279,7 +2279,7 @@ rotate_quadratic_matrix.2735:
     fmv  f0 f2
     sw r31 r29 188
     addi r29 r29 192
-    jal fsqr.2599
+    jal fsqr.2566
     subi r29 r29 192
     lw r31 r29 188
     lwcZ f1 r29 120
@@ -2291,7 +2291,7 @@ rotate_quadratic_matrix.2735:
     fmv  f0 f2
     sw r31 r29 196
     addi r29 r29 200
-    jal fsqr.2599
+    jal fsqr.2566
     subi r29 r29 200
     lw r31 r29 196
     lwcZ f1 r29 104
@@ -2562,7 +2562,7 @@ beq_cont.8833:
     fmv  f0 f1
     sw r31 r29 76
     addi r29 r29 80
-    jal fsqr.2599
+    jal fsqr.2566
     subi r29 r29 80
     lw r31 r29 76
     lwcZ f1 r29 64
@@ -2589,7 +2589,7 @@ beq_cont.8837:
     fmv  f0 f1
     sw r31 r29 92
     addi r29 r29 96
-    jal fsqr.2599
+    jal fsqr.2566
     subi r29 r29 96
     lw r31 r29 92
     lwcZ f1 r29 80
@@ -2616,7 +2616,7 @@ beq_cont.8840:
     fmv  f0 f1
     sw r31 r29 108
     addi r29 r29 112
-    jal fsqr.2599
+    jal fsqr.2566
     subi r29 r29 112
     lw r31 r29 108
     lwcZ f1 r29 96
@@ -2884,7 +2884,7 @@ float_ble_cont.8863:
     mv r2 r3
     sw r31 r29 68
     addi r29 r29 72
-    jal xor.2592
+    jal xor.2601
     subi r29 r29 72
     lw r31 r29 68
     lw r2 r29 52
@@ -2916,7 +2916,7 @@ float_ble_cont.8863:
     fmv  f0 f1
     sw r31 r29 76
     addi r29 r29 80
-    jal fabs.2595
+    jal fabs.2562
     subi r29 r29 80
     lw r31 r29 76
     lw r1 r29 32
@@ -2926,7 +2926,7 @@ float_ble_cont.8863:
     lwcZ f1 r27 0
     sw r31 r29 76
     addi r29 r29 80
-    jal fless.2601
+    jal fless.2568
     subi r29 r29 80
     lw r31 r29 76
     addi r28 r0 0
@@ -2945,7 +2945,7 @@ beq_else.8864:
     fadd f0 f0 f2
     sw r31 r29 76
     addi r29 r29 80
-    jal fabs.2595
+    jal fabs.2562
     subi r29 r29 80
     lw r31 r29 76
     lw r1 r29 16
@@ -2955,7 +2955,7 @@ beq_else.8864:
     lwcZ f1 r27 0
     sw r31 r29 76
     addi r29 r29 80
-    jal fless.2601
+    jal fless.2568
     subi r29 r29 80
     lw r31 r29 76
     addi r28 r0 0
@@ -3098,7 +3098,7 @@ quadratic.2773:
     sw r1 r29 24
     sw r31 r29 28
     addi r29 r29 32
-    jal fsqr.2599
+    jal fsqr.2566
     subi r29 r29 32
     lw r31 r29 28
     lw r1 r29 24
@@ -3115,7 +3115,7 @@ quadratic.2773:
     fmv  f0 f1
     sw r31 r29 52
     addi r29 r29 56
-    jal fsqr.2599
+    jal fsqr.2566
     subi r29 r29 56
     lw r31 r29 52
     lw r1 r29 24
@@ -3134,7 +3134,7 @@ quadratic.2773:
     fmv  f0 f1
     sw r31 r29 68
     addi r29 r29 72
-    jal fsqr.2599
+    jal fsqr.2566
     subi r29 r29 72
     lw r31 r29 68
     lw r1 r29 24
@@ -3320,7 +3320,7 @@ beq_else.8875:
     fadd f0 f1 f0
     sw r31 r29 148
     addi r29 r29 152
-    jal fhalf.2597
+    jal fhalf.2564
     subi r29 r29 152
     lw r31 r29 148
     lwcZ f1 r29 96
@@ -3403,7 +3403,7 @@ beq_cont.8879:
     fmv  f0 f1
     sw r31 r29 76
     addi r29 r29 80
-    jal fsqr.2599
+    jal fsqr.2566
     subi r29 r29 80
     lw r31 r29 76
     lwcZ f1 r29 64
@@ -3559,7 +3559,7 @@ solver_rect_fast.2796:
     fmv  f0 f4
     sw r31 r29 60
     addi r29 r29 64
-    jal fabs.2595
+    jal fabs.2562
     subi r29 r29 64
     lw r31 r29 60
     lw r1 r29 52
@@ -3573,7 +3573,7 @@ solver_rect_fast.2796:
     lwcZ f0 r29 56
     sw r31 r29 68
     addi r29 r29 72
-    jal fless.2601
+    jal fless.2568
     subi r29 r29 72
     lw r31 r29 68
     addi r28 r0 0
@@ -3589,7 +3589,7 @@ beq_else.8887:
     fadd f0 f0 f2
     sw r31 r29 68
     addi r29 r29 72
-    jal fabs.2595
+    jal fabs.2562
     subi r29 r29 72
     lw r31 r29 68
     lw r1 r29 52
@@ -3603,7 +3603,7 @@ beq_else.8887:
     lwcZ f0 r29 64
     sw r31 r29 76
     addi r29 r29 80
-    jal fless.2601
+    jal fless.2568
     subi r29 r29 80
     lw r31 r29 76
     addi r28 r0 0
@@ -3640,7 +3640,7 @@ beq_cont.8888:
     fmv  f0 f2
     sw r31 r29 84
     addi r29 r29 88
-    jal fabs.2595
+    jal fabs.2562
     subi r29 r29 88
     lw r31 r29 84
     lw r1 r29 52
@@ -3654,7 +3654,7 @@ beq_cont.8888:
     lwcZ f0 r29 80
     sw r31 r29 92
     addi r29 r29 96
-    jal fless.2601
+    jal fless.2568
     subi r29 r29 96
     lw r31 r29 92
     addi r28 r0 0
@@ -3670,7 +3670,7 @@ beq_else.8894:
     fadd f0 f0 f2
     sw r31 r29 92
     addi r29 r29 96
-    jal fabs.2595
+    jal fabs.2562
     subi r29 r29 96
     lw r31 r29 92
     lw r1 r29 52
@@ -3684,7 +3684,7 @@ beq_else.8894:
     lwcZ f0 r29 88
     sw r31 r29 100
     addi r29 r29 104
-    jal fless.2601
+    jal fless.2568
     subi r29 r29 104
     lw r31 r29 100
     addi r28 r0 0
@@ -3721,7 +3721,7 @@ beq_cont.8895:
     fmv  f0 f1
     sw r31 r29 108
     addi r29 r29 112
-    jal fabs.2595
+    jal fabs.2562
     subi r29 r29 112
     lw r31 r29 108
     lw r1 r29 52
@@ -3735,7 +3735,7 @@ beq_cont.8895:
     lwcZ f0 r29 104
     sw r31 r29 116
     addi r29 r29 120
-    jal fless.2601
+    jal fless.2568
     subi r29 r29 120
     lw r31 r29 116
     addi r28 r0 0
@@ -3751,7 +3751,7 @@ beq_else.8901:
     fadd f0 f0 f2
     sw r31 r29 116
     addi r29 r29 120
-    jal fabs.2595
+    jal fabs.2562
     subi r29 r29 120
     lw r31 r29 116
     lw r1 r29 52
@@ -3765,7 +3765,7 @@ beq_else.8901:
     lwcZ f0 r29 112
     sw r31 r29 124
     addi r29 r29 128
-    jal fless.2601
+    jal fless.2568
     subi r29 r29 128
     lw r31 r29 124
     addi r28 r0 0
@@ -3886,7 +3886,7 @@ beq_cont.8912:
     fmv  f0 f1
     sw r31 r29 52
     addi r29 r29 56
-    jal fsqr.2599
+    jal fsqr.2566
     subi r29 r29 56
     lw r31 r29 52
     lwcZ f1 r29 40
@@ -4116,7 +4116,7 @@ solver_second_fast2.2826:
     swcZ f3 r29 32
     sw r31 r29 44
     addi r29 r29 48
-    jal fsqr.2599
+    jal fsqr.2566
     subi r29 r29 48
     lw r31 r29 44
     lwcZ f1 r29 24
@@ -4316,7 +4316,7 @@ float_ble_cont.8931:
     mv r2 r3
     sw r31 r29 12
     addi r29 r29 16
-    jal xor.2592
+    jal xor.2601
     subi r29 r29 16
     lw r31 r29 12
     lw r2 r29 0
@@ -4373,7 +4373,7 @@ float_ble_cont.8935:
     mv r2 r3
     sw r31 r29 20
     addi r29 r29 24
-    jal xor.2592
+    jal xor.2601
     subi r29 r29 24
     lw r31 r29 20
     lw r2 r29 0
@@ -4430,7 +4430,7 @@ float_ble_cont.8939:
     mv r2 r3
     sw r31 r29 20
     addi r29 r29 24
-    jal xor.2592
+    jal xor.2601
     subi r29 r29 24
     lw r31 r29 20
     lw r2 r29 0
@@ -4611,7 +4611,7 @@ beq_else.8941:
     fadd f0 f1 f0
     sw r31 r29 100
     addi r29 r29 104
-    jal fhalf.2597
+    jal fhalf.2564
     subi r29 r29 104
     lw r31 r29 100
     lwcZ f1 r29 32
@@ -4647,7 +4647,7 @@ beq_else.8941:
     fadd f0 f1 f0
     sw r31 r29 124
     addi r29 r29 128
-    jal fhalf.2597
+    jal fhalf.2564
     subi r29 r29 128
     lw r31 r29 124
     lwcZ f1 r29 48
@@ -4682,7 +4682,7 @@ beq_else.8941:
     fadd f0 f1 f0
     sw r31 r29 148
     addi r29 r29 152
-    jal fhalf.2597
+    jal fhalf.2564
     subi r29 r29 152
     lw r31 r29 148
     lwcZ f1 r29 64
@@ -4953,7 +4953,7 @@ is_rect_outside.2855:
     sw r1 r29 16
     sw r31 r29 20
     addi r29 r29 24
-    jal fabs.2595
+    jal fabs.2562
     subi r29 r29 24
     lw r31 r29 20
     lw r1 r29 16
@@ -4967,7 +4967,7 @@ is_rect_outside.2855:
     lwcZ f0 r29 24
     sw r31 r29 36
     addi r29 r29 40
-    jal fless.2601
+    jal fless.2568
     subi r29 r29 40
     lw r31 r29 36
     addi r28 r0 0
@@ -4978,7 +4978,7 @@ beq_else.8960:
     lwcZ f0 r29 8
     sw r31 r29 36
     addi r29 r29 40
-    jal fabs.2595
+    jal fabs.2562
     subi r29 r29 40
     lw r31 r29 36
     lw r1 r29 16
@@ -4992,7 +4992,7 @@ beq_else.8960:
     lwcZ f0 r29 32
     sw r31 r29 44
     addi r29 r29 48
-    jal fless.2601
+    jal fless.2568
     subi r29 r29 48
     lw r31 r29 44
     addi r28 r0 0
@@ -5003,7 +5003,7 @@ beq_else.8962:
     lwcZ f0 r29 0
     sw r31 r29 44
     addi r29 r29 48
-    jal fabs.2595
+    jal fabs.2562
     subi r29 r29 48
     lw r31 r29 44
     lw r1 r29 16
@@ -5017,7 +5017,7 @@ beq_else.8962:
     lwcZ f0 r29 40
     sw r31 r29 52
     addi r29 r29 56
-    jal fless.2601
+    jal fless.2568
     subi r29 r29 56
     lw r31 r29 52
 beq_cont.8963:
@@ -5077,7 +5077,7 @@ float_ble_else.8967:
 float_ble_cont.8968:
     sw r31 r29 44
     addi r29 r29 48
-    jal xor.2592
+    jal xor.2601
     subi r29 r29 48
     lw r31 r29 44
     addi r28 r0 0
@@ -5130,7 +5130,7 @@ float_ble_else.8973:
 float_ble_cont.8974:
     sw r31 r29 28
     addi r29 r29 32
-    jal xor.2592
+    jal xor.2601
     subi r29 r29 32
     lw r31 r29 28
     addi r28 r0 0
@@ -5290,7 +5290,7 @@ beq_else.8983:
     fori f1 f1 -13107
     sw r31 r29 52
     addi r29 r29 56
-    jal fless.2601
+    jal fless.2568
     subi r29 r29 56
     lw r31 r29 52
 beq_cont.8984:
@@ -5453,7 +5453,7 @@ beq_else.8993:
     fori f1 f1 -13107
     sw r31 r29 28
     addi r29 r29 32
-    jal fless.2601
+    jal fless.2568
     subi r29 r29 32
     lw r31 r29 28
     addi r28 r0 0
@@ -5587,7 +5587,7 @@ beq_else.9003:
     swcZ f1 r29 56
     sw r31 r29 68
     addi r29 r29 72
-    jal fless.2601
+    jal fless.2568
     subi r29 r29 72
     lw r31 r29 68
     addi r28 r0 0
@@ -5599,7 +5599,7 @@ beq_else.9006:
     lwcZ f0 r29 56
     sw r31 r29 68
     addi r29 r29 72
-    jal fless.2601
+    jal fless.2568
     subi r29 r29 72
     lw r31 r29 68
     addi r28 r0 0
@@ -5771,7 +5771,7 @@ beq_else.9018:
     lwcZ f1 r1 0
     sw r31 r29 36
     addi r29 r29 40
-    jal fless.2601
+    jal fless.2568
     subi r29 r29 40
     lw r31 r29 36
     addi r28 r0 0
@@ -5830,7 +5830,7 @@ judge_intersection.2902:
     swcZ f1 r29 8
     sw r31 r29 20
     addi r29 r29 24
-    jal fless.2601
+    jal fless.2568
     subi r29 r29 24
     lw r31 r29 20
     addi r28 r0 0
@@ -5842,7 +5842,7 @@ beq_else.9023:
     # 100000000.000000
     fori f1 f1 -17376
     lwcZ f0 r29 8
-    j fless.2601
+    j fless.2568
 solve_each_element_fast.2904:
     lw r4 r25 36
     lw r5 r25 32
@@ -5927,7 +5927,7 @@ beq_else.9026:
     swcZ f1 r29 64
     sw r31 r29 76
     addi r29 r29 80
-    jal fless.2601
+    jal fless.2568
     subi r29 r29 80
     lw r31 r29 76
     addi r28 r0 0
@@ -5939,7 +5939,7 @@ beq_else.9029:
     lwcZ f0 r29 64
     sw r31 r29 76
     addi r29 r29 80
-    jal fless.2601
+    jal fless.2568
     subi r29 r29 80
     lw r31 r29 76
     addi r28 r0 0
@@ -6107,7 +6107,7 @@ beq_else.9041:
     lwcZ f1 r1 0
     sw r31 r29 36
     addi r29 r29 40
-    jal fless.2601
+    jal fless.2568
     subi r29 r29 40
     lw r31 r29 36
     addi r28 r0 0
@@ -6166,7 +6166,7 @@ judge_intersection_fast.2916:
     swcZ f1 r29 8
     sw r31 r29 20
     addi r29 r29 24
-    jal fless.2601
+    jal fless.2568
     subi r29 r29 24
     lw r31 r29 20
     addi r28 r0 0
@@ -6178,7 +6178,7 @@ beq_else.9046:
     # 100000000.000000
     fori f1 f1 -17376
     lwcZ f0 r29 8
-    j fless.2601
+    j fless.2568
 get_nvector_rect.2918:
     lw r2 r25 8
     lw r3 r25 4
@@ -6351,7 +6351,7 @@ beq_else.9050:
     fadd f0 f2 f0
     sw r31 r29 100
     addi r29 r29 104
-    jal fhalf.2597
+    jal fhalf.2564
     subi r29 r29 104
     lw r31 r29 100
     lwcZ f1 r29 64
@@ -6380,7 +6380,7 @@ beq_else.9050:
     fadd f0 f1 f0
     sw r31 r29 108
     addi r29 r29 112
-    jal fhalf.2597
+    jal fhalf.2564
     subi r29 r29 112
     lw r31 r29 108
     lwcZ f1 r29 72
@@ -6409,7 +6409,7 @@ beq_else.9050:
     fadd f0 f1 f0
     sw r31 r29 116
     addi r29 r29 120
-    jal fhalf.2597
+    jal fhalf.2564
     subi r29 r29 120
     lw r31 r29 116
     lwcZ f1 r29 80
@@ -6535,7 +6535,7 @@ utexture.2927:
     # 10.000000
     sw r31 r29 36
     addi r29 r29 40
-    jal fless.2601
+    jal fless.2568
     subi r29 r29 40
     lw r31 r29 36
     lw r2 r29 0
@@ -6571,7 +6571,7 @@ utexture.2927:
     # 10.000000
     sw r31 r29 60
     addi r29 r29 64
-    jal fless.2601
+    jal fless.2568
     subi r29 r29 64
     lw r31 r29 60
     lw r2 r29 32
@@ -6616,7 +6616,7 @@ beq_else.9054:
     lw r31 r29 60
     sw r31 r29 60
     addi r29 r29 64
-    jal fsqr.2599
+    jal fsqr.2566
     subi r29 r29 64
     lw r31 r29 60
     flui f1 17279
@@ -6664,7 +6664,7 @@ beq_else.9063:
     fmv  f0 f1
     sw r31 r29 92
     addi r29 r29 96
-    jal fsqr.2599
+    jal fsqr.2566
     subi r29 r29 96
     lw r31 r29 92
     lwcZ f1 r29 80
@@ -6672,7 +6672,7 @@ beq_else.9063:
     fmv  f0 f1
     sw r31 r29 100
     addi r29 r29 104
-    jal fsqr.2599
+    jal fsqr.2566
     subi r29 r29 104
     lw r31 r29 100
     lwcZ f1 r29 88
@@ -6704,7 +6704,7 @@ beq_else.9063:
     lw r31 r29 108
     sw r31 r29 108
     addi r29 r29 112
-    jal fsqr.2599
+    jal fsqr.2566
     subi r29 r29 112
     lw r31 r29 108
     flui f1 17279
@@ -6781,7 +6781,7 @@ beq_else.9065:
     fmv  f0 f1
     sw r31 r29 156
     addi r29 r29 160
-    jal fsqr.2599
+    jal fsqr.2566
     subi r29 r29 160
     lw r31 r29 156
     lwcZ f1 r29 144
@@ -6789,7 +6789,7 @@ beq_else.9065:
     fmv  f0 f1
     sw r31 r29 164
     addi r29 r29 168
-    jal fsqr.2599
+    jal fsqr.2566
     subi r29 r29 168
     lw r31 r29 164
     lwcZ f1 r29 152
@@ -6799,7 +6799,7 @@ beq_else.9065:
     fmv  f0 f1
     sw r31 r29 172
     addi r29 r29 176
-    jal fabs.2595
+    jal fabs.2562
     subi r29 r29 176
     lw r31 r29 172
     flui f1 14545
@@ -6807,7 +6807,7 @@ beq_else.9065:
     fori f1 f1 -18665
     sw r31 r29 172
     addi r29 r29 176
-    jal fless.2601
+    jal fless.2568
     subi r29 r29 176
     lw r31 r29 172
     addi r28 r0 0
@@ -6817,7 +6817,7 @@ beq_else.9065:
     fdiv f0 f1 f0
     sw r31 r29 172
     addi r29 r29 176
-    jal fabs.2595
+    jal fabs.2562
     subi r29 r29 176
     lw r31 r29 172
     sw r31 r29 172
@@ -6876,7 +6876,7 @@ beq_cont.9069:
     fmv  f0 f1
     sw r31 r29 212
     addi r29 r29 216
-    jal fabs.2595
+    jal fabs.2562
     subi r29 r29 216
     lw r31 r29 212
     flui f1 14545
@@ -6884,7 +6884,7 @@ beq_cont.9069:
     fori f1 f1 -18665
     sw r31 r29 212
     addi r29 r29 216
-    jal fless.2601
+    jal fless.2568
     subi r29 r29 216
     lw r31 r29 212
     addi r28 r0 0
@@ -6894,7 +6894,7 @@ beq_cont.9069:
     fdiv f0 f1 f0
     sw r31 r29 212
     addi r29 r29 216
-    jal fabs.2595
+    jal fabs.2562
     subi r29 r29 216
     lw r31 r29 212
     sw r31 r29 212
@@ -6934,7 +6934,7 @@ beq_cont.9071:
     fmv  f0 f2
     sw r31 r29 236
     addi r29 r29 240
-    jal fsqr.2599
+    jal fsqr.2566
     subi r29 r29 240
     lw r31 r29 236
     lwcZ f1 r29 224
@@ -6947,7 +6947,7 @@ beq_cont.9071:
     fmv  f0 f1
     sw r31 r29 244
     addi r29 r29 248
-    jal fsqr.2599
+    jal fsqr.2566
     subi r29 r29 248
     lw r31 r29 244
     lwcZ f1 r29 232
@@ -6986,12 +6986,12 @@ float_ble_else.9076:
     fmv  f0 f1
     sw r31 r29 20
     addi r29 r29 24
-    jal fsqr.2599
+    jal fsqr.2566
     subi r29 r29 24
     lw r31 r29 20
     sw r31 r29 20
     addi r29 r29 24
-    jal fsqr.2599
+    jal fsqr.2566
     subi r29 r29 24
     lw r31 r29 20
     lwcZ f1 r29 8
@@ -7265,7 +7265,7 @@ float_ble_else.9095:
     swcZ f0 r29 128
     sw r31 r29 140
     addi r29 r29 144
-    jal fsqr.2599
+    jal fsqr.2566
     subi r29 r29 144
     lw r31 r29 140
     lwcZ f1 r29 128
@@ -7405,7 +7405,7 @@ beq_else.9092:
     # 0.500000
     sw r31 r29 164
     addi r29 r29 168
-    jal fless.2601
+    jal fless.2568
     subi r29 r29 168
     lw r31 r29 164
     addi r28 r0 0
@@ -7578,7 +7578,7 @@ beq_cont.9103:
     lwcZ f1 r29 96
     sw r31 r29 196
     addi r29 r29 200
-    jal fless.2601
+    jal fless.2568
     subi r29 r29 200
     lw r31 r29 196
     addi r28 r0 0
@@ -9117,7 +9117,7 @@ calc_dirvec.3039:
     swcZ f1 r29 24
     sw r31 r29 36
     addi r29 r29 40
-    jal fsqr.2599
+    jal fsqr.2566
     subi r29 r29 40
     lw r31 r29 36
     lwcZ f1 r29 24
@@ -9125,7 +9125,7 @@ calc_dirvec.3039:
     fmv  f0 f1
     sw r31 r29 44
     addi r29 r29 48
-    jal fsqr.2599
+    jal fsqr.2566
     subi r29 r29 48
     lw r31 r29 44
     lwcZ f1 r29 32
@@ -9942,7 +9942,7 @@ setup_reflections.3083:
     # 1.000000
     sw r31 r29 20
     addi r29 r29 24
-    jal fless.2601
+    jal fless.2568
     subi r29 r29 24
     lw r31 r29 20
     addi r28 r0 0
