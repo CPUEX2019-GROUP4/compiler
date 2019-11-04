@@ -140,12 +140,12 @@ let rec fhalf x = x *. 0.5 in
 let rec fsqr x = x *. x in
 let rec fless a b = a <. b in
 let rec abs_float x = fabs x in
-(* このテストを実行する場合は、Main.file等を呼び出す前に
-   Typing.extenvを:=等で書き換えて、あらかじめsinやcosなど
-   外部関数の型を陽に指定する必要があります（そうしないと
-   MinCamlでは勝手にint -> intと推論されるため）。 *)
-print_int
-  (int_of_float
-     ((sin (cos (sqrt (abs_float (-12.3))))
-         +. 4.5 -. 6.7 *. 8.9 /. 1.23456789)
-        *. (float_of_int 1000000)))
+let rec print_int_ n =
+  let n =
+    if (n < 0) then ((out 0 45); - n) else n in
+  if (n < 10) then
+    (out 48 n)
+  else
+    let m = n / 10 in
+    ((print_int_ m); (out 48 (n - (m * 10))))
+in ((print_int_ (-1034)); (out 0 10); ())
