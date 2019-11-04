@@ -1,1 +1,1 @@
-print_int (int_of_float (10000000. *. (atan (-. 1.001))))
+print_int (int_of_float (floor (-1.0)))

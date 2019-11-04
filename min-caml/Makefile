@@ -61,7 +61,7 @@ raytrace: $(RESULT) raytracer/minrt.ml libmincaml.S
 	cat MIPS/library.ml > raytracer/galois.ml
 	cat raytracer/globals.ml >> raytracer/galois.ml
 	cat raytracer/minrt.ml >> raytracer/galois.ml
-	./$(RESULT) raytracer/galois
+	./$(RESULT) raytracer/galois > ../syntax.txt
 	cat MIPS/create_array.S >> raytracer/galois.s
 #	cat MIPS/print.S >> raytracer/galois.s
 

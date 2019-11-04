@@ -274,6 +274,8 @@ let rec print e i =
                         print e1 j; print_newline (); print e2 j
   | IfFLt (a,b,e1,e2) -> p ("if " ^ a ^ " <. " ^ b); print_newline ();
                         print e1 j; print_newline (); print e2 j
+  | IfFZero (a,e1,e2) -> p ("if " ^ a ^ " == 0.0 "); print_newline ();
+                        print e1 j; print_newline (); print e2 j
   | Let ((name,typ),e1,e2) -> p ("let " ^ name ^ " : "); Type.print typ; p " ="; print_newline ();
                               print e1 j; print_newline (); indent i; p "in"; print_newline ();
                               print e2 i
@@ -303,6 +305,6 @@ let rec print e i =
 
 let f e = let return = fst (g M.empty e) in
 (* print before returning. *)
-(*(print_newline (); print_newline (); p "----- kNormal.print -----"; print_newline (); print return 0; print_newline ());*)
+(print_newline (); print_newline (); p "----- kNormal.print -----"; print_newline (); print return 0; print_newline ());
   return
 

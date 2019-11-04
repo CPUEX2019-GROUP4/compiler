@@ -36,7 +36,7 @@ let rec kernel_sin a =
   let a3 = a2 *. a in
   let a5 = a3 *. a2 in
   let a7 = a5 *. a2 in
-  (-. (0.0001984126984126984 *. a7)) +. (0.0083333333333 *. a5) -. (0.1666666666666 *. a3) +. a
+  (-. (0.0001984116984126984 *. a7)) +. (0.0083333333333 *. a5) -. (0.1666666666666 *. a3) +. a
 in
 let rec kernel_cos a =
   let a2 = a *. a in
@@ -131,7 +131,7 @@ in
 (* floor *)
 let rec floor x =
   let a = float_of_int (int_of_float x) in
-  if x <. 0.0 then a -. 1.0 else a
+  if x <. a then a -. 1.0 else a
 in
 (******************************************************************************
    Global 勝手に持ってきた
