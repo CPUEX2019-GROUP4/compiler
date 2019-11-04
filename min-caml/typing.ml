@@ -207,8 +207,8 @@ let rec g env e = (* 型推論ルーチン (caml2html: typing_g) *)
 
 let f e =
   (* 問1 syntax print (unify する前に print) *)
-  print_string "----- syntax.print -----";
-  Syntax.print e 0;
+  (*print_string "----- syntax.print -----";
+  Syntax.print e 0;*)
   (****************)
 
   extenv := M.empty;

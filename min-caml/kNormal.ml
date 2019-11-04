@@ -300,6 +300,6 @@ let rec print e i =
 
 let f e = let return = fst (g M.empty e) in
 (* print before returning. *)
-(print_newline (); print_newline (); p "----- kNormal.print -----"; print_newline (); print return 0; print_newline ());
+(*(print_newline (); print_newline (); p "----- kNormal.print -----"; print_newline (); print return 0; print_newline ());*)
   return
 

@@ -6,8 +6,7 @@ if [ $# -lt 0 ] || [ $# -gt 2 ]; then
   exit 1
 fi
 
-if [ $# = 2 ]; then
+if [ $# = 1 ]; then
   input_file=$1
 fi
-
 python3 convert.py $input_file $output_file

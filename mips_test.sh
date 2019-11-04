@@ -28,7 +28,7 @@ cat MIPS/print.S >> ../simulator/simulator/sim/mips_test.s
 # make input.bin
 echo "-----input.bin-----"
 cd ../binary_conversion
-./test.sh $input_file out.bin
+./test.sh $input_file
 cp out.bin ../simulator/simulator/sim/input.bin
 
 # simulate
