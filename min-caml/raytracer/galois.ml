@@ -129,7 +129,8 @@ let rec atan a =
 in
 (* floor *)
 let rec floor x =
-  float_of_int (int_of_float x)
+  let a = float_of_int (int_of_float x) in
+  if x <. 0.0 then a -. 1.0 else a
 in
 (******************************************************************************
    Global 勝手に持ってきた
@@ -138,6 +139,7 @@ let rec fabs f = if f <. 0.0 then (-. f) else f in
 let rec fhalf x = x *. 0.5 in
 let rec fsqr x = x *. x in
 let rec fless a b = a <. b in
+let rec abs_float x = fabs x in
 (**************** グローバル変数の宣言 ****************)
 
 (* オブジェクトの個数 *)

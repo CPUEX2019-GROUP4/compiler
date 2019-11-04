@@ -130,7 +130,7 @@ in
 (* floor *)
 let rec floor x =
   let a = float_of_int (int_of_float x) in
-  if x >. 0.0 then a else a -. 1.0
+  if x <. 0.0 then a -. 1.0 else a
 in
 (******************************************************************************
    Global 勝手に持ってきた
@@ -139,4 +139,13 @@ let rec fabs f = if f <. 0.0 then (-. f) else f in
 let rec fhalf x = x *. 0.5 in
 let rec fsqr x = x *. x in
 let rec fless a b = a <. b in
-print_int (int_of_float (floor (-.3.1)))
+let rec abs_float x = fabs x in
+(* このテストを実行する場合は、Main.file等を呼び出す前に
+   Typing.extenvを:=等で書き換えて、あらかじめsinやcosなど
+   外部関数の型を陽に指定する必要があります（そうしないと
+   MinCamlでは勝手にint -> intと推論されるため）。 *)
+print_int
+  (int_of_float
+     ((sin (cos (sqrt (abs_float (-12.3))))
+         +. 4.5 -. 6.7 *. 8.9 /. 1.23456789)
+        *. (float_of_int 1000000)))

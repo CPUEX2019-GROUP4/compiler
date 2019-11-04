@@ -1,1 +1,1 @@
-print_int (int_of_float (floor (-.3.1)))
+print_int (int_of_float (1000000. *. (sqrt (9.0))))
