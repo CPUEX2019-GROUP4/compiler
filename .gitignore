@@ -6,6 +6,7 @@ min-caml/*.cm*
 min-caml/*.o
 min-caml/test/*.ans
 min-caml/test/*.s
+min-caml/test/mips_test*
 min-caml/raytracer/galois*
 gomi/
 data/

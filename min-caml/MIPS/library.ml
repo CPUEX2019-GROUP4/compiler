@@ -36,13 +36,13 @@ let rec kernel_sin a =
   let a3 = a2 *. a in
   let a5 = a3 *. a2 in
   let a7 = a5 *. a2 in
-  a -. (0.16666668 *. a3) +. (0.008332824 *. a5) -. (0.00019587841 *. a7)
+  (-. (0.0001984126984126984 *. a7)) +. (0.0083333333333 *. a5) -. (0.1666666666666 *. a3) +. a
 in
 let rec kernel_cos a =
   let a2 = a *. a in
   let a4 = a2 *. a2 in
   let a6 = a4 *. a2 in
-  1.0 -. (0.5 *. a2) +. (0.04166368 *. a4) -. (0.0013695068 *. a6)
+  (-. (0.0013888888888888 *. a6)) +. (0.0416666666666666 *. a4) -. (0.5 *. a2) +. 1.0
 in
 let rec sin a =
   let flag = a >. 0.0 in
@@ -95,7 +95,7 @@ let rec sqrt x =
             t
         else
             inner ((t *. t +. x) /. (2. *. t)) (i - 1)
-    in inner (UNKNOWN sqrt_init float float x) 7
+    in inner (UNKNOWN sqrt_init float float x) 5
 in
 (* atan *)
 let rec kernel_atan a1 =

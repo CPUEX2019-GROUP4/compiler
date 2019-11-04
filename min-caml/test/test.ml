@@ -1,1 +1,1 @@
-print_int (int_of_float (1000000. *. (sqrt (9.0))))
+print_int (int_of_float (10000000. *. (atan (-. 1.001))))
