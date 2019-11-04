@@ -8,6 +8,7 @@ let rec print_int n =
     let m = n / 10 in
     ((print_int m); (out 48 (n - (m * 10))))
 in
+let rec print_char c = out 0 c in
 (* sin, cos *)
 let rec reduction_2pi_sub1 a p =
   if a <. p then p else reduction_2pi_sub1 a (p +. p)
@@ -140,12 +141,7 @@ let rec fhalf x = x *. 0.5 in
 let rec fsqr x = x *. x in
 let rec fless a b = a <. b in
 let rec abs_float x = fabs x in
-let rec print_int_ n =
-  let n =
-    if (n < 0) then ((out 0 45); - n) else n in
-  if (n < 10) then
-    (out 48 n)
-  else
-    let m = n / 10 in
-    ((print_int_ m); (out 48 (n - (m * 10))))
-in ((print_int_ (-1034)); (out 0 10); ())
+print_int (- 1034); print_char 10;
+print_int (- 1034); print_char 10;
+print_int (- 1034); print_char 10;
+print_int (- 1034); print_char 10
