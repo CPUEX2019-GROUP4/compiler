@@ -129,7 +129,8 @@ let rec atan a =
 in
 (* floor *)
 let rec floor x =
-  float_of_int (int_of_float x)
+  let a = float_of_int (int_of_float x) in
+  if x >. 0.0 then a else a -. 1.0
 in
 (******************************************************************************
    Global 勝手に持ってきた
