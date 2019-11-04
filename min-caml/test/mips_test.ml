@@ -138,4 +138,4 @@ let rec fabs f = if f <. 0.0 then (-. f) else f in
 let rec fhalf x = x *. 0.5 in
 let rec fsqr x = x *. x in
 let rec fless a b = a <. b in
-print_int (if fiszero 3.0 then 0 else 1)
+print_int (int_of_float (floor 3.50))
