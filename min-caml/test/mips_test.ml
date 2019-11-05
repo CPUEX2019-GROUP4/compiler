@@ -141,4 +141,4 @@ let rec fhalf x = x *. 0.5 in
 let rec fsqr x = x *. x in
 let rec fless a b = a <. b in
 let rec abs_float x = fabs x in
-print_int (int_of_float (floor (-1.0)))
+print_int (- 1034); print_char 10
