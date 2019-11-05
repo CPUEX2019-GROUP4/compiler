@@ -51,3 +51,7 @@ cat ../../../min-caml/test/$1.ans
 printf '\n'
 #diff -u --ignore-space-change --strip-trailing-cr --ignore-blank-lines  out.txt ../../../min-caml/test/$1.ans
 
+# program.txt
+echo "----- program.txt ------"
+cd ../../../
+./assemble_for_core.sh
