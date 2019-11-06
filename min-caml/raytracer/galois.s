@@ -1226,8 +1226,8 @@ beq_else.8683:
     addi r1 r0 0
 beq_cont.8684:
     or r2 r30 r0
-    addi r30 r30 16
-    sw r1 r2 8
+    addi r30 r30 8
+    sw r1 r2 4
     swcZ f0 r2 0
     or r1 r2 r0
     j float_ble_cont.8682
@@ -1236,12 +1236,12 @@ float_ble_else.8681:
     # 0.000000
     fadd f0 f0 f1
     or r1 r30 r0
-    addi r30 r30 16
+    addi r30 r30 8
     lw r2 r29 0
-    sw r2 r1 8
+    sw r2 r1 4
     swcZ f0 r1 0
 float_ble_cont.8682:
-    lw r2 r1 8
+    lw r2 r1 4
     lwcZ f0 r1 0
     flui f1 16329
     # 1.570796
@@ -1319,20 +1319,20 @@ float_ble_cont.8691:
     fsub f0 f0 f1
     addi r1 r0 0
     or r2 r30 r0
-    addi r30 r30 16
-    sw r1 r2 8
+    addi r30 r30 8
+    sw r1 r2 4
     swcZ f0 r2 0
     or r1 r2 r0
     j float_ble_cont.8693
 float_ble_else.8692:
     addi r1 r0 1
     or r2 r30 r0
-    addi r30 r30 16
-    sw r1 r2 8
+    addi r30 r30 8
+    sw r1 r2 4
     swcZ f0 r2 0
     or r1 r2 r0
 float_ble_cont.8693:
-    lw r2 r1 8
+    lw r2 r1 4
     lwcZ f0 r1 0
     flui f1 16329
     # 1.570796
@@ -1351,8 +1351,8 @@ beq_else.8696:
     addi r1 r0 0
 beq_cont.8697:
     or r2 r30 r0
-    addi r30 r30 16
-    sw r1 r2 8
+    addi r30 r30 8
+    sw r1 r2 4
     swcZ f0 r2 0
     or r1 r2 r0
     j float_ble_cont.8695
@@ -1361,11 +1361,11 @@ float_ble_else.8694:
     # 0.000000
     fadd f0 f0 f1
     or r1 r30 r0
-    addi r30 r30 16
-    sw r2 r1 8
+    addi r30 r30 8
+    sw r2 r1 4
     swcZ f0 r1 0
 float_ble_cont.8695:
-    lw r2 r1 8
+    lw r2 r1 4
     lwcZ f0 r1 0
     flui f1 16201
     # 0.785398
@@ -1637,13 +1637,13 @@ bge_else.8720:
     jr r31
 vecset.2587:
     swcZ f0 r1 0
-    swcZ f1 r1 8
-    swcZ f2 r1 16
+    swcZ f1 r1 4
+    swcZ f2 r1 8
     jr r31
 vecfill.2592:
     swcZ f0 r1 0
+    swcZ f0 r1 4
     swcZ f0 r1 8
-    swcZ f0 r1 16
     jr r31
 vecbzero.2595:
     flui f0 0
@@ -1652,10 +1652,10 @@ vecbzero.2595:
 veccpy.2597:
     lwcZ f0 r2 0
     swcZ f0 r1 0
+    lwcZ f0 r2 4
+    swcZ f0 r1 4
     lwcZ f0 r2 8
     swcZ f0 r1 8
-    lwcZ f0 r2 16
-    swcZ f0 r1 16
     jr r31
 vecunit_sgn.2605:
     lwcZ f0 r1 0
@@ -1667,7 +1667,7 @@ vecunit_sgn.2605:
     subi r29 r29 16
     lw r31 r29 12
     lw r1 r29 4
-    lwcZ f1 r1 8
+    lwcZ f1 r1 4
     swcZ f0 r29 8
     fmv  f0 f1
     sw r31 r29 20
@@ -1678,7 +1678,7 @@ vecunit_sgn.2605:
     lwcZ f1 r29 8
     fadd f0 f1 f0
     lw r1 r29 4
-    lwcZ f1 r1 16
+    lwcZ f1 r1 8
     swcZ f0 r29 16
     fmv  f0 f1
     sw r31 r29 28
@@ -1716,33 +1716,33 @@ float_eq0_cont.8725:
     lwcZ f1 r1 0
     fmul f1 f1 f0
     swcZ f1 r1 0
-    lwcZ f1 r1 8
+    lwcZ f1 r1 4
     fmul f1 f1 f0
-    swcZ f1 r1 8
-    lwcZ f1 r1 16
+    swcZ f1 r1 4
+    lwcZ f1 r1 8
     fmul f0 f1 f0
-    swcZ f0 r1 16
+    swcZ f0 r1 8
     jr r31
 veciprod.2608:
     lwcZ f0 r1 0
     lwcZ f1 r2 0
     fmul f0 f0 f1
-    lwcZ f1 r1 8
-    lwcZ f2 r2 8
+    lwcZ f1 r1 4
+    lwcZ f2 r2 4
     fmul f1 f1 f2
     fadd f0 f0 f1
-    lwcZ f1 r1 16
-    lwcZ f2 r2 16
+    lwcZ f1 r1 8
+    lwcZ f2 r2 8
     fmul f1 f1 f2
     fadd f0 f0 f1
     jr r31
 veciprod2.2611:
     lwcZ f3 r1 0
     fmul f0 f3 f0
-    lwcZ f3 r1 8
+    lwcZ f3 r1 4
     fmul f1 f3 f1
     fadd f0 f0 f1
-    lwcZ f1 r1 16
+    lwcZ f1 r1 8
     fmul f1 f1 f2
     fadd f0 f0 f1
     jr r31
@@ -1752,41 +1752,41 @@ vecaccum.2616:
     fmul f2 f0 f2
     fadd f1 f1 f2
     swcZ f1 r1 0
-    lwcZ f1 r1 8
-    lwcZ f2 r2 8
+    lwcZ f1 r1 4
+    lwcZ f2 r2 4
     fmul f2 f0 f2
     fadd f1 f1 f2
-    swcZ f1 r1 8
-    lwcZ f1 r1 16
-    lwcZ f2 r2 16
+    swcZ f1 r1 4
+    lwcZ f1 r1 8
+    lwcZ f2 r2 8
     fmul f0 f0 f2
     fadd f0 f1 f0
-    swcZ f0 r1 16
+    swcZ f0 r1 8
     jr r31
 vecadd.2620:
     lwcZ f0 r1 0
     lwcZ f1 r2 0
     fadd f0 f0 f1
     swcZ f0 r1 0
+    lwcZ f0 r1 4
+    lwcZ f1 r2 4
+    fadd f0 f0 f1
+    swcZ f0 r1 4
     lwcZ f0 r1 8
     lwcZ f1 r2 8
     fadd f0 f0 f1
     swcZ f0 r1 8
-    lwcZ f0 r1 16
-    lwcZ f1 r2 16
-    fadd f0 f0 f1
-    swcZ f0 r1 16
     jr r31
 vecscale.2626:
     lwcZ f1 r1 0
     fmul f1 f1 f0
     swcZ f1 r1 0
-    lwcZ f1 r1 8
+    lwcZ f1 r1 4
     fmul f1 f1 f0
-    swcZ f1 r1 8
-    lwcZ f1 r1 16
+    swcZ f1 r1 4
+    lwcZ f1 r1 8
     fmul f0 f1 f0
-    swcZ f0 r1 16
+    swcZ f0 r1 8
     jr r31
 vecaccumv.2629:
     lwcZ f0 r1 0
@@ -1795,18 +1795,18 @@ vecaccumv.2629:
     fmul f1 f1 f2
     fadd f0 f0 f1
     swcZ f0 r1 0
+    lwcZ f0 r1 4
+    lwcZ f1 r2 4
+    lwcZ f2 r3 4
+    fmul f1 f1 f2
+    fadd f0 f0 f1
+    swcZ f0 r1 4
     lwcZ f0 r1 8
     lwcZ f1 r2 8
     lwcZ f2 r3 8
     fmul f1 f1 f2
     fadd f0 f0 f1
     swcZ f0 r1 8
-    lwcZ f0 r1 16
-    lwcZ f1 r2 16
-    lwcZ f2 r3 16
-    fmul f1 f1 f2
-    fadd f0 f0 f1
-    swcZ f0 r1 16
     jr r31
 o_texturetype.2633:
     lw r1 r1 0
@@ -1829,11 +1829,11 @@ o_param_a.2643:
     jr r31
 o_param_b.2645:
     lw r1 r1 16
-    lwcZ f0 r1 8
+    lwcZ f0 r1 4
     jr r31
 o_param_c.2647:
     lw r1 r1 16
-    lwcZ f0 r1 16
+    lwcZ f0 r1 8
     jr r31
 o_param_abc.2649:
     lw r1 r1 16
@@ -1844,11 +1844,11 @@ o_param_x.2651:
     jr r31
 o_param_y.2653:
     lw r1 r1 20
-    lwcZ f0 r1 8
+    lwcZ f0 r1 4
     jr r31
 o_param_z.2655:
     lw r1 r1 20
-    lwcZ f0 r1 16
+    lwcZ f0 r1 8
     jr r31
 o_diffuse.2657:
     lw r1 r1 28
@@ -1856,7 +1856,7 @@ o_diffuse.2657:
     jr r31
 o_hilight.2659:
     lw r1 r1 28
-    lwcZ f0 r1 8
+    lwcZ f0 r1 4
     jr r31
 o_color_red.2661:
     lw r1 r1 32
@@ -1864,11 +1864,11 @@ o_color_red.2661:
     jr r31
 o_color_green.2663:
     lw r1 r1 32
-    lwcZ f0 r1 8
+    lwcZ f0 r1 4
     jr r31
 o_color_blue.2665:
     lw r1 r1 32
-    lwcZ f0 r1 16
+    lwcZ f0 r1 8
     jr r31
 o_param_r1.2667:
     lw r1 r1 36
@@ -1876,11 +1876,11 @@ o_param_r1.2667:
     jr r31
 o_param_r2.2669:
     lw r1 r1 36
-    lwcZ f0 r1 8
+    lwcZ f0 r1 4
     jr r31
 o_param_r3.2671:
     lw r1 r1 36
-    lwcZ f0 r1 16
+    lwcZ f0 r1 8
     jr r31
 o_param_ctbl.2673:
     lw r1 r1 40
@@ -1946,10 +1946,10 @@ read_screen_settings.2706:
     swcZ f0 r5 0
     inflt f0 r0
     #unknown instruction
-    swcZ f0 r5 8
+    swcZ f0 r5 4
     inflt f0 r0
     #unknown instruction
-    swcZ f0 r5 16
+    swcZ f0 r5 8
     inflt f0 r0
     #unknown instruction
     sw r1 r29 0
@@ -2010,43 +2010,43 @@ read_screen_settings.2706:
     # -200.000000
     lwcZ f3 r29 40
     fmul f2 f3 f2
-    swcZ f2 r1 8
+    swcZ f2 r1 4
     lwcZ f2 r29 56
     fmul f4 f1 f2
     flui f5 17224
     # 200.000000
     fmul f4 f4 f5
-    swcZ f4 r1 16
+    swcZ f4 r1 8
     lw r2 r29 12
     swcZ f2 r2 0
     flui f4 0
     # 0.000000
-    swcZ f4 r2 8
+    swcZ f4 r2 4
     fneg f4 f0
-    swcZ f4 r2 16
+    swcZ f4 r2 8
     fneg f4 f3
     fmul f0 f4 f0
     lw r2 r29 8
     swcZ f0 r2 0
     fneg f0 f1
-    swcZ f0 r2 8
+    swcZ f0 r2 4
     fneg f0 f3
     fmul f0 f0 f2
-    swcZ f0 r2 16
+    swcZ f0 r2 8
     lw r2 r29 4
     lwcZ f0 r2 0
     lwcZ f1 r1 0
     fsub f0 f0 f1
     lw r3 r29 0
     swcZ f0 r3 0
+    lwcZ f0 r2 4
+    lwcZ f1 r1 4
+    fsub f0 f0 f1
+    swcZ f0 r3 4
     lwcZ f0 r2 8
     lwcZ f1 r1 8
     fsub f0 f0 f1
     swcZ f0 r3 8
-    lwcZ f0 r2 16
-    lwcZ f1 r1 16
-    fsub f0 f0 f1
-    swcZ f0 r3 16
     jr r31
 read_light.2708:
     lw r1 r25 8
@@ -2070,7 +2070,7 @@ read_light.2708:
     lw r31 r29 20
     fneg f0 f0
     lw r1 r29 4
-    swcZ f0 r1 8
+    swcZ f0 r1 4
     inflt f0 r0
     #unknown instruction
     sw r31 r29 20
@@ -2107,7 +2107,7 @@ read_light.2708:
     lwcZ f1 r29 24
     fmul f0 f1 f0
     lw r1 r29 4
-    swcZ f0 r1 16
+    swcZ f0 r1 8
     inflt f0 r0
     #unknown instruction
     lw r1 r29 0
@@ -2132,7 +2132,7 @@ rotate_quadratic_matrix.2710:
     subi r29 r29 24
     lw r31 r29 20
     lw r1 r29 4
-    lwcZ f1 r1 8
+    lwcZ f1 r1 4
     swcZ f0 r29 16
     fmv  f0 f1
     sw r31 r29 28
@@ -2141,7 +2141,7 @@ rotate_quadratic_matrix.2710:
     subi r29 r29 32
     lw r31 r29 28
     lw r1 r29 4
-    lwcZ f1 r1 8
+    lwcZ f1 r1 4
     swcZ f0 r29 24
     fmv  f0 f1
     sw r31 r29 36
@@ -2150,7 +2150,7 @@ rotate_quadratic_matrix.2710:
     subi r29 r29 40
     lw r31 r29 36
     lw r1 r29 4
-    lwcZ f1 r1 16
+    lwcZ f1 r1 8
     swcZ f0 r29 32
     fmv  f0 f1
     sw r31 r29 44
@@ -2159,7 +2159,7 @@ rotate_quadratic_matrix.2710:
     subi r29 r29 48
     lw r31 r29 44
     lw r1 r29 4
-    lwcZ f1 r1 16
+    lwcZ f1 r1 8
     swcZ f0 r29 40
     fmv  f0 f1
     sw r31 r29 52
@@ -2195,8 +2195,8 @@ rotate_quadratic_matrix.2710:
     fmul f2 f7 f2
     lw r1 r29 0
     lwcZ f5 r1 0
-    lwcZ f7 r1 8
-    lwcZ f11 r1 16
+    lwcZ f7 r1 4
+    lwcZ f11 r1 8
     swcZ f3 r29 48
     swcZ f2 r29 56
     swcZ f0 r29 64
@@ -2276,7 +2276,7 @@ rotate_quadratic_matrix.2710:
     lwcZ f2 r29 168
     fadd f0 f2 f0
     lw r1 r29 0
-    swcZ f0 r1 8
+    swcZ f0 r1 4
     lwcZ f0 r29 72
     sw r31 r29 180
     addi r29 r29 184
@@ -2310,7 +2310,7 @@ rotate_quadratic_matrix.2710:
     lwcZ f2 r29 184
     fadd f0 f2 f0
     lw r1 r29 0
-    swcZ f0 r1 16
+    swcZ f0 r1 8
     flui f0 16384
     # 2.000000
     lwcZ f2 r29 96
@@ -2346,7 +2346,7 @@ rotate_quadratic_matrix.2710:
     fmul f11 f12 f11
     fadd f5 f5 f11
     fmul f0 f0 f5
-    swcZ f0 r1 8
+    swcZ f0 r1 4
     flui f0 16384
     # 2.000000
     fmul f3 f3 f4
@@ -2358,7 +2358,7 @@ rotate_quadratic_matrix.2710:
     fmul f1 f1 f8
     fadd f1 f2 f1
     fmul f0 f0 f1
-    swcZ f0 r1 16
+    swcZ f0 r1 8
     jr r31
 read_nth_object.2713:
     lw r2 r25 4
@@ -2395,10 +2395,10 @@ beq_else.8738:
     swcZ f0 r1 0
     inflt f0 r0
     #unknown instruction
-    swcZ f0 r1 8
+    swcZ f0 r1 4
     inflt f0 r0
     #unknown instruction
-    swcZ f0 r1 16
+    swcZ f0 r1 8
     addi r2 r0 3
     flui f0 0
     # 0.000000
@@ -2414,10 +2414,10 @@ beq_else.8738:
     swcZ f0 r1 0
     inflt f0 r0
     #unknown instruction
-    swcZ f0 r1 8
+    swcZ f0 r1 4
     inflt f0 r0
     #unknown instruction
-    swcZ f0 r1 16
+    swcZ f0 r1 8
     inflt f0 r0
     #unknown instruction
     flui f1 0
@@ -2445,7 +2445,7 @@ float_ble_cont.8740:
     swcZ f0 r1 0
     inflt f0 r0
     #unknown instruction
-    swcZ f0 r1 8
+    swcZ f0 r1 4
     addi r2 r0 3
     flui f0 0
     # 0.000000
@@ -2461,10 +2461,10 @@ float_ble_cont.8740:
     swcZ f0 r1 0
     inflt f0 r0
     #unknown instruction
-    swcZ f0 r1 8
+    swcZ f0 r1 4
     inflt f0 r0
     #unknown instruction
-    swcZ f0 r1 16
+    swcZ f0 r1 8
     addi r2 r0 3
     flui f0 0
     # 0.000000
@@ -2498,7 +2498,7 @@ beq_else.8741:
     subi r29 r29 56
     lw r31 r29 52
     lw r1 r29 44
-    swcZ f0 r1 8
+    swcZ f0 r1 4
     inflt f0 r0
     #unknown instruction
     sw r31 r29 52
@@ -2507,7 +2507,7 @@ beq_else.8741:
     subi r29 r29 56
     lw r31 r29 52
     lw r1 r29 44
-    swcZ f0 r1 16
+    swcZ f0 r1 8
 beq_cont.8742:
     lw r2 r29 16
     addi r28 r0 2
@@ -2584,7 +2584,7 @@ float_eq0.8747:
 float_eq0_cont.8748:
     lw r1 r29 24
     swcZ f0 r1 0
-    lwcZ f0 r1 8
+    lwcZ f0 r1 4
     fcz f0
     bc1f float_eq0.8750
     flui f0 0
@@ -2609,8 +2609,8 @@ float_eq0.8750:
     fdiv f0 f1 f0
 float_eq0_cont.8751:
     lw r1 r29 24
-    swcZ f0 r1 8
-    lwcZ f0 r1 16
+    swcZ f0 r1 4
+    lwcZ f0 r1 8
     fcz f0
     bc1f float_eq0.8752
     flui f0 0
@@ -2635,7 +2635,7 @@ float_eq0.8752:
     fdiv f0 f1 f0
 float_eq0_cont.8753:
     lw r1 r29 24
-    swcZ f0 r1 16
+    swcZ f0 r1 8
     j beq_cont.8746
 beq_else.8745:
     addi r28 r0 2
@@ -2847,7 +2847,7 @@ read_parameter.2725:
     jr r31
 solver_rect_surface.2727:
     lw r6 r25 4
-    sll r7 r3 3
+    sll r7 r3 2
     add r27 r2 r7
     lwcZ f3 r27 0
     fcz f3
@@ -2878,7 +2878,7 @@ float_neq_0.8769:
     subi r29 r29 72
     lw r31 r29 68
     lw r2 r29 52
-    sll r3 r2 3
+    sll r3 r2 2
     lw r4 r29 48
     add r27 r4 r3
     lwcZ f0 r27 0
@@ -2898,7 +2898,7 @@ float_ble_cont.8774:
     subi r29 r29 72
     lw r31 r29 68
     lw r2 r29 52
-    sll r3 r2 3
+    sll r3 r2 2
     lw r4 r29 60
     add r27 r4 r3
     lwcZ f0 r27 0
@@ -2910,13 +2910,13 @@ float_ble_cont.8774:
     lwcZ f1 r29 40
     fsub f0 f0 f1
     lw r1 r29 52
-    sll r1 r1 3
+    sll r1 r1 2
     lw r2 r29 48
     add r27 r2 r1
     lwcZ f1 r27 0
     fdiv f0 f0 f1
     lw r1 r29 32
-    sll r3 r1 3
+    sll r3 r1 2
     add r27 r2 r3
     lwcZ f1 r27 0
     fmul f1 f0 f1
@@ -2930,7 +2930,7 @@ float_ble_cont.8774:
     subi r29 r29 80
     lw r31 r29 76
     lw r1 r29 32
-    sll r1 r1 3
+    sll r1 r1 2
     lw r2 r29 60
     add r27 r2 r1
     lwcZ f1 r27 0
@@ -2945,7 +2945,7 @@ float_ble_cont.8774:
     jr r31
 beq_else.8775:
     lw r1 r29 16
-    sll r2 r1 3
+    sll r2 r1 2
     lw r3 r29 48
     add r27 r3 r2
     lwcZ f0 r27 0
@@ -2959,7 +2959,7 @@ beq_else.8775:
     subi r29 r29 80
     lw r31 r29 76
     lw r1 r29 16
-    sll r1 r1 3
+    sll r1 r1 2
     lw r2 r29 60
     add r27 r2 r1
     lwcZ f1 r27 0
@@ -3089,7 +3089,7 @@ solver_surface.2742:
     lwcZ f1 r29 48
     fdiv f0 f0 f1
     lw r1 r29 40
-    sll r1 r1 3
+    sll r1 r1 2
     lw r2 r29 0
     add r27 r2 r1
     swcZ f0 r27 0
@@ -3336,8 +3336,8 @@ beq_else.8786:
 solver_second.2761:
     lw r3 r25 4
     lwcZ f3 r2 0
-    lwcZ f4 r2 8
-    lwcZ f5 r2 16
+    lwcZ f4 r2 4
+    lwcZ f5 r2 8
     sw r3 r29 0
     swcZ f2 r29 8
     swcZ f1 r29 16
@@ -3359,8 +3359,8 @@ solver_second.2761:
 float_neq_0.8788:
     lw r1 r29 36
     lwcZ f1 r1 0
-    lwcZ f2 r1 8
-    lwcZ f3 r1 16
+    lwcZ f2 r1 4
+    lwcZ f3 r1 8
     lwcZ f4 r29 24
     lwcZ f5 r29 16
     lwcZ f6 r29 8
@@ -3448,7 +3448,7 @@ beq_cont.8793:
     fsub f0 f0 f1
     lwcZ f1 r29 40
     fdiv f0 f0 f1
-    sll r1 r1 3
+    sll r1 r1 2
     lw r2 r29 0
     add r27 r2 r1
     swcZ f0 r27 0
@@ -3481,7 +3481,7 @@ solver.2767:
     lwcZ f1 r29 24
     fsub f0 f1 f0
     lw r1 r29 20
-    lwcZ f1 r1 8
+    lwcZ f1 r1 4
     lw r2 r29 16
     swcZ f0 r29 32
     swcZ f1 r29 40
@@ -3494,7 +3494,7 @@ solver.2767:
     lwcZ f1 r29 40
     fsub f0 f1 f0
     lw r1 r29 20
-    lwcZ f1 r1 16
+    lwcZ f1 r1 8
     lw r1 r29 16
     swcZ f0 r29 48
     swcZ f1 r29 56
@@ -3549,9 +3549,9 @@ solver_rect_fast.2771:
     lw r4 r25 4
     lwcZ f3 r3 0
     fsub f3 f3 f0
-    lwcZ f4 r3 8
+    lwcZ f4 r3 4
     fmul f3 f3 f4
-    lwcZ f4 r2 8
+    lwcZ f4 r2 4
     fmul f4 f3 f4
     fadd f4 f4 f1
     sw r4 r29 0
@@ -3588,7 +3588,7 @@ solver_rect_fast.2771:
     j beq_cont.8799
 beq_else.8798:
     lw r1 r29 48
-    lwcZ f0 r1 16
+    lwcZ f0 r1 8
     lwcZ f1 r29 40
     fmul f0 f1 f0
     lwcZ f2 r29 32
@@ -3618,7 +3618,7 @@ beq_else.8798:
     j beq_cont.8801
 beq_else.8800:
     lw r1 r29 24
-    lwcZ f0 r1 8
+    lwcZ f0 r1 4
     fcz f0
     bc1f float_eq0.8802
     addi r1 r0 0
@@ -3631,10 +3631,10 @@ beq_cont.8799:
     addi r28 r0 0
     bne r1 r28 beq_else.8804
     lw r1 r29 24
-    lwcZ f0 r1 16
+    lwcZ f0 r1 8
     lwcZ f1 r29 16
     fsub f0 f0 f1
-    lwcZ f2 r1 24
+    lwcZ f2 r1 12
     fmul f0 f0 f2
     lw r2 r29 48
     lwcZ f2 r2 0
@@ -3668,7 +3668,7 @@ beq_cont.8799:
     j beq_cont.8806
 beq_else.8805:
     lw r1 r29 48
-    lwcZ f0 r1 16
+    lwcZ f0 r1 8
     lwcZ f1 r29 72
     fmul f0 f1 f0
     lwcZ f2 r29 32
@@ -3698,7 +3698,7 @@ beq_else.8805:
     j beq_cont.8808
 beq_else.8807:
     lw r1 r29 24
-    lwcZ f0 r1 24
+    lwcZ f0 r1 12
     fcz f0
     bc1f float_eq0.8809
     addi r1 r0 0
@@ -3711,10 +3711,10 @@ beq_cont.8806:
     addi r28 r0 0
     bne r1 r28 beq_else.8811
     lw r1 r29 24
-    lwcZ f0 r1 32
+    lwcZ f0 r1 16
     lwcZ f1 r29 32
     fsub f0 f0 f1
-    lwcZ f1 r1 40
+    lwcZ f1 r1 20
     fmul f0 f0 f1
     lw r2 r29 48
     lwcZ f1 r2 0
@@ -3748,7 +3748,7 @@ beq_cont.8806:
     j beq_cont.8813
 beq_else.8812:
     lw r1 r29 48
-    lwcZ f0 r1 8
+    lwcZ f0 r1 4
     lwcZ f1 r29 96
     fmul f0 f1 f0
     lwcZ f2 r29 16
@@ -3778,7 +3778,7 @@ beq_else.8812:
     j beq_cont.8815
 beq_else.8814:
     lw r1 r29 24
-    lwcZ f0 r1 40
+    lwcZ f0 r1 20
     fcz f0
     bc1f float_eq0.8816
     addi r1 r0 0
@@ -3819,23 +3819,23 @@ solver_surface_fast.2778:
     bc1f float_ble_else.8819
     addi r3 r0 0
     addi r4 r0 1
-    sll r4 r4 3
+    sll r4 r4 2
     add r27 r2 r4
     lwcZ f3 r27 0
     fmul f0 f3 f0
     addi r4 r0 2
-    sll r4 r4 3
+    sll r4 r4 2
     add r27 r2 r4
     lwcZ f3 r27 0
     fmul f1 f3 f1
     fadd f0 f0 f1
     addi r4 r0 3
-    sll r4 r4 3
+    sll r4 r4 2
     add r27 r2 r4
     lwcZ f1 r27 0
     fmul f1 f1 f2
     fadd f0 f0 f1
-    sll r2 r3 3
+    sll r2 r3 2
     add r27 r1 r2
     swcZ f0 r27 0
     addi r1 r0 1
@@ -3851,12 +3851,12 @@ solver_second_fast.2784:
     addi r1 r0 0
     jr r31
 float_neq_0.8820:
-    lwcZ f4 r2 8
+    lwcZ f4 r2 4
     fmul f4 f4 f0
-    lwcZ f5 r2 16
+    lwcZ f5 r2 8
     fmul f5 f5 f1
     fadd f4 f4 f5
-    lwcZ f5 r2 24
+    lwcZ f5 r2 12
     fmul f5 f5 f2
     fadd f4 f4 f5
     sw r3 r29 0
@@ -3922,13 +3922,13 @@ beq_cont.8823:
     lwcZ f1 r29 16
     fsub f0 f1 f0
     addi r1 r0 4
-    sll r1 r1 3
+    sll r1 r1 2
     lw r2 r29 4
     add r27 r2 r1
     lwcZ f1 r27 0
     fmul f0 f0 f1
     lw r1 r29 56
-    sll r1 r1 3
+    sll r1 r1 2
     lw r2 r29 0
     add r27 r2 r1
     swcZ f0 r27 0
@@ -3945,13 +3945,13 @@ beq_else.8825:
     lwcZ f1 r29 16
     fadd f0 f1 f0
     addi r1 r0 4
-    sll r1 r1 3
+    sll r1 r1 2
     lw r2 r29 4
     add r27 r2 r1
     lwcZ f1 r27 0
     fmul f0 f0 f1
     lw r1 r29 60
-    sll r1 r1 3
+    sll r1 r1 2
     lw r2 r29 0
     add r27 r2 r1
     swcZ f0 r27 0
@@ -3987,7 +3987,7 @@ solver_fast.2790:
     lwcZ f1 r29 32
     fsub f0 f1 f0
     lw r1 r29 24
-    lwcZ f1 r1 8
+    lwcZ f1 r1 4
     lw r2 r29 20
     swcZ f0 r29 40
     swcZ f1 r29 48
@@ -4000,7 +4000,7 @@ solver_fast.2790:
     lwcZ f1 r29 48
     fsub f0 f1 f0
     lw r1 r29 24
-    lwcZ f1 r1 16
+    lwcZ f1 r1 8
     lw r1 r29 20
     swcZ f0 r29 56
     swcZ f1 r29 64
@@ -4079,15 +4079,15 @@ solver_surface_fast2.2794:
     bc1f float_ble_else.8830
     addi r4 r0 0
     addi r5 r0 0
-    sll r5 r5 3
+    sll r5 r5 2
     add r27 r2 r5
     lwcZ f0 r27 0
     addi r2 r0 3
-    sll r2 r2 3
+    sll r2 r2 2
     add r27 r3 r2
     lwcZ f1 r27 0
     fmul f0 f0 f1
-    sll r2 r4 3
+    sll r2 r4 2
     add r27 r1 r2
     swcZ f0 r27 0
     addi r1 r0 1
@@ -4103,15 +4103,15 @@ solver_second_fast2.2801:
     addi r1 r0 0
     jr r31
 float_neq_0.8831:
-    lwcZ f4 r2 8
+    lwcZ f4 r2 4
     fmul f0 f4 f0
-    lwcZ f4 r2 16
+    lwcZ f4 r2 8
     fmul f1 f4 f1
     fadd f0 f0 f1
-    lwcZ f1 r2 24
+    lwcZ f1 r2 12
     fmul f1 f1 f2
     fadd f0 f0 f1
-    lwcZ f1 r3 24
+    lwcZ f1 r3 12
     sw r4 r29 0
     sw r2 r29 4
     swcZ f0 r29 8
@@ -4151,13 +4151,13 @@ float_neq_0.8831:
     lwcZ f1 r29 8
     fsub f0 f1 f0
     addi r1 r0 4
-    sll r1 r1 3
+    sll r1 r1 2
     lw r2 r29 4
     add r27 r2 r1
     lwcZ f1 r27 0
     fmul f0 f0 f1
     lw r1 r29 48
-    sll r1 r1 3
+    sll r1 r1 2
     lw r2 r29 0
     add r27 r2 r1
     swcZ f0 r27 0
@@ -4174,13 +4174,13 @@ beq_else.8834:
     lwcZ f1 r29 8
     fadd f0 f1 f0
     addi r1 r0 4
-    sll r1 r1 3
+    sll r1 r1 2
     lw r2 r29 4
     add r27 r2 r1
     lwcZ f1 r27 0
     fmul f0 f0 f1
     lw r1 r29 52
-    sll r1 r1 3
+    sll r1 r1 2
     lw r2 r29 0
     add r27 r2 r1
     swcZ f0 r27 0
@@ -4211,8 +4211,8 @@ solver_fast2.2808:
     subi r29 r29 32
     lw r31 r29 28
     lwcZ f0 r1 0
-    lwcZ f1 r1 8
-    lwcZ f2 r1 16
+    lwcZ f1 r1 4
+    lwcZ f2 r1 8
     lw r2 r29 20
     sw r1 r29 24
     swcZ f2 r29 32
@@ -4334,8 +4334,8 @@ setup_second_table.2817:
     lw r31 r29 12
     lw r2 r29 4
     lwcZ f0 r2 0
-    lwcZ f1 r2 8
-    lwcZ f2 r2 16
+    lwcZ f1 r2 4
+    lwcZ f2 r2 8
     lw r3 r29 0
     sw r1 r29 8
     mv r1 r3
@@ -4359,7 +4359,7 @@ setup_second_table.2817:
     fmul f0 f1 f0
     fneg f0 f0
     lw r1 r29 4
-    lwcZ f1 r1 8
+    lwcZ f1 r1 4
     lw r2 r29 0
     swcZ f0 r29 32
     swcZ f1 r29 40
@@ -4373,7 +4373,7 @@ setup_second_table.2817:
     fmul f0 f1 f0
     fneg f0 f0
     lw r1 r29 4
-    lwcZ f1 r1 16
+    lwcZ f1 r1 8
     lw r2 r29 0
     swcZ f0 r29 48
     swcZ f1 r29 56
@@ -4401,15 +4401,15 @@ setup_second_table.2817:
     bne r1 r28 beq_else.8840
     lw r1 r29 8
     lwcZ f0 r29 32
-    swcZ f0 r1 8
+    swcZ f0 r1 4
     lwcZ f0 r29 48
-    swcZ f0 r1 16
+    swcZ f0 r1 8
     lwcZ f0 r29 64
-    swcZ f0 r1 24
+    swcZ f0 r1 12
     j beq_cont.8841
 beq_else.8840:
     lw r1 r29 4
-    lwcZ f0 r1 16
+    lwcZ f0 r1 8
     lw r2 r29 0
     swcZ f0 r29 72
     mv r1 r2
@@ -4421,7 +4421,7 @@ beq_else.8840:
     lwcZ f1 r29 72
     fmul f0 f1 f0
     lw r1 r29 4
-    lwcZ f1 r1 8
+    lwcZ f1 r1 4
     lw r2 r29 0
     swcZ f0 r29 80
     swcZ f1 r29 88
@@ -4443,9 +4443,9 @@ beq_else.8840:
     lwcZ f1 r29 32
     fsub f0 f1 f0
     lw r1 r29 8
-    swcZ f0 r1 8
+    swcZ f0 r1 4
     lw r2 r29 4
-    lwcZ f0 r2 16
+    lwcZ f0 r2 8
     lw r3 r29 0
     swcZ f0 r29 96
     mv r1 r3
@@ -4479,9 +4479,9 @@ beq_else.8840:
     lwcZ f1 r29 48
     fsub f0 f1 f0
     lw r1 r29 8
-    swcZ f0 r1 16
+    swcZ f0 r1 8
     lw r2 r29 4
-    lwcZ f0 r2 8
+    lwcZ f0 r2 4
     lw r3 r29 0
     swcZ f0 r29 120
     mv r1 r3
@@ -4514,7 +4514,7 @@ beq_else.8840:
     lwcZ f1 r29 64
     fsub f0 f1 f0
     lw r1 r29 8
-    swcZ f0 r1 24
+    swcZ f0 r1 12
 beq_cont.8841:
     jr r31
 iter_setup_dirvec_constants.2820:
@@ -4652,7 +4652,7 @@ setup_startp_constants.2825:
     lw r1 r29 16
     swcZ f0 r1 0
     lw r2 r29 8
-    lwcZ f0 r2 8
+    lwcZ f0 r2 4
     lw r3 r29 12
     swcZ f0 r29 32
     mv r1 r3
@@ -4664,9 +4664,9 @@ setup_startp_constants.2825:
     lwcZ f1 r29 32
     fsub f0 f1 f0
     lw r1 r29 16
-    swcZ f0 r1 8
+    swcZ f0 r1 4
     lw r2 r29 8
-    lwcZ f0 r2 16
+    lwcZ f0 r2 8
     lw r3 r29 12
     swcZ f0 r29 40
     mv r1 r3
@@ -4678,7 +4678,7 @@ setup_startp_constants.2825:
     lwcZ f1 r29 40
     fsub f0 f1 f0
     lw r1 r29 16
-    swcZ f0 r1 16
+    swcZ f0 r1 8
     lw r2 r29 20
     addi r28 r0 2
     bne r2 r28 beq_else.8849
@@ -4691,15 +4691,15 @@ setup_startp_constants.2825:
     lw r31 r29 52
     lw r2 r29 16
     lwcZ f0 r2 0
-    lwcZ f1 r2 8
-    lwcZ f2 r2 16
+    lwcZ f1 r2 4
+    lwcZ f2 r2 8
     sw r31 r29 52
     addi r29 r29 56
     jal veciprod2.2611
     subi r29 r29 56
     lw r31 r29 52
     lw r1 r29 16
-    swcZ f0 r1 24
+    swcZ f0 r1 12
     j beq_cont.8850
 beq_else.8849:
     addi r28 r0 2
@@ -4708,8 +4708,8 @@ beq_else.8849:
     j ble_cont.8852
 ble_else.8851:
     lwcZ f0 r1 0
-    lwcZ f1 r1 8
-    lwcZ f2 r1 16
+    lwcZ f1 r1 4
+    lwcZ f2 r1 8
     lw r3 r29 12
     mv r1 r3
     sw r31 r29 52
@@ -4727,7 +4727,7 @@ ble_else.8851:
 beq_else.8853:
 beq_cont.8854:
     lw r1 r29 16
-    swcZ f0 r1 24
+    swcZ f0 r1 12
 ble_cont.8852:
 beq_cont.8850:
     lw r1 r29 4
@@ -5145,13 +5145,13 @@ beq_else.8882:
     lw r2 r29 4
     lwcZ f2 r2 0
     fadd f1 f1 f2
-    lwcZ f2 r1 8
+    lwcZ f2 r1 4
     fmul f2 f2 f0
-    lwcZ f3 r2 8
+    lwcZ f3 r2 4
     fadd f2 f2 f3
-    lwcZ f3 r1 16
+    lwcZ f3 r1 8
     fmul f0 f3 f0
-    lwcZ f3 r2 16
+    lwcZ f3 r2 8
     fadd f0 f0 f3
     addi r1 r0 0
     lw r2 r29 12
@@ -5432,13 +5432,13 @@ beq_else.8905:
     lw r2 r29 16
     lwcZ f2 r2 0
     fadd f1 f1 f2
-    lwcZ f2 r1 8
+    lwcZ f2 r1 4
     fmul f2 f2 f0
-    lwcZ f3 r2 8
+    lwcZ f3 r2 4
     fadd f2 f2 f3
-    lwcZ f3 r1 16
+    lwcZ f3 r1 8
     fmul f3 f3 f0
-    lwcZ f4 r2 16
+    lwcZ f4 r2 8
     fadd f3 f3 f4
     addi r2 r0 0
     lw r3 r29 32
@@ -5772,13 +5772,13 @@ beq_else.8928:
     lw r2 r29 16
     lwcZ f2 r2 0
     fadd f1 f1 f2
-    lwcZ f2 r1 8
+    lwcZ f2 r1 4
     fmul f2 f2 f0
-    lwcZ f3 r2 8
+    lwcZ f3 r2 4
     fadd f2 f2 f3
-    lwcZ f3 r1 16
+    lwcZ f3 r1 8
     fmul f3 f3 f0
-    lwcZ f4 r2 16
+    lwcZ f4 r2 8
     fadd f3 f3 f4
     addi r1 r0 0
     lw r2 r29 44
@@ -6010,7 +6010,7 @@ get_nvector_rect.2893:
     lw r1 r29 8
     subi r2 r1 1
     subi r1 r1 1
-    sll r1 r1 3
+    sll r1 r1 2
     lw r3 r29 4
     add r27 r3 r1
     lwcZ f0 r27 0
@@ -6022,7 +6022,7 @@ get_nvector_rect.2893:
     lw r31 r29 20
     fneg f0 f0
     lw r1 r29 12
-    sll r1 r1 3
+    sll r1 r1 2
     lw r2 r29 0
     add r27 r2 r1
     swcZ f0 r27 0
@@ -6048,7 +6048,7 @@ get_nvector_plane.2895:
     lw r31 r29 12
     fneg f0 f0
     lw r1 r29 4
-    swcZ f0 r1 8
+    swcZ f0 r1 4
     lw r2 r29 0
     mv r1 r2
     sw r31 r29 12
@@ -6058,7 +6058,7 @@ get_nvector_plane.2895:
     lw r31 r29 12
     fneg f0 f0
     lw r1 r29 4
-    swcZ f0 r1 16
+    swcZ f0 r1 8
     jr r31
 get_nvector_second.2897:
     lw r2 r25 8
@@ -6076,7 +6076,7 @@ get_nvector_second.2897:
     lwcZ f1 r29 16
     fsub f0 f1 f0
     lw r1 r29 8
-    lwcZ f1 r1 8
+    lwcZ f1 r1 4
     lw r2 r29 4
     swcZ f0 r29 24
     swcZ f1 r29 32
@@ -6089,7 +6089,7 @@ get_nvector_second.2897:
     lwcZ f1 r29 32
     fsub f0 f1 f0
     lw r1 r29 8
-    lwcZ f1 r1 16
+    lwcZ f1 r1 8
     lw r1 r29 4
     swcZ f0 r29 40
     swcZ f1 r29 48
@@ -6140,9 +6140,9 @@ get_nvector_second.2897:
     lwcZ f0 r29 64
     swcZ f0 r1 0
     lwcZ f0 r29 72
-    swcZ f0 r1 8
+    swcZ f0 r1 4
     lwcZ f0 r29 80
-    swcZ f0 r1 16
+    swcZ f0 r1 8
     j beq_cont.8948
 beq_else.8947:
     lw r1 r29 4
@@ -6201,7 +6201,7 @@ beq_else.8947:
     lwcZ f1 r29 72
     fadd f0 f1 f0
     lw r1 r29 0
-    swcZ f0 r1 8
+    swcZ f0 r1 4
     lw r2 r29 4
     mv r1 r2
     sw r31 r29 108
@@ -6230,7 +6230,7 @@ beq_else.8947:
     lwcZ f1 r29 80
     fadd f0 f1 f0
     lw r1 r29 0
-    swcZ f0 r1 16
+    swcZ f0 r1 8
 beq_cont.8948:
     lw r2 r29 4
     mv r1 r2
@@ -6305,7 +6305,7 @@ utexture.2902:
     subi r29 r29 24
     lw r31 r29 20
     lw r1 r29 4
-    swcZ f0 r1 8
+    swcZ f0 r1 4
     lw r2 r29 8
     mv r1 r2
     sw r31 r29 20
@@ -6314,7 +6314,7 @@ utexture.2902:
     subi r29 r29 24
     lw r31 r29 20
     lw r1 r29 4
-    swcZ f0 r1 16
+    swcZ f0 r1 8
     lw r2 r29 12
     addi r28 r0 1
     bne r2 r28 beq_else.8951
@@ -6354,7 +6354,7 @@ utexture.2902:
     subi r29 r29 40
     lw r31 r29 36
     lw r2 r29 0
-    lwcZ f0 r2 16
+    lwcZ f0 r2 8
     lw r2 r29 8
     sw r1 r29 32
     swcZ f0 r29 40
@@ -6414,13 +6414,13 @@ beq_else.8957:
 beq_cont.8958:
 beq_cont.8954:
     lw r1 r29 4
-    swcZ f0 r1 8
+    swcZ f0 r1 4
     jr r31
 beq_else.8951:
     addi r28 r0 2
     bne r2 r28 beq_else.8960
     lw r2 r29 0
-    lwcZ f0 r2 8
+    lwcZ f0 r2 4
     flui f1 16000
     # 0.250000
     fmul f0 f0 f1
@@ -6445,7 +6445,7 @@ beq_else.8951:
     # 1.000000
     fsub f0 f2 f0
     fmul f0 f1 f0
-    swcZ f0 r1 8
+    swcZ f0 r1 4
     jr r31
 beq_else.8960:
     addi r28 r0 3
@@ -6463,7 +6463,7 @@ beq_else.8960:
     lwcZ f1 r29 56
     fsub f0 f1 f0
     lw r1 r29 0
-    lwcZ f1 r1 16
+    lwcZ f1 r1 8
     lw r1 r29 8
     swcZ f0 r29 64
     swcZ f1 r29 72
@@ -6526,14 +6526,14 @@ beq_else.8960:
     # 255.000000
     fmul f1 f0 f1
     lw r1 r29 4
-    swcZ f1 r1 8
+    swcZ f1 r1 4
     flui f1 16256
     # 1.000000
     fsub f0 f1 f0
     flui f1 17279
     # 255.000000
     fmul f0 f0 f1
-    swcZ f0 r1 16
+    swcZ f0 r1 8
     jr r31
 beq_else.8962:
     addi r28 r0 4
@@ -6565,7 +6565,7 @@ beq_else.8962:
     lwcZ f1 r29 112
     fmul f0 f1 f0
     lw r1 r29 0
-    lwcZ f1 r1 16
+    lwcZ f1 r1 8
     lw r2 r29 8
     swcZ f0 r29 120
     swcZ f1 r29 128
@@ -6661,7 +6661,7 @@ beq_cont.8966:
     lwcZ f1 r29 168
     fsub f0 f1 f0
     lw r1 r29 0
-    lwcZ f1 r1 8
+    lwcZ f1 r1 4
     lw r1 r29 8
     swcZ f0 r29 176
     swcZ f1 r29 184
@@ -6784,7 +6784,7 @@ float_ble_cont.8970:
     fori f1 f1 -26214
     fdiv f0 f0 f1
     lw r1 r29 4
-    swcZ f0 r1 16
+    swcZ f0 r1 8
     jr r31
 beq_else.8964:
     jr r31
@@ -6811,30 +6811,30 @@ add_light.2905:
     fmul f0 f0 f1
     addi r1 r0 0
     addi r2 r0 0
-    sll r2 r2 3
+    sll r2 r2 2
     lw r3 r29 0
     add r27 r3 r2
     lwcZ f1 r27 0
     fadd f1 f1 f0
-    sll r1 r1 3
+    sll r1 r1 2
     add r27 r3 r1
     swcZ f1 r27 0
     addi r1 r0 1
     addi r2 r0 1
-    sll r2 r2 3
+    sll r2 r2 2
     add r27 r3 r2
     lwcZ f1 r27 0
     fadd f1 f1 f0
-    sll r1 r1 3
+    sll r1 r1 2
     add r27 r3 r1
     swcZ f1 r27 0
     addi r1 r0 2
     addi r2 r0 2
-    sll r2 r2 3
+    sll r2 r2 2
     add r27 r3 r2
     lwcZ f1 r27 0
     fadd f0 f1 f0
-    sll r1 r1 3
+    sll r1 r1 2
     add r27 r3 r1
     swcZ f0 r27 0
     jr r31
@@ -7086,37 +7086,37 @@ beq_else.8990:
     lwcZ f1 r29 96
     fmul f0 f0 f1
     addi r1 r0 0
-    sll r1 r1 3
+    sll r1 r1 2
     lw r2 r29 88
     add r27 r2 r1
     lwcZ f1 r27 0
     fmul f0 f0 f1
     addi r1 r0 0
     addi r2 r0 0
-    sll r2 r2 3
+    sll r2 r2 2
     lw r3 r29 84
     add r27 r3 r2
     lwcZ f1 r27 0
     fadd f1 f1 f0
-    sll r1 r1 3
+    sll r1 r1 2
     add r27 r3 r1
     swcZ f1 r27 0
     addi r1 r0 1
     addi r2 r0 1
-    sll r2 r2 3
+    sll r2 r2 2
     add r27 r3 r2
     lwcZ f1 r27 0
     fadd f1 f1 f0
-    sll r1 r1 3
+    sll r1 r1 2
     add r27 r3 r1
     swcZ f1 r27 0
     addi r1 r0 2
     addi r2 r0 2
-    sll r2 r2 3
+    sll r2 r2 2
     add r27 r3 r2
     lwcZ f1 r27 0
     fadd f0 f1 f0
-    sll r1 r1 3
+    sll r1 r1 2
     add r27 r3 r1
     swcZ f0 r27 0
     jr r31
@@ -8195,7 +8195,7 @@ write_rgb.2972:
     subi r29 r29 8
     lw r31 r29 4
     lw r1 r29 0
-    lwcZ f0 r1 8
+    lwcZ f0 r1 4
     sw r31 r29 4
     addi r29 r29 8
     jal write_rgb_element.2970
@@ -8208,7 +8208,7 @@ write_rgb.2972:
     subi r29 r29 8
     lw r31 r29 4
     lw r1 r29 0
-    lwcZ f0 r1 16
+    lwcZ f0 r1 8
     sw r31 r29 4
     addi r29 r29 8
     jal write_rgb_element.2970
@@ -8352,14 +8352,14 @@ pretrace_pixels.2977:
     fmul f4 f3 f4
     fadd f4 f4 f0
     swcZ f4 r10 0
-    lwcZ f4 r7 8
+    lwcZ f4 r7 4
     fmul f4 f3 f4
     fadd f4 f4 f1
-    swcZ f4 r10 8
-    lwcZ f4 r7 16
+    swcZ f4 r10 4
+    lwcZ f4 r7 8
     fmul f3 f3 f4
     fadd f3 f3 f2
-    swcZ f3 r10 16
+    swcZ f3 r10 8
     addi r7 r0 0
     swcZ f2 r29 0
     swcZ f1 r29 8
@@ -8499,13 +8499,13 @@ pretrace_line.2984:
     fmul f1 f0 f1
     lwcZ f2 r4 0
     fadd f1 f1 f2
-    lwcZ f2 r5 8
+    lwcZ f2 r5 4
     fmul f2 f0 f2
-    lwcZ f3 r4 8
+    lwcZ f3 r4 4
     fadd f2 f2 f3
-    lwcZ f3 r5 16
+    lwcZ f3 r5 8
     fmul f0 f0 f3
-    lwcZ f3 r4 16
+    lwcZ f3 r4 8
     fadd f0 f0 f3
     lw r2 r8 0
     subi r2 r2 1
@@ -9551,9 +9551,9 @@ setup_rect_reflection.3052:
     lw r1 r29 16
     lwcZ f1 r1 0
     fneg f1 f1
-    lwcZ f2 r1 8
+    lwcZ f2 r1 4
     fneg f2 f2
-    lwcZ f3 r1 16
+    lwcZ f3 r1 8
     fneg f3 f3
     lw r2 r29 12
     addi r3 r2 1
@@ -9579,7 +9579,7 @@ setup_rect_reflection.3052:
     lw r3 r29 12
     addi r4 r3 2
     lw r5 r29 16
-    lwcZ f2 r5 8
+    lwcZ f2 r5 4
     lwcZ f0 r29 56
     lwcZ f1 r29 48
     lwcZ f3 r29 40
@@ -9598,7 +9598,7 @@ setup_rect_reflection.3052:
     lw r3 r29 12
     addi r3 r3 3
     lw r4 r29 16
-    lwcZ f3 r4 16
+    lwcZ f3 r4 8
     lwcZ f0 r29 56
     lwcZ f1 r29 48
     lwcZ f2 r29 32
@@ -9688,7 +9688,7 @@ setup_surface_reflection.3055:
     lwcZ f1 r29 40
     fmul f0 f0 f1
     lw r1 r29 16
-    lwcZ f2 r1 8
+    lwcZ f2 r1 4
     fsub f0 f0 f2
     flui f2 16384
     # 2.000000
@@ -9706,7 +9706,7 @@ setup_surface_reflection.3055:
     lwcZ f1 r29 40
     fmul f0 f0 f1
     lw r1 r29 16
-    lwcZ f1 r1 16
+    lwcZ f1 r1 8
     fsub f3 f0 f1
     lwcZ f0 r29 32
     lwcZ f1 r29 56
@@ -9955,5 +9955,5 @@ create_float_array_loop:
 create_float_array_cont:
     swcZ f0 r30 0
     subi r2 r2 1
-    addi r30 r30 8
+    addi r30 r30 4
     j create_float_array_loop

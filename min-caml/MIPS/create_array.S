@@ -21,5 +21,5 @@ create_float_array_loop:
 create_float_array_cont:
     swcZ f0 r30 0
     subi r2 r2 1
-    addi r30 r30 8
+    addi r30 r30 4
     j create_float_array_loop
