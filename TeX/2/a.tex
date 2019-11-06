@@ -1,0 +1,299 @@
+\documentclass[dvipdfmx]{jsarticle}
+\usepackage{listings}
+\usepackage{amsmath}
+\usepackage{examplep}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage[dvipdfmx]{hyperref}
+\usepackage{graphicx}
+\usepackage{mathdots}
+\lstset{
+	language={Caml},
+	basicstyle={\ttfamily\small},
+    commentstyle={\small},
+	identifierstyle={\small\ttfamily},
+	frame={tb},
+	columns=[1]{fullflexible}
+}
+\def\fun{{\mathrm{ \,fun\,}}}
+\def\var{{\mathrm{ \,var\,}}}
+\def\expr{{\mathrm{ \,expr\,}}}
+\def\Int{{\mathrm{ \,Int\,}}}
+\def\arr{\rightarrow}
+\begin{document}
+\title {コンパイラ実験第2回}
+\author{05-191022 平田 賢吾}
+\maketitle
+\begin{twocolumn}
+\section*{問1}
+\begin{lstlisting}[]
+letrec x : (INT -> INT) =
+variables : (x : INT)
+  let x : INT =
+    let x : INT =
+      let Ti4 : INT =
+        - x
+      in
+      x - Ti4
+    in
+    let Ti6 : INT =
+      let x : INT =
+        - x
+      in
+      let Ti5 : INT =
+        - x
+      in
+      x - Ti5
+    in
+    x - Ti6
+  in
+  let Ti7 : INT =
+    - x
+  in
+  x - Ti7
+in
+  let x : INT =
+    let Ti1 : INT =
+      int 125
+    in
+    app
+      x
+      Ti1
+  in
+  let Ti3 : INT =
+    let Ti2 : INT =
+      - x
+    in
+    x - Ti2
+  in
+  Ti3
+\end{lstlisting}
+MinCaml コンパイラにそれぞれの変換をさせて, それが元のコードと意味として一致することを確認した.
+左が K 正規化した後のコードである.
+次ページに $\alpha$ 変換後のコードを, その次のページに $A$ 正規化した後のコードを載せている.
+
+K 正規化した後のコードは信じられないほど見にくい.
+元のコードより見にくいとさえいえる.
+
+\newpage
+\begin{lstlisting}[]
+letrec x.8 : (INT -> INT) =
+variables : (x.9 : INT)
+  let x.14 : INT =
+    let x.16 : INT =
+      let Ti4.20 : INT =
+        - x.9
+      in
+        x.9 - Ti4.20
+    in
+    let Ti6.17 : INT =
+      let x.18 : INT =
+        - x.16
+      in
+      let Ti5.19 : INT =
+        - x.18
+      in
+        x.18 - Ti5.19
+    in
+      x.16 - Ti6.17
+  in
+  let Ti7.15 : INT =
+    - x.14
+  in
+  x.14 - Ti7.15
+in
+  let x.10 : INT =
+    let Ti1.13 : INT =
+      int 125
+    in
+    app
+      x.8
+      Ti1.13
+  in
+  let Ti3.11 : INT =
+    let Ti2.12 : INT =
+      - x.10
+    in
+    x.10 - Ti2.12
+  in
+  Ti3.11
+\end{lstlisting}
+上がさらに$\alpha$変換した後のコードである.
+だいぶ見やすくなっており, 焦らず丁寧に一行ずつ追っていけ
+ばちゃんと全部読めるくらいにはなっている.
+
+\newpage
+\begin{lstlisting}[]
+letrec x.8 : (INT -> INT) =
+variables : (x.9 : INT)
+  let Ti4.20 : INT =
+    - x.9
+  in
+  let x.16 : INT =
+    x.9 - Ti4.20
+  in
+  let x.18 : INT =
+    - x.16
+  in
+  let Ti5.19 : INT =
+    - x.18
+  in
+  let Ti6.17 : INT =
+    x.18 - Ti5.19
+  in
+  let x.14 : INT =
+    x.16 - Ti6.17
+  in
+  let Ti7.15 : INT =
+    - x.14
+  in
+  x.14 - Ti7.15
+in
+  let Ti1.13 : INT =
+    int 125
+  in
+  let x.10 : INT =
+    app
+      x.8
+      Ti1.13
+  in
+  let Ti2.12 : INT =
+    - x.10
+  in
+  let Ti3.11 : INT =
+    x.10 - Ti2.12
+  in
+  Ti3.11
+\end{lstlisting}
+最後に, 上が A 正規化した後のコードである. A 正規化したコードは, K 正規化 $\arr$ $\alpha$ 変換
+$\arr$ A 正規化 をこの順に施すことで得た. 課題の要件に A 正規化し適切に$\alpha$ 変換せよとあるが,
+最初に $\alpha$変換しておけば, データとして一致するものと変数名として一致するものが同じに
+なるので, A 正規化において平坦化の際に意味が変わることはない上に, A 正規化後に再度 $\alpha$ 変換
+する必要はなくなるので, K $\arr\,\alpha\,\arr$ A の順番で変換を施せば十分である.
+
+A 正規化すると, let のネストが消えた. しかし, let rec の中に let が出現している.
+これは, let rec (関数定義) において導入される引数が, 単純に平坦化を行ってしまうと
+let rec の外に出現してしまうことになるため, 未定義変数になってしまうからこれ以上平坦化
+してはならないので正しい.
+
+最初のコードよりだいぶ計算の方法が単純になっていることがすぐにわかる.
+\end{twocolumn}
+
+\newpage
+\section*{問 2}
+\subsection*{(1)}
+友人に少しヒントをもらってしまった. (再帰関数内で何か他の変数を定義するといいと教えてもらった.
+x を a が定義された後に使用すると条件を満たすようにできることは自分で気づいた.)
+
+./3-1.ml にインライン化の際に$\alpha$変換を行わないとプログラムの意味が変わる例を書いた.
+f はインライン化前の関数, g は f にインライン化を施したものの$\alpha$変換を怠った場合に
+生成される関数である. 短いので, この pdf にもそのまま添付した.
+\begin{lstlisting}[]
+let rec f x = 
+let a = x - 1 in
+if x <= 0 then
+x
+else
+1 + f a
+
+let rec g x = 
+let a = x - 1 in
+if x <= 0 then      (***********)
+x
+else
+1 +
+let a = a - 1 in
+if a <= 0 then      (***********)
+a
+else
+1 + g a
+\end{lstlisting}
+
+これを実行すると下のようになる.
+
+\begin{lstlisting}[]
+# #use "3-1.ml";;
+val f : int -> int = <fun>
+val g : int -> int = <fun>
+# g 3;;
+- : int = 2
+# f 3;;
+- : int = 3
+\end{lstlisting}
+
+ここから, 実際に挙動が変わっていることがわかる.
+これは, f の内部で定義された局所変数 a を f に
+引数として渡すと, インライン化の際に x を a に
+全て置き換えることになるのだが, 上のコードで
+(***********) と印をつけた二つの部分を見ると, 上の印の部分では関数の引数と 0 を比較
+するのに対し, 下の印の部分では局所変数 a ($\neq$関数の引数 a) と 0 とを比較してしまっている.
+これは明らかに問題があり, 実際上のコードでは異なる挙動を示すようになる.
+
+これは適切に $\alpha$ 変換を施すと, インライン化した $f$ の局所変数の $a$ と関数の引数の $a$ を
+別の名前に付け替えることができるため, 適切な挙動をするようになる.
+すなわち下のようになる.
+
+\begin{lstlisting}[]
+let rec f2 x =
+let a1 = x - 1 in
+if x <= 0 then
+x
+else
+1 +
+let a2 = a1 - 1 in
+if a1 <= 0 then
+a1
+else
+1 + f a2
+\end{lstlisting}
+
+
+
+
+
+\subsection*{(2)}
+数人で相談して以下のような関数を発見した.
+以下に考えた道筋を記すが,
+無限再帰を行う関数を用いればいいこと,
+その関数が巡回的($f^n = f$ なる $n$ が存在することを巡回的とここでは呼んでいる.)
+であればいいこと, この巡回の位数が 2 以外の素因数を持てばいいことは自分で思いついた.
+巡回的な関数を作るために引数を n 個にして, それを循環させればいいことを思いついた
+のは友人である.
+\begin{lstlisting}[]
+  1 let rec loop3 x y z = loop3 y z x in 
+  2 let rec g x =
+  3   if x = 0 then
+  4     0
+  5   else
+  6     loop3 1 2 3 
+  7 in print_int (g 0)
+\end{lstlisting}
+とすると, これはインライン化, 定数畳み込みなどの最適化を繰り返し行っても
+コードサイズは一定のまま回数制限がないと止まらない.
+
+これは ./min-caml ディレクトリにおいて,
+\begin{lstlisting}[]
+make min-caml
+./min-caml test/test-for-compiler2 -inline 10
+\end{lstlisting}
+を実行すると, 最適化のたびにコードが出力され, 100 回ほとんど同じコードが出力されることで確かめられる.
+
+これはなぜかというと, $f = {\mathrm{loop3}}$ とすると,
+\[
+  f \neq f^2~ \wedge~ f^4 = f
+\]
+がなりたつため, (位数 3 の巡回群になる)
+インライン化するたびに $f$ は $f^2$ になり, もう一度インライン化すると $f^4 = f$ になって戻る.
+これは無限に繰り返すことができる.
+また $g$ の中の $f$ もインライン化される. $g$ の中に $f$ が出現することには, $f$ が不要な関数として
+削除されることを防ぐ意味がある. 逆にそれ以外に本質的に意味はないと思われる.
+
+最初は巡回的な関数として,
+$f\,\, x = f \,\,(x + 1)$ として(位数は 0), min-caml がこれを定数最適化してくれて,
+$f\,\,x = f\,\,(x + 2), \,\,f\,\,x = f\,\,(x + 4), \dots$ としてくれることを期待したが,
+これはコード長がインライン化ごとにだんだん増えてしまったためうまくいかなかった.
+
+上の loop3 では入れ替えがおこるだけなのでコード長が伸びない上に,
+インライン化をすると必ず一回前と異なる結果が得られるという点が異なる.
+
+\end{document}

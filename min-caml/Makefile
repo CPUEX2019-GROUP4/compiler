@@ -40,8 +40,7 @@ do_test: $(TESTS:%=test/%.cmp)
 .PRECIOUS: test/%.s test/% test/%.res test/%.ans test/%.cmp
 ## 勝手に TRASH されちゃう
 ## 適宜コメントアウトすればよさそう
-TRASH = \
-		$(TESTS:%=test/%) $(TESTS:%=test/%.res) $(TESTS:%=test/%.ans) $(TESTS:%=test/%.cmp)
+TRASH = $(TESTS:%=test/%) $(TESTS:%=test/%.res) $(TESTS:%=test/%.ans) $(TESTS:%=test/%.cmp)
 ##$(TESTS:%=test/%.s) \
 
 test/%.s: $(RESULT) test/%.ml

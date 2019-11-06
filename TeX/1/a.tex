@@ -1,0 +1,495 @@
+\documentclass[dvipdfmx]{jsarticle}
+\usepackage{listings}
+\usepackage{amsmath}
+\usepackage{examplep}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage[dvipdfmx]{hyperref}
+\usepackage{graphicx}
+\usepackage{mathdots}
+\lstset{
+	language={Caml},
+	basicstyle={\ttfamily\small},
+    commentstyle={\small},
+	identifierstyle={\small\ttfamily},
+	frame={tb},
+	columns=[1]{fullflexible}
+}
+\def\fun{{\mathrm{ \,fun\,}}}
+\def\var{{\mathrm{ \,var\,}}}
+%\def\let{{\mathrm{ \,let\,}}}
+\def\expr{{\mathrm{ \,expr\,}}}
+\def\Int{{\mathrm{ \,Int\,}}}
+\def\arr{\rightarrow}
+
+\begin{document}
+
+\title {FL実験 第 9 回}
+\author{05-191022 平田 賢吾}
+\maketitle
+
+\noindent
+OCaml は 4.07.1 を使っている.
+それぞれ make されたい.
+
+\section*{問 1}
+\subsection*{実行例}
+\begin{lstlisting}[caption=   , label=   ]
+# (1, 2);;
+- :  = (1, 2)
+# (1, true);;
+- :  = (1, true)
+# [];;
+- :  = []
+# 1 :: 2 :: [];;
+- :  = [1; 2]
+# (1 :: []) :: [] :: [] :: [];;
+- :  = [[1]; []; []]
+\end{lstlisting}
+\subsection*{考察}
+eval.ml を編集した.
+VPair, VCons, VNil を追加した. それに応じて print\_value 関数を拡張させた.
+list は見やすい表示 ([1; 2; 3] など) で出力されるようにループを作った.
+
+課題のメインは
+eval.ml 内の eval\_expr
+の拡張と思われるが,
+ENil は そのまま VNil にして, ECons, EPair は 2 つの要素それぞれ
+評価し, くっつければいい.
+
+ところで parser では pair を (\_, \_) という形で定義するようになっている
+が, 本家 OCaml では括弧なしの, \_, \_ で定義できる.
+これは発展2 で実装した.
+
+
+\newpage
+\section*{問 2}
+\subsection*{実行例}
+\begin{lstlisting}[caption=   , label=   ]
+# match 0 with
+  0 -> 0
+ |x -> x + 1;;
+- :  = 0
+# match 1 with
+  0 -> 0
+ |x -> x + 1;;
+- :  = 2
+# match 0 with
+  | 1 -> false;;
+Fatal error: exception Eval.EvalErr
+# match (1, 2) with
+  (x, y) -> x + 100;;
+- :  = 101
+# match (1, 2) with
+  (x, 1) -> x + 100
+ |(x, y) -> x;;
+- :  = 1
+# match 1::2::[] with
+  1::[] -> false
+ |2::[] -> false
+ |1::x  -> true;;
+- :  = true
+\end{lstlisting}
+\subsection*{考察}
+eval.ml を編集した.
+find\_match 関数を付け足し, eval\_expr 関数に EMatch のケースを追加した.
+基本的には講義資料通りに実装した.
+
+find\_match は例題で書いたので詳細を書く必要はないと思うが,
+match 文と値がともに
+int, bool の時は値が一致するか調べ,
+変数の時は環境に追加し, 組やリストのときは再帰的に見る.
+一致しない時は None を返す.
+
+EMatch の評価は, まず match させる値を評価したあと,
+条件分岐の先頭から順に find\_match に適用させていき,
+初めて値が帰って来た時にその条件分岐内の expr を評価すればいい.
+
+
+
+配布された parser.mly では, 1 shift/reduce conflict
+が起きている.
+これは match 文の中に match 文 が出現するときに,
+case が一つ目の match 文の case なのか, 二つ目のそれなのかが
+判断できないために起きている.
+これを解消するためには match 文の途中で他の match 文が現れないように
+parser を書き換えればいい. これはさほど難しくない.
+(途中というのはつまり, 条件分岐のうち, 一番最後のものでないものを指す.
+最後の条件分岐には現れてもいい.)
+
+しかしながら, この shift/reduce conflict は直さなくても良い.
+(その方が parser の状態数が減るという点で特をする.)
+次の例を見る.
+
+\begin{lstlisting}[caption=   , label=   ]
+# match 0 with
+  | 1 ->
+      match 1 with
+      | 1 -> false
+      | 0 -> false;;
+Fatal error: exception Eval.EvalErr
+\end{lstlisting}
+
+いま, この例では match 文が二重になっている.
+一見これがエラーになるのは明らかに見えるが,
+このプログラムは下のように解釈されうるのではないか
+というのがいまの懸念である.
+
+\begin{lstlisting}[caption=   , label=   ]
+# match 0 with
+  | 1 ->
+      match 1 with
+      | 1 -> false
+  | 0 -> false;;
+\end{lstlisting}
+
+下の場合では false が返ってくるプログラムに見えるが,
+実際はエラーが返って来ていることから
+上の場合のように解釈されていることがわかる.
+これは期待する挙動であるので, このままで良い.
+以下の問題でも直していない.
+
+
+\newpage
+\section*{問 3}
+\subsection*{実行例}
+\begin{lstlisting}[caption=   , label=   ]
+# [];;
+- : 'a3 list = []
+# fun x -> match x with [] -> true | x::y -> false;;
+- : ('a2 list -> bool) = <fun>
+# if true then
+      (1, true)
+  else
+      (2, 3);;
+Error: TypeError
+# 1 :: false :: [];;
+Error: TypeError
+# if true then
+      1::[]
+  else
+      false::[];;
+Error: TypeError
+# match 1 with
+  | 1 -> false
+  | true -> false;;
+Error: TypeError
+# match 1 with
+  | 1 -> false
+  | 2 -> 1;;
+Error: TypeError
+\end{lstlisting}
+\subsection*{考察}
+let 多相は入れていない. (発展 2 で入れた.)
+
+まず TyList, TyPair を追加し,
+solver.ml (unify するプログラムが置いてある)
+を対応させた. これはほとんど TyFun の場合と同じにして良い.
+
+制約を集める infer\_expr が比較的大変だった.
+
+EPair の場合は, 再帰をするだけで良い.
+ENil の場合は, 新しい型変数$\alpha$を導入し, TyList(TyVar($\alpha$)) とすれば良い.
+ECons(x, y) の場合は, TyList(x) と y の型が一致することを確かめればいい.
+残る EMatch の場合だが, まず pattern\_to\_ty という, パターンに対して
+その型と制約と追加される型環境の組を返す関数を作った.
+これを使って, 各条件分岐に対して制約を求め, 最後に pattern と match させる型が全て等しいこと
+と, 返り値の型が全て等しいことを集めた制約に足して, 全体の制約とする.
+
+
+\newpage
+\section*{問 4}
+\subsection*{実行例}
+\begin{lstlisting}[caption=   , label=   ]
+# let ignore = fun x -> 0;;
+val ignore : ('a1 -> int) = <fun>
+# let rec loop x = loop x;;
+val loop : ('a2 -> 'a3) = <fun>
+# ignore (loop 1);;
+- : int = 0
+
+# let rec a x = if x < 1000 then a (x + 1) else x;;
+val a : (int -> int) = <fun>
+# let b = a 1;;
+val b : int = 1000
+# let rec f n = if n < 1000 then b::(f (n + 1)) else [];;
+val f : (int -> int list) = <fun>
+# f 1;;
+(1 分以上かかる)
+\end{lstlisting}
+\subsection*{考察}
+名前呼びを実装した.
+再帰関数はサポートしている.
+match 文はサポートしていない.
+
+基本的に講義資料通りに実装した.
+再帰関数を ref 型を使って実装してきたので,
+thunk の型は expr * env ref とした.
+こうすると let rec のときに都合がいい.
+
+基本的に, eval\_expr を書き換えた.
+名前呼びは変数を呼び出す時に初めて評価するので,
+EVar のときに中身の評価が行われる.
+その一方で, ELet の評価時は単純に thunk を作るだけになる.
+関数適用の時は関数側を評価し, 値側を環境に追加して, 関数の中身を評価する.
+
+少し問題なのは再帰関数なのだが, これは
+作る thunk に入る環境に関数自身が入っていないといけないから,
+ref 型を使って, そのような環境を実現する必要がある.
+
+実装例の一つ目は, 値呼びでは loop 1 が止まらないのに対し, 名前呼びでは loop 1 の評価はされないから
+ちゃんと止まる.
+
+実装例の二つ目は, 値呼びでは a 1 が 1000 回評価される. a 1 はループが 1000 回まわる.
+さらに毎回足し算が 1 から n になるまで行われる. 計算量は全体で $10^9$ 程度になる.
+発展1 の必要呼びでは a 1 は一回しか評価されないから, 計算量が $10^3$ になり, 高速に終わる
+ことがわかる.
+
+
+
+
+\newpage
+\section*{発展 1}
+\subsection*{実行例}
+\begin{lstlisting}[caption=   , label=   ]
+# let ignore = fun x -> 0;;
+val ignore : ('a1 -> int) = <fun>
+# let rec loop x = loop x;;
+val loop : ('a2 -> 'a3) = <fun>
+# ignore (loop 1);;
+- : int = 0
+
+# let rec a x = if x < 1000 then a (x + 1) else x;;
+val a : (int -> int) = <fun>
+# let b = a 1;;
+val b : int = 1000
+# let rec f n = if n < 1000 then b::(f (n + 1)) else [];;
+val f : (int -> int list) = <fun>
+# f 1;;
+- : int list = [1000; 1000; 1000; 1000; 1000; 1000; 1000; 1000; 1000; 1000; 1000; 1000; 1000; 1000; 1000; 1000; 1000;
+\end{lstlisting}
+\subsection*{考察}
+おおよそ名前呼びのときと実装は似ている.
+一番の違いは変数が一度呼ばれたあと, その評価結果を覚えて, 環境のその値を thunk から value に
+書き換えることにある.
+
+必要呼びと名前呼びの違いは,
+一度評価した値は再びは評価しないことにある.
+それゆえ, 上のケースは名前呼びと同様に評価が終わる.
+さらに, 下の場合は名前呼びではそれなりの時間がかかるが,
+必要呼びではすぐに終わる.
+
+というのも, 必要呼びでは
+最初に関数 f 内で b が呼ばれたときに b が評価され, 環境が書き換わる.
+それ以降 b を呼ぶたびに a 1 が計算され直すことはない.
+一方で名前呼びでは a 1 何度も呼ばれることになり, かなり遅くなる.
+この点で必要呼びは名前呼びより有利である.
+
+
+
+
+
+\newpage
+\section*{発展 2}
+\subsection*{実行例}
+実行例として option モナドを作ってみた.
+\begin{lstlisting}[caption=   , label=   ]
+# let (>>=) x f =
+    match x with
+    | None -> None
+    | Some y -> f y;;
+val >>= : ('a5 option -> (('a5 -> 'a4 option) -> 'a4 option)) = <fun>
+# let return x = Some x;;
+val return : ('a8 -> 'a8 option) = <fun>
+# let rec elookup key xs =
+     match xs with
+     | [] -> None
+     | (k,v)::rest ->
+       if key = k then Some v
+       else elookup key rest;;
+val elookup : (int -> ((int * 'a15) list -> 'a15 option)) = <fun>
+# let mydiv x y =
+    if y = 0 then
+      None
+    else
+      Some (x / y)
+;;
+val mydiv : (int -> (int -> int option)) = <fun>
+# let lookupdiv kx ky t =
+     (elookup kx t) >>= (fun x ->
+     (elookup ky t) >>= (fun y ->
+     (mydiv x y)    >>= (fun ans ->
+     return ans)));;
+val lookupdiv : (int -> (int -> ((int * int) list -> int option))) = <fun>
+# lookupdiv 4 3 [(1,3); (2,5); (3,5); (4,75); (5,9); (6,7)];;
+- : int option = Some 15
+\end{lstlisting}
+\subsection*{実装}
+以下を実装した.
+(メインは二項演算子である.)
+\begin{itemize}
+    \item list の定義を [1; 2; 3] の形で受け取れる糖衣構文.
+    \item pair, list, match 文 を含めた let 多相.
+    \item option 型.
+    \item pair の定義を ($\_\_$ ,$\_\_$) ではなく, $\_\_$, $\_\_$ でできるように. (OCaml は comma だけで pair が作れる.)
+    \item 新しい二項演算子の定義およびオーバーロード.
+\end{itemize}
+\subsection*{実装の詳細と考察}
+
+\subsubsection*{list の糖衣構文}
+\begin{lstlisting}[caption=   , label=   ]
+# [1; 2; 3; 4];;
+- : int list = [1; 2; 3; 4]
+# match [1;2] with
+  | [1] -> false
+  | [1;2] -> true;;
+- : bool = true
+\end{lstlisting}
+parser に list$\_$loop という変数を追加し, そこでループするようにした.
+pattern に関しても同様にした.
+
+
+\subsubsection*{let 多相}
+\begin{lstlisting}[caption=   , label=   ]
+# let rec length xs = match xs with [] -> 0 | a::b -> 1 + (length b);;
+val length : ('a3 list -> int) = <fun>
+# [length [1; 2], length [true]];;
+- : (int * int) list = [(2, 1)]
+\end{lstlisting}
+型環境を name と type$\_$schema の組に変更した.
+type$\_$schema 内に TyPair と TyList の場合を足し,
+pattern 内の型と制約と追加される型環境を集める関数 (pattern$\_$to$\_$ty とした.) を, 型環境の定義が変わったので
+それに応じて変更した. (PVar のところだけ.) PVar 内の変数を多相にする必要はないので, 単純に type$\_$schema は何も$\forall$で束縛しない
+ようにすれば良い.
+
+match 文で match させる値に多相関数を与えることはサポートしていない.
+
+
+\subsubsection*{option 型}
+\begin{lstlisting}[caption=   , label=   ]
+# Some 2;;
+- : int option = Some 2
+# None;;
+- : 'a1 option = None
+# match Some true with
+  | None -> false
+  | Some false -> false
+  | Some true -> true;;
+- : bool = true
+\end{lstlisting}
+option 型を組み込んだ.
+ENone, ESome, VNone, VSome, PNone, PSome を追加し,
+新しい型 TyOption を追加した.
+lexer, parser, solver, letPoly (type$\_$schema 関連のコードが書かれている), eval をそれぞれ, それに応じて拡張させた.
+制約を集めるときに, None に対しては新しい型変数を与えた.
+
+
+\subsubsection*{pair の定義式の変更}
+\begin{lstlisting}[caption=   , label=   ]
+# 2, 3;;
+- : (int * int) = (2, 3)
+# match 1, 4 with
+ | x, y -> true;;
+- : bool = true
+\end{lstlisting}
+OCaml のインタプリタは "," のみでペアが作れるようになっている("(" および ")" は必ずしも必要でない)
+から, それに準拠して parser を書き換えた.
+結合の強さは実験すると "@" より強く,  "::" 未満になることが分かったので parser でもそうした.
+結合の強さについては下により詳しく書く.
+
+
+
+\subsubsection*{二項演算子}
+\begin{lstlisting}[caption=   , label=   ]
+# let rec (**) x y = if y = 0 then 1 else x * (x ** (y - 1));;
+val ** : (int -> (int -> int)) = <fun>
+# 3 ** 4;;
+- : int = 81
+
+# 3 + 4;;
+- : int = 7
+# let (+) x y = x - y;;
+val + : (int -> (int -> int)) = <fun>
+# 3 + 4;;
+- : int = -1
+
+# let (=) x y = x y;;
+val = : (('a2 -> 'a3) -> ('a2 -> 'a3)) = <fun>
+# (fun x -> [x]) = 6;;
+- : int list = [6]
+\end{lstlisting}
+二項演算子の定義ができるようにした.
+OCaml の組み込み演算の "+", "-", $\dots$ たちはインタプリタに埋め込まれているのではなく,
+デフォルトでモジュールが読み込まれていることを知っていたので,
+それにできる限り準拠するように, そういった演算子は初期環境にいれてオーバーロードできるようにした.
+
+マニュアルを読むと, 演算子に使える文字列は決まっていることが分かった.
+
+\href
+{http://caml.inria.fr/pub/docs/manual-ocaml/lex.html#infix-symbol}
+{マニュアル : http://caml.inria.fr/pub/docs/manual-ocaml/lex.html$\#$infix-symbol}
+
+しかし, "+" や "*" はどちらもモジュール(Pervasives) から提供されているにも関わらず,
+結合の強さが違うことを不思議に思い, 調べてみたところ, どうやら演算子の最初の文字によって
+右結合, 左結合, 結合順序 が決まっていることが分かった.
+
+\href
+{http://blog.shaynefletcher.org/2016/09/custom-operators-in-ocaml.html}
+{ Custom operators in OCaml : http://blog.shaynefletcher.org/2016/09/custom-operators-in-ocaml.html }
+
+実際に OCaml のインタプリタで全て実験してみたところ, おおよそこのブログの通りの結合方向と結合順序に従って
+いることが分かったが, ただ "$\&$" と "\&\&" は例外的に右結合で "|" より強く, '$\&$' の後に他の文字などが続く場合("$\&*$" など)は左結合
+になっていることが分かった. 実際, "$\&$" は右結合になるとマニュアルに書いてある.
+
+\href
+{https://caml.inria.fr/pub/docs/manual-ocaml/expr.html}
+{マニュアル : https://caml.inria.fr/pub/docs/manual-ocaml/expr.html}
+
+よって, 結合の弱いものから順に先頭文字を並べると,
+\begin{align*}
+    =,\, <,\, >,\, |,\, \&,\, \$~~&left~~(OP0)\\
+    \&,\,  \&\& (後に続かない形) ~~ &right\\
+    @,\, {\PVerb{^}} ~~&right ~~(OP1)\\
+    +,\, -~~&left ~~ (OP2)\\
+    *,\, /,\, \%~~&left~~(OP3)\\
+    \#~~&left\\
+\end{align*}
+となっていることが推測できた. (OP0,1,2,3 は実装時に対応させたトークンの名前である.)
+pair の "," は OP1 の次に, list の "::" はその次に入る.
+簡単に付け足せるが, "\&", "\&\&" の場合と, "\#" から始まる場合は実装しなかった.
+
+各演算子に対し, それぞれに対応する正規表現を lexer に書き,
+parser に 演算子の適用と, 演算子の新規定義のときの構文解析を書いた.
+
+演算子の適用は "+" や "-" でこれまでしてきたのと似ているのだが,
+ここで EAdd などをあてがうのではなく,
+" "+" という名前の関数を引数に適用する " という expr を対応させる.
+こうすることで評価時に "+" という名前の関数を環境に探しに行くことになり,
+例えば "+" 演算子をオーバーロードすれば環境が書き換わるため,
+それに応じて関数 "+" の適用の評価結果も変えることができる.
+また新しく演算子を定義するときは, これまで使っていた ELet をそのまま使い回し,
+ただの (名前が記号になっている) 新しい関数としてこれまで通り定義できるようにした.
+lexer からは ADD や SUB, MUL, DIV, LT は消した.
+
+一方で, EQ は let 文などで使うので, lexer から消せない.
+しかし "=" は OCaml ではオーバーロードできる仕様なので, この場合だけは
+parser で例外的に扱った.
+
+ここからわかるように, ほとんどを lexer と parser で処理し, eval はほとんど変えていない.
+実はむしろ eval.ml は小さくなった.
+というのも, 組み込みの演算を初期環境に移したため, (eval\_expr の EAdd などはそれがないと整数の演算ができない
+から消せないが) 特に型推論の制約を集める際に, 初期型環境に例えば "+" は int $\arr$ int $\arr$ int であると
+書いてあるので, EAdd などが呼ばれることはないので, 消すことができた.
+
+
+実装していないものについてだが,
+"\&" を付け足すには lexer で "\&", "\&" に対応するトークンをそれぞれ用意しておき,
+"=" の時と同様に
+parser で 変数を OP0 と OP2 の間に一つ足せば良いし,
+"\#" から始まる場合も新しいトークンを作り, OP3 よりさらに強い位置に変数を足せばいい.
+
+
+
+
+
+\end{document}
