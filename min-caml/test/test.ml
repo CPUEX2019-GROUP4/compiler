@@ -1,4 +1,4 @@
-print_int (int_of_float (sqrt 0.0))
+print_int (int_of_float (cos 0.0))
 (*let a =
   let dammy = Array.create 3 0.0 in
   Array.create 2 dammy in

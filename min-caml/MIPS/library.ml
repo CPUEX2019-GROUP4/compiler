@@ -139,5 +139,8 @@ in
 let rec fabs f = if f <. 0.0 then (-. f) else f in
 let rec fhalf x = x *. 0.5 in
 let rec fsqr x = x *. x in
+let rec fneg x = -. x in
 let rec fless a b = a <. b in
 let rec abs_float x = fabs x in
+let rec fispos x = x >. 0.0 in
+let rec fisneg x = x <. 0.0 in

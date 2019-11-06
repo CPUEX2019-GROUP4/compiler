@@ -1,16 +1,12 @@
 (* float (1) *)
-(*
 external fequal : float -> float -> bool = "%equal"
 external fless : float -> float -> bool = "%lessthan"
 
 let fispos x = x > 0.0
 let fisneg x = x < 0.0
-* 移植ずみ
 let fiszero x = (x = 0.0)
-*)
 
 (* int *)
-(*
 external (=) : int -> int -> bool = "%equal"
 external (<>) : int -> int -> bool = "%notequal"
 external (<) : int -> int -> bool = "%lessthan"
@@ -22,19 +18,14 @@ external (+) : int -> int -> int = "%addint"
 external (-) : int -> int -> int = "%subint"
 external ( * ) : int -> int -> int = "%mulint"
 external (/) : int -> int -> int = "%divint"
-*)
+
 (* logic *)
-(*
 external xor : bool -> bool -> bool = "%notequal"
 external not : bool -> bool = "%boolnot"
-*)
+
 (* float (2) *)
-(*
 let fhalf x = x *. 0.5
 let fsqr x = x *. x
-* 移植ずみ
-*)
-(*
 external (+.) : float -> float -> float = "%addfloat"
 external (-.) : float -> float -> float = "%subfloat"
 external ( *. ) : float -> float -> float = "%mulfloat"
@@ -42,24 +33,26 @@ external (/.) : float -> float -> float = "%divfloat"
 
 external fabs : float -> float = "%absfloat"
 external fneg : float -> float = "%negfloat"
-
 external sqrt : float -> float = "sqrt_float" "sqrt" "float"
-
 external floor : float -> float = "floor_float" "floor" "float"
+
 external int_of_float : float -> int = "%intoffloat"
 external float_of_int : int -> float = "%floatofint"
 
 external cos : float -> float = "cos_float" "cos" "float"
 external sin : float -> float = "sin_float" "sin" "float"
 external atan : float -> float = "atan_float" "atan" "float"
-*)
+
+external int_of_float : float -> int = "%intoffloat"
+external float_of_int : int -> float = "%floatofint"
+
 external create_array : int -> 'a -> 'a array = "caml_make_vect"
 
 (* I/O *)
-(*
+
 let print_char x = Pervasives.print_char (char_of_int x)
 let print_int = Pervasives.print_int
-*)
+
 let buf = Buffer.create 16
 
 let rec read_token in_token =

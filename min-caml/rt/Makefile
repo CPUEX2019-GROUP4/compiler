@@ -1,7 +1,6 @@
 OCOPT = -ccopt -O2
-OCAMLBASE=
-OCAMLC=$(OCAMLBASE)ocamlc
-OCAMLOPT=$(OCAMLBASE)ocamlopt
+OCAMLC=ocamlc
+OCAMLOPT=ocamlopt
 
 all: native
 

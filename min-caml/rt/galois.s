@@ -1072,8 +1072,8 @@
     sw r13 r25 12
     sw r4 r25 8
     sw r2 r25 4
-    addi r1 r0 512
-    addi r2 r0 512
+    addi r1 r0 1
+    addi r2 r0 1
     sw r31 r29 148
     addi r29 r29 152
     lw r31 r25 0
