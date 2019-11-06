@@ -36,6 +36,10 @@ LETREC print_char (VAR of )
   (c : VAR of )
   OUT
     VAR c  0
+LETREC print_newline (VAR of )
+  (a : VAR of )
+  OUT
+    INT 0  10
 LETREC reduction_2pi_sub1 (VAR of )
   (a : VAR of ), (p : VAR of )
   IF
@@ -7206,23 +7210,23 @@ UNIT
 letrec print_int : (INT -> UNIT) =
 variables : (n : INT)
   let n : INT =
-    let Ti2502 : INT =
+    let Ti2503 : INT =
       int 0
     in
-    if Ti2502 <= n
+    if Ti2503 <= n
       n
       let Tu1 : UNIT =
-        let Ti2503 : INT =
+        let Ti2504 : INT =
           int 45
         in
-        out Ti2503 0
+        out Ti2504 0
       in
       neg n
   in
-  let Ti2504 : INT =
+  let Ti2505 : INT =
     int 10
   in
-  if Ti2504 <= n
+  if Ti2505 <= n
     let m : INT =
       div n 10
     in
@@ -7231,18 +7235,25 @@ variables : (n : INT)
         print_int
         m
     in
-    let Ti2506 : INT =
-      let Ti2505 : INT =
+    let Ti2507 : INT =
+      let Ti2506 : INT =
         mul m 10
       in
-      sub n Ti2505
+      sub n Ti2506
     in
-    out Ti2506 48
+    out Ti2507 48
     out n 48
 in
 letrec print_char : (INT -> UNIT) =
 variables : (c : INT)
   out c 0
+in
+letrec print_newline : (INT -> UNIT) =
+variables : (a : INT)
+  let Ti2502 : INT =
+    int 0
+  in
+  out Ti2502 10
 in
 letrec reduction_2pi_sub1 : (FLOAT -> (FLOAT -> FLOAT)) =
 variables : (a : FLOAT), (p : FLOAT)
