@@ -1,7 +1,7 @@
 #!/bin/bash
 input_file=test.txt
 if [ $# -lt 1 ] || [ $# -gt 3 ]; then
-  echo "USAGE: $0 {{input_the_name_of_program}} {{input_file}} {{flag}}" 1>&2
+  echo "USAGE: $0 {{input_the_name_of_program}} {{flag}} {{input_file}}" 1>&2
   exit 1
 fi
 echo $#

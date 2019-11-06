@@ -16,11 +16,11 @@
                   let zi = ti in
                   let zr2 = zr *. zr in
                   let zi2 = zi *. zi in
-                  if zr2 +. zi2 > 2.0 *. 2.0 then print_int 0 else
+                  if zr2 +. zi2 >. 2.0 *. 2.0 then print_int 0 else
                   iloop (i - 1) zr zi zr2 zi2 cr ci in
                 iloop 1000 0.0 0.0 0.0 0.0 cr ci;
 (*
-                let i = ref 1000 in
+                let i = ref 4000 in
                 let zr = ref 0.0 in
                 let zi = ref 0.0 in
                 let zr2 = ref 0.0 in
@@ -38,7 +38,7 @@
                 done;
 *)
 (*MINCAML*)     xloop (x + 1) y in
-(*MINCAML*)   xloop 0 y;
+(*MINCAML*)   xloop 0 y; print_char 10;
 (*NOMINCAML   done; *)
 (*MINCAML*)   yloop (y + 1) in
 (*MINCAML*) yloop 0

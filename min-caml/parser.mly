@@ -30,6 +30,8 @@ let addtyp x = (x, Type.gentyp ())
 %token LESS_GREATER
 %token LESS_EQUAL
 %token GREATER_EQUAL
+%token LESS_DOT /**/
+%token GREATER_DOT /**/
 %token LESS
 %token GREATER
 %token IF
@@ -48,8 +50,6 @@ let addtyp x = (x, Type.gentyp ())
 %token RPAREN
 %token EOF
 
-%token LESS_DOT
-%token GREATER_DOT
 
 /* (* 優先順位とassociativityの定義（低い方から高い方へ） (caml2html: parser_prior) *) */
 %nonassoc IN
@@ -59,7 +59,7 @@ let addtyp x = (x, Type.gentyp ())
 %right LESS_MINUS
 %nonassoc prec_tuple
 %left COMMA
-%left EQUAL LESS_GREATER LESS GREATER LESS_EQUAL GREATER_EQUAL
+%left EQUAL LESS_GREATER LESS GREATER LESS_EQUAL GREATER_EQUAL LESS_DOT GREATER_DOT
 %left OUT  /** added **/
 %left PLUS MINUS PLUS_DOT MINUS_DOT
 %left AST_DOT SLASH_DOT
@@ -125,7 +125,7 @@ exp: /* (* 一般の式 (caml2html: parser_exp) *) */
 | exp LESS_DOT exp
     { FLt($1, $3) }
 | exp GREATER_DOT exp
-    { Not(FLt($1, $3)) }
+    { (FLt($3, $1)) }
 | exp LESS_EQUAL exp
     { LE($1, $3) }
 | exp GREATER_EQUAL exp

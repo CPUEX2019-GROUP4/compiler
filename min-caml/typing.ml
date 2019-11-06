@@ -190,8 +190,6 @@ let rec g env e = (* 型推論ルーチン (caml2html: typing_g) *)
         ignore (g env e1);
         Type.Unit
     | Unknown(_,t1,t2,e1) ->
-        (print_string t1;
-        print_string t2);
       let t1' =
         (if t1 = "unit" then Type.Unit else
           if t1 = "int" then Type.Int else
@@ -207,8 +205,8 @@ let rec g env e = (* 型推論ルーチン (caml2html: typing_g) *)
 
 let f e =
   (* 問1 syntax print (unify する前に print) *)
-  (*print_string "----- syntax.print -----";
-  Syntax.print e 0;*)
+  print_string "----- syntax.print -----";
+  Syntax.print e 0;
   (****************)
 
   extenv := M.empty;
