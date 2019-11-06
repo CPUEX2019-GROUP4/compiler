@@ -9,6 +9,7 @@ let rec print_int n =
     ((print_int m); (out 48 (n - (m * 10))))
 in
 let rec print_char c = out 0 c in
+let rec print_newline _ = out 10 0 in
 (* sin, cos *)
 let rec reduction_2pi_sub1 a p =
   if a <. p then p else reduction_2pi_sub1 a (p +. p)

@@ -9,6 +9,7 @@ let rec print_int n =
     ((print_int m); (out 48 (n - (m * 10))))
 in
 let rec print_char c = out 0 c in
+let rec print_newline _ = out 10 0 in
 (* sin, cos *)
 let rec reduction_2pi_sub1 a p =
   if a <. p then p else reduction_2pi_sub1 a (p +. p)
@@ -139,22 +140,24 @@ in
 let rec fabs f = if f <. 0.0 then (-. f) else f in
 let rec fhalf x = x *. 0.5 in
 let rec fsqr x = x *. x in
+let rec fneg x = -. x in
 let rec fless a b = a <. b in
 let rec abs_float x = fabs x in
-print_int (int_of_float (cos 0.0))
-(*let a =
-  let dammy = Array.create 3 0.0 in
-  Array.create 2 dammy in
-a.(0).(0) <- 0.0;
-a.(0).(1) <- 1.0;
-a.(0).(2) <- 2.0;
-a.(1).(0) <- 3.0;
-a.(1).(1) <- 4.0;
-a.(1).(2) <- 5.0;
-print_int (int_of_float (a.(0).(0))); (* => 3 *)
-print_int (int_of_float (a.(0).(1))); (* => 4 *)
-print_int (int_of_float (a.(0).(2))); (* => 5 *)
-print_int (int_of_float (a.(1).(0))); (* => 3 *)
-print_int (int_of_float (a.(1).(1))); (* => 4 *)
-print_int (int_of_float (a.(1).(2)))  (* => 5 *)
-*)
+let rec fispos x = x >. 0.0 in
+let rec fisneg x = x <. 0.0 in
+print_int (int_of_float ((floor 3.1) *. 20.)); print_char 10;
+print_int (int_of_float ((floor 3.6) *. 20.)); print_char 10;
+print_int (int_of_float ((floor 3.5) *. 20.)); print_char 10;
+print_int (int_of_float ((floor 3.) *. 20.)); print_char 10;
+print_int (int_of_float ((floor 1.2) *. 20.)); print_char 10;
+print_int (int_of_float ((floor 1.7) *. 20.)); print_char 10;
+print_int (int_of_float ((floor 1.5) *. 20.)); print_char 10;
+print_int (int_of_float ((floor 0.0) *. 20.)); print_char 10;
+print_int (int_of_float ((floor (-0.0)) *. 20.)); print_char 10;
+print_int (int_of_float ((floor (-1.2)) *. 20.)); print_char 10;
+print_int (int_of_float ((floor (-1.6)) *. 20.)); print_char 10;
+print_int (int_of_float ((floor (-1.5)) *. 20.)); print_char 10;
+print_int (int_of_float ((floor (-1.0)) *. 20.)); print_char 10;
+print_int (int_of_float ((floor (-7.0)) *. 20.)); print_char 10;
+print_int (int_of_float ((floor (-7.2)) *. 20.)); print_char 10;
+print_int (int_of_float ((floor (-7.7)) *. 20.)); print_char 10
