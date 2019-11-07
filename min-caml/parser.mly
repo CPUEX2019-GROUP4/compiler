@@ -115,6 +115,7 @@ exp: /* (* 一般の式 (caml2html: parser_exp) *) */
 | exp EQUAL exp
     { Eq($1, $3) }
 | FZERO exp /*(* =0 *)*/
+    %prec prec_app
     { FZero($2) }
 | exp LESS_GREATER exp
     { Not(Eq($1, $3)) }
@@ -151,8 +152,10 @@ exp: /* (* 一般の式 (caml2html: parser_exp) *) */
     %prec prec_let
     { LetRec($3, $5) }
 | FLOAT_TO_INT exp
+    %prec prec_app
     { FtoI($2) }
 | INT_TO_FLOAT exp
+    %prec prec_app
     { ItoF($2) }
 | OUT INT exp
     { Out($3,$2) }
@@ -161,6 +164,7 @@ exp: /* (* 一般の式 (caml2html: parser_exp) *) */
 | READ_FLOAT LPAREN RPAREN
     { Unknown("inflt","unit","float",Unit)}
 | UNKNOWN IDENT IDENT IDENT exp
+    %prec prec_app
     { Unknown($2,$3,$4,$5) }
 | simple_exp actual_args
     %prec prec_app

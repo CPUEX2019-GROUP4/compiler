@@ -9,7 +9,7 @@ let rec print_int n =
     ((print_int m); (out 48 (n - (m * 10))))
 in
 let rec print_char c = out 0 c in
-let rec print_newline a = out 10 0 in
+let rec print_newline _ = out 10 0 in
 (* sin, cos *)
 let rec reduction_2pi_sub1 a p =
   if a <. p then p else reduction_2pi_sub1 a (p +. p)
@@ -140,12 +140,11 @@ in
 let rec fabs f = if f <. 0.0 then (-. f) else f in
 let rec fhalf x = x *. 0.5 in
 let rec fsqr x = x *. x in
+let rec fneg x = -. x in
 let rec fless a b = a <. b in
 let rec abs_float x = fabs x in
-let rec test x =
-  let f = read_float () in
-  if fiszero f then () else
-  (print_int (int_of_float (10000. *. sqrt f));
-  print_newline ();
-  test ())
-in test ()
+let rec fispos x = x >. 0.0 in
+let rec fisneg x = x <. 0.0 in
+let a = Array.create 3 0.0 in
+a.(1) <- 3.0;
+print_int(int_of_float a.(1))

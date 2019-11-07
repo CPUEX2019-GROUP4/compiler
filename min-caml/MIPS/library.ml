@@ -9,7 +9,7 @@ let rec print_int n =
     ((print_int m); (out 48 (n - (m * 10))))
 in
 let rec print_char c = out 0 c in
-let rec print_newline a = out 10 0 in
+let rec print_newline _ = out 10 0 in
 (* sin, cos *)
 let rec reduction_2pi_sub1 a p =
   if a <. p then p else reduction_2pi_sub1 a (p +. p)
@@ -20,12 +20,12 @@ let rec reduction_2pi_sub2 a p =
       if a >. p then
         a -. p
       else
-        a +. 0.0
+        a
     in
     let p = p /. 2.0 in
     reduction_2pi_sub2 a p
   else
-    a +. 0.0
+    a
 in
 let rec reduction_2pi a =
   let p = 6.28318530717958 in
@@ -53,23 +53,23 @@ let rec sin a =
     if a >. 3.141592653589793238 then
       (a -. 3.141592653589793238, not flag)
     else
-      (a +. 0.0, flag) in
+      (a, flag) in
   let a = if a >. 1.5707963267948966 then
     3.141592653589793238 -. a
   else
-    a +. 0.0
+    a
   in
   let a = if a <. 0.7853981633974483 then
     kernel_cos (1.5707963267948966 -. a)
   else
     kernel_sin a
   in
-  if flag then a +. 0.0 else -. a
+  if flag then a else -. a
 in
 
 let rec cos a =
   (* abs *)
-  let a = if a <.0.0 then -. a else a +. 0.0 in
+  let a = if a <.0.0 then -. a else a in
   (* 2pi *)
   let a = reduction_2pi a in
   (* pi *)
@@ -81,13 +81,13 @@ let rec cos a =
   let (a, flag) =
     if a >.1.5707963267948966 then
       (3.141592653589793 -. a, not flag)
-    else (a +. 0.0, flag) in
+    else (a, flag) in
   (* pi/4 *)
   let a =
     if a >.0.7853981633974483 then
       kernel_cos a
     else kernel_sin (1.5707963267948966 -. a) in
-  if flag then a +. 0.0 else -. a
+  if flag then a else -. a
 in
 (* sqrt *)
 let rec sqrt x =
@@ -117,17 +117,17 @@ let rec kernel_atan a1 =
 in
 let rec atan a =
   let flag = a >. 0.0 in
-  let a = if flag then a +. 0.0 else -. a in
+  let a = if flag then a else -. a in
   let b =
     if a <. 0.4375 then
       kernel_atan a
     else
-      (if a <. 2.4375 then
+      if a <. 2.4375 then
         0.7853981633974483 +. (kernel_atan ((a -. 1.0)/.(a +. 1.0)))
       else
-        1.5707963267948966 -. (kernel_atan (1.0 /. a))) +. 0.0
+        1.5707963267948966 -. (kernel_atan (1.0 /. a))
   in
-  if flag then 0.0 +. b else -. b
+  if flag then b else -. b
 in
 (* floor *)
 let rec floor x =
@@ -140,5 +140,8 @@ in
 let rec fabs f = if f <. 0.0 then (-. f) else f in
 let rec fhalf x = x *. 0.5 in
 let rec fsqr x = x *. x in
+let rec fneg x = -. x in
 let rec fless a b = a <. b in
 let rec abs_float x = fabs x in
+let rec fispos x = x >. 0.0 in
+let rec fisneg x = x <. 0.0 in

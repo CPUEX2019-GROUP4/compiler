@@ -12,9 +12,10 @@ let save x =
 let savef x =
   stackset := S.add x !stackset;
   if not (List.mem x !stackmap) then
-    (let pad =
+  (*  (let pad =
       if List.length !stackmap mod 2 = 0 then [] else [Id.gentmp Type.Int] in
-    stackmap := !stackmap @ pad @ [x; x])
+  *)
+  stackmap := !stackmap @ [x]
 let locate x =
   let rec loc = function
     | [] -> []
@@ -283,13 +284,13 @@ and g' oc = function (* 各命令のアセンブリ生成 (caml2html: emit_gprime) *)
       );
       g'_args oc [(x, reg_cl)] ys zs;
       let ss = stacksize () in
-      Printf.fprintf oc "    sw %s %s %d\n" (reg reg_tmp) (reg reg_sp) (ss - 4);    (**************)
+      Printf.fprintf oc "    sw r31 %s %d\n" (reg reg_sp) (ss - 4);    (**************)
       Printf.fprintf oc "    addi %s %s %d\n" (reg reg_sp) (reg reg_sp) ss;  (************)
-      Printf.fprintf oc "    lw %s %s 0\n" (reg reg_tmp) (reg reg_cl);     (**************)
-      Printf.fprintf oc "    mv r26 %s\n" (reg reg_tmp);      (***********)
+      Printf.fprintf oc "    lw r26 %s 0\n" (reg reg_cl);     (**************)
+      (*Printf.fprintf oc "    mv r26 r31\n";      (***********)*)
       Printf.fprintf oc "    jalr r26\n";                     (***********)
       Printf.fprintf oc "    subi %s %s %d\n" (reg reg_sp) (reg reg_sp) ss;   (***********)
-      Printf.fprintf oc "    lw %s %s %d\n" (reg reg_tmp) (reg reg_sp) (ss - 4); (**************)
+      Printf.fprintf oc "    lw r31 %s %d\n" (reg reg_sp) (ss - 4); (**************)
       if List.mem a allregs && a <> regs.(0) then
         Printf.fprintf oc "    or %s r0 %s\n" (reg a) (reg regs.(0))  (***************)
       else if List.mem a allfregs && a <> fregs.(0) then
@@ -401,7 +402,7 @@ let f oc (Prog(fundefs, e)) =
   Printf.fprintf oc "    stwu    r1, -96(r1)\n";
   *)
   (* heap pointer *)
-  Printf.fprintf oc "    lui r30 5\n";
+  Printf.fprintf oc "    lui r30 1\n";
   (*Printf.fprintf oc "    ori r30 r30 0\n";*)
   Printf.fprintf oc "#    main program starts\n";
   stackset := S.empty;

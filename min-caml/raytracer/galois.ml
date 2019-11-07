@@ -9,7 +9,7 @@ let rec print_int n =
     ((print_int m); (out 48 (n - (m * 10))))
 in
 let rec print_char c = out 0 c in
-let rec print_newline a = out 10 0 in
+let rec print_newline _ = out 10 0 in
 (* sin, cos *)
 let rec reduction_2pi_sub1 a p =
   if a <. p then p else reduction_2pi_sub1 a (p +. p)
@@ -140,8 +140,13 @@ in
 let rec fabs f = if f <. 0.0 then (-. f) else f in
 let rec fhalf x = x *. 0.5 in
 let rec fsqr x = x *. x in
+let rec fneg x = -. x in
 let rec fless a b = a <. b in
 let rec abs_float x = fabs x in
+let rec fispos x = x >. 0.0 in
+let rec fisneg x = x <. 0.0 in
+(*open MiniMLRuntime;;*)
+
 (**************** グローバル変数の宣言 ****************)
 
 (* オブジェクトの個数 *)
@@ -243,11 +248,9 @@ let n_reflections = create_array 1 0 in
 
 (*NOMINCAML open MiniMLRuntime;;*)
 (*NOMINCAML open Globals;;*)
-(*MINCAML*) (*let true = 1 in
-(*MINCAML*) let false = 0 in*)
+(*MINCAML   let true = 1 in*)
+(*MINCAML   let false = 0 in*)
 (*MINCAML*) let rec xor x y = if x then not y else y in
-
-
 
 (******************************************************************************
    ユーティリティー
@@ -256,13 +259,13 @@ let n_reflections = create_array 1 0 in
 (* 符号 *)
 let rec sgn x =
   if fiszero x then 0.0
-  else if x >. 0.0 then 1.0
+  else if fispos x then 1.0
   else -1.0
 in
 
 (* 条件付き符号反転 *)
 let rec fneg_cond cond x =
-  if cond then x else -. x
+  if cond then x else fneg x
 in
 
 (* (x+y) mod 5 *)
@@ -738,11 +741,11 @@ let rec read_screen_settings _ =
   (* スクリーン面X方向のベクトル *)
   screenx_dir.(0) <- cos_v2;
   screenx_dir.(1) <- 0.0;
-  screenx_dir.(2) <- -. sin_v2;
+  screenx_dir.(2) <- fneg sin_v2;
   (* スクリーン面Y方向のベクトル *)
-  screeny_dir.(0) <- -. sin_v1 *. sin_v2;
-  screeny_dir.(1) <- -. cos_v1;
-  screeny_dir.(2) <- -. sin_v1 *. cos_v2;
+  screeny_dir.(0) <- fneg sin_v1 *. sin_v2;
+  screeny_dir.(1) <- fneg cos_v1;
+  screeny_dir.(2) <- fneg sin_v1 *. cos_v2;
   (* 視点位置ベクトル(絶対座標) *)
   viewpoint.(0) <- screen.(0) -. screenz_dir.(0);
   viewpoint.(1) <- screen.(1) -. screenz_dir.(1);
@@ -758,7 +761,7 @@ let rec read_light _ =
   (* 光線関係 *)
   let l1 = rad (read_float ()) in
   let sl1 = sin l1 in
-  light.(1) <- -. sl1;
+  light.(1) <- fneg sl1;
   let l2 = rad (read_float ()) in
   let cl1 = cos l1 in
   let sl2 = sin l2 in
@@ -790,7 +793,7 @@ let rec rotate_quadratic_matrix abc rot =
   let m11 = sin_x *. sin_y *. sin_z +. cos_x *. cos_z in
   let m12 = cos_x *. sin_y *. sin_z -. sin_x *. cos_z in
 
-  let m20 = -. sin_y in
+  let m20 = fneg sin_y in
   let m21 = sin_x *. cos_y in
   let m22 = cos_x *. cos_y in
 
@@ -823,28 +826,28 @@ let rec read_nth_object n =
       let refltype = read_int () in
       let isrot_p = read_int () in
 
-      let abc = Array.create 3 0.0 in
+      let abc = create_array 3 0.0 in
       abc.(0) <- read_float ();
       abc.(1) <- read_float (); (* 5 *)
       abc.(2) <- read_float ();
 
-      let xyz = Array.create 3 0.0 in
+      let xyz = create_array 3 0.0 in
       xyz.(0) <- read_float ();
       xyz.(1) <- read_float ();
       xyz.(2) <- read_float ();
 
-      let m_invert = (read_float ()) <. 0.0 in (* 10 *)
+      let m_invert = fisneg (read_float ()) in (* 10 *)
 
-      let reflparam = Array.create 2 0.0 in
+      let reflparam = create_array 2 0.0 in
       reflparam.(0) <- read_float (); (* diffuse *)
       reflparam.(1) <- read_float (); (* hilight *)
 
-      let color = Array.create 3 0.0 in
+      let color = create_array 3 0.0 in
       color.(0) <- read_float ();
       color.(1) <- read_float ();
       color.(2) <- read_float (); (* 15 *)
 
-      let rotation = Array.create 3 0.0 in
+      let rotation = create_array 3 0.0 in
       if isrot_p <> 0 then
 	(
 	 rotation.(0) <- rad (read_float ());
@@ -857,7 +860,7 @@ let rec read_nth_object n =
 
       (* 注: 下記正規化 (form = 2) 参照 *)
       let m_invert2 = if form = 2 then true else m_invert in
-      let ctbl = Array.create 4 0.0 in
+      let ctbl = create_array 4 0.0 in
       (* ここからあとは abc と rotation しか操作しない。*)
       let obj =
 	(texture, form, refltype, isrot_p,
@@ -915,7 +918,7 @@ in
 (* ネットワーク1つを読み込みベクトルにして返す *)
 let rec read_net_item length =
   let item = read_int () in
-  if item = -1 then Array.create (length + 1) (-1)
+  if item = -1 then create_array (length + 1) (-1)
   else
     let v = read_net_item (length + 1) in
     (v.(length) <- item; v)
@@ -924,7 +927,7 @@ in
 let rec read_or_network length =
   let net = read_net_item 0 in
   if net.(0) = -1 then
-    Array.create (length + 1) net
+    create_array (length + 1) net
   else
     let v = read_or_network (length + 1) in
     (v.(length) <- net; v)
@@ -968,7 +971,7 @@ in
 let rec solver_rect_surface m dirvec b0 b1 b2 i0 i1 i2  =
   if fiszero dirvec.(i0) then false else
   let abc = o_param_abc m in
-  let d = fneg_cond (xor (o_isinvert m) (dirvec.(i0) <. 0.0)) abc.(i0) in
+  let d = fneg_cond (xor (o_isinvert m) (fisneg dirvec.(i0))) abc.(i0) in
 
   let d2 = (d -. b0) /. dirvec.(i0) in
   if fless (fabs (d2 *. dirvec.(i1) +. b1)) abc.(i1) then
@@ -994,8 +997,8 @@ let rec solver_surface m dirvec b0 b1 b2 =
   (* 平面は極性が負に統一されている *)
   let abc = o_param_abc m in
   let d = veciprod dirvec abc in
-  if d >. 0.0 then (
-    solver_dist.(0) <- -. (veciprod2 abc b0 b1 b2) /. d;
+  if fispos d then (
+    solver_dist.(0) <- fneg (veciprod2 abc b0 b1 b2) /. d;
     1
    ) else 0
 in
@@ -1059,9 +1062,9 @@ let rec solver_second m dirvec b0 b1 b2 =
     (* 判別式 *)
     let d = fsqr bb -. aa *. cc in
 
-    if d >. 0.0 then (
+    if fispos d then (
       let sd = sqrt d in
-      let t1 = if o_isinvert m then sd else -. sd in
+      let t1 = if o_isinvert m then sd else fneg sd in
       (solver_dist.(0) <- (t1 -. bb) /.  aa; 1)
      )
     else
@@ -1136,7 +1139,7 @@ in
 
 (**** solver_surfaceのdirvecテーブル使用高速版 ******)
 let rec solver_surface_fast m dconst b0 b1 b2 =
-  if dconst.(0) <. 0.0 then (
+  if fisneg dconst.(0) then (
     solver_dist.(0) <-
       dconst.(1) *. b0 +. dconst.(2) *. b1 +. dconst.(3) *. b2;
     1
@@ -1154,7 +1157,7 @@ let rec solver_second_fast m dconst b0 b1 b2 =
     let cc0 = quadratic m b0 b1 b2 in
     let cc = if o_form m = 3 then cc0 -. 1.0 else cc0 in
     let d = (fsqr neg_bb) -. aa *. cc in
-    if d >. 0.0 then (
+    if fispos d then (
       if o_isinvert m then
 	solver_dist.(0) <- (neg_bb +. sqrt d) *. dconst.(4)
       else
@@ -1185,7 +1188,7 @@ in
 
 (* solver_surfaceのdirvec+startテーブル使用高速版 *)
 let rec solver_surface_fast2 m dconst sconst b0 b1 b2 =
-  if dconst.(0) <. 0.0 then (
+  if fisneg dconst.(0) then (
     solver_dist.(0) <- dconst.(0) *. sconst.(3);
     1
    ) else 0
@@ -1201,7 +1204,7 @@ let rec solver_second_fast2 m dconst sconst b0 b1 b2 =
     let neg_bb = dconst.(1) *. b0 +. dconst.(2) *. b1 +. dconst.(3) *. b2 in
     let cc = sconst.(3) in
     let d = (fsqr neg_bb) -. aa *. cc in
-    if d >. 0.0 then (
+    if fispos d then (
       if o_isinvert m then
 	solver_dist.(0) <- (neg_bb +. sqrt d) *. dconst.(4)
       else
@@ -1234,26 +1237,26 @@ in
 
 (* 直方体オブジェクトに対する前処理 *)
 let rec setup_rect_table vec m =
-  let const = Array.create 6 0.0 in
+  let const = create_array 6 0.0 in
 
   if fiszero vec.(0) then (* YZ平面 *)
     const.(1) <- 0.0
   else (
     (* 面の X 座標 *)
-    const.(0) <- fneg_cond (xor (o_isinvert m) (vec.(0) <. 0.0)) (o_param_a m);
+    const.(0) <- fneg_cond (xor (o_isinvert m) (fisneg vec.(0))) (o_param_a m);
     (* 方向ベクトルを何倍すればX方向に1進むか *)
     const.(1) <- 1.0 /. vec.(0)
   );
   if fiszero vec.(1) then (* ZX平面 : YZ平面と同様*)
     const.(3) <- 0.0
   else (
-    const.(2) <- fneg_cond (xor (o_isinvert m) (vec.(1) <. 0.0)) (o_param_b m);
+    const.(2) <- fneg_cond (xor (o_isinvert m) (fisneg vec.(1))) (o_param_b m);
     const.(3) <- 1.0 /. vec.(1)
   );
   if fiszero vec.(2) then (* XY平面 : YZ平面と同様*)
     const.(5) <- 0.0
   else (
-    const.(4) <- fneg_cond (xor (o_isinvert m) (vec.(2) <. 0.0)) (o_param_c m);
+    const.(4) <- fneg_cond (xor (o_isinvert m) (fisneg vec.(2))) (o_param_c m);
     const.(5) <- 1.0 /. vec.(2)
   );
   const
@@ -1261,17 +1264,17 @@ in
 
 (* 平面オブジェクトに対する前処理 *)
 let rec setup_surface_table vec m =
-  let const = Array.create 4 0.0 in
+  let const = create_array 4 0.0 in
   let d =
     vec.(0) *. o_param_a m +. vec.(1) *. o_param_b m +. vec.(2) *. o_param_c m
   in
-  if d >. 0.0 then (
+  if fispos d then (
     (* 方向ベクトルを何倍すれば平面の垂直方向に 1 進むか *)
     const.(0) <- -1.0 /. d;
     (* ある点の平面からの距離が方向ベクトル何個分かを導く3次一形式の係数 *)
-    const.(1) <- -. (o_param_a m /. d);
-    const.(2) <- -. (o_param_b m /. d);
-    const.(3) <- -. (o_param_c m /. d)
+    const.(1) <- fneg (o_param_a m /. d);
+    const.(2) <- fneg (o_param_b m /. d);
+    const.(3) <- fneg (o_param_c m /. d)
    ) else
     const.(0) <- 0.0;
   const
@@ -1280,12 +1283,12 @@ in
 
 (* 2次曲面に対する前処理 *)
 let rec setup_second_table v m =
-  let const = Array.create 5 0.0 in
+  let const = create_array 5 0.0 in
 
   let aa = quadratic m v.(0) v.(1) v.(2) in
-  let c1 = -. (v.(0) *. o_param_a m) in
-  let c2 = -. (v.(1) *. o_param_b m) in
-  let c3 = -. (v.(2) *. o_param_c m) in
+  let c1 = fneg (v.(0) *. o_param_a m) in
+  let c2 = fneg (v.(1) *. o_param_b m) in
+  let c3 = fneg (v.(2) *. o_param_c m) in
 
   const.(0) <- aa;  (* 2次方程式の a 係数 *)
 
@@ -1377,14 +1380,14 @@ in
 (* 平面 *)
 let rec is_plane_outside m p0 p1 p2 =
   let w = veciprod2 (o_param_abc m) p0 p1 p2 in
-  not (xor (o_isinvert m) (w <. 0.0))
+  not (xor (o_isinvert m) (fisneg w))
 in
 
 (* 2次曲面 *)
 let rec is_second_outside m p0 p1 p2 =
   let w = quadratic m p0 p1 p2 in
   let w2 = if o_form m = 3 then w -. 1.0 else w in
-  not (xor (o_isinvert m) (w2 <. 0.0))
+  not (xor (o_isinvert m) (fisneg w2))
 in
 
 (* 物体の中心座標に平行移動した上で、適切な補助関数を呼ぶ *)
@@ -1696,15 +1699,15 @@ let rec get_nvector_rect dirvec =
   let rectside = intsec_rectside.(0) in
   (* solver の返り値はぶつかった面の方向を示す *)
   vecbzero nvector;
-  nvector.(rectside-1) <- -. (sgn (dirvec.(rectside-1)))
+  nvector.(rectside-1) <- fneg (sgn (dirvec.(rectside-1)))
 in
 
 (* 平面 *)
 let rec get_nvector_plane m =
   (* m_invert は常に true のはず *)
-  nvector.(0) <- -. (o_param_a m); (* if m_invert then -. m_a else m_a *)
-  nvector.(1) <- -. (o_param_b m);
-  nvector.(2) <- -. (o_param_c m)
+  nvector.(0) <- fneg (o_param_a m); (* if m_invert then fneg m_a else m_a *)
+  nvector.(1) <- fneg (o_param_b m);
+  nvector.(2) <- fneg (o_param_c m)
 in
 
 (* 2次曲面 :  grad x^t A x = 2 A x を正規化する *)
@@ -1813,7 +1816,7 @@ let rec utexture m p =
     in
     let w10 = w8 -. (floor w8) in
     let w11 = 0.15 -. (fsqr (0.5 -. w9)) -. (fsqr (0.5 -. w10)) in
-    let w12 = if w11 <. 0.0 then 0.0 else w11 in
+    let w12 = if fisneg w11 then 0.0 else w11 in
     texture_color.(2) <- (255.0 *. w12) /. 0.3
    )
   else ()
@@ -1827,12 +1830,12 @@ in
 let rec add_light bright hilight hilight_scale =
 
   (* 拡散光 *)
-  if bright >. 0.0 then
+  if fispos bright then
     vecaccum rgb bright texture_color
   else ();
 
   (* 不完全鏡面反射 cos ^4 モデル *)
-  if hilight >. 0.0 then (
+  if fispos hilight then (
     let ihl = fsqr (fsqr hilight) *. hilight_scale in
     rgb.(0) <- rgb.(0) +. ihl;
     rgb.(1) <- rgb.(1) +. ihl;
@@ -1849,7 +1852,7 @@ let rec trace_reflections index diffuse hilight_scale dirvec =
 
     (*反射光を逆にたどり、実際にその鏡面に当たれば、反射光が届く可能性有り *)
     if judge_intersection_fast dvec then
-      let surface_id = intersected_object_id.(0) * 4 + intsec_rectside.(0) in       (** here !!!!!!!!!! **)
+      let surface_id = intersected_object_id.(0) * 4 + intsec_rectside.(0) in
       if surface_id = r_surface_id rinfo then
 	(* 鏡面との衝突点が光源の影になっていなければ反射光は届く *)
         if not (shadow_check_one_or_matrix 0 or_net.(0)) then
@@ -1910,8 +1913,8 @@ let rec trace_ray nref energy dirvec pixel dist =
 
       (* 光源光が直接届く場合、RGB成分にこれを加味する *)
       if not (shadow_check_one_or_matrix 0 or_net.(0)) then
-        let bright = -. (veciprod nvector light) *. diffuse in
-        let hilight = -. (veciprod dirvec light) in
+        let bright = fneg (veciprod nvector light) *. diffuse in
+        let hilight = fneg (veciprod dirvec light) in
         add_light bright hilight hilight_scale
       else ();
 
@@ -1939,9 +1942,9 @@ let rec trace_ray nref energy dirvec pixel dist =
       surface_ids.(nref) <- -1;
 
       if nref <> 0 then (
-	let hl = -. (veciprod dirvec light) in
+	let hl = fneg (veciprod dirvec light) in
         (* 90°を超える場合は0 (光なし) *)
-	if hl >. 0.0 then
+	if fispos hl then
 	  (
 	   (* ハイライト強度は角度の cos^3 に比例 *)
 	   let ihl = fsqr hl *. hl *. energy *. beam.(0) in
@@ -1973,8 +1976,8 @@ let rec trace_diffuse_ray dirvec energy =
 
     (* その物体が放射する光の強さを求める。直接光源光のみを計算 *)
     if not (shadow_check_one_or_matrix 0 or_net.(0)) then
-      let br =  -. (veciprod nvector light) in
-      let bright = (if br >. 0.0 then br else 0.0) in
+      let br =  fneg (veciprod nvector light) in
+      let bright = (if fispos br then br else 0.0) in
       vecaccum diffuse_ray (energy *. bright *. o_diffuse obj) texture_color
     else ()
   else ()
@@ -1988,7 +1991,7 @@ let rec iter_trace_diffuse_rays dirvec_group nvector org index =
 
     (* 配列の 2n 番目と 2n+1 番目には互いに逆向の方向ベクトルが入っている
        法線ベクトルと同じ向きの物を選んで使う *)
-    if p <. 0.0 then
+    if fisneg p then
       trace_diffuse_ray dirvec_group.(index + 1) (p /. -150.0)
     else
       trace_diffuse_ray dirvec_group.(index) (p /. 150.0);
@@ -2299,25 +2302,25 @@ in
 
 (* 3次元ベクトルの5要素配列を割り当て *)
 let rec create_float5x3array _ = (
-  let vec = Array.create 3 0.0 in
-  let array = Array.create 5 vec in
-  array.(1) <- Array.create 3 0.0;
-  array.(2) <- Array.create 3 0.0;
-  array.(3) <- Array.create 3 0.0;
-  array.(4) <- Array.create 3 0.0;
+  let vec = create_array 3 0.0 in
+  let array = create_array 5 vec in
+  array.(1) <- create_array 3 0.0;
+  array.(2) <- create_array 3 0.0;
+  array.(3) <- create_array 3 0.0;
+  array.(4) <- create_array 3 0.0;
   array
 )
 in
 
 (* ピクセルを表すtupleを割り当て *)
 let rec create_pixel _ =
-  let m_rgb = Array.create 3 0.0 in
+  let m_rgb = create_array 3 0.0 in
   let m_isect_ps = create_float5x3array() in
-  let m_sids = Array.create 5 0 in
-  let m_cdif = Array.create 5 false in
+  let m_sids = create_array 5 0 in
+  let m_cdif = create_array 5 false in
   let m_engy = create_float5x3array() in
   let m_r20p = create_float5x3array() in
-  let m_gid = Array.create 1 0 in
+  let m_gid = create_array 1 0 in
   let m_nvectors = create_float5x3array() in
   (m_rgb, m_isect_ps, m_sids, m_cdif, m_engy, m_r20p, m_gid, m_nvectors)
 in
@@ -2333,7 +2336,7 @@ in
 
 (* 横方向1ライン分のピクセル配列を作る *)
 let rec create_pixelline _ =
-  let line = Array.create image_size.(0) (create_pixel()) in
+  let line = create_array image_size.(0) (create_pixel()) in
   init_line_elements line (image_size.(0)-2)
 in
 
@@ -2370,11 +2373,11 @@ let rec calc_dirvec icount x y rx ry group_id index =
     (* 立方体的に対称に分布させる *)
     let dgroup = dirvecs.(group_id) in
     vecset (d_vec dgroup.(index))    vx vy vz;
-    vecset (d_vec dgroup.(index+40)) vx vz (-. vy);
-    vecset (d_vec dgroup.(index+80)) vz (-. vx) (-. vy);
-    vecset (d_vec dgroup.(index+1)) (-. vx) (-. vy) (-. vz);
-    vecset (d_vec dgroup.(index+41)) (-. vx) (-. vz) vy;
-    vecset (d_vec dgroup.(index+81)) (-. vz) vx vy
+    vecset (d_vec dgroup.(index+40)) vx vz (fneg vy);
+    vecset (d_vec dgroup.(index+80)) vz (fneg vx) (fneg vy);
+    vecset (d_vec dgroup.(index+1)) (fneg vx) (fneg vy) (fneg vz);
+    vecset (d_vec dgroup.(index+41)) (fneg vx) (fneg vz) vy;
+    vecset (d_vec dgroup.(index+81)) (fneg vz) vx vy
    ) else
     let x2 = adjust_position y rx in
     calc_dirvec (icount + 1) x2 (adjust_position x2 ry) rx ry group_id index
@@ -2409,8 +2412,8 @@ in
 
 
 let rec create_dirvec _ =
-  let v3 = Array.create 3 0.0 in
-  let consts = Array.create n_objects.(0) v3 in
+  let v3 = create_array 3 0.0 in
+  let consts = create_array n_objects.(0) v3 in
   (v3, consts)
 in
 
@@ -2423,7 +2426,7 @@ in
 
 let rec create_dirvecs index =
   if index >= 0 then (
-    dirvecs.(index) <- Array.create 120 (create_dirvec());
+    dirvecs.(index) <- create_array 120 (create_dirvec());
     create_dirvec_elements dirvecs.(index) 118;
     create_dirvecs (index-1)
    ) else ()
@@ -2468,12 +2471,12 @@ in
 
 (* 直方体の各面について情報を追加する *)
 let rec setup_rect_reflection obj_id obj =
-  let sid = obj_id * 4 in                                 (** here !!!!!!!!!!! **)
+  let sid = obj_id * 4 in
   let nr = n_reflections.(0) in
   let br = 1.0 -. o_diffuse obj in
-  let n0 = -. light.(0) in
-  let n1 = -. light.(1) in
-  let n2 = -. light.(2) in
+  let n0 = fneg light.(0) in
+  let n1 = fneg light.(1) in
+  let n2 = fneg light.(2) in
   add_reflection nr (sid+1) br light.(0) n1 n2;
   add_reflection (nr+1) (sid+2) br n0 light.(1) n2;
   add_reflection (nr+2) (sid+3) br n0 n1 light.(2);
@@ -2482,7 +2485,7 @@ in
 
 (* 平面について情報を追加する *)
 let rec setup_surface_reflection obj_id obj =
-  let sid = obj_id * 4 + 1 in                               (** here !!!!!!!!!! **)
+  let sid = obj_id * 4 + 1 in
   let nr = n_reflections.(0) in
   let br = 1.0 -. o_diffuse obj in
   let p = veciprod light (o_param_abc obj) in
@@ -2522,9 +2525,9 @@ let rec rt size_x size_y =
 (
  image_size.(0) <- size_x;
  image_size.(1) <- size_y;
- image_center.(0) <- size_x / 2;                      (** here !!!!!!!! **)
- image_center.(1) <- size_y / 2;                      (** here !!!!!!!! **)
- scan_pitch.(0) <- 128.0 /. (float_of_int size_x);
+ image_center.(0) <- size_x / 2;
+ image_center.(1) <- size_y / 2;
+ scan_pitch.(0) <- 128.0 /. float_of_int size_x;
  let prev = create_pixelline () in
  let cur  = create_pixelline () in
  let next = create_pixelline () in
@@ -2539,6 +2542,4 @@ let rec rt size_x size_y =
 )
 in
 
-let a = rt 512 512
-in ()
-(*let _ = rt 512 512*)
+rt 512 512
