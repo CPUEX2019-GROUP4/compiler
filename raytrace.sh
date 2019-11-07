@@ -22,4 +22,3 @@ cd ../simulator/simulator/sim/
 rm out.txt
 ./test.sh raytrace.s input.bin true
 mv out.txt out.ppm
-open out.ppm
