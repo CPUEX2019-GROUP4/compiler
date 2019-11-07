@@ -1,4 +1,4 @@
-    lui r30 1
+    ori r30 r0 32768
 #    main program starts
     addi r1 r0 1
     addi r2 r0 0
