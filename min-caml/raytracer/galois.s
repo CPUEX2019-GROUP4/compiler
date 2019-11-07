@@ -1,4 +1,4 @@
-    lui r30 5
+    lui r30 10
 #    main program starts
     addi r1 r0 1
     addi r2 r0 0
@@ -10382,19 +10382,27 @@ rt.3079:
     or r26 r0 r24
     jr r26
 #   create_array
+#     r1 = pointer in heap
+#     r3 = conter
+#     r2 = value
+#     r31= heap pointer
 min_caml_create_array:
-    mv r6 r1
+    mv r3 r1
     mv r1 r30
 create_array_loop:
-    bne r6 r0 create_array_cont
+    bne r3 r0 create_array_cont
 create_array_exit:
     jr r31
 create_array_cont:
     sw r2 r30 0
-    subi r6 r6 1
+    subi r3 r3 1
     addi r30 r30 4
     j create_array_loop
 #   create_float_array
+#     r1 = pointer in heap
+#     r2 = conter
+#     f0 = value
+#     r31= heap pointer
 min_caml_create_float_array:
     mv r2 r1
     mv r1 r30

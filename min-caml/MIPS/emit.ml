@@ -401,7 +401,7 @@ let f oc (Prog(fundefs, e)) =
   Printf.fprintf oc "    stwu    r1, -96(r1)\n";
   *)
   (* heap pointer *)
-  Printf.fprintf oc "    lui r30 5\n";
+  Printf.fprintf oc "    lui r30 10\n";
   (*Printf.fprintf oc "    ori r30 r30 0\n";*)
   Printf.fprintf oc "#    main program starts\n";
   stackset := S.empty;
