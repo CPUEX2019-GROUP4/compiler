@@ -13,6 +13,5 @@ data/
 program.txt
 *.ml
 commit.sh
-binary_conversion/*.txt
 binary_conversion/Untitled.ipynb
 binary_conversion/.*
