@@ -44,7 +44,7 @@ fi
 
 # cat
 echo "----- out.txt ------"
-cat out.txt
+#cat out.txt
 printf '\n'
 echo "-----    .ans ------"
 cat ../../../min-caml/test/$1.ans
