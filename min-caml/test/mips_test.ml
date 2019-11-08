@@ -12,6 +12,7 @@ let rec print_char c = out 0 c in
 let rec print_newline _ = out 10 0 in
 
 (* sin *)
+(*
 let rec reduction_2pi_sub1 v =
   if (v.(0) <. v.(1)) then
     ()
@@ -87,7 +88,7 @@ let rec cos a =
       kernel_sin (1.5707963267948966 -. v.(0))
   in if v.(2) <. 0.0 then -. x else x
 in
-
+*)
 (* sqrt *)
 let rec sqrt x =
     let rec inner t i =
