@@ -35,7 +35,7 @@ cp out.bin ../simulator/simulator/sim/input.bin
 # simulate
 echo "-----simulate-----"
 cd ../simulator/simulator/sim/
-rm out.txt
+#rm out.txt
 if [ $2 != "true" ]; then
   ./test.sh mips_test.s input.bin true
 else
