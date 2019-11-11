@@ -8,7 +8,6 @@ let rec print_int n =
     let m = n / 10 in
     ((print_int m); (out 48 (n - (m * 10))))
 in
-let rec print_char c = out 0 c in
 let rec print_newline _ = out 10 0 in
 
 (* sin *)

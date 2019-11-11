@@ -32,10 +32,6 @@ LETREC print_int (VAR of )
         VAR n
         MULTIPLE 10
           VAR m    48
-LETREC print_char (VAR of )
-  (c : VAR of )
-  OUT
-    VAR c  0
 LETREC print_newline (VAR of )
   (Tu3 : VAR of )
   OUT
@@ -5766,19 +5762,16 @@ LETREC try_exploit_neighbors (VAR of )
 LETREC write_ppm_header (VAR of )
   (Tu176 : VAR of )
   LET Tu184 (UNIT)
-    APP
-      VAR print_char
-      INT 80
+    OUT
+      INT 80    0
   LET Tu183 (UNIT)
-    APP
-      VAR print_char
+    OUT
       ADD
         INT 48
-        INT 6
+        INT 6    0
   LET Tu182 (UNIT)
-    APP
-      VAR print_char
-      INT 10
+    OUT
+      INT 10    0
   LET Tu181 (UNIT)
     APP
       VAR print_int
@@ -5786,9 +5779,8 @@ LETREC write_ppm_header (VAR of )
         VAR image_size
         INT 0
   LET Tu180 (UNIT)
-    APP
-      VAR print_char
-      INT 32
+    OUT
+      INT 32    0
   LET Tu179 (UNIT)
     APP
       VAR print_int
@@ -5796,16 +5788,14 @@ LETREC write_ppm_header (VAR of )
         VAR image_size
         INT 1
   LET Tu178 (UNIT)
-    APP
-      VAR print_char
-      INT 32
+    OUT
+      INT 32    0
   LET Tu177 (UNIT)
     APP
       VAR print_int
       INT 255
-  APP
-    VAR print_char
-    INT 10
+  OUT
+    INT 10  0
 LETREC write_rgb_element (VAR of )
   (x : VAR of )
   LET ix (VAR of )
@@ -5825,9 +5815,8 @@ LETREC write_rgb_element (VAR of )
             VAR ix
         INT 0
         VAR ix
-  APP
-    VAR print_char
-    VAR elem
+  OUT
+    VAR elem  0
 LETREC write_rgb (VAR of )
   (Tu185 : VAR of )
   LET Tu187 (UNIT)
@@ -7044,10 +7033,6 @@ variables : (n : INT)
     in
     out Ti2445 48
     out n 48
-in
-letrec print_char : (INT -> UNIT) =
-variables : (c : INT)
-  out c 0
 in
 letrec print_newline : (INT -> UNIT) =
 variables : (Tu3 : INT)
@@ -16448,9 +16433,7 @@ variables : (Tu176 : UNIT)
     let Ti692 : INT =
       int 80
     in
-    app
-      print_char
-      Ti692
+    out Ti692 0
   in
   let Tu183 : UNIT =
     let Ti695 : INT =
@@ -16462,17 +16445,13 @@ variables : (Tu176 : UNIT)
       in
       add Ti693 Ti694
     in
-    app
-      print_char
-      Ti695
+    out Ti695 0
   in
   let Tu182 : UNIT =
     let Ti696 : INT =
       int 10
     in
-    app
-      print_char
-      Ti696
+    out Ti696 0
   in
   let Tu181 : UNIT =
     let Ti698 : INT =
@@ -16489,9 +16468,7 @@ variables : (Tu176 : UNIT)
     let Ti699 : INT =
       int 32
     in
-    app
-      print_char
-      Ti699
+    out Ti699 0
   in
   let Tu179 : UNIT =
     let Ti701 : INT =
@@ -16508,9 +16485,7 @@ variables : (Tu176 : UNIT)
     let Ti702 : INT =
       int 32
     in
-    app
-      print_char
-      Ti702
+    out Ti702 0
   in
   let Tu177 : UNIT =
     let Ti703 : INT =
@@ -16523,9 +16498,7 @@ variables : (Tu176 : UNIT)
   let Ti704 : INT =
     int 10
   in
-  app
-    print_char
-    Ti704
+  out Ti704 0
 in
 letrec write_rgb_element : (FLOAT -> UNIT) =
 variables : (x : FLOAT)
@@ -16545,9 +16518,7 @@ variables : (x : FLOAT)
         int 0
       int 255
   in
-  app
-    print_char
-    elem
+  out elem 0
 in
 letrec write_rgb : (UNIT -> UNIT) =
 variables : (Tu185 : UNIT)

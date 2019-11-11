@@ -96,6 +96,8 @@ rule token = parse
     { READ_INT }
 | "read_float"
     { READ_FLOAT }
+| "print_char"
+    { PRINT_CHAR }
 | "UNKNOWN"
     { UNKNOWN }
 | "Array.create" | "Array.make" | "create_array" (* [XX] ad hoc *)
