@@ -1,6 +1,7 @@
 #!/bin/bash
 
 unset LC_ALL LANG LC_CTYPE LC_COLLATE LC_NUMERIC LC_TIME LC_MONETARY LC_MESSAGES
+# language settei kesu
 
 input_file=base.sld
 if [ $# == 1 ]; then
