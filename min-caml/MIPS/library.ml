@@ -91,6 +91,15 @@ in
 *)
 (* sqrt *)
 let rec sqrt x =
+  let t = UNKNOWN sqrt_init float float x in
+  let t = ((t *. t +. x) /. (t +. t)) in
+  let t = ((t *. t +. x) /. (t +. t)) in
+  let t = ((t *. t +. x) /. (t +. t)) in
+  let t = ((t *. t +. x) /. (t +. t)) in
+  t
+in
+(*
+let rec sqrt x =
     let rec inner t i =
         if i = 0 then
             t
@@ -98,6 +107,8 @@ let rec sqrt x =
             inner ((t *. t +. x) /. (2. *. t)) (i - 1)
     in inner (UNKNOWN sqrt_init float float x) 5
 in
+*)
+
 (* atan *)
 let rec kernel_atan a1 =
   let a2  = a1 *. a1  in

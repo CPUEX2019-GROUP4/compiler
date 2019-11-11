@@ -42,32 +42,50 @@ LETREC print_newline (VAR of )
     INT 0  10
 LETREC sqrt (VAR of )
   (x : VAR of )
-  LETREC inner (VAR of )
-    (t : VAR of ), (i : VAR of )
-    IF
-      EQ
-        VAR i
-        INT 0
-      VAR t
-      APP
-        VAR inner
-        FDIV
-          FADD
-            FMUL
-              VAR t
-              VAR t
-            VAR x
-          FMUL
-            FLOAT 2.
-            VAR t
-        SUB
-          VAR i
-          INT 1
-  APP
-    VAR inner
+  LET t (VAR of )
     UNKNOWN APP      sqrt_init
       VAR x
-    INT 5
+  LET t (VAR of )
+    FDIV
+      FADD
+        FMUL
+          VAR t
+          VAR t
+        VAR x
+      FMUL
+        FLOAT 2.
+        VAR t
+  LET t (VAR of )
+    FDIV
+      FADD
+        FMUL
+          VAR t
+          VAR t
+        VAR x
+      FMUL
+        FLOAT 2.
+        VAR t
+  LET t (VAR of )
+    FDIV
+      FADD
+        FMUL
+          VAR t
+          VAR t
+        VAR x
+      FMUL
+        FLOAT 2.
+        VAR t
+  LET t (VAR of )
+    FDIV
+      FADD
+        FMUL
+          VAR t
+          VAR t
+        VAR x
+      FMUL
+        FLOAT 2.
+        VAR t
+  VAR t
 LETREC kernel_atan (VAR of )
   (a1 : VAR of )
   LET a2 (VAR of )
@@ -7005,23 +7023,23 @@ APP
 letrec print_int : (INT -> UNIT) =
 variables : (n : INT)
   let n : INT =
-    let Ti2445 : INT =
+    let Ti2451 : INT =
       int 0
     in
-    if Ti2445 <= n
+    if Ti2451 <= n
       n
       let Tu1 : UNIT =
-        let Ti2446 : INT =
+        let Ti2452 : INT =
           int 45
         in
-        out Ti2446 0
+        out Ti2452 0
       in
       neg n
   in
-  let Ti2447 : INT =
+  let Ti2453 : INT =
     int 10
   in
-  if Ti2447 <= n
+  if Ti2453 <= n
     let m : INT =
       div n 10
     in
@@ -7030,13 +7048,13 @@ variables : (n : INT)
         print_int
         m
     in
-    let Ti2449 : INT =
-      let Ti2448 : INT =
+    let Ti2455 : INT =
+      let Ti2454 : INT =
         mul m 10
       in
-      sub n Ti2448
+      sub n Ti2454
     in
-    out Ti2449 48
+    out Ti2455 48
     out n 48
 in
 letrec print_char : (INT -> UNIT) =
@@ -7045,56 +7063,77 @@ variables : (c : INT)
 in
 letrec print_newline : (INT -> UNIT) =
 variables : (Tu3 : INT)
-  let Ti2444 : INT =
+  let Ti2450 : INT =
     int 0
   in
-  out Ti2444 10
+  out Ti2450 10
 in
 letrec sqrt : (FLOAT -> FLOAT) =
 variables : (x : FLOAT)
-  letrec inner : (FLOAT -> (INT -> FLOAT)) =
-  variables : (t : FLOAT), (i : INT)
-    let Ti2436 : INT =
-      int 0
-    in
-    if i == Ti2436
-      t
-      let Td2441 : FLOAT =
-        let Td2438 : FLOAT =
-          let Td2437 : FLOAT =
-            fmul t t
-          in
-          fadd Td2437 x
-        in
-        let Td2440 : FLOAT =
-          let Td2439 : FLOAT =
-            float 2.
-          in
-          fmul Td2439 t
-        in
-        fdiv Td2438 Td2440
-      in
-      let Ti2443 : INT =
-        let Ti2442 : INT =
-          int 1
-        in
-        sub i Ti2442
-      in
-      app
-        inner
-        Td2441
-        Ti2443
-  in
-  let Td2434 : FLOAT =
+  let t : FLOAT =
     unknown sqrt_init x
   in
-  let Ti2435 : INT =
-    int 5
+  let t : FLOAT =
+    let Td2435 : FLOAT =
+      let Td2434 : FLOAT =
+        fmul t t
+      in
+      fadd Td2434 x
+    in
+    let Td2437 : FLOAT =
+      let Td2436 : FLOAT =
+        float 2.
+      in
+      fmul Td2436 t
+    in
+    fdiv Td2435 Td2437
   in
-  app
-    inner
-    Td2434
-    Ti2435
+  let t : FLOAT =
+    let Td2439 : FLOAT =
+      let Td2438 : FLOAT =
+        fmul t t
+      in
+      fadd Td2438 x
+    in
+    let Td2441 : FLOAT =
+      let Td2440 : FLOAT =
+        float 2.
+      in
+      fmul Td2440 t
+    in
+    fdiv Td2439 Td2441
+  in
+  let t : FLOAT =
+    let Td2443 : FLOAT =
+      let Td2442 : FLOAT =
+        fmul t t
+      in
+      fadd Td2442 x
+    in
+    let Td2445 : FLOAT =
+      let Td2444 : FLOAT =
+        float 2.
+      in
+      fmul Td2444 t
+    in
+    fdiv Td2443 Td2445
+  in
+  let t : FLOAT =
+    let Td2447 : FLOAT =
+      let Td2446 : FLOAT =
+        fmul t t
+      in
+      fadd Td2446 x
+    in
+    let Td2449 : FLOAT =
+      let Td2448 : FLOAT =
+        float 2.
+      in
+      fmul Td2448 t
+    in
+    fdiv Td2447 Td2449
+  in
+  t
 in
 letrec kernel_atan : (FLOAT -> FLOAT) =
 variables : (a1 : FLOAT)

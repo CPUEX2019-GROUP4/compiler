@@ -125,6 +125,7 @@ min_caml_sin:
     sw r31 r29 4
     addi r29 r29 8
     jal min_caml_create_float_array
+    # rewind hp
     subi r30 r30 12
     subi r29 r29 8
     lw r31 r29 4
@@ -253,6 +254,7 @@ float_ble_cont_561:
     sw r31 r29 4
     addi r29 r29 8
     jal min_caml_create_float_array
+    # rewind hp
     subi r30 r30 12
     subi r29 r29 8
     lw r31 r29 4
