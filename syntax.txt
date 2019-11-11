@@ -71,16 +71,6 @@ LETREC sqrt (VAR of )
       FADD
         VAR t
         VAR t
-  LET t (VAR of )
-    FDIV
-      FADD
-        FMUL
-          VAR t
-          VAR t
-        VAR x
-      FADD
-        VAR t
-        VAR t
   VAR t
 LETREC kernel_atan (VAR of )
   (a1 : VAR of )
@@ -7000,23 +6990,23 @@ APP
 letrec print_int : (INT -> UNIT) =
 variables : (n : INT)
   let n : INT =
-    let Ti2441 : INT =
+    let Ti2438 : INT =
       int 0
     in
-    if Ti2441 <= n
+    if Ti2438 <= n
       n
       let Tu1 : UNIT =
-        let Ti2442 : INT =
+        let Ti2439 : INT =
           int 45
         in
-        out Ti2442 0
+        out Ti2439 0
       in
       neg n
   in
-  let Ti2443 : INT =
+  let Ti2440 : INT =
     int 10
   in
-  if Ti2443 <= n
+  if Ti2440 <= n
     let m : INT =
       div n 10
     in
@@ -7025,21 +7015,21 @@ variables : (n : INT)
         print_int
         m
     in
-    let Ti2445 : INT =
-      let Ti2444 : INT =
+    let Ti2442 : INT =
+      let Ti2441 : INT =
         mul m 10
       in
-      sub n Ti2444
+      sub n Ti2441
     in
-    out Ti2445 48
+    out Ti2442 48
     out n 48
 in
 letrec print_newline : (INT -> UNIT) =
 variables : (Tu3 : INT)
-  let Ti2440 : INT =
+  let Ti2437 : INT =
     int 0
   in
-  out Ti2440 10
+  out Ti2437 10
 in
 letrec sqrt : (FLOAT -> FLOAT) =
 variables : (x : FLOAT)
@@ -7081,18 +7071,6 @@ variables : (x : FLOAT)
       fadd t t
     in
     fdiv Td2435 Td2436
-  in
-  let t : FLOAT =
-    let Td2438 : FLOAT =
-      let Td2437 : FLOAT =
-        fmul t t
-      in
-      fadd Td2437 x
-    in
-    let Td2439 : FLOAT =
-      fadd t t
-    in
-    fdiv Td2438 Td2439
   in
   t
 in

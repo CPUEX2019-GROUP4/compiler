@@ -20,7 +20,7 @@ cd min-caml
 make min-caml
 cp MIPS/library.ml test/mips_test.ml
 cat test/$1.ml >> test/mips_test.ml
-make test/mips_test.s
+./min-caml test/mips_test -inline 100
 rm test/$1.ans
 make test/$1.ans
 cp test/mips_test.s ../simulator/simulator/sim/mips_test.s
@@ -49,7 +49,7 @@ fi
 
 # cat
 echo "----- out.txt ------"
-#cat out.txt
+cat out.txt
 printf '\n'
 echo "-----    .ans ------"
 cat ../../../min-caml/test/$1.ans
