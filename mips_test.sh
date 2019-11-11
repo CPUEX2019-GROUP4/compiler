@@ -1,4 +1,7 @@
 #!/bin/bash
+
+unset LC_ALL LANG LC_CTYPE LC_COLLATE LC_NUMERIC LC_TIME LC_MONETARY LC_MESSAGES
+
 input_file=test.txt
 if [ $# -lt 1 ] || [ $# -gt 3 ]; then
   echo "USAGE: $0 {{input_the_name_of_program}} {{flag}} {{input_file}}" 1>&2

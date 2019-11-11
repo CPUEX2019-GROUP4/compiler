@@ -145,10 +145,7 @@ let rec fless a b = a <. b in
 let rec abs_float x = fabs x in
 let rec fispos x = x >. 0.0 in
 let rec fisneg x = x <. 0.0 in
-let rec test x =
-  let f = read_float () in
-  if fiszero f then () else
-  (print_int (int_of_float (10000. *. cos (sin f)));
-  print_newline ();
-  test ())
-in test ()
+let rec fib n =
+  if n <= 1 then n else
+  fib (n - 1) + fib (n - 2) in
+  print_int (fib 10)

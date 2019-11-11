@@ -1,31 +1,37 @@
     ori r30 r0 32768
 #    main program starts
+    addi r1 r0 10
     sw r31 r29 4
     addi r29 r29 8
-    jal test.101
+    jal fib.99
+    subi r29 r29 8
+    lw r31 r29 4
+    sw r31 r29 4
+    addi r29 r29 8
+    jal print_int.68
     subi r29 r29 8
     lw r31 r29 4
 end_of_program:
 nop
      beq r0 r0 end_of_program
-print_int.70:
+print_int.68:
     slti r28 r1 0
-    bne r0 r28 bge_else.195
-    j bge_cont.196
-bge_else.195:
+    bne r0 r28 bge_else.189
+    j bge_cont.190
+bge_else.189:
     addi r2 r0 45
     out r2 0
     sub r1 r0 r1
-bge_cont.196:
+bge_cont.190:
     slti r28 r1 10
-    bne r0 r28 bge_else.197
+    bne r0 r28 bge_else.191
     div10 r2 r1
     sw r1 r29 0
     sw r2 r29 4
     mv r1 r2
     sw r31 r29 12
     addi r29 r29 16
-    jal print_int.70
+    jal print_int.68
     subi r29 r29 16
     lw r31 r29 12
     lw r1 r29 4
@@ -36,48 +42,35 @@ bge_cont.196:
     sub r1 r2 r1
     out r1 48
     jr r31
-bge_else.197:
+bge_else.191:
     out r1 48
     jr r31
-print_newline.74:
-    addi r1 r0 0
-    out r1 10
+fib.99:
+    addi r28 r0 1
+    slt r28 r28 r1
+    bne r0 r28 ble_else.194
     jr r31
-test.101:
-    inflt f0 r0
-    #unknown instruction
-    fcz f0
-    bc1f float_neq_0.201
+ble_else.194:
+    subi r2 r1 1
+    sw r1 r29 0
+    mv r1 r2
+    sw r31 r29 4
+    addi r29 r29 8
+    jal fib.99
+    subi r29 r29 8
+    lw r31 r29 4
+    lw r2 r29 0
+    subi r2 r2 2
+    sw r1 r29 4
+    mv r1 r2
+    sw r31 r29 12
+    addi r29 r29 16
+    jal fib.99
+    subi r29 r29 16
+    lw r31 r29 12
+    lw r2 r29 4
+    add r1 r2 r1
     jr r31
-float_neq_0.201:
-    flui f1 17948
-    # 10000.000000
-    fori f1 f1 16384
-    swcZ f1 r29 0
-    sw r31 r29 4
-    addi r29 r29 8
-    jal min_caml_sin
-    subi r29 r29 8
-    lw r31 r29 4
-    sw r31 r29 4
-    addi r29 r29 8
-    jal min_caml_cos
-    subi r29 r29 8
-    lw r31 r29 4
-    lwcZ f1 r29 0
-    fmul f0 f1 f0
-    ftoi r1 f0
-    sw r31 r29 4
-    addi r29 r29 8
-    jal print_int.70
-    subi r29 r29 8
-    lw r31 r29 4
-    sw r31 r29 4
-    addi r29 r29 8
-    jal print_newline.74
-    subi r29 r29 8
-    lw r31 r29 4
-    j test.101
 #   create_array
 #     r1 = pointer in heap
 #     r3 = conter
