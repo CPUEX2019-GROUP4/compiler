@@ -11,7 +11,6 @@ in
 let rec print_newline _ = out 10 0 in
 
 (* sin *)
-(*
 let rec reduction_2pi_sub1 v =
   if (v.(0) <. v.(1)) then
     ()
@@ -60,7 +59,7 @@ let rec sin a =
   (if v.(0) >. 1.5707963267948966 then
     v.(0) <- 3.141592653589793238 -. v.(0) else ());
   let x =
-    if v.(0) <. 0.7853981633974483 then
+    if v.(0) >. 0.7853981633974483 then
       kernel_cos (1.5707963267948966 -. v.(0))
     else
       kernel_sin v.(0)
@@ -81,20 +80,24 @@ let rec cos a =
   else ());
 
   let x =
-    if v.(0) >. 0.7853981633974483 then
+    if v.(0) <. 0.7853981633974483 then
       kernel_cos v.(0)
     else
       kernel_sin (1.5707963267948966 -. v.(0))
   in if v.(2) <. 0.0 then -. x else x
 in
-*)
+
+
 (* sqrt *)
 let rec sqrt x =
-  let t = UNKNOWN sqrt_init float float x in
-  let t = ((t *. t +. x) /. (t +. t)) in
-  let t = ((t *. t +. x) /. (t +. t)) in
-  let t = ((t *. t +. x) /. (t +. t)) in
-  t
+  if x >. 0.0 then
+    let t = UNKNOWN sqrt_init float float x in
+    let t = ((t *. t +. x) /. (t +. t)) in
+    let t = ((t *. t +. x) /. (t +. t)) in
+    let t = ((t *. t +. x) /. (t +. t)) in
+    t
+  else
+    0.0
 in
 (*
 let rec sqrt x =
