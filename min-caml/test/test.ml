@@ -1,1 +1,1 @@
-print_char 1
+print_int (fsqr 1.0)

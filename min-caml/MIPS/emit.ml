@@ -145,7 +145,11 @@ and g' oc = function (* 各命令のアセンブリ生成 (caml2html: emit_gprime) *)
   (* 入出力 *)
   | NonTail(_), Out(y, z) -> Printf.fprintf oc "    out %s %d\n" (reg y) z         (************)
   (* Unknown instruction *)
-  | NonTail(x), Unknown(f,t1,t2,y) -> Printf.fprintf oc "    %s %s %s\n    #unknown instruction\n" f (reg x) (reg y)   (************)
+  | NonTail(x), Unknown(f,t1,t2,y) ->
+      if f = "fsqr" then
+        Printf.fprintf oc "    fmul %s %s %s\n" (reg x) (reg y) (reg y)  (************)
+      else
+        Printf.fprintf oc "    %s %s %s\n    #unknown instruction\n" f (reg x) (reg y)   (************)
   (* 末尾だったら計算結果を第一レジスタにセットしてリターン (caml2html: emit_tailret) *)
   | Tail, (Nop | Stw _ | Stfd _ | Comment _ | Save _ | Out _ as exp) ->
       g' oc (NonTail(Id.gentmp Type.Unit), exp);

@@ -22,6 +22,8 @@ let addtyp x = (x, Type.gentyp ())
 %token READ_INT /* added */
 %token READ_FLOAT /* added */
 %token PRINT_CHAR /* added */
+%token FLESS /* added */
+%token FSQR /* added */
 %token MINUS_DOT
 %token PLUS_DOT
 %token MINUS_DOT
@@ -167,9 +169,13 @@ exp: /* (* ∞Ï»Ã§Œº∞ (caml2html: parser_exp) *) */
 | PRINT_CHAR exp    /* added */
     %prec prec_app
     { Out($2, 0) }
+| FSQR simple_exp    /* added */
+    { Unknown("fsqr", "float", "float", $2) }
 | UNKNOWN IDENT IDENT IDENT exp
     %prec prec_app
     { Unknown($2,$3,$4,$5) }
+| FLESS simple_exp simple_exp
+    { FLt($2,$3) }
 | simple_exp actual_args
     %prec prec_app
     { App($1, $2) }

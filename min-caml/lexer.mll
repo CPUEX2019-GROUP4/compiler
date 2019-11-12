@@ -90,6 +90,10 @@ rule token = parse
     { INT_TO_FLOAT }
 | "fiszero"
     { FZERO }
+| "fless"
+    { FLESS }
+| "fsqr"
+    { FSQR }
 | "out"
     { OUT }
 | "read_int"

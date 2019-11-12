@@ -25,3 +25,11 @@ cd ../simulator/simulator/sim/
 rm out.txt
 ./test.sh raytrace.s input.bin 1
 mv out.txt out.ppm
+
+#LANG="ja_JP.UTF-8"
+#LC_COLLATE="ja_JP.UTF-8"
+#LC_CTYPE="ja_JP.UTF-8"
+#LC_MESSAGES="ja_JP.UTF-8"
+#LC_MONETARY="ja_JP.UTF-8"
+#LC_NUMERIC="ja_JP.UTF-8"
+#LC_TIME="ja_JP.UTF-8"
