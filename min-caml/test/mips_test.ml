@@ -11,7 +11,6 @@ in
 let rec print_newline _ = out 10 0 in
 
 (* sin *)
-(*
 let rec reduction_2pi_sub1 v =
   if (v.(0) <. v.(1)) then
     ()
@@ -60,7 +59,7 @@ let rec sin a =
   (if v.(0) >. 1.5707963267948966 then
     v.(0) <- 3.141592653589793238 -. v.(0) else ());
   let x =
-    if v.(0) <. 0.7853981633974483 then
+    if v.(0) >. 0.7853981633974483 then
       kernel_cos (1.5707963267948966 -. v.(0))
     else
       kernel_sin v.(0)
@@ -81,20 +80,24 @@ let rec cos a =
   else ());
 
   let x =
-    if v.(0) >. 0.7853981633974483 then
+    if v.(0) <. 0.7853981633974483 then
       kernel_cos v.(0)
     else
       kernel_sin (1.5707963267948966 -. v.(0))
   in if v.(2) <. 0.0 then -. x else x
 in
-*)
+
+
 (* sqrt *)
 let rec sqrt x =
-  let t = UNKNOWN sqrt_init float float x in
-  let t = ((t *. t +. x) /. (t +. t)) in
-  let t = ((t *. t +. x) /. (t +. t)) in
-  let t = ((t *. t +. x) /. (t +. t)) in
-  t
+  if x >. 0.0 then
+    let t = UNKNOWN sqrt_init float float x in
+    let t = ((t *. t +. x) /. (t +. t)) in
+    let t = ((t *. t +. x) /. (t +. t)) in
+    let t = ((t *. t +. x) /. (t +. t)) in
+    t
+  else
+    0.0
 in
 (*
 let rec sqrt x =
@@ -148,13 +151,9 @@ in
  *****************************************************************************)
 let rec fabs f = if f <. 0.0 then (-. f) else f in
 let rec fhalf x = x *. 0.5 in
-let rec fsqr x = x *. x in
 let rec fneg x = -. x in
-let rec fless a b = a <. b in
 let rec abs_float x = fabs x in
 let rec fispos x = x >. 0.0 in
 let rec fisneg x = x <. 0.0 in
-let rec fib n =
-  if n <= 1 then n else
-  fib (n - 1) + fib (n - 2) in
-  print_int (fib 40)
+let rec sqrt_init f = UNKNOWN sqrt_init float float f in (* definition of sqrt_init *)
+print_int (int_of_float ((fsqr (sqrt_init 2.0)) +. (fsqr (sqrt_init 12.25))))

@@ -23,7 +23,7 @@ cp out.bin ../simulator/simulator/sim/input.bin
 echo "-----simulate-----"
 cd ../simulator/simulator/sim/
 rm out.txt
-./test.sh raytrace.s input.bin 1
+./test.sh raytrace.s input.bin label
 mv out.txt out.ppm
 
 #LANG="ja_JP.UTF-8"
