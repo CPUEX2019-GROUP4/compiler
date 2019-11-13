@@ -1,0 +1,16 @@
+print_int (int_of_float ((floor 3.1) *. 20.)); print_char 10;
+print_int (int_of_float ((floor 3.6) *. 20.)); print_char 10;
+print_int (int_of_float ((floor 3.5) *. 20.)); print_char 10;
+print_int (int_of_float ((floor 3.) *. 20.)); print_char 10;
+print_int (int_of_float ((floor 1.2) *. 20.)); print_char 10;
+print_int (int_of_float ((floor 1.7) *. 20.)); print_char 10;
+print_int (int_of_float ((floor 1.5) *. 20.)); print_char 10;
+print_int (int_of_float ((floor 0.0) *. 20.)); print_char 10;
+print_int (int_of_float ((floor (-0.0)) *. 20.)); print_char 10;
+print_int (int_of_float ((floor (-1.2)) *. 20.)); print_char 10;
+print_int (int_of_float ((floor (-1.6)) *. 20.)); print_char 10;
+print_int (int_of_float ((floor (-1.5)) *. 20.)); print_char 10;
+print_int (int_of_float ((floor (-1.0)) *. 20.)); print_char 10;
+print_int (int_of_float ((floor (-7.0)) *. 20.)); print_char 10;
+print_int (int_of_float ((floor (-7.2)) *. 20.)); print_char 10;
+print_int (int_of_float ((floor (-7.7)) *. 20.)); print_char 10
