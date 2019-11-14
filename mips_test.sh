@@ -27,7 +27,7 @@ cp test/mips_test.s ../simulator/simulator/sim/mips_test.s
 
 echo "-----cat library.s-----"
 cat MIPS/create_array.S >> ../simulator/simulator/sim/mips_test.s
-cat MIPS/sin.S >> ../simulator/simulator/sim/mips_test.s
+#cat MIPS/sin.S >> ../simulator/simulator/sim/mips_test.s
 cp ../simulator/simulator/sim/mips_test.s ../program.s
 #cat MIPS/print.S >> ../simulator/simulator/sim/mips_test.s
 
