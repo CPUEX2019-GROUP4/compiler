@@ -2,12 +2,12 @@
 (*NOMINCAML let dbl f = 2. *. f in *)
 (*NOMINCAML for y = 0 to 399 do *)
 (*MINCAML*) let rec yloop y =
-(*MINCAML*)   if y >= 400 then () else
+(*MINCAML*)   if y >= 256 then () else
 (*NOMINCAML   for x = 0 to 399 do *)
 (*MINCAML*)   let rec xloop x y =
-(*MINCAML*)     if x >= 400 then () else
-                let cr = dbl (float_of_int x) /. 400.0 -. 1.5 in
-                let ci = dbl (float_of_int y) /. 400.0 -. 1.0 in
+(*MINCAML*)     if x >= 256 then () else
+                let cr = dbl (float_of_int x) /. 256.0 -. 1.5 in
+                let ci = dbl (float_of_int y) /. 256.0 -. 1.0 in
                 let rec iloop i zr zi zr2 zi2 cr ci =
                   if i = 0 then print_int 1 else
                   let tr = zr2 -. zi2 +. cr in
@@ -20,7 +20,7 @@
                   iloop (i - 1) zr zi zr2 zi2 cr ci in
                 iloop 1000 0.0 0.0 0.0 0.0 cr ci;
 (*
-                let i = ref 4000 in
+                let i = ref 2560 in
                 let zr = ref 0.0 in
                 let zi = ref 0.0 in
                 let zr2 = ref 0.0 in
