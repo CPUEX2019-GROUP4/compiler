@@ -5,7 +5,7 @@
 
 RESULT = min-caml
 NCSUFFIX = .opt
-CC = gcc
+CC = gcc-6
 CFLAGS = -g -O2 -Wall
 OCAMLLDFLAGS=-warn-error -31
 
