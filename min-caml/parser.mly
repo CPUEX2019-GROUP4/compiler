@@ -147,7 +147,7 @@ exp: /* (* ∞Ï»Ã§Œº∞ (caml2html: parser_exp) *) */
 | exp AST_DOT exp
     { FMul($1, $3) }
 | exp SLASH_DOT exp
-    { FDiv($1, $3) }
+    { App(Var("fdiv"), [$1; $3]) }
 | LET IDENT EQUAL exp IN exp
     %prec prec_let
     { Let(addtyp $2, $4, $6) }

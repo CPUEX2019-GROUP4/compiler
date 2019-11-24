@@ -1,1 +1,1 @@
-print_int (fsqr 1.0)
+print_int (int_of_float (1.0 /. 3.0))
