@@ -111,6 +111,7 @@ let rec sqrt x =
     let t = ((t *. t +. x) /. (t +. t)) in
     let t = ((t *. t +. x) /. (t +. t)) in
     let t = ((t *. t +. x) /. (t +. t)) in
+    let t = ((t *. t +. x) /. (t +. t)) in
     t
   else
     0.0
