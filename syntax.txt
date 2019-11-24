@@ -7343,8 +7343,8 @@ LETREC rt (VAR of )
     INT 2
 APP
   VAR rt
-  INT 512
-  INT 512
+  INT 128
+  INT 128
 
 ----- kNormal.print -----
 letrec finv : (FLOAT -> FLOAT) =
@@ -19272,10 +19272,10 @@ variables : (size_x : INT), (size_y : INT)
     Ti375
 in
 let Ti349 : INT =
-  int 512
+  int 128
 in
 let Ti350 : INT =
-  int 512
+  int 128
 in
 app
   rt
