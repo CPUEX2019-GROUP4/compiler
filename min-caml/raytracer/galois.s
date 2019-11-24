@@ -1,5 +1,5 @@
     ori r29 r0 3072
-    ori r30 r0 4096
+    ori r30 r0 5120
 #    main program starts
     addi r1 r0 1
     addi r2 r0 0
@@ -984,38 +984,71 @@
 end_of_program:
 nop
      beq r0 r0 end_of_program
-print_int.2544:
+fdiv.2546:
+    fcz f1
+    bc1f float_eq0.12986
+    j float_eq0_cont.12987
+float_eq0.12986:
+    finv_init f2 f1
+    #unknown instruction
+    flui f3 16384
+    # 2.000000
+    fmul f4 f1 f2
+    fsub f4 f3 f4
+    fmul f2 f2 f4
+    fmul f4 f1 f2
+    fsub f4 f3 f4
+    fmul f2 f2 f4
+    fmul f4 f1 f2
+    fsub f4 f3 f4
+    fmul f2 f2 f4
+    fmul f4 f1 f2
+    fsub f4 f3 f4
+    fmul f2 f2 f4
+    fmul f4 f1 f2
+    fsub f4 f3 f4
+    fmul f2 f2 f4
+    fmul f4 f1 f2
+    fsub f4 f3 f4
+    fmul f2 f2 f4
+    fmul f1 f1 f2
+    fsub f1 f3 f1
+    fmul f1 f2 f1
+float_eq0_cont.12987:
+    fmul f0 f0 f1
+    jr r31
+print_int.2549:
     slti r28 r1 0
-    bne r0 r28 bge_else.12986
-    j bge_cont.12987
-bge_else.12986:
+    bne r0 r28 bge_else.12988
+    j bge_cont.12989
+bge_else.12988:
     addi r2 r0 45
     out r2 0
     sub r1 r0 r1
-bge_cont.12987:
+bge_cont.12989:
     slti r28 r1 10
-    bne r0 r28 bge_else.12988
+    bne r0 r28 bge_else.12990
     div10 r2 r1
     slti r28 r2 0
-    bne r0 r28 bge_else.12989
+    bne r0 r28 bge_else.12991
     or r3 r2 r0
-    j bge_cont.12990
-bge_else.12989:
+    j bge_cont.12992
+bge_else.12991:
     addi r3 r0 45
     out r3 0
     sub r3 r0 r2
-bge_cont.12990:
+bge_cont.12992:
     sw r1 r29 0
     sw r2 r29 4
     slti r28 r3 10
-    bne r0 r28 bge_else.12991
+    bne r0 r28 bge_else.12993
     div10 r4 r3
     sw r3 r29 8
     sw r4 r29 12
     mv r1 r4
     sw r31 r29 20
     addi r29 r29 24
-    jal print_int.2544
+    jal print_int.2549
     subi r29 r29 24
     lw r31 r29 20
     lw r1 r29 12
@@ -1025,10 +1058,10 @@ bge_cont.12990:
     lw r2 r29 8
     sub r1 r2 r1
     out r1 48
-    j bge_cont.12992
-bge_else.12991:
+    j bge_cont.12994
+bge_else.12993:
     out r3 48
-bge_cont.12992:
+bge_cont.12994:
     lw r1 r29 4
     sll r28 r1 3
     add r28 r28 r1
@@ -1037,16 +1070,16 @@ bge_cont.12992:
     sub r1 r2 r1
     out r1 48
     jr r31
-bge_else.12988:
+bge_else.12990:
     out r1 48
     jr r31
-reduction_2pi_sub1.2548:
+reduction_2pi_sub1.2553:
     lwcZ f0 r1 0
     lwcZ f1 r1 4
     fclt f0 f1
-    bc1f float_ble_else.12995
+    bc1f float_ble_else.12997
     jr r31
-float_ble_else.12995:
+float_ble_else.12997:
     addi r2 r0 1
     addi r3 r0 1
     sll r3 r3 2
@@ -1058,14 +1091,14 @@ float_ble_else.12995:
     sll r2 r2 2
     add r27 r1 r2
     swcZ f0 r27 0
-    j reduction_2pi_sub1.2548
-reduction_2pi_sub2.2550:
+    j reduction_2pi_sub1.2553
+reduction_2pi_sub2.2555:
     flui f0 16585
     # 6.283185
     fori f0 f0 4059
     lwcZ f1 r1 0
     fclt f0 f1
-    bc1f float_ble_else.12997
+    bc1f float_ble_else.12999
     addi r2 r0 1
     sll r2 r2 2
     add r27 r1 r2
@@ -1075,7 +1108,7 @@ reduction_2pi_sub2.2550:
     add r27 r1 r2
     lwcZ f1 r27 0
     fclt f0 f1
-    bc1f float_ble_else.12998
+    bc1f float_ble_else.13000
     addi r2 r0 0
     addi r3 r0 0
     sll r3 r3 2
@@ -1089,9 +1122,9 @@ reduction_2pi_sub2.2550:
     sll r2 r2 2
     add r27 r1 r2
     swcZ f0 r27 0
-    j float_ble_cont.12999
-float_ble_else.12998:
-float_ble_cont.12999:
+    j float_ble_cont.13001
+float_ble_else.13000:
+float_ble_cont.13001:
     addi r2 r0 1
     addi r3 r0 1
     sll r3 r3 2
@@ -1103,7 +1136,7 @@ float_ble_cont.12999:
     sw r2 r29 4
     sw r31 r29 12
     addi r29 r29 16
-    jal min_caml_fdiv
+    jal fdiv.2546
     subi r29 r29 16
     lw r31 r29 12
     lw r1 r29 4
@@ -1112,10 +1145,10 @@ float_ble_cont.12999:
     add r27 r2 r1
     swcZ f0 r27 0
     mv r1 r2
-    j reduction_2pi_sub2.2550
-float_ble_else.12997:
+    j reduction_2pi_sub2.2555
+float_ble_else.12999:
     jr r31
-kernel_sin.2554:
+kernel_sin.2559:
     fmul f1 f0 f0
     fmul f2 f1 f0
     fmul f3 f2 f1
@@ -1136,7 +1169,7 @@ kernel_sin.2554:
     fmul f1 f2 f1
     fsub f0 f0 f1
     jr r31
-kernel_cos.2556:
+kernel_cos.2561:
     fmul f0 f0 f0
     fmul f1 f0 f0
     fmul f2 f1 f0
@@ -1157,7 +1190,7 @@ kernel_cos.2556:
     fmul f1 f1 f2
     fsub f0 f0 f1
     jr r31
-sin.2558:
+sin.2563:
     addi r1 r0 3
     swcZ f0 r29 0
     sw r31 r29 4
@@ -1169,15 +1202,15 @@ sin.2558:
     # 0.000000
     lwcZ f1 r29 0
     fclt f1 f0
-    bc1f float_ble_else.13001
+    bc1f float_ble_else.13003
     addi r2 r0 0
     fneg f0 f1
     sll r2 r2 2
     add r27 r1 r2
     swcZ f0 r27 0
-    j float_ble_cont.13002
-float_ble_else.13001:
-float_ble_cont.13002:
+    j float_ble_cont.13004
+float_ble_else.13003:
+float_ble_cont.13004:
     flui f0 16585
     # 6.283185
     fori f0 f0 4059
@@ -1186,9 +1219,9 @@ float_ble_cont.13002:
     lwcZ f1 r1 4
     sw r1 r29 4
     fclt f0 f1
-    bc1f float_ble_else.13003
-    j float_ble_cont.13004
-float_ble_else.13003:
+    bc1f float_ble_else.13005
+    j float_ble_cont.13006
+float_ble_else.13005:
     addi r2 r0 1
     addi r3 r0 1
     sll r3 r3 2
@@ -1202,17 +1235,17 @@ float_ble_else.13003:
     swcZ f0 r27 0
     sw r31 r29 12
     addi r29 r29 16
-    jal reduction_2pi_sub1.2548
+    jal reduction_2pi_sub1.2553
     subi r29 r29 16
     lw r31 r29 12
-float_ble_cont.13004:
+float_ble_cont.13006:
     flui f0 16585
     # 6.283185
     fori f0 f0 4059
     lw r1 r29 4
     lwcZ f1 r1 0
     fclt f0 f1
-    bc1f float_ble_else.13005
+    bc1f float_ble_else.13007
     addi r2 r0 1
     sll r2 r2 2
     add r27 r1 r2
@@ -1222,7 +1255,7 @@ float_ble_cont.13004:
     add r27 r1 r2
     lwcZ f1 r27 0
     fclt f0 f1
-    bc1f float_ble_else.13007
+    bc1f float_ble_else.13009
     addi r2 r0 0
     addi r3 r0 0
     sll r3 r3 2
@@ -1236,9 +1269,9 @@ float_ble_cont.13004:
     sll r2 r2 2
     add r27 r1 r2
     swcZ f0 r27 0
-    j float_ble_cont.13008
-float_ble_else.13007:
-float_ble_cont.13008:
+    j float_ble_cont.13010
+float_ble_else.13009:
+float_ble_cont.13010:
     addi r2 r0 1
     addi r3 r0 1
     sll r3 r3 2
@@ -1249,7 +1282,7 @@ float_ble_cont.13008:
     sw r2 r29 8
     sw r31 r29 12
     addi r29 r29 16
-    jal min_caml_fdiv
+    jal fdiv.2546
     subi r29 r29 16
     lw r31 r29 12
     lw r1 r29 8
@@ -1260,19 +1293,19 @@ float_ble_cont.13008:
     mv r1 r2
     sw r31 r29 12
     addi r29 r29 16
-    jal reduction_2pi_sub2.2550
+    jal reduction_2pi_sub2.2555
     subi r29 r29 16
     lw r31 r29 12
-    j float_ble_cont.13006
-float_ble_else.13005:
-float_ble_cont.13006:
+    j float_ble_cont.13008
+float_ble_else.13007:
+float_ble_cont.13008:
     flui f0 16457
     # 3.141593
     fori f0 f0 4059
     lw r1 r29 4
     lwcZ f1 r1 0
     fclt f0 f1
-    bc1f float_ble_else.13009
+    bc1f float_ble_else.13011
     addi r2 r0 0
     addi r3 r0 0
     sll r3 r3 2
@@ -1294,15 +1327,15 @@ float_ble_cont.13006:
     sll r2 r2 2
     add r27 r1 r2
     swcZ f0 r27 0
-    j float_ble_cont.13010
-float_ble_else.13009:
-float_ble_cont.13010:
+    j float_ble_cont.13012
+float_ble_else.13011:
+float_ble_cont.13012:
     flui f0 16329
     # 1.570796
     fori f0 f0 4059
     lwcZ f1 r1 0
     fclt f0 f1
-    bc1f float_ble_else.13011
+    bc1f float_ble_else.13013
     addi r2 r0 0
     flui f0 16457
     # 3.141593
@@ -1315,15 +1348,15 @@ float_ble_cont.13010:
     sll r2 r2 2
     add r27 r1 r2
     swcZ f0 r27 0
-    j float_ble_cont.13012
-float_ble_else.13011:
-float_ble_cont.13012:
+    j float_ble_cont.13014
+float_ble_else.13013:
+float_ble_cont.13014:
     flui f0 16201
     # 0.785398
     fori f0 f0 4059
     lwcZ f1 r1 0
     fclt f0 f1
-    bc1f float_ble_else.13013
+    bc1f float_ble_else.13015
     flui f0 16329
     # 1.570796
     fori f0 f0 4059
@@ -1334,40 +1367,40 @@ float_ble_cont.13012:
     fsub f0 f0 f1
     sw r31 r29 12
     addi r29 r29 16
-    jal kernel_cos.2556
+    jal kernel_cos.2561
     subi r29 r29 16
     lw r31 r29 12
-    j float_ble_cont.13014
-float_ble_else.13013:
+    j float_ble_cont.13016
+float_ble_else.13015:
     addi r2 r0 0
     sll r2 r2 2
     add r27 r1 r2
     lwcZ f0 r27 0
     sw r31 r29 12
     addi r29 r29 16
-    jal kernel_sin.2554
+    jal kernel_sin.2559
     subi r29 r29 16
     lw r31 r29 12
-float_ble_cont.13014:
+float_ble_cont.13016:
     lw r1 r29 4
     lwcZ f1 r1 8
     flui f2 0
     # 0.000000
     fclt f1 f2
-    bc1f float_ble_else.13015
+    bc1f float_ble_else.13017
     fneg f0 f0
     jr r31
-float_ble_else.13015:
+float_ble_else.13017:
     jr r31
-cos.2560:
+cos.2565:
     flui f1 0
     # 0.000000
     fclt f0 f1
-    bc1f float_ble_else.13016
+    bc1f float_ble_else.13018
     fneg f0 f0
-    j float_ble_cont.13017
-float_ble_else.13016:
-float_ble_cont.13017:
+    j float_ble_cont.13019
+float_ble_else.13018:
+float_ble_cont.13019:
     addi r1 r0 3
     sw r31 r29 4
     addi r29 r29 8
@@ -1382,9 +1415,9 @@ float_ble_cont.13017:
     lwcZ f1 r1 4
     sw r1 r29 0
     fclt f0 f1
-    bc1f float_ble_else.13018
-    j float_ble_cont.13019
-float_ble_else.13018:
+    bc1f float_ble_else.13020
+    j float_ble_cont.13021
+float_ble_else.13020:
     addi r2 r0 1
     addi r3 r0 1
     sll r3 r3 2
@@ -1398,17 +1431,17 @@ float_ble_else.13018:
     swcZ f0 r27 0
     sw r31 r29 4
     addi r29 r29 8
-    jal reduction_2pi_sub1.2548
+    jal reduction_2pi_sub1.2553
     subi r29 r29 8
     lw r31 r29 4
-float_ble_cont.13019:
+float_ble_cont.13021:
     flui f0 16585
     # 6.283185
     fori f0 f0 4059
     lw r1 r29 0
     lwcZ f1 r1 0
     fclt f0 f1
-    bc1f float_ble_else.13020
+    bc1f float_ble_else.13022
     addi r2 r0 1
     sll r2 r2 2
     add r27 r1 r2
@@ -1418,7 +1451,7 @@ float_ble_cont.13019:
     add r27 r1 r2
     lwcZ f1 r27 0
     fclt f0 f1
-    bc1f float_ble_else.13022
+    bc1f float_ble_else.13024
     addi r2 r0 0
     addi r3 r0 0
     sll r3 r3 2
@@ -1432,9 +1465,9 @@ float_ble_cont.13019:
     sll r2 r2 2
     add r27 r1 r2
     swcZ f0 r27 0
-    j float_ble_cont.13023
-float_ble_else.13022:
-float_ble_cont.13023:
+    j float_ble_cont.13025
+float_ble_else.13024:
+float_ble_cont.13025:
     addi r2 r0 1
     addi r3 r0 1
     sll r3 r3 2
@@ -1445,7 +1478,7 @@ float_ble_cont.13023:
     sw r2 r29 4
     sw r31 r29 12
     addi r29 r29 16
-    jal min_caml_fdiv
+    jal fdiv.2546
     subi r29 r29 16
     lw r31 r29 12
     lw r1 r29 4
@@ -1456,19 +1489,19 @@ float_ble_cont.13023:
     mv r1 r2
     sw r31 r29 12
     addi r29 r29 16
-    jal reduction_2pi_sub2.2550
+    jal reduction_2pi_sub2.2555
     subi r29 r29 16
     lw r31 r29 12
-    j float_ble_cont.13021
-float_ble_else.13020:
-float_ble_cont.13021:
+    j float_ble_cont.13023
+float_ble_else.13022:
+float_ble_cont.13023:
     flui f0 16457
     # 3.141593
     fori f0 f0 4059
     lw r1 r29 0
     lwcZ f1 r1 0
     fclt f0 f1
-    bc1f float_ble_else.13024
+    bc1f float_ble_else.13026
     addi r2 r0 0
     addi r3 r0 0
     sll r3 r3 2
@@ -1487,15 +1520,15 @@ float_ble_cont.13021:
     sll r2 r2 2
     add r27 r1 r2
     swcZ f0 r27 0
-    j float_ble_cont.13025
-float_ble_else.13024:
-float_ble_cont.13025:
+    j float_ble_cont.13027
+float_ble_else.13026:
+float_ble_cont.13027:
     flui f0 16329
     # 1.570796
     fori f0 f0 4059
     lwcZ f1 r1 0
     fclt f0 f1
-    bc1f float_ble_else.13026
+    bc1f float_ble_else.13028
     addi r2 r0 0
     flui f0 16457
     # 3.141593
@@ -1517,26 +1550,26 @@ float_ble_cont.13025:
     sll r2 r2 2
     add r27 r1 r2
     swcZ f0 r27 0
-    j float_ble_cont.13027
-float_ble_else.13026:
-float_ble_cont.13027:
+    j float_ble_cont.13029
+float_ble_else.13028:
+float_ble_cont.13029:
     lwcZ f0 r1 0
     flui f1 16201
     # 0.785398
     fori f1 f1 4059
     fclt f0 f1
-    bc1f float_ble_else.13028
+    bc1f float_ble_else.13030
     addi r2 r0 0
     sll r2 r2 2
     add r27 r1 r2
     lwcZ f0 r27 0
     sw r31 r29 12
     addi r29 r29 16
-    jal kernel_cos.2556
+    jal kernel_cos.2561
     subi r29 r29 16
     lw r31 r29 12
-    j float_ble_cont.13029
-float_ble_else.13028:
+    j float_ble_cont.13031
+float_ble_else.13030:
     flui f0 16329
     # 1.570796
     fori f0 f0 4059
@@ -1547,25 +1580,25 @@ float_ble_else.13028:
     fsub f0 f0 f1
     sw r31 r29 12
     addi r29 r29 16
-    jal kernel_sin.2554
+    jal kernel_sin.2559
     subi r29 r29 16
     lw r31 r29 12
-float_ble_cont.13029:
+float_ble_cont.13031:
     lw r1 r29 0
     lwcZ f1 r1 8
     flui f2 0
     # 0.000000
     fclt f1 f2
-    bc1f float_ble_else.13030
+    bc1f float_ble_else.13032
     fneg f0 f0
     jr r31
-float_ble_else.13030:
+float_ble_else.13032:
     jr r31
-sqrt.2562:
+sqrt.2567:
     flui f1 0
     # 0.000000
     fclt f1 f0
-    bc1f float_ble_else.13031
+    bc1f float_ble_else.13033
     sqrt_init f1 f0
     #unknown instruction
     fmul f2 f1 f1
@@ -1575,7 +1608,7 @@ sqrt.2562:
     fmv  f0 f2
     sw r31 r29 4
     addi r29 r29 8
-    jal min_caml_fdiv
+    jal fdiv.2546
     subi r29 r29 8
     lw r31 r29 4
     fmul f1 f0 f0
@@ -1587,7 +1620,7 @@ sqrt.2562:
     fmv  f0 f31
     sw r31 r29 4
     addi r29 r29 8
-    jal min_caml_fdiv
+    jal fdiv.2546
     subi r29 r29 8
     lw r31 r29 4
     fmul f1 f0 f0
@@ -1599,15 +1632,15 @@ sqrt.2562:
     fmv  f0 f31
     sw r31 r29 4
     addi r29 r29 8
-    jal min_caml_fdiv
+    jal fdiv.2546
     subi r29 r29 8
     lw r31 r29 4
     jr r31
-float_ble_else.13031:
+float_ble_else.13033:
     flui f0 0
     # 0.000000
     jr r31
-kernel_atan.2564:
+kernel_atan.2569:
     fmul f1 f0 f0
     fmul f2 f1 f0
     fmul f3 f1 f2
@@ -1646,38 +1679,38 @@ kernel_atan.2564:
     fmul f1 f2 f1
     fadd f0 f0 f1
     jr r31
-atan.2566:
+atan.2571:
     flui f1 0
     # 0.000000
     fclt f1 f0
-    bc1f float_ble_else.13032
+    bc1f float_ble_else.13034
     addi r1 r0 1
-    j float_ble_cont.13033
-float_ble_else.13032:
+    j float_ble_cont.13035
+float_ble_else.13034:
     addi r1 r0 0
-float_ble_cont.13033:
+float_ble_cont.13035:
     addi r28 r0 0
-    bne r1 r28 beq_else.13034
+    bne r1 r28 beq_else.13036
     fneg f0 f0
-    j beq_cont.13035
-beq_else.13034:
-beq_cont.13035:
+    j beq_cont.13037
+beq_else.13036:
+beq_cont.13037:
     flui f1 16096
     # 0.437500
     sw r1 r29 0
     fclt f0 f1
-    bc1f float_ble_else.13036
+    bc1f float_ble_else.13038
     sw r31 r29 4
     addi r29 r29 8
-    jal kernel_atan.2564
+    jal kernel_atan.2569
     subi r29 r29 8
     lw r31 r29 4
-    j float_ble_cont.13037
-float_ble_else.13036:
+    j float_ble_cont.13039
+float_ble_else.13038:
     flui f1 16412
     # 2.437500
     fclt f0 f1
-    bc1f float_ble_else.13038
+    bc1f float_ble_else.13040
     flui f1 16201
     # 0.785398
     fori f1 f1 4059
@@ -1692,18 +1725,18 @@ float_ble_else.13036:
     fmv  f0 f2
     sw r31 r29 12
     addi r29 r29 16
-    jal min_caml_fdiv
+    jal fdiv.2546
     subi r29 r29 16
     lw r31 r29 12
     sw r31 r29 12
     addi r29 r29 16
-    jal kernel_atan.2564
+    jal kernel_atan.2569
     subi r29 r29 16
     lw r31 r29 12
     lwcZ f1 r29 4
     fadd f0 f1 f0
-    j float_ble_cont.13039
-float_ble_else.13038:
+    j float_ble_cont.13041
+float_ble_else.13040:
     flui f1 16329
     # 1.570796
     fori f1 f1 4059
@@ -1714,57 +1747,24 @@ float_ble_else.13038:
     fmv  f0 f2
     sw r31 r29 12
     addi r29 r29 16
-    jal min_caml_fdiv
+    jal fdiv.2546
     subi r29 r29 16
     lw r31 r29 12
     sw r31 r29 12
     addi r29 r29 16
-    jal kernel_atan.2564
+    jal kernel_atan.2569
     subi r29 r29 16
     lw r31 r29 12
     lwcZ f1 r29 8
     fsub f0 f1 f0
+float_ble_cont.13041:
 float_ble_cont.13039:
-float_ble_cont.13037:
     lw r1 r29 0
     addi r28 r0 0
-    bne r1 r28 beq_else.13040
+    bne r1 r28 beq_else.13042
     fneg f0 f0
     jr r31
-beq_else.13040:
-    jr r31
-fdiv.2572:
-    fcz f1
-    bc1f float_eq0.13041
-    j float_eq0_cont.13042
-float_eq0.13041:
-    finv_init f2 f1
-    #unknown instruction
-    flui f3 16384
-    # 2.000000
-    fmul f4 f1 f2
-    fsub f4 f3 f4
-    fmul f2 f2 f4
-    fmul f4 f1 f2
-    fsub f4 f3 f4
-    fmul f2 f2 f4
-    fmul f4 f1 f2
-    fsub f4 f3 f4
-    fmul f2 f2 f4
-    fmul f4 f1 f2
-    fsub f4 f3 f4
-    fmul f2 f2 f4
-    fmul f4 f1 f2
-    fsub f4 f3 f4
-    fmul f2 f2 f4
-    fmul f4 f1 f2
-    fsub f4 f3 f4
-    fmul f2 f2 f4
-    fmul f1 f1 f2
-    fsub f1 f3 f1
-    fmul f1 f2 f1
-float_eq0_cont.13042:
-    fmul f0 f0 f1
+beq_else.13042:
     jr r31
 fabs.2575:
     flui f1 0
@@ -1876,7 +1876,7 @@ vecunit_sgn.2646:
     fmv  f0 f2
     sw r31 r29 12
     addi r29 r29 16
-    jal min_caml_fdiv
+    jal fdiv.2546
     subi r29 r29 16
     lw r31 r29 12
     fmul f1 f0 f0
@@ -1888,7 +1888,7 @@ vecunit_sgn.2646:
     fmv  f0 f31
     sw r31 r29 12
     addi r29 r29 16
-    jal min_caml_fdiv
+    jal fdiv.2546
     subi r29 r29 16
     lw r31 r29 12
     fmul f1 f0 f0
@@ -1900,7 +1900,7 @@ vecunit_sgn.2646:
     fmv  f0 f31
     sw r31 r29 12
     addi r29 r29 16
-    jal min_caml_fdiv
+    jal fdiv.2546
     subi r29 r29 16
     lw r31 r29 12
     fmv f1 f0
@@ -1922,7 +1922,7 @@ float_eq0.13055:
     # 1.000000
     sw r31 r29 12
     addi r29 r29 16
-    jal fdiv.2572
+    jal fdiv.2546
     subi r29 r29 16
     lw r31 r29 12
     j beq_cont.13058
@@ -1931,7 +1931,7 @@ beq_else.13057:
     # -1.000000
     sw r31 r29 12
     addi r29 r29 16
-    jal fdiv.2572
+    jal fdiv.2546
     subi r29 r29 16
     lw r31 r29 12
 beq_cont.13058:
@@ -2082,7 +2082,7 @@ read_screen_settings.2747:
     swcZ f0 r29 20
     sw r31 r29 28
     addi r29 r29 32
-    jal cos.2560
+    jal cos.2565
     subi r29 r29 32
     lw r31 r29 28
     lwcZ f1 r29 20
@@ -2090,7 +2090,7 @@ read_screen_settings.2747:
     fmv  f0 f1
     sw r31 r29 28
     addi r29 r29 32
-    jal sin.2558
+    jal sin.2563
     subi r29 r29 32
     lw r31 r29 28
     inflt f1 r0
@@ -2104,7 +2104,7 @@ read_screen_settings.2747:
     fmv  f0 f1
     sw r31 r29 36
     addi r29 r29 40
-    jal cos.2560
+    jal cos.2565
     subi r29 r29 40
     lw r31 r29 36
     lwcZ f1 r29 32
@@ -2112,7 +2112,7 @@ read_screen_settings.2747:
     fmv  f0 f1
     sw r31 r29 44
     addi r29 r29 48
-    jal sin.2558
+    jal sin.2563
     subi r29 r29 48
     lw r31 r29 44
     lwcZ f1 r29 24
@@ -2180,7 +2180,7 @@ read_light.2749:
     sw r1 r29 8
     sw r31 r29 12
     addi r29 r29 16
-    jal sin.2558
+    jal sin.2563
     subi r29 r29 16
     lw r31 r29 12
     fneg f0 f0
@@ -2197,7 +2197,7 @@ read_light.2749:
     fmv  f0 f1
     sw r31 r29 20
     addi r29 r29 24
-    jal cos.2560
+    jal cos.2565
     subi r29 r29 24
     lw r31 r29 20
     lwcZ f1 r29 12
@@ -2205,7 +2205,7 @@ read_light.2749:
     fmv  f0 f1
     sw r31 r29 20
     addi r29 r29 24
-    jal sin.2558
+    jal sin.2563
     subi r29 r29 24
     lw r31 r29 20
     lwcZ f1 r29 16
@@ -2215,7 +2215,7 @@ read_light.2749:
     lwcZ f0 r29 12
     sw r31 r29 20
     addi r29 r29 24
-    jal cos.2560
+    jal cos.2565
     subi r29 r29 24
     lw r31 r29 20
     lwcZ f1 r29 16
@@ -2233,7 +2233,7 @@ rotate_quadratic_matrix.2751:
     sw r2 r29 4
     sw r31 r29 12
     addi r29 r29 16
-    jal cos.2560
+    jal cos.2565
     subi r29 r29 16
     lw r31 r29 12
     lw r1 r29 4
@@ -2242,7 +2242,7 @@ rotate_quadratic_matrix.2751:
     fmv  f0 f1
     sw r31 r29 12
     addi r29 r29 16
-    jal sin.2558
+    jal sin.2563
     subi r29 r29 16
     lw r31 r29 12
     lw r1 r29 4
@@ -2251,7 +2251,7 @@ rotate_quadratic_matrix.2751:
     fmv  f0 f1
     sw r31 r29 20
     addi r29 r29 24
-    jal cos.2560
+    jal cos.2565
     subi r29 r29 24
     lw r31 r29 20
     lw r1 r29 4
@@ -2260,7 +2260,7 @@ rotate_quadratic_matrix.2751:
     fmv  f0 f1
     sw r31 r29 20
     addi r29 r29 24
-    jal sin.2558
+    jal sin.2563
     subi r29 r29 24
     lw r31 r29 20
     lw r1 r29 4
@@ -2269,7 +2269,7 @@ rotate_quadratic_matrix.2751:
     fmv  f0 f1
     sw r31 r29 28
     addi r29 r29 32
-    jal cos.2560
+    jal cos.2565
     subi r29 r29 32
     lw r31 r29 28
     lw r1 r29 4
@@ -2278,7 +2278,7 @@ rotate_quadratic_matrix.2751:
     fmv  f0 f1
     sw r31 r29 28
     addi r29 r29 32
-    jal sin.2558
+    jal sin.2563
     subi r29 r29 32
     lw r31 r29 28
     lwcZ f1 r29 24
@@ -2584,7 +2584,7 @@ float_eq0.13076:
     fmul f1 f1 f1
     sw r31 r29 60
     addi r29 r29 64
-    jal fdiv.2572
+    jal fdiv.2546
     subi r29 r29 64
     lw r31 r29 60
 float_eq0_cont.13077:
@@ -2607,7 +2607,7 @@ float_eq0.13078:
     fmul f1 f1 f1
     sw r31 r29 60
     addi r29 r29 64
-    jal fdiv.2572
+    jal fdiv.2546
     subi r29 r29 64
     lw r31 r29 60
 float_eq0_cont.13079:
@@ -2630,7 +2630,7 @@ float_eq0.13080:
     fmul f1 f1 f1
     sw r31 r29 68
     addi r29 r29 72
-    jal fdiv.2572
+    jal fdiv.2546
     subi r29 r29 72
     lw r31 r29 68
 float_eq0_cont.13081:
@@ -2978,7 +2978,7 @@ float_eq0.13110:
     fmv  f1 f2
     sw r31 r29 36
     addi r29 r29 40
-    jal fdiv.2572
+    jal fdiv.2546
     subi r29 r29 40
     lw r31 r29 36
     lw r1 r29 20
@@ -3089,7 +3089,7 @@ float_eq0.13117:
     fmv  f1 f2
     sw r31 r29 52
     addi r29 r29 56
-    jal fdiv.2572
+    jal fdiv.2546
     subi r29 r29 56
     lw r31 r29 52
     lw r1 r29 20
@@ -3199,7 +3199,7 @@ float_eq0.13124:
     lwcZ f1 r1 8
     sw r31 r29 68
     addi r29 r29 72
-    jal fdiv.2572
+    jal fdiv.2546
     subi r29 r29 72
     lw r31 r29 68
     lw r1 r29 20
@@ -3548,7 +3548,7 @@ beq_else.13143:
     lwcZ f0 r29 40
     sw r31 r29 44
     addi r29 r29 48
-    jal sqrt.2562
+    jal sqrt.2567
     subi r29 r29 48
     lw r31 r29 44
     lw r1 r29 20
@@ -3575,7 +3575,7 @@ beq_cont.13145:
     lwcZ f1 r29 28
     sw r31 r29 52
     addi r29 r29 56
-    jal fdiv.2572
+    jal fdiv.2546
     subi r29 r29 56
     lw r31 r29 52
     lw r1 r29 0
@@ -3955,7 +3955,7 @@ beq_else.13181:
     lwcZ f0 r29 24
     sw r31 r29 28
     addi r29 r29 32
-    jal sqrt.2562
+    jal sqrt.2567
     subi r29 r29 32
     lw r31 r29 28
     lwcZ f1 r29 12
@@ -3970,7 +3970,7 @@ beq_else.13182:
     lwcZ f0 r29 24
     sw r31 r29 28
     addi r29 r29 32
-    jal sqrt.2562
+    jal sqrt.2567
     subi r29 r29 32
     lw r31 r29 28
     lwcZ f1 r29 12
@@ -4078,7 +4078,7 @@ beq_else.13190:
     lwcZ f0 r29 12
     sw r31 r29 20
     addi r29 r29 24
-    jal sqrt.2562
+    jal sqrt.2567
     subi r29 r29 24
     lw r31 r29 20
     lwcZ f1 r29 8
@@ -4093,7 +4093,7 @@ beq_else.13191:
     lwcZ f0 r29 12
     sw r31 r29 20
     addi r29 r29 24
-    jal sqrt.2562
+    jal sqrt.2567
     subi r29 r29 24
     lw r31 r29 20
     lwcZ f1 r29 8
@@ -4397,7 +4397,7 @@ float_eq0.13207:
     # 1.000000
     sw r31 r29 12
     addi r29 r29 16
-    jal fdiv.2572
+    jal fdiv.2546
     subi r29 r29 16
     lw r31 r29 12
     lw r1 r29 8
@@ -4486,7 +4486,7 @@ float_eq0.13212:
     lwcZ f1 r2 0
     sw r31 r29 36
     addi r29 r29 40
-    jal fdiv.2572
+    jal fdiv.2546
     subi r29 r29 40
     lw r31 r29 36
     lw r1 r29 24
@@ -4546,7 +4546,7 @@ float_eq0.13214:
     lwcZ f1 r2 4
     sw r31 r29 44
     addi r29 r29 48
-    jal fdiv.2572
+    jal fdiv.2546
     subi r29 r29 48
     lw r31 r29 44
     lw r1 r29 24
@@ -4606,7 +4606,7 @@ float_eq0.13216:
     lwcZ f1 r2 8
     sw r31 r29 52
     addi r29 r29 56
-    jal fdiv.2572
+    jal fdiv.2546
     subi r29 r29 56
     lw r31 r29 52
     lw r1 r29 24
@@ -6433,7 +6433,7 @@ beq_else.13377:
     sw r3 r29 0
     sw r31 r29 4
     addi r29 r29 8
-    jal sin.2558
+    jal sin.2563
     subi r29 r29 8
     lw r31 r29 4
     fmul f0 f0 f0
@@ -6478,7 +6478,7 @@ beq_else.13393:
     fmv  f0 f2
     sw r31 r29 12
     addi r29 r29 16
-    jal min_caml_fdiv
+    jal fdiv.2546
     subi r29 r29 16
     lw r31 r29 12
     fmul f1 f0 f0
@@ -6490,7 +6490,7 @@ beq_else.13393:
     fmv  f0 f31
     sw r31 r29 12
     addi r29 r29 16
-    jal min_caml_fdiv
+    jal fdiv.2546
     subi r29 r29 16
     lw r31 r29 12
     fmul f1 f0 f0
@@ -6502,7 +6502,7 @@ beq_else.13393:
     fmv  f0 f31
     sw r31 r29 12
     addi r29 r29 16
-    jal min_caml_fdiv
+    jal fdiv.2546
     subi r29 r29 16
     lw r31 r29 12
     j float_ble_cont.13397
@@ -6560,7 +6560,7 @@ float_ble_cont.13401:
     fmul f0 f0 f1
     sw r31 r29 12
     addi r29 r29 16
-    jal cos.2560
+    jal cos.2565
     subi r29 r29 16
     lw r31 r29 12
     fmul f0 f0 f0
@@ -6604,7 +6604,7 @@ beq_else.13395:
     fmv  f0 f3
     sw r31 r29 28
     addi r29 r29 32
-    jal min_caml_fdiv
+    jal fdiv.2546
     subi r29 r29 32
     lw r31 r29 28
     fmul f1 f0 f0
@@ -6616,7 +6616,7 @@ beq_else.13395:
     fmv  f0 f31
     sw r31 r29 28
     addi r29 r29 32
-    jal min_caml_fdiv
+    jal fdiv.2546
     subi r29 r29 32
     lw r31 r29 28
     fmul f1 f0 f0
@@ -6628,7 +6628,7 @@ beq_else.13395:
     fmv  f0 f31
     sw r31 r29 28
     addi r29 r29 32
-    jal min_caml_fdiv
+    jal fdiv.2546
     subi r29 r29 32
     lw r31 r29 28
     j float_ble_cont.13405
@@ -6662,7 +6662,7 @@ float_ble_cont.13405:
     fmv  f0 f4
     sw r31 r29 36
     addi r29 r29 40
-    jal min_caml_fdiv
+    jal fdiv.2546
     subi r29 r29 40
     lw r31 r29 36
     fmul f1 f0 f0
@@ -6674,7 +6674,7 @@ float_ble_cont.13405:
     fmv  f0 f31
     sw r31 r29 36
     addi r29 r29 40
-    jal min_caml_fdiv
+    jal fdiv.2546
     subi r29 r29 40
     lw r31 r29 36
     fmul f1 f0 f0
@@ -6686,7 +6686,7 @@ float_ble_cont.13405:
     fmv  f0 f31
     sw r31 r29 36
     addi r29 r29 40
-    jal min_caml_fdiv
+    jal fdiv.2546
     subi r29 r29 40
     lw r31 r29 36
     j float_ble_cont.13407
@@ -6721,7 +6721,7 @@ float_ble_cont.13409:
 float_ble_else.13410:
     sw r31 r29 44
     addi r29 r29 48
-    jal fdiv.2572
+    jal fdiv.2546
     subi r29 r29 48
     lw r31 r29 44
     sw r31 r29 44
@@ -6731,7 +6731,7 @@ float_ble_else.13410:
     lw r31 r29 44
     sw r31 r29 44
     addi r29 r29 48
-    jal atan.2566
+    jal atan.2571
     subi r29 r29 48
     lw r31 r29 44
     flui f1 16880
@@ -6742,7 +6742,7 @@ float_ble_else.13410:
     fori f1 f1 4059
     sw r31 r29 44
     addi r29 r29 48
-    jal fdiv.2572
+    jal fdiv.2546
     subi r29 r29 48
     lw r31 r29 44
 float_ble_cont.13411:
@@ -6781,7 +6781,7 @@ float_ble_cont.13413:
     fmv  f0 f4
     sw r31 r29 52
     addi r29 r29 56
-    jal min_caml_fdiv
+    jal fdiv.2546
     subi r29 r29 56
     lw r31 r29 52
     fmul f1 f0 f0
@@ -6793,7 +6793,7 @@ float_ble_cont.13413:
     fmv  f0 f31
     sw r31 r29 52
     addi r29 r29 56
-    jal min_caml_fdiv
+    jal fdiv.2546
     subi r29 r29 56
     lw r31 r29 52
     fmul f1 f0 f0
@@ -6805,7 +6805,7 @@ float_ble_cont.13413:
     fmv  f0 f31
     sw r31 r29 52
     addi r29 r29 56
-    jal min_caml_fdiv
+    jal fdiv.2546
     subi r29 r29 56
     lw r31 r29 52
     j float_ble_cont.13415
@@ -6837,7 +6837,7 @@ float_ble_else.13418:
     fmv  f1 f2
     sw r31 r29 52
     addi r29 r29 56
-    jal fdiv.2572
+    jal fdiv.2546
     subi r29 r29 56
     lw r31 r29 52
     sw r31 r29 52
@@ -6847,7 +6847,7 @@ float_ble_else.13418:
     lw r31 r29 52
     sw r31 r29 52
     addi r29 r29 56
-    jal atan.2566
+    jal atan.2571
     subi r29 r29 56
     lw r31 r29 52
     flui f1 16880
@@ -6858,7 +6858,7 @@ float_ble_else.13418:
     fori f1 f1 4059
     sw r31 r29 52
     addi r29 r29 56
-    jal fdiv.2572
+    jal fdiv.2546
     subi r29 r29 56
     lw r31 r29 52
 float_ble_cont.13419:
@@ -7462,7 +7462,7 @@ float_ble_else.13472:
     sw r2 r29 140
     sw r31 r29 148
     addi r29 r29 152
-    jal fdiv.2572
+    jal fdiv.2546
     subi r29 r29 152
     lw r31 r29 148
     lwcZ f1 r29 120
@@ -8607,7 +8607,7 @@ bge_cont.13553:
     mv r1 r3
     sw r31 r29 12
     addi r29 r29 16
-    jal print_int.2544
+    jal print_int.2549
     subi r29 r29 16
     lw r31 r29 12
     lw r1 r29 8
@@ -8641,7 +8641,7 @@ bge_cont.13557:
     mv r1 r2
     sw r31 r29 20
     addi r29 r29 24
-    jal print_int.2544
+    jal print_int.2549
     subi r29 r29 24
     lw r31 r29 20
     lw r1 r29 16
@@ -8664,7 +8664,7 @@ bge_cont.13559:
     mv r1 r2
     sw r31 r29 28
     addi r29 r29 32
-    jal print_int.2544
+    jal print_int.2549
     subi r29 r29 32
     lw r31 r29 28
     lw r1 r29 24
@@ -9416,7 +9416,7 @@ calc_dirvec.3055:
     fmv  f0 f4
     sw r31 r29 28
     addi r29 r29 32
-    jal min_caml_fdiv
+    jal fdiv.2546
     subi r29 r29 32
     lw r31 r29 28
     fmul f1 f0 f0
@@ -9428,7 +9428,7 @@ calc_dirvec.3055:
     fmv  f0 f31
     sw r31 r29 28
     addi r29 r29 32
-    jal min_caml_fdiv
+    jal fdiv.2546
     subi r29 r29 32
     lw r31 r29 28
     fmul f1 f0 f0
@@ -9440,7 +9440,7 @@ calc_dirvec.3055:
     fmv  f0 f31
     sw r31 r29 28
     addi r29 r29 32
-    jal min_caml_fdiv
+    jal fdiv.2546
     subi r29 r29 32
     lw r31 r29 28
     j float_ble_cont.13611
@@ -9635,7 +9635,7 @@ bge_else.13609:
     fmv  f0 f4
     sw r31 r29 44
     addi r29 r29 48
-    jal min_caml_fdiv
+    jal fdiv.2546
     subi r29 r29 48
     lw r31 r29 44
     fmul f1 f0 f0
@@ -9647,7 +9647,7 @@ bge_else.13609:
     fmv  f0 f31
     sw r31 r29 44
     addi r29 r29 48
-    jal min_caml_fdiv
+    jal fdiv.2546
     subi r29 r29 48
     lw r31 r29 44
     fmul f1 f0 f0
@@ -9659,7 +9659,7 @@ bge_else.13609:
     fmv  f0 f31
     sw r31 r29 44
     addi r29 r29 48
-    jal min_caml_fdiv
+    jal fdiv.2546
     subi r29 r29 48
     lw r31 r29 44
     j float_ble_cont.13620
@@ -9725,7 +9725,7 @@ beq_cont.13626:
     fmv  f0 f1
     sw r31 r29 52
     addi r29 r29 56
-    jal kernel_atan.2564
+    jal kernel_atan.2569
     subi r29 r29 56
     lw r31 r29 52
     j float_ble_cont.13628
@@ -9747,12 +9747,12 @@ float_ble_else.13627:
     fmv  f0 f3
     sw r31 r29 60
     addi r29 r29 64
-    jal min_caml_fdiv
+    jal fdiv.2546
     subi r29 r29 64
     lw r31 r29 60
     sw r31 r29 60
     addi r29 r29 64
-    jal kernel_atan.2564
+    jal kernel_atan.2569
     subi r29 r29 64
     lw r31 r29 60
     lwcZ f1 r29 52
@@ -9768,12 +9768,12 @@ float_ble_else.13629:
     fmv  f0 f3
     sw r31 r29 60
     addi r29 r29 64
-    jal min_caml_fdiv
+    jal fdiv.2546
     subi r29 r29 64
     lw r31 r29 60
     sw r31 r29 60
     addi r29 r29 64
-    jal kernel_atan.2564
+    jal kernel_atan.2569
     subi r29 r29 64
     lw r31 r29 60
     lwcZ f1 r29 56
@@ -9792,7 +9792,7 @@ beq_cont.13632:
     swcZ f0 r29 60
     sw r31 r29 68
     addi r29 r29 72
-    jal sin.2558
+    jal sin.2563
     subi r29 r29 72
     lw r31 r29 68
     lwcZ f1 r29 60
@@ -9800,7 +9800,7 @@ beq_cont.13632:
     fmv  f0 f1
     sw r31 r29 68
     addi r29 r29 72
-    jal cos.2560
+    jal cos.2565
     subi r29 r29 72
     lw r31 r29 68
     fcz f0
@@ -9860,7 +9860,7 @@ float_eq0_cont.13634:
     fmv  f0 f3
     sw r31 r29 84
     addi r29 r29 88
-    jal min_caml_fdiv
+    jal fdiv.2546
     subi r29 r29 88
     lw r31 r29 84
     fmul f1 f0 f0
@@ -9872,7 +9872,7 @@ float_eq0_cont.13634:
     fmv  f0 f31
     sw r31 r29 84
     addi r29 r29 88
-    jal min_caml_fdiv
+    jal fdiv.2546
     subi r29 r29 88
     lw r31 r29 84
     fmul f1 f0 f0
@@ -9884,7 +9884,7 @@ float_eq0_cont.13634:
     fmv  f0 f31
     sw r31 r29 84
     addi r29 r29 88
-    jal min_caml_fdiv
+    jal fdiv.2546
     subi r29 r29 88
     lw r31 r29 84
     j float_ble_cont.13636
@@ -9950,7 +9950,7 @@ beq_cont.13642:
     fmv  f0 f1
     sw r31 r29 92
     addi r29 r29 96
-    jal kernel_atan.2564
+    jal kernel_atan.2569
     subi r29 r29 96
     lw r31 r29 92
     j float_ble_cont.13644
@@ -9972,12 +9972,12 @@ float_ble_else.13643:
     fmv  f0 f3
     sw r31 r29 92
     addi r29 r29 96
-    jal min_caml_fdiv
+    jal fdiv.2546
     subi r29 r29 96
     lw r31 r29 92
     sw r31 r29 92
     addi r29 r29 96
-    jal kernel_atan.2564
+    jal kernel_atan.2569
     subi r29 r29 96
     lw r31 r29 92
     lwcZ f1 r29 88
@@ -9993,12 +9993,12 @@ float_ble_else.13645:
     fmv  f0 f3
     sw r31 r29 100
     addi r29 r29 104
-    jal min_caml_fdiv
+    jal fdiv.2546
     subi r29 r29 104
     lw r31 r29 100
     sw r31 r29 100
     addi r29 r29 104
-    jal kernel_atan.2564
+    jal kernel_atan.2569
     subi r29 r29 104
     lw r31 r29 100
     lwcZ f1 r29 92
@@ -10017,7 +10017,7 @@ beq_cont.13648:
     swcZ f0 r29 96
     sw r31 r29 100
     addi r29 r29 104
-    jal sin.2558
+    jal sin.2563
     subi r29 r29 104
     lw r31 r29 100
     lwcZ f1 r29 96
@@ -10025,7 +10025,7 @@ beq_cont.13648:
     fmv  f0 f1
     sw r31 r29 108
     addi r29 r29 112
-    jal cos.2560
+    jal cos.2565
     subi r29 r29 112
     lw r31 r29 108
     fcz f0

@@ -1,3 +1,20 @@
+(* finv *)
+let rec finv x =
+  if fiszero x then x else
+  let t = UNKNOWN finv_init float float x in
+  let two = 2.0 in
+  let t = (t *. (two -. x *. t)) in
+  let t = (t *. (two -. x *. t)) in
+  let t = (t *. (two -. x *. t)) in
+  let t = (t *. (two -. x *. t)) in
+  let t = (t *. (two -. x *. t)) in
+  let t = (t *. (two -. x *. t)) in
+  let t = (t *. (two -. x *. t)) in
+  t
+in
+(* fdiv *)
+let rec fdiv x y = x *. finv y in
+
 (* print_int *)
 let rec print_int n =
   let n =
@@ -147,22 +164,6 @@ let rec floor x =
   if x <. a then a -. 1.0 else a
 in
 
-(* finv *)
-let rec finv x =
-  if fiszero x then x else
-  let t = UNKNOWN finv_init float float x in
-  let two = 2.0 in
-  let t = (t *. (two -. x *. t)) in
-  let t = (t *. (two -. x *. t)) in
-  let t = (t *. (two -. x *. t)) in
-  let t = (t *. (two -. x *. t)) in
-  let t = (t *. (two -. x *. t)) in
-  let t = (t *. (two -. x *. t)) in
-  let t = (t *. (two -. x *. t)) in
-  t
-in
-(* fdiv *)
-let rec fdiv x y = x *. finv y in
 
 let rec fabs f = if f <. 0.0 then (-. f) else f in
 let rec fhalf x = x *. 0.5 in

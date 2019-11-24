@@ -1,10 +1,12 @@
     ori r29 r0 3072
     ori r30 r0 4096
 #    main program starts
-    flui f0 17558
-    # 1200.000000
-    flui f1 16880
-    # 30.000000
+    flui f0 20501
+    # 10000000000.000000
+    fori f0 f0 761
+    flui f1 17724
+    # 3020.000010
+    fori f1 f1 -16384
     fcz f1
     bc1f float_eq0.591
     j float_eq0_cont.592
@@ -39,13 +41,13 @@ float_eq0_cont.592:
     ftoi r1 f0
     sw r31 r29 4
     addi r29 r29 8
-    jal print_int.211
+    jal print_int.216
     subi r29 r29 8
     lw r31 r29 4
 end_of_program:
 nop
      beq r0 r0 end_of_program
-print_int.211:
+print_int.216:
     slti r28 r1 0
     bne r0 r28 bge_else.593
     j bge_cont.594
@@ -62,7 +64,7 @@ bge_cont.594:
     mv r1 r2
     sw r31 r29 12
     addi r29 r29 16
-    jal print_int.211
+    jal print_int.216
     subi r29 r29 16
     lw r31 r29 12
     lw r1 r29 4
