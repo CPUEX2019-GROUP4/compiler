@@ -1,6 +1,6 @@
 (* finv *)
 let rec finv x =
-  if fiszero x then x else
+  (if fiszero x then x else
   let t = UNKNOWN finv_init float float x in
   let two = 2.0 in
   let t = (t *. (two -. x *. t)) in
@@ -8,12 +8,10 @@ let rec finv x =
   let t = (t *. (two -. x *. t)) in
   let t = (t *. (two -. x *. t)) in
   let t = (t *. (two -. x *. t)) in
-  let t = (t *. (two -. x *. t)) in
-  let t = (t *. (two -. x *. t)) in
-  t
+  t)
 in
 (* fdiv *)
-let rec fdiv x y = x *. finv y in
+let rec fdiv x y = x *. (finv y) in
 
 (* print_int *)
 let rec print_int n =
@@ -112,6 +110,24 @@ let rec sqrt x =
     let t = ((t *. t +. x) /. (t +. t)) in
     let t = ((t *. t +. x) /. (t +. t)) in
     let t = ((t *. t +. x) /. (t +. t)) in
+    let t = ((t *. t +. x) /. (t +. t)) in
+    let t = ((t *. t +. x) /. (t +. t)) in
+    let t = ((t *. t +. x) /. (t +. t)) in
+    let t = ((t *. t +. x) /. (t +. t)) in
+    let t = ((t *. t +. x) /. (t +. t)) in
+    let t = ((t *. t +. x) /. (t +. t)) in
+    let t = ((t *. t +. x) /. (t +. t)) in
+    let t = ((t *. t +. x) /. (t +. t)) in
+    let t = ((t *. t +. x) /. (t +. t)) in
+    let t = ((t *. t +. x) /. (t +. t)) in
+    let t = ((t *. t +. x) /. (t +. t)) in
+    let t = ((t *. t +. x) /. (t +. t)) in
+    let t = ((t *. t +. x) /. (t +. t)) in
+    let t = ((t *. t +. x) /. (t +. t)) in
+    let t = ((t *. t +. x) /. (t +. t)) in
+    let t = ((t *. t +. x) /. (t +. t)) in
+    let t = ((t *. t +. x) /. (t +. t)) in
+    let t = ((t *. t +. x) /. (t +. t)) in
     t
   else
     0.0
@@ -171,4 +187,4 @@ let rec fneg x = -. x in
 let rec abs_float x = fabs x in
 let rec fispos x = x >. 0.0 in
 let rec fisneg x = x <. 0.0 in
-print_int (int_of_float (10000000000.00 /. 3020.00001))
+print_int (int_of_float ((UNKNOWN sqrt_init float float 0.1) *. 10000.0))

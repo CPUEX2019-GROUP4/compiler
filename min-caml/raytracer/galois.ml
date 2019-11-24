@@ -1,6 +1,6 @@
 (* finv *)
 let rec finv x =
-  if fiszero x then x else
+  (if fiszero x then x else
   let t = UNKNOWN finv_init float float x in
   let two = 2.0 in
   let t = (t *. (two -. x *. t)) in
@@ -8,12 +8,10 @@ let rec finv x =
   let t = (t *. (two -. x *. t)) in
   let t = (t *. (two -. x *. t)) in
   let t = (t *. (two -. x *. t)) in
-  let t = (t *. (two -. x *. t)) in
-  let t = (t *. (two -. x *. t)) in
-  t
+  t)
 in
 (* fdiv *)
-let rec fdiv x y = x *. finv y in
+let rec fdiv x y = x *. (finv y) in
 
 (* print_int *)
 let rec print_int n =
@@ -112,20 +110,11 @@ let rec sqrt x =
     let t = ((t *. t +. x) /. (t +. t)) in
     let t = ((t *. t +. x) /. (t +. t)) in
     let t = ((t *. t +. x) /. (t +. t)) in
+    let t = ((t *. t +. x) /. (t +. t)) in
     t
   else
     0.0
 in
-(*
-let rec sqrt x =
-    let rec inner t i =
-        if i = 0 then
-            t
-        else
-            inner ((t *. t +. x) /. (2. *. t)) (i - 1)
-    in inner (UNKNOWN sqrt_init float float x) 5
-in
-*)
 
 (* atan *)
 let rec kernel_atan a1 =
@@ -2568,4 +2557,4 @@ let rec rt size_x size_y =
 )
 in
 
-rt 128 128
+rt 512 512

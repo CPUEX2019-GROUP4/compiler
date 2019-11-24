@@ -1,1 +1,1 @@
-print_int (int_of_float (10000000000.00 /. 3020.00001))
+print_int (int_of_float ((UNKNOWN sqrt_init float float 0.1) *. 10000.0))
