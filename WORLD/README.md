@@ -1,4 +1,4 @@
-## contents
+# contents
 
 - README.md
 - base
@@ -12,25 +12,26 @@
 - program.txt
 - raytrace.s
 
-#### raytrace.s
+# outline
+## raytrace.s
 raytrase.s consists of
 32759 instruction words.
 
-#### program.txt
+## program.txt
 converted raytrace.s to 0-1 file for use of .coe file.
 
-#### \*.bin
+## \*.bin
 input file for FPGA.
 
-#### \*.coe.bin
+## \*.coe.bin
 input file for vivado simulator. (0-1 file)
 
-#### \*.RUNsim.ppm
+## \*.RUNsim.ppm
 .ppm file which RUNRUNsimulator made.
 Take diff if you succeeded in making .ppm file from FPGA.
 
-###### base.sld
+### base.sld
 total executed instructions:   242,423,888
 
-###### contest.sld
+### contest.sld
 total executed instructions: 3,384,854,436
