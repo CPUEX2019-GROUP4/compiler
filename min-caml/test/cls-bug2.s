@@ -1,42 +1,50 @@
-    lui r30 2
-#    main program starts
-    or r25 r30 r0
-    addi r30 r30 8
-    lui r1 ha16(f.9)
-    ori r1 r1 lo16(f.9)
-    sw r1 r25 0
-    addi r1 r0 9
-    sw r31 r29 4
-    addi r29 r29 8
-    lw r31 r25 0
-    mv r26 r31
-    jalr r26
-    subi r29 r29 8
-    lw r31 r29 4
-nop
-#    main program ends
+.data
+.balign	8
+.text
 f.9:
-    slti r28 r1 0
-    bne r0 r28 bge_else.27
-    sw r1 r29 0
-    sw r25 r29 4
-    sw r31 r29 12
-    addi r29 r29 16
-    jal min_caml_print_int
-    subi r29 r29 16
-    lw r31 r29 12
-    addi r1 r0 1
-    lw r2 r29 4
-    sw r31 r29 12
-    addi r29 r29 16
-    jal min_caml_create_array
-    subi r29 r29 16
-    lw r31 r29 12
-    lw r25 r1 0
-    lw r1 r29 0
-    subi r1 r1 1
-    lw r24 r25 0
-    or r26 r0 r24
-    jr r26
-bge_else.27:
-    jr r31
+	cmpl	$0, %eax
+	jl	jge_else.26
+	movl	%eax, 0(%ebp)
+	movl	%edi, 4(%ebp)
+	addl	$8, %ebp
+	call	min_caml_print_int
+	subl	$8, %ebp
+	movl	$1, %eax
+	movl	4(%ebp), %ebx
+	addl	$8, %ebp
+	call	min_caml_create_array
+	subl	$8, %ebp
+	movl	0(%eax), %edi
+	movl	0(%ebp), %eax
+	subl	$1, %eax
+	jmp	*(%edi)
+jge_else.26:
+	ret
+.globl	min_caml_start
+min_caml_start:
+.globl	_min_caml_start
+_min_caml_start: # for cygwin
+	pushl	%eax
+	pushl	%ebx
+	pushl	%ecx
+	pushl	%edx
+	pushl	%esi
+	pushl	%edi
+	pushl	%ebp
+	movl	32(%esp),%ebp
+	movl	36(%esp),%eax
+	movl	%eax,min_caml_hp
+	movl	min_caml_hp, %edi
+	addl	$8, min_caml_hp
+	movl	$f.9, %eax
+	movl	%eax, 0(%edi)
+	movl	$9, %eax
+	call	*(%edi)
+	popl	%ebp
+	popl	%edi
+	popl	%esi
+	popl	%edx
+	popl	%ecx
+	popl	%ebx
+	popl	%eax
+	ret
