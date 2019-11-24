@@ -1,16 +1,16 @@
 ## contents
->.
-|-- README.md
-|-- base
-|   |-- base.RUNsim.ppm
-|   |-- base.bin
-|   `-- base.coe.txt
-|-- contest
-|   |-- contest.RUNsim.ppm
-|   |-- contest.bin
-|   `-- contest.coe.txt
-|-- program.txt
-`-- raytrace.s
+
+- README.md
+- base
+    - base.RUNsim.ppm
+    - base.bin
+    - base.coe.txt
+- contest
+    - contest.RUNsim.ppm
+    - contest.bin
+    - contest.coe.txt
+- program.txt
+- raytrace.s
 
 #### raytrace.s
 raytrase.s consists of
