@@ -156,6 +156,9 @@ let rec finv x =
   let t = (t *. (two -. x *. t)) in
   let t = (t *. (two -. x *. t)) in
   let t = (t *. (two -. x *. t)) in
+  let t = (t *. (two -. x *. t)) in
+  let t = (t *. (two -. x *. t)) in
+  let t = (t *. (two -. x *. t)) in
   t
 in
 (* fdiv *)

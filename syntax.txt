@@ -91,7 +91,8 @@ LETREC reduction_2pi_sub2 (VAR of )
       PUT
         VAR v
         INT 1
-        FDIV
+        APP
+          VAR fdiv
           GET
             VAR v
             INT 1
@@ -362,7 +363,8 @@ LETREC sqrt (VAR of )
       UNKNOWN APP        sqrt_init
         VAR x
     LET t (VAR of )
-      FDIV
+      APP
+        VAR fdiv
         FADD
           FMUL
             VAR t
@@ -372,7 +374,8 @@ LETREC sqrt (VAR of )
           VAR t
           VAR t
     LET t (VAR of )
-      FDIV
+      APP
+        VAR fdiv
         FADD
           FMUL
             VAR t
@@ -382,7 +385,8 @@ LETREC sqrt (VAR of )
           VAR t
           VAR t
     LET t (VAR of )
-      FDIV
+      APP
+        VAR fdiv
         FADD
           FMUL
             VAR t
@@ -476,7 +480,8 @@ LETREC atan (VAR of )
           FLOAT 0.785398163397
           APP
             VAR kernel_atan
-            FDIV
+            APP
+              VAR fdiv
               FSUB
                 VAR a
                 FLOAT 1.
@@ -487,7 +492,8 @@ LETREC atan (VAR of )
           FLOAT 1.57079632679
           APP
             VAR kernel_atan
-            FDIV
+            APP
+              VAR fdiv
               FLOAT 1.
               VAR a
   IF
@@ -509,6 +515,81 @@ LETREC floor (VAR of )
       VAR a
       FLOAT 1.
     VAR a
+LETREC finv (VAR of )
+  (x : VAR of )
+  IF
+    FZero?
+      VAR x
+    VAR x
+    LET t (VAR of )
+      UNKNOWN APP        finv_init
+        VAR x
+    LET two (VAR of )
+      FLOAT 2.
+    LET t (VAR of )
+      FMUL
+        VAR t
+        FSUB
+          VAR two
+          FMUL
+            VAR x
+            VAR t
+    LET t (VAR of )
+      FMUL
+        VAR t
+        FSUB
+          VAR two
+          FMUL
+            VAR x
+            VAR t
+    LET t (VAR of )
+      FMUL
+        VAR t
+        FSUB
+          VAR two
+          FMUL
+            VAR x
+            VAR t
+    LET t (VAR of )
+      FMUL
+        VAR t
+        FSUB
+          VAR two
+          FMUL
+            VAR x
+            VAR t
+    LET t (VAR of )
+      FMUL
+        VAR t
+        FSUB
+          VAR two
+          FMUL
+            VAR x
+            VAR t
+    LET t (VAR of )
+      FMUL
+        VAR t
+        FSUB
+          VAR two
+          FMUL
+            VAR x
+            VAR t
+    LET t (VAR of )
+      FMUL
+        VAR t
+        FSUB
+          VAR two
+          FMUL
+            VAR x
+            VAR t
+    VAR t
+LETREC fdiv (VAR of )
+  (x : VAR of ), (y : VAR of )
+  FMUL
+    VAR x
+    APP
+      VAR finv
+      VAR y
 LETREC fabs (VAR of )
   (f : VAR of )
   IF
@@ -857,7 +938,8 @@ LETREC vecdist2 (VAR of )
 LETREC vecunit (VAR of )
   (v : VAR of )
   LET il (VAR of )
-    FDIV
+    APP
+      VAR fdiv
       FLOAT 1.
       APP
         VAR sqrt
@@ -927,10 +1009,12 @@ LETREC vecunit_sgn (VAR of )
       FLOAT 1.
       IF
         VAR inv
-        FDIV
+        APP
+          VAR fdiv
           FLOAT -1.
           VAR l
-        FDIV
+        APP
+          VAR fdiv
           FLOAT 1.
           VAR l
   LET Tu28 (UNIT)
@@ -2019,7 +2103,8 @@ LETREC read_nth_object (VAR of )
               FZero?
                 VAR a
               FLOAT 0.
-              FDIV
+              APP
+                VAR fdiv
                 APP
                   VAR sgn
                   VAR a
@@ -2037,7 +2122,8 @@ LETREC read_nth_object (VAR of )
               FZero?
                 VAR b
               FLOAT 0.
-              FDIV
+              APP
+                VAR fdiv
                 APP
                   VAR sgn
                   VAR b
@@ -2054,7 +2140,8 @@ LETREC read_nth_object (VAR of )
             FZero?
               VAR c
             FLOAT 0.
-            FDIV
+            APP
+              VAR fdiv
               APP
                 VAR sgn
                 VAR c
@@ -2244,7 +2331,8 @@ LETREC solver_rect_surface (VAR of )
           VAR abc
           VAR i0
     LET d2 (VAR of )
-      FDIV
+      APP
+        VAR fdiv
         FSUB
           VAR d
           VAR b0
@@ -2345,7 +2433,8 @@ LETREC solver_surface (VAR of )
       PUT
         VAR solver_dist
         INT 0
-        FDIV
+        APP
+          VAR fdiv
           APP
             VAR fneg
             APP
@@ -2565,7 +2654,8 @@ LETREC solver_second (VAR of )
         PUT
           VAR solver_dist
           INT 0
-          FDIV
+          APP
+            VAR fdiv
             FSUB
               VAR t1
               VAR bb
@@ -3188,7 +3278,8 @@ LETREC setup_rect_table (VAR of )
       PUT
         VAR const
         INT 1
-        FDIV
+        APP
+          VAR fdiv
           FLOAT 1.
           GET
             VAR vec
@@ -3225,7 +3316,8 @@ LETREC setup_rect_table (VAR of )
       PUT
         VAR const
         INT 3
-        FDIV
+        APP
+          VAR fdiv
           FLOAT 1.
           GET
             VAR vec
@@ -3262,7 +3354,8 @@ LETREC setup_rect_table (VAR of )
       PUT
         VAR const
         INT 5
-        FDIV
+        APP
+          VAR fdiv
           FLOAT 1.
           GET
             VAR vec
@@ -3307,7 +3400,8 @@ LETREC setup_surface_table (VAR of )
         PUT
           VAR const
           INT 0
-          FDIV
+          APP
+            VAR fdiv
             FLOAT -1.
             VAR d
       LET Tu108 (UNIT)
@@ -3316,7 +3410,8 @@ LETREC setup_surface_table (VAR of )
           INT 1
           APP
             VAR fneg
-            FDIV
+            APP
+              VAR fdiv
               APP
                 VAR o_param_a
                 VAR m
@@ -3327,7 +3422,8 @@ LETREC setup_surface_table (VAR of )
           INT 2
           APP
             VAR fneg
-            FDIV
+            APP
+              VAR fdiv
               APP
                 VAR o_param_b
                 VAR m
@@ -3337,7 +3433,8 @@ LETREC setup_surface_table (VAR of )
         INT 3
         APP
           VAR fneg
-          FDIV
+          APP
+            VAR fdiv
             APP
               VAR o_param_c
               VAR m
@@ -3499,7 +3596,8 @@ LETREC setup_second_table (VAR of )
       PUT
         VAR const
         INT 4
-        FDIV
+        APP
+          VAR fdiv
           FLOAT 1.
           VAR aa
       UNIT
@@ -4882,7 +4980,8 @@ LETREC utexture (VAR of )
               VAR o_param_z
               VAR m
         LET w2 (VAR of )
-          FDIV
+          APP
+            VAR fdiv
             APP
               VAR sqrt
               FADD
@@ -4968,10 +5067,12 @@ LETREC utexture (VAR of )
               LET w5 (VAR of )
                 APP
                   VAR fabs
-                  FDIV
+                  APP
+                    VAR fdiv
                     VAR w3
                     VAR w1
-              FDIV
+              APP
+                VAR fdiv
                 FMUL
                   APP
                     VAR atan
@@ -5009,10 +5110,12 @@ LETREC utexture (VAR of )
               LET w6 (VAR of )
                 APP
                   VAR fabs
-                  FDIV
+                  APP
+                    VAR fdiv
                     VAR w2
                     VAR w4
-              FDIV
+              APP
+                VAR fdiv
                 FMUL
                   APP
                     VAR atan
@@ -5047,7 +5150,8 @@ LETREC utexture (VAR of )
           PUT
             VAR texture_color
             INT 2
-            FDIV
+            APP
+              VAR fdiv
               FMUL
                 FLOAT 255.
                 VAR w12
@@ -5294,7 +5398,8 @@ LETREC trace_ray (VAR of )
                 VAR energya
                 VAR nref
               FMUL
-                FDIV
+                APP
+                  VAR fdiv
                   FLOAT 1.
                   FLOAT 256.
                 VAR diffuse
@@ -5566,7 +5671,8 @@ LETREC iter_trace_diffuse_rays (VAR of )
             ADD
               VAR index
               INT 1
-          FDIV
+          APP
+            VAR fdiv
             VAR p
             FLOAT -150.
         APP
@@ -5574,7 +5680,8 @@ LETREC iter_trace_diffuse_rays (VAR of )
           GET
             VAR dirvec_group
             VAR index
-          FDIV
+          APP
+            VAR fdiv
             VAR p
             FLOAT 150.
     APP
@@ -6530,7 +6637,8 @@ LETREC create_pixelline (VAR of )
       INT 2
 LETREC tan (VAR of )
   (x : VAR of )
-  FDIV
+  APP
+    VAR fdiv
     APP
       VAR sin
       VAR x
@@ -6548,7 +6656,8 @@ LETREC adjust_position (VAR of )
           VAR h
         FLOAT 0.1
   LET tan_h (VAR of )
-    FDIV
+    APP
+      VAR fdiv
       FLOAT 1.
       VAR l
   LET theta_h (VAR of )
@@ -6581,15 +6690,18 @@ LETREC calc_dirvec (VAR of )
               VAR y
           FLOAT 1.
     LET vx (VAR of )
-      FDIV
+      APP
+        VAR fdiv
         VAR x
         VAR l
     LET vy (VAR of )
-      FDIV
+      APP
+        VAR fdiv
         VAR y
         VAR l
     LET vz (VAR of )
-      FDIV
+      APP
+        VAR fdiv
         FLOAT 1.
         VAR l
     LET dgroup (VAR of )
@@ -7162,7 +7274,8 @@ LETREC rt (VAR of )
     PUT
       VAR scan_pitch
       INT 0
-      FDIV
+      APP
+        VAR fdiv
         FLOAT 128.
         int_to_float
           VAR size_x
@@ -7231,23 +7344,23 @@ APP
 letrec print_int : (INT -> UNIT) =
 variables : (n : INT)
   let n : INT =
-    let Ti2524 : INT =
+    let Ti2539 : INT =
       int 0
     in
-    if Ti2524 <= n
+    if Ti2539 <= n
       n
       let Tu1 : UNIT =
-        let Ti2525 : INT =
+        let Ti2540 : INT =
           int 45
         in
-        out Ti2525 0
+        out Ti2540 0
       in
       neg n
   in
-  let Ti2526 : INT =
+  let Ti2541 : INT =
     int 10
   in
-  if Ti2526 <= n
+  if Ti2541 <= n
     let m : INT =
       div n 10
     in
@@ -7256,55 +7369,55 @@ variables : (n : INT)
         print_int
         m
     in
-    let Ti2528 : INT =
-      let Ti2527 : INT =
+    let Ti2543 : INT =
+      let Ti2542 : INT =
         mul m 10
       in
-      sub n Ti2527
+      sub n Ti2542
     in
-    out Ti2528 48
+    out Ti2543 48
     out n 48
 in
 letrec print_newline : (INT -> UNIT) =
 variables : (Tu3 : INT)
-  let Ti2523 : INT =
+  let Ti2538 : INT =
     int 0
   in
-  out Ti2523 10
+  out Ti2538 10
 in
 letrec reduction_2pi_sub1 : (Array of FLOAT -> UNIT) =
 variables : (v : Array of FLOAT)
-  let Td2515 : FLOAT =
-    let Ti2514 : INT =
+  let Td2530 : FLOAT =
+    let Ti2529 : INT =
       int 0
     in
-    v.(Ti2514)
+    v.(Ti2529)
   in
-  let Td2517 : FLOAT =
-    let Ti2516 : INT =
+  let Td2532 : FLOAT =
+    let Ti2531 : INT =
       int 1
     in
-    v.(Ti2516)
+    v.(Ti2531)
   in
-  if Td2515 <. Td2517
+  if Td2530 <. Td2532
     unit ()
     let Tu4 : UNIT =
-      let Ti2518 : INT =
+      let Ti2533 : INT =
         int 1
       in
-      let Td2522 : FLOAT =
-        let Td2520 : FLOAT =
-          let Ti2519 : INT =
+      let Td2537 : FLOAT =
+        let Td2535 : FLOAT =
+          let Ti2534 : INT =
             int 1
           in
-          v.(Ti2519)
+          v.(Ti2534)
         in
-        let Td2521 : FLOAT =
+        let Td2536 : FLOAT =
           float 2.
         in
-        fmul Td2520 Td2521
+        fmul Td2535 Td2536
       in
-      v.(Ti2518) <- Td2522
+      v.(Ti2533) <- Td2537
     in
     app
       reduction_2pi_sub1
@@ -7312,68 +7425,71 @@ variables : (v : Array of FLOAT)
 in
 letrec reduction_2pi_sub2 : (Array of FLOAT -> UNIT) =
 variables : (v : Array of FLOAT)
-  let Td2496 : FLOAT =
+  let Td2511 : FLOAT =
     float 6.28318530718
   in
-  let Td2498 : FLOAT =
-    let Ti2497 : INT =
+  let Td2513 : FLOAT =
+    let Ti2512 : INT =
       int 0
     in
-    v.(Ti2497)
+    v.(Ti2512)
   in
-  if Td2496 <. Td2498
+  if Td2511 <. Td2513
     let Tu6 : UNIT =
-      let Td2500 : FLOAT =
-        let Ti2499 : INT =
+      let Td2515 : FLOAT =
+        let Ti2514 : INT =
           int 1
         in
-        v.(Ti2499)
+        v.(Ti2514)
       in
-      let Td2502 : FLOAT =
-        let Ti2501 : INT =
+      let Td2517 : FLOAT =
+        let Ti2516 : INT =
           int 0
         in
-        v.(Ti2501)
+        v.(Ti2516)
       in
-      if Td2500 <. Td2502
-        let Ti2503 : INT =
+      if Td2515 <. Td2517
+        let Ti2518 : INT =
           int 0
         in
-        let Td2508 : FLOAT =
-          let Td2505 : FLOAT =
-            let Ti2504 : INT =
+        let Td2523 : FLOAT =
+          let Td2520 : FLOAT =
+            let Ti2519 : INT =
               int 0
             in
-            v.(Ti2504)
+            v.(Ti2519)
           in
-          let Td2507 : FLOAT =
-            let Ti2506 : INT =
+          let Td2522 : FLOAT =
+            let Ti2521 : INT =
               int 1
             in
-            v.(Ti2506)
+            v.(Ti2521)
           in
-          fsub Td2505 Td2507
+          fsub Td2520 Td2522
         in
-        v.(Ti2503) <- Td2508
+        v.(Ti2518) <- Td2523
         unit ()
     in
     let Tu5 : UNIT =
-      let Ti2509 : INT =
+      let Ti2524 : INT =
         int 1
       in
-      let Td2513 : FLOAT =
-        let Td2511 : FLOAT =
-          let Ti2510 : INT =
+      let Td2528 : FLOAT =
+        let Td2526 : FLOAT =
+          let Ti2525 : INT =
             int 1
           in
-          v.(Ti2510)
+          v.(Ti2525)
         in
-        let Td2512 : FLOAT =
+        let Td2527 : FLOAT =
           float 2.
         in
-        fdiv Td2511 Td2512
+        extfunapp
+          fdiv
+          Td2526
+          Td2527
       in
-      v.(Ti2509) <- Td2513
+      v.(Ti2524) <- Td2528
     in
     app
       reduction_2pi_sub2
@@ -7383,13 +7499,13 @@ in
 letrec reduction_2pi : (Array of FLOAT -> UNIT) =
 variables : (v : Array of FLOAT)
   let Tu8 : UNIT =
-    let Ti2494 : INT =
+    let Ti2509 : INT =
       int 1
     in
-    let Td2495 : FLOAT =
+    let Td2510 : FLOAT =
       float 6.28318530718
     in
-    v.(Ti2494) <- Td2495
+    v.(Ti2509) <- Td2510
   in
   let Tu7 : UNIT =
     app
@@ -7414,31 +7530,31 @@ variables : (a : FLOAT)
   let a7 : FLOAT =
     fmul a5 a2
   in
-  let Td2491 : FLOAT =
-    let Td2488 : FLOAT =
-      let Td2487 : FLOAT =
-        let Td2486 : FLOAT =
+  let Td2506 : FLOAT =
+    let Td2503 : FLOAT =
+      let Td2502 : FLOAT =
+        let Td2501 : FLOAT =
           float 0.16666668
         in
-        fmul Td2486 a3
+        fmul Td2501 a3
       in
-      fsub a Td2487
+      fsub a Td2502
     in
-    let Td2490 : FLOAT =
-      let Td2489 : FLOAT =
+    let Td2505 : FLOAT =
+      let Td2504 : FLOAT =
         float 0.008332824
       in
-      fmul Td2489 a5
+      fmul Td2504 a5
     in
-    fadd Td2488 Td2490
+    fadd Td2503 Td2505
   in
-  let Td2493 : FLOAT =
-    let Td2492 : FLOAT =
+  let Td2508 : FLOAT =
+    let Td2507 : FLOAT =
       float 0.00019587841
     in
-    fmul Td2492 a7
+    fmul Td2507 a7
   in
-  fsub Td2491 Td2493
+  fsub Td2506 Td2508
 in
 letrec kernel_cos : (FLOAT -> FLOAT) =
 variables : (a : FLOAT)
@@ -7451,58 +7567,58 @@ variables : (a : FLOAT)
   let a6 : FLOAT =
     fmul a4 a2
   in
-  let Td2483 : FLOAT =
-    let Td2480 : FLOAT =
-      let Td2477 : FLOAT =
+  let Td2498 : FLOAT =
+    let Td2495 : FLOAT =
+      let Td2492 : FLOAT =
         float 1.
       in
-      let Td2479 : FLOAT =
-        let Td2478 : FLOAT =
+      let Td2494 : FLOAT =
+        let Td2493 : FLOAT =
           float 0.5
         in
-        fmul Td2478 a2
+        fmul Td2493 a2
       in
-      fsub Td2477 Td2479
+      fsub Td2492 Td2494
     in
-    let Td2482 : FLOAT =
-      let Td2481 : FLOAT =
+    let Td2497 : FLOAT =
+      let Td2496 : FLOAT =
         float 0.04166368
       in
-      fmul Td2481 a4
+      fmul Td2496 a4
     in
-    fadd Td2480 Td2482
+    fadd Td2495 Td2497
   in
-  let Td2485 : FLOAT =
-    let Td2484 : FLOAT =
+  let Td2500 : FLOAT =
+    let Td2499 : FLOAT =
       float 0.0013695068
     in
-    fmul Td2484 a6
+    fmul Td2499 a6
   in
-  fsub Td2483 Td2485
+  fsub Td2498 Td2500
 in
 letrec sin : (FLOAT -> FLOAT) =
 variables : (a : FLOAT)
   let v : Array of FLOAT =
-    let Ti2441 : INT =
+    let Ti2456 : INT =
       int 3
     in
     extfunapp
       create_float_array
-      Ti2441
+      Ti2456
       a
   in
   let Tu13 : UNIT =
-    let Td2442 : FLOAT =
+    let Td2457 : FLOAT =
       float 0.
     in
-    if a <. Td2442
-      let Ti2443 : INT =
+    if a <. Td2457
+      let Ti2458 : INT =
         int 0
       in
-      let Td2444 : FLOAT =
+      let Td2459 : FLOAT =
         fneg a
       in
-      v.(Ti2443) <- Td2444
+      v.(Ti2458) <- Td2459
       unit ()
   in
   let Tu12 : UNIT =
@@ -7511,144 +7627,144 @@ variables : (a : FLOAT)
       v
   in
   let Tu11 : UNIT =
-    let Td2445 : FLOAT =
+    let Td2460 : FLOAT =
       float 3.14159265359
     in
-    let Td2447 : FLOAT =
-      let Ti2446 : INT =
+    let Td2462 : FLOAT =
+      let Ti2461 : INT =
         int 0
       in
-      v.(Ti2446)
+      v.(Ti2461)
     in
-    if Td2445 <. Td2447
+    if Td2460 <. Td2462
       let Tu9 : UNIT =
-        let Ti2448 : INT =
+        let Ti2463 : INT =
           int 0
         in
-        let Td2452 : FLOAT =
-          let Td2450 : FLOAT =
-            let Ti2449 : INT =
+        let Td2467 : FLOAT =
+          let Td2465 : FLOAT =
+            let Ti2464 : INT =
               int 0
             in
-            v.(Ti2449)
+            v.(Ti2464)
           in
-          let Td2451 : FLOAT =
+          let Td2466 : FLOAT =
             float 3.14159265359
           in
-          fsub Td2450 Td2451
+          fsub Td2465 Td2466
         in
-        v.(Ti2448) <- Td2452
+        v.(Ti2463) <- Td2467
       in
-      let Ti2453 : INT =
+      let Ti2468 : INT =
         int 2
       in
-      let Td2456 : FLOAT =
-        let Td2455 : FLOAT =
-          let Ti2454 : INT =
-            int 2
-          in
-          v.(Ti2454)
-        in
-        fneg Td2455
-      in
-      v.(Ti2453) <- Td2456
-      unit ()
-  in
-  let Tu10 : UNIT =
-    let Td2457 : FLOAT =
-      float 1.57079632679
-    in
-    let Td2459 : FLOAT =
-      let Ti2458 : INT =
-        int 0
-      in
-      v.(Ti2458)
-    in
-    if Td2457 <. Td2459
-      let Ti2460 : INT =
-        int 0
-      in
-      let Td2464 : FLOAT =
-        let Td2461 : FLOAT =
-          float 3.14159265359
-        in
-        let Td2463 : FLOAT =
-          let Ti2462 : INT =
-            int 0
-          in
-          v.(Ti2462)
-        in
-        fsub Td2461 Td2463
-      in
-      v.(Ti2460) <- Td2464
-      unit ()
-  in
-  let x : FLOAT =
-    let Td2465 : FLOAT =
-      float 0.785398163397
-    in
-    let Td2467 : FLOAT =
-      let Ti2466 : INT =
-        int 0
-      in
-      v.(Ti2466)
-    in
-    if Td2465 <. Td2467
       let Td2471 : FLOAT =
-        let Td2468 : FLOAT =
-          float 1.57079632679
-        in
         let Td2470 : FLOAT =
           let Ti2469 : INT =
-            int 0
+            int 2
           in
           v.(Ti2469)
         in
-        fsub Td2468 Td2470
+        fneg Td2470
+      in
+      v.(Ti2468) <- Td2471
+      unit ()
+  in
+  let Tu10 : UNIT =
+    let Td2472 : FLOAT =
+      float 1.57079632679
+    in
+    let Td2474 : FLOAT =
+      let Ti2473 : INT =
+        int 0
+      in
+      v.(Ti2473)
+    in
+    if Td2472 <. Td2474
+      let Ti2475 : INT =
+        int 0
+      in
+      let Td2479 : FLOAT =
+        let Td2476 : FLOAT =
+          float 3.14159265359
+        in
+        let Td2478 : FLOAT =
+          let Ti2477 : INT =
+            int 0
+          in
+          v.(Ti2477)
+        in
+        fsub Td2476 Td2478
+      in
+      v.(Ti2475) <- Td2479
+      unit ()
+  in
+  let x : FLOAT =
+    let Td2480 : FLOAT =
+      float 0.785398163397
+    in
+    let Td2482 : FLOAT =
+      let Ti2481 : INT =
+        int 0
+      in
+      v.(Ti2481)
+    in
+    if Td2480 <. Td2482
+      let Td2486 : FLOAT =
+        let Td2483 : FLOAT =
+          float 1.57079632679
+        in
+        let Td2485 : FLOAT =
+          let Ti2484 : INT =
+            int 0
+          in
+          v.(Ti2484)
+        in
+        fsub Td2483 Td2485
       in
       app
         kernel_cos
-        Td2471
-      let Td2473 : FLOAT =
-        let Ti2472 : INT =
+        Td2486
+      let Td2488 : FLOAT =
+        let Ti2487 : INT =
           int 0
         in
-        v.(Ti2472)
+        v.(Ti2487)
       in
       app
         kernel_sin
-        Td2473
+        Td2488
   in
-  let Td2475 : FLOAT =
-    let Ti2474 : INT =
+  let Td2490 : FLOAT =
+    let Ti2489 : INT =
       int 2
     in
-    v.(Ti2474)
+    v.(Ti2489)
   in
-  let Td2476 : FLOAT =
+  let Td2491 : FLOAT =
     float 0.
   in
-  if Td2475 <. Td2476
+  if Td2490 <. Td2491
     fneg x
     x
 in
 letrec cos : (FLOAT -> FLOAT) =
 variables : (a : FLOAT)
   let a : FLOAT =
-    let Td2405 : FLOAT =
+    let Td2420 : FLOAT =
       float 0.
     in
-    if a <. Td2405
+    if a <. Td2420
       fneg a
       a
   in
   let v : Array of FLOAT =
-    let Ti2406 : INT =
+    let Ti2421 : INT =
       int 3
     in
     extfunapp
       create_float_array
-      Ti2406
+      Ti2421
       a
   in
   let Tu18 : UNIT =
@@ -7657,180 +7773,189 @@ variables : (a : FLOAT)
       v
   in
   let Tu17 : UNIT =
-    let Td2407 : FLOAT =
+    let Td2422 : FLOAT =
       float 3.14159265359
     in
-    let Td2409 : FLOAT =
-      let Ti2408 : INT =
+    let Td2424 : FLOAT =
+      let Ti2423 : INT =
         int 0
       in
-      v.(Ti2408)
+      v.(Ti2423)
     in
-    if Td2407 <. Td2409
+    if Td2422 <. Td2424
       let Tu14 : UNIT =
-        let Ti2410 : INT =
+        let Ti2425 : INT =
           int 0
         in
-        let Td2414 : FLOAT =
-          let Td2412 : FLOAT =
-            let Ti2411 : INT =
+        let Td2429 : FLOAT =
+          let Td2427 : FLOAT =
+            let Ti2426 : INT =
               int 0
             in
-            v.(Ti2411)
+            v.(Ti2426)
           in
-          let Td2413 : FLOAT =
+          let Td2428 : FLOAT =
             float 3.14159265359
           in
-          fsub Td2412 Td2413
+          fsub Td2427 Td2428
         in
-        v.(Ti2410) <- Td2414
+        v.(Ti2425) <- Td2429
       in
-      let Ti2415 : INT =
+      let Ti2430 : INT =
         int 2
       in
-      let Td2416 : FLOAT =
+      let Td2431 : FLOAT =
         float -1.
       in
-      v.(Ti2415) <- Td2416
+      v.(Ti2430) <- Td2431
       unit ()
   in
   let Tu16 : UNIT =
-    let Td2417 : FLOAT =
+    let Td2432 : FLOAT =
       float 1.57079632679
     in
-    let Td2419 : FLOAT =
-      let Ti2418 : INT =
+    let Td2434 : FLOAT =
+      let Ti2433 : INT =
         int 0
       in
-      v.(Ti2418)
+      v.(Ti2433)
     in
-    if Td2417 <. Td2419
+    if Td2432 <. Td2434
       let Tu15 : UNIT =
-        let Ti2420 : INT =
+        let Ti2435 : INT =
           int 0
         in
-        let Td2424 : FLOAT =
-          let Td2421 : FLOAT =
+        let Td2439 : FLOAT =
+          let Td2436 : FLOAT =
             float 3.14159265359
           in
-          let Td2423 : FLOAT =
-            let Ti2422 : INT =
+          let Td2438 : FLOAT =
+            let Ti2437 : INT =
               int 0
             in
-            v.(Ti2422)
+            v.(Ti2437)
           in
-          fsub Td2421 Td2423
+          fsub Td2436 Td2438
         in
-        v.(Ti2420) <- Td2424
+        v.(Ti2435) <- Td2439
       in
-      let Ti2425 : INT =
+      let Ti2440 : INT =
         int 2
       in
-      let Td2428 : FLOAT =
-        let Td2427 : FLOAT =
-          let Ti2426 : INT =
+      let Td2443 : FLOAT =
+        let Td2442 : FLOAT =
+          let Ti2441 : INT =
             int 2
           in
-          v.(Ti2426)
+          v.(Ti2441)
         in
-        fneg Td2427
+        fneg Td2442
       in
-      v.(Ti2425) <- Td2428
+      v.(Ti2440) <- Td2443
       unit ()
   in
   let x : FLOAT =
-    let Td2430 : FLOAT =
-      let Ti2429 : INT =
+    let Td2445 : FLOAT =
+      let Ti2444 : INT =
         int 0
       in
-      v.(Ti2429)
+      v.(Ti2444)
     in
-    let Td2431 : FLOAT =
+    let Td2446 : FLOAT =
       float 0.785398163397
     in
-    if Td2430 <. Td2431
-      let Td2433 : FLOAT =
-        let Ti2432 : INT =
+    if Td2445 <. Td2446
+      let Td2448 : FLOAT =
+        let Ti2447 : INT =
           int 0
         in
-        v.(Ti2432)
+        v.(Ti2447)
       in
       app
         kernel_cos
-        Td2433
-      let Td2437 : FLOAT =
-        let Td2434 : FLOAT =
+        Td2448
+      let Td2452 : FLOAT =
+        let Td2449 : FLOAT =
           float 1.57079632679
         in
-        let Td2436 : FLOAT =
-          let Ti2435 : INT =
+        let Td2451 : FLOAT =
+          let Ti2450 : INT =
             int 0
           in
-          v.(Ti2435)
+          v.(Ti2450)
         in
-        fsub Td2434 Td2436
+        fsub Td2449 Td2451
       in
       app
         kernel_sin
-        Td2437
+        Td2452
   in
-  let Td2439 : FLOAT =
-    let Ti2438 : INT =
+  let Td2454 : FLOAT =
+    let Ti2453 : INT =
       int 2
     in
-    v.(Ti2438)
+    v.(Ti2453)
   in
-  let Td2440 : FLOAT =
+  let Td2455 : FLOAT =
     float 0.
   in
-  if Td2439 <. Td2440
+  if Td2454 <. Td2455
     fneg x
     x
 in
 letrec sqrt : (FLOAT -> FLOAT) =
 variables : (x : FLOAT)
-  let Td2395 : FLOAT =
+  let Td2410 : FLOAT =
     float 0.
   in
-  if Td2395 <. x
+  if Td2410 <. x
     let t : FLOAT =
       unknown sqrt_init x
     in
     let t : FLOAT =
-      let Td2397 : FLOAT =
-        let Td2396 : FLOAT =
+      let Td2412 : FLOAT =
+        let Td2411 : FLOAT =
           fmul t t
         in
-        fadd Td2396 x
+        fadd Td2411 x
       in
-      let Td2398 : FLOAT =
+      let Td2413 : FLOAT =
         fadd t t
       in
-      fdiv Td2397 Td2398
+      extfunapp
+        fdiv
+        Td2412
+        Td2413
     in
     let t : FLOAT =
-      let Td2400 : FLOAT =
-        let Td2399 : FLOAT =
+      let Td2415 : FLOAT =
+        let Td2414 : FLOAT =
           fmul t t
         in
-        fadd Td2399 x
+        fadd Td2414 x
       in
-      let Td2401 : FLOAT =
+      let Td2416 : FLOAT =
         fadd t t
       in
-      fdiv Td2400 Td2401
+      extfunapp
+        fdiv
+        Td2415
+        Td2416
     in
     let t : FLOAT =
-      let Td2403 : FLOAT =
-        let Td2402 : FLOAT =
+      let Td2418 : FLOAT =
+        let Td2417 : FLOAT =
           fmul t t
         in
-        fadd Td2402 x
+        fadd Td2417 x
       in
-      let Td2404 : FLOAT =
+      let Td2419 : FLOAT =
         fadd t t
       in
-      fdiv Td2403 Td2404
+      extfunapp
+        fdiv
+        Td2418
+        Td2419
     in
     t
     float 0.
@@ -7858,150 +7983,240 @@ variables : (a1 : FLOAT)
   let a13 : FLOAT =
     fmul a2 a11
   in
-  let Td2392 : FLOAT =
-    let Td2389 : FLOAT =
-      let Td2386 : FLOAT =
-        let Td2383 : FLOAT =
-          let Td2380 : FLOAT =
-            let Td2379 : FLOAT =
-              let Td2378 : FLOAT =
+  let Td2407 : FLOAT =
+    let Td2404 : FLOAT =
+      let Td2401 : FLOAT =
+        let Td2398 : FLOAT =
+          let Td2395 : FLOAT =
+            let Td2394 : FLOAT =
+              let Td2393 : FLOAT =
                 float 0.3333333
               in
-              fmul Td2378 a3
+              fmul Td2393 a3
             in
-            fsub a1 Td2379
+            fsub a1 Td2394
           in
-          let Td2382 : FLOAT =
-            let Td2381 : FLOAT =
+          let Td2397 : FLOAT =
+            let Td2396 : FLOAT =
               float 0.2
             in
-            fmul Td2381 a5
+            fmul Td2396 a5
           in
-          fadd Td2380 Td2382
+          fadd Td2395 Td2397
         in
-        let Td2385 : FLOAT =
-          let Td2384 : FLOAT =
+        let Td2400 : FLOAT =
+          let Td2399 : FLOAT =
             float 0.142857142
           in
-          fmul Td2384 a7
+          fmul Td2399 a7
         in
-        fsub Td2383 Td2385
+        fsub Td2398 Td2400
       in
-      let Td2388 : FLOAT =
-        let Td2387 : FLOAT =
+      let Td2403 : FLOAT =
+        let Td2402 : FLOAT =
           float 0.111111104
         in
-        fmul Td2387 a9
+        fmul Td2402 a9
       in
-      fadd Td2386 Td2388
+      fadd Td2401 Td2403
     in
-    let Td2391 : FLOAT =
-      let Td2390 : FLOAT =
+    let Td2406 : FLOAT =
+      let Td2405 : FLOAT =
         float 0.08976446
       in
-      fmul Td2390 a11
+      fmul Td2405 a11
     in
-    fsub Td2389 Td2391
+    fsub Td2404 Td2406
   in
-  let Td2394 : FLOAT =
-    let Td2393 : FLOAT =
+  let Td2409 : FLOAT =
+    let Td2408 : FLOAT =
       float 0.060035485
     in
-    fmul Td2393 a13
+    fmul Td2408 a13
   in
-  fadd Td2392 Td2394
+  fadd Td2407 Td2409
 in
 letrec atan : (FLOAT -> FLOAT) =
 variables : (a : FLOAT)
   let flag : BOOL =
-    let Td2362 : FLOAT =
+    let Td2377 : FLOAT =
       float 0.
     in
-    if Td2362 <. a
+    if Td2377 <. a
       int 1
       int 0
   in
   let a : FLOAT =
-    let Ti2363 : INT =
+    let Ti2378 : INT =
       int 0
     in
-    if flag == Ti2363
+    if flag == Ti2378
       fneg a
       a
   in
   let b : FLOAT =
-    let Td2364 : FLOAT =
+    let Td2379 : FLOAT =
       float 0.4375
     in
-    if a <. Td2364
+    if a <. Td2379
       app
         kernel_atan
         a
-      let Td2365 : FLOAT =
+      let Td2380 : FLOAT =
         float 2.4375
       in
-      if a <. Td2365
-        let Td2366 : FLOAT =
+      if a <. Td2380
+        let Td2381 : FLOAT =
           float 0.785398163397
         in
-        let Td2372 : FLOAT =
-          let Td2371 : FLOAT =
-            let Td2368 : FLOAT =
-              let Td2367 : FLOAT =
+        let Td2387 : FLOAT =
+          let Td2386 : FLOAT =
+            let Td2383 : FLOAT =
+              let Td2382 : FLOAT =
                 float 1.
               in
-              fsub a Td2367
+              fsub a Td2382
             in
-            let Td2370 : FLOAT =
-              let Td2369 : FLOAT =
+            let Td2385 : FLOAT =
+              let Td2384 : FLOAT =
                 float 1.
               in
-              fadd a Td2369
+              fadd a Td2384
             in
-            fdiv Td2368 Td2370
+            extfunapp
+              fdiv
+              Td2383
+              Td2385
           in
           app
             kernel_atan
-            Td2371
+            Td2386
         in
-        fadd Td2366 Td2372
-        let Td2373 : FLOAT =
+        fadd Td2381 Td2387
+        let Td2388 : FLOAT =
           float 1.57079632679
         in
-        let Td2376 : FLOAT =
-          let Td2375 : FLOAT =
-            let Td2374 : FLOAT =
+        let Td2391 : FLOAT =
+          let Td2390 : FLOAT =
+            let Td2389 : FLOAT =
               float 1.
             in
-            fdiv Td2374 a
+            extfunapp
+              fdiv
+              Td2389
+              a
           in
           app
             kernel_atan
-            Td2375
+            Td2390
         in
-        fsub Td2373 Td2376
+        fsub Td2388 Td2391
   in
-  let Ti2377 : INT =
+  let Ti2392 : INT =
     int 0
   in
-  if flag == Ti2377
+  if flag == Ti2392
     fneg b
     b
 in
 letrec floor : (FLOAT -> FLOAT) =
 variables : (x : FLOAT)
   let a : FLOAT =
-    let Ti2360 : INT =
+    let Ti2375 : INT =
       ftoi x
     in
-    itof Ti2360
+    itof Ti2375
   in
   if x <. a
-    let Td2361 : FLOAT =
+    let Td2376 : FLOAT =
       float 1.
     in
-    fsub a Td2361
+    fsub a Td2376
     a
+in
+letrec finv : (FLOAT -> FLOAT) =
+variables : (x : FLOAT)
+  if x == 0.0 
+    x
+    let t : FLOAT =
+      unknown finv_init x
+    in
+    let two : FLOAT =
+      float 2.
+    in
+    let t : FLOAT =
+      let Td2362 : FLOAT =
+        let Td2361 : FLOAT =
+          fmul x t
+        in
+        fsub two Td2361
+      in
+      fmul t Td2362
+    in
+    let t : FLOAT =
+      let Td2364 : FLOAT =
+        let Td2363 : FLOAT =
+          fmul x t
+        in
+        fsub two Td2363
+      in
+      fmul t Td2364
+    in
+    let t : FLOAT =
+      let Td2366 : FLOAT =
+        let Td2365 : FLOAT =
+          fmul x t
+        in
+        fsub two Td2365
+      in
+      fmul t Td2366
+    in
+    let t : FLOAT =
+      let Td2368 : FLOAT =
+        let Td2367 : FLOAT =
+          fmul x t
+        in
+        fsub two Td2367
+      in
+      fmul t Td2368
+    in
+    let t : FLOAT =
+      let Td2370 : FLOAT =
+        let Td2369 : FLOAT =
+          fmul x t
+        in
+        fsub two Td2369
+      in
+      fmul t Td2370
+    in
+    let t : FLOAT =
+      let Td2372 : FLOAT =
+        let Td2371 : FLOAT =
+          fmul x t
+        in
+        fsub two Td2371
+      in
+      fmul t Td2372
+    in
+    let t : FLOAT =
+      let Td2374 : FLOAT =
+        let Td2373 : FLOAT =
+          fmul x t
+        in
+        fsub two Td2373
+      in
+      fmul t Td2374
+    in
+    t
+in
+letrec fdiv : (FLOAT -> (FLOAT -> FLOAT)) =
+variables : (x : FLOAT), (y : FLOAT)
+  let Td2360 : FLOAT =
+    app
+      finv
+      y
+  in
+  fmul x Td2360
 in
 letrec fabs : (FLOAT -> FLOAT) =
 variables : (f : FLOAT)
@@ -8808,7 +9023,10 @@ variables : (v : Array of FLOAT)
         sqrt
         Td2300
     in
-    fdiv Td2289 Td2301
+    app
+      fdiv
+      Td2289
+      Td2301
   in
   let Tu26 : UNIT =
     let Ti2302 : INT =
@@ -8904,11 +9122,17 @@ variables : (v : Array of FLOAT), (inv : BOOL)
         let Td2275 : FLOAT =
           float 1.
         in
-        fdiv Td2275 l
+        app
+          fdiv
+          Td2275
+          l
         let Td2276 : FLOAT =
           float -1.
         in
-        fdiv Td2276 l
+        app
+          fdiv
+          Td2276
+          l
   in
   let Tu28 : UNIT =
     let Ti2277 : INT =
@@ -10721,7 +10945,10 @@ variables : (n : INT)
               let Td1952 : FLOAT =
                 unknown fsqr a
               in
-              fdiv Td1951 Td1952
+              app
+                fdiv
+                Td1951
+                Td1952
           in
           abc.(Ti1950) <- Td1953
         in
@@ -10746,7 +10973,10 @@ variables : (n : INT)
               let Td1957 : FLOAT =
                 unknown fsqr b
               in
-              fdiv Td1956 Td1957
+              app
+                fdiv
+                Td1956
+                Td1957
           in
           abc.(Ti1955) <- Td1958
         in
@@ -10770,7 +11000,10 @@ variables : (n : INT)
             let Td1962 : FLOAT =
               unknown fsqr c
             in
-            fdiv Td1961 Td1962
+            app
+              fdiv
+              Td1961
+              Td1962
         in
         abc.(Ti1960) <- Td1963
         let Ti1964 : INT =
@@ -11070,7 +11303,10 @@ variables : (m : (INT * INT * INT * INT * Array of FLOAT * Array of FLOAT * BOOL
       let Td1830 : FLOAT =
         dirvec.(i0)
       in
-      fdiv Td1829 Td1830
+      app
+        fdiv
+        Td1829
+        Td1830
     in
     let Td1834 : FLOAT =
       let Td1833 : FLOAT =
@@ -11241,7 +11477,10 @@ variables : (m : (INT * INT * INT * INT * Array of FLOAT * Array of FLOAT * BOOL
             fneg
             Td1805
         in
-        fdiv Td1806 d
+        app
+          fdiv
+          Td1806
+          d
       in
       solver_dist.(Ti1804) <- Td1807
     in
@@ -11584,7 +11823,10 @@ variables : (m : (INT * INT * INT * INT * Array of FLOAT * Array of FLOAT * BOOL
           let Td1747 : FLOAT =
             fsub t1 bb
           in
-          fdiv Td1747 aa
+          app
+            fdiv
+            Td1747
+            aa
         in
         solver_dist.(Ti1746) <- Td1748
       in
@@ -12560,7 +12802,10 @@ variables : (vec : Array of FLOAT), (m : (INT * INT * INT * INT * Array of FLOAT
           in
           vec.(Ti1505)
         in
-        fdiv Td1504 Td1506
+        app
+          fdiv
+          Td1504
+          Td1506
       in
       const.(Ti1503) <- Td1507
   in
@@ -12631,7 +12876,10 @@ variables : (vec : Array of FLOAT), (m : (INT * INT * INT * INT * Array of FLOAT
           in
           vec.(Ti1522)
         in
-        fdiv Td1521 Td1523
+        app
+          fdiv
+          Td1521
+          Td1523
       in
       const.(Ti1520) <- Td1524
   in
@@ -12702,7 +12950,10 @@ variables : (vec : Array of FLOAT), (m : (INT * INT * INT * INT * Array of FLOAT
           in
           vec.(Ti1539)
         in
-        fdiv Td1538 Td1540
+        app
+          fdiv
+          Td1538
+          Td1540
       in
       const.(Ti1537) <- Td1541
   in
@@ -12795,7 +13046,10 @@ variables : (vec : Array of FLOAT), (m : (INT * INT * INT * INT * Array of FLOAT
           let Td1475 : FLOAT =
             float -1.
           in
-          fdiv Td1475 d
+          app
+            fdiv
+            Td1475
+            d
         in
         const.(Ti1474) <- Td1476
       in
@@ -12810,7 +13064,10 @@ variables : (vec : Array of FLOAT), (m : (INT * INT * INT * INT * Array of FLOAT
                 o_param_a
                 m
             in
-            fdiv Td1478 d
+            app
+              fdiv
+              Td1478
+              d
           in
           app
             fneg
@@ -12829,7 +13086,10 @@ variables : (vec : Array of FLOAT), (m : (INT * INT * INT * INT * Array of FLOAT
                 o_param_b
                 m
             in
-            fdiv Td1482 d
+            app
+              fdiv
+              Td1482
+              d
           in
           app
             fneg
@@ -12847,7 +13107,10 @@ variables : (vec : Array of FLOAT), (m : (INT * INT * INT * INT * Array of FLOAT
               o_param_c
               m
           in
-          fdiv Td1486 d
+          app
+            fdiv
+            Td1486
+            d
         in
         app
           fneg
@@ -13130,7 +13393,10 @@ variables : (v : Array of FLOAT), (m : (INT * INT * INT * INT * Array of FLOAT *
         let Td1453 : FLOAT =
           float 1.
         in
-        fdiv Td1453 aa
+        app
+          fdiv
+          Td1453
+          aa
       in
       const.(Ti1452) <- Td1454
   in
@@ -15233,7 +15499,10 @@ variables : (m : (INT * INT * INT * INT * Array of FLOAT * Array of FLOAT * BOOL
           let Td993 : FLOAT =
             float 10.
           in
-          fdiv Td992 Td993
+          app
+            fdiv
+            Td992
+            Td993
         in
         let w4 : FLOAT =
           let Td995 : FLOAT =
@@ -15365,7 +15634,10 @@ variables : (m : (INT * INT * INT * INT * Array of FLOAT * Array of FLOAT * BOOL
               float 15.
               let w5 : FLOAT =
                 let Td1023 : FLOAT =
-                  fdiv w3 w1
+                  app
+                    fdiv
+                    w3
+                    w1
                 in
                 app
                   fabs
@@ -15385,7 +15657,10 @@ variables : (m : (INT * INT * INT * INT * Array of FLOAT * Array of FLOAT * BOOL
               let Td1027 : FLOAT =
                 float 3.1415927
               in
-              fdiv Td1026 Td1027
+              app
+                fdiv
+                Td1026
+                Td1027
           in
           let w9 : FLOAT =
             let Td1028 : FLOAT =
@@ -15435,7 +15710,10 @@ variables : (m : (INT * INT * INT * INT * Array of FLOAT * Array of FLOAT * BOOL
               float 15.
               let w6 : FLOAT =
                 let Td1037 : FLOAT =
-                  fdiv w2 w4
+                  app
+                    fdiv
+                    w2
+                    w4
                 in
                 app
                   fabs
@@ -15455,7 +15733,10 @@ variables : (m : (INT * INT * INT * INT * Array of FLOAT * Array of FLOAT * BOOL
               let Td1041 : FLOAT =
                 float 3.1415927
               in
-              fdiv Td1040 Td1041
+              app
+                fdiv
+                Td1040
+                Td1041
           in
           let w10 : FLOAT =
             let Td1042 : FLOAT =
@@ -15518,7 +15799,10 @@ variables : (m : (INT * INT * INT * INT * Array of FLOAT * Array of FLOAT * BOOL
             let Td1056 : FLOAT =
               float 0.3
             in
-            fdiv Td1055 Td1056
+            app
+              fdiv
+              Td1055
+              Td1056
           in
           texture_color.(Ti1053) <- Td1057
           unit ()
@@ -15967,7 +16251,10 @@ variables : (nref : INT), (energy : FLOAT), (dirvec : Array of FLOAT), (pixel : 
                 let Td866 : FLOAT =
                   float 256.
                 in
-                fdiv Td865 Td866
+                app
+                  fdiv
+                  Td865
+                  Td866
               in
               fmul Td867 diffuse
             in
@@ -16297,7 +16584,10 @@ variables : (dirvec_group : Array of (Array of FLOAT * Array of Array of FLOAT))
           let Td801 : FLOAT =
             float 150.
           in
-          fdiv p Td801
+          app
+            fdiv
+            p
+            Td801
         in
         app
           trace_diffuse_ray
@@ -16316,7 +16606,10 @@ variables : (dirvec_group : Array of (Array of FLOAT * Array of Array of FLOAT))
           let Td806 : FLOAT =
             float -150.
           in
-          fdiv p Td806
+          app
+            fdiv
+            p
+            Td806
         in
         app
           trace_diffuse_ray
@@ -17787,7 +18080,10 @@ variables : (x : FLOAT)
       cos
       x
   in
-  fdiv Td555 Td556
+  app
+    fdiv
+    Td555
+    Td556
 in
 letrec adjust_position : (FLOAT -> (FLOAT -> FLOAT)) =
 variables : (h : FLOAT), (ratio : FLOAT)
@@ -17809,7 +18105,10 @@ variables : (h : FLOAT), (ratio : FLOAT)
     let Td553 : FLOAT =
       float 1.
     in
-    fdiv Td553 l
+    app
+      fdiv
+      Td553
+      l
   in
   let theta_h : FLOAT =
     app
@@ -17853,16 +18152,25 @@ variables : (icount : INT), (x : FLOAT), (y : FLOAT), (rx : FLOAT), (ry : FLOAT)
         Td514
     in
     let vx : FLOAT =
-      fdiv x l
+      app
+        fdiv
+        x
+        l
     in
     let vy : FLOAT =
-      fdiv y l
+      app
+        fdiv
+        y
+        l
     in
     let vz : FLOAT =
       let Td515 : FLOAT =
         float 1.
       in
-      fdiv Td515 l
+      app
+        fdiv
+        Td515
+        l
     in
     let dgroup : Array of (Array of FLOAT * Array of Array of FLOAT) =
       dirvecs.(group_id)
@@ -18830,7 +19138,10 @@ variables : (size_x : INT), (size_y : INT)
       let Td359 : FLOAT =
         itof size_x
       in
-      fdiv Td358 Td359
+      app
+        fdiv
+        Td358
+        Td359
     in
     scan_pitch.(Ti357) <- Td360
   in

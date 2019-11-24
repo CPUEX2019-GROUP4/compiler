@@ -1,14 +1,14 @@
     ori r29 r0 3072
     ori r30 r0 4096
 #    main program starts
-    flui f0 16256
-    # 1.000000
-    flui f1 16448
-    # 3.000000
+    flui f0 17558
+    # 1200.000000
+    flui f1 16880
+    # 30.000000
     fcz f1
-    bc1f float_eq0.558
-    j float_eq0_cont.559
-float_eq0.558:
+    bc1f float_eq0.591
+    j float_eq0_cont.592
+float_eq0.591:
     finv_init f2 f1
     #unknown instruction
     flui f3 16384
@@ -22,38 +22,47 @@ float_eq0.558:
     fmul f4 f1 f2
     fsub f4 f3 f4
     fmul f2 f2 f4
+    fmul f4 f1 f2
+    fsub f4 f3 f4
+    fmul f2 f2 f4
+    fmul f4 f1 f2
+    fsub f4 f3 f4
+    fmul f2 f2 f4
+    fmul f4 f1 f2
+    fsub f4 f3 f4
+    fmul f2 f2 f4
     fmul f1 f1 f2
     fsub f1 f3 f1
     fmul f1 f2 f1
-float_eq0_cont.559:
+float_eq0_cont.592:
     fmul f0 f0 f1
     ftoi r1 f0
     sw r31 r29 4
     addi r29 r29 8
-    jal print_int.205
+    jal print_int.211
     subi r29 r29 8
     lw r31 r29 4
 end_of_program:
 nop
      beq r0 r0 end_of_program
-print_int.205:
+print_int.211:
     slti r28 r1 0
-    bne r0 r28 bge_else.560
-    j bge_cont.561
-bge_else.560:
+    bne r0 r28 bge_else.593
+    j bge_cont.594
+bge_else.593:
     addi r2 r0 45
     out r2 0
     sub r1 r0 r1
-bge_cont.561:
+bge_cont.594:
     slti r28 r1 10
-    bne r0 r28 bge_else.562
+    bne r0 r28 bge_else.595
     div10 r2 r1
     sw r1 r29 0
     sw r2 r29 4
     mv r1 r2
     sw r31 r29 12
     addi r29 r29 16
-    jal print_int.205
+    jal print_int.211
     subi r29 r29 16
     lw r31 r29 12
     lw r1 r29 4
@@ -64,7 +73,7 @@ bge_cont.561:
     sub r1 r2 r1
     out r1 48
     jr r31
-bge_else.562:
+bge_else.595:
     out r1 48
     jr r31
 #   create_array

@@ -156,6 +156,9 @@ let rec finv x =
   let t = (t *. (two -. x *. t)) in
   let t = (t *. (two -. x *. t)) in
   let t = (t *. (two -. x *. t)) in
+  let t = (t *. (two -. x *. t)) in
+  let t = (t *. (two -. x *. t)) in
+  let t = (t *. (two -. x *. t)) in
   t
 in
 (* fdiv *)
@@ -167,4 +170,4 @@ let rec fneg x = -. x in
 let rec abs_float x = fabs x in
 let rec fispos x = x >. 0.0 in
 let rec fisneg x = x <. 0.0 in
-print_int (int_of_float (1.0 /. 3.0))
+print_int (int_of_float (1200.0 /. 30.0))
