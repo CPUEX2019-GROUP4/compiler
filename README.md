@@ -13,3 +13,21 @@ cd simulator/simulator/sim
 
 を実行する. るんるんシミュレータの使い方は適当にプリントを叩いて, s を打ったり, break point を設定して
 r を打ったりしてればわかると思う.
+
+
+## raytrace
+
+```
+./raytrace.sh contest
+```
+
+でレイトレを実行. インラインの量は min-caml/Makefile ./min-caml raytrace -inline で設定されている.
+第二引数は読み込む .sld ファイル名. 第二引数はデフォルトで base.
+
+既に別の .sld ファイルで実行した直後に別の .sld ファイルを入力として動かしたいときは,
+
+```
+./raytrace_nocompile contest
+```
+
+で実行できる.
