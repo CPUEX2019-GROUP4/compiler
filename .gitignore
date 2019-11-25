@@ -6,12 +6,14 @@ min-caml/*.cm*
 min-caml/*.o
 min-caml/test/*.ans
 min-caml/test/*.s
-min-caml/test/mips_test*
-min-caml/raytracer/galois*
+min-caml/test/mips_test.ml
+min-caml/test/mips_test.s
+min-caml/raytracer/galois.ml
+min-caml/raytracer/galois.s
 gomi/
 data/
 program.txt
 commit.sh
 binary_conversion/Untitled.ipynb
-binary_conversion/.*
 syntax.txt
+binary_conversion/.*
