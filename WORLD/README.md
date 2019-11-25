@@ -15,7 +15,7 @@
 # outline
 ## raytrace.s
 raytrase.s consists of
-44705 instruction words.
+104509 instruction words.
 
 ## program.txt
 converted raytrace.s to 0-1 file for use of .coe file.
@@ -31,7 +31,7 @@ input file for vivado simulator. (0-1 file)
 Take diff if you succeeded in making .ppm file from FPGA.
 
 ### base.sld
-total executed instructions:   213,474,653
+total executed instructions:   200,850,936
 
 ### contest.sld
-total executed instructions: 3,048,104,848
+total executed instructions: 2,818,083,061

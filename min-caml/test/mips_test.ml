@@ -161,12 +161,10 @@ let rec fneg x = -. x in
 let rec abs_float x = fabs x in
 let rec fispos x = x >. 0.0 in
 let rec fisneg x = x <. 0.0 in
-let rec finit x =
-  print_int (int_of_float ((UNKNOWN finv_init float float x) *. 100.0));
-  print_char 10
+let rec sum_tail x y =
+  if x <= 0 then
+    y
+  else
+    sum_tail (x - 1) (y + x)
 in
-let rec loop n =
-  let f = read_float () in
-  finit f; loop n; print_char 0
-in
-loop 3
+print_int (sum_tail 10000 1)
