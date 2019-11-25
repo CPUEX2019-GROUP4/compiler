@@ -112,36 +112,10 @@ let rec sqrt x =
     let t = ((t *. t +. x) /. (t +. t)) in
     let t = ((t *. t +. x) /. (t +. t)) in
     let t = ((t *. t +. x) /. (t +. t)) in
-    let t = ((t *. t +. x) /. (t +. t)) in
-    let t = ((t *. t +. x) /. (t +. t)) in
-    let t = ((t *. t +. x) /. (t +. t)) in
-    let t = ((t *. t +. x) /. (t +. t)) in
-    let t = ((t *. t +. x) /. (t +. t)) in
-    let t = ((t *. t +. x) /. (t +. t)) in
-    let t = ((t *. t +. x) /. (t +. t)) in
-    let t = ((t *. t +. x) /. (t +. t)) in
-    let t = ((t *. t +. x) /. (t +. t)) in
-    let t = ((t *. t +. x) /. (t +. t)) in
-    let t = ((t *. t +. x) /. (t +. t)) in
-    let t = ((t *. t +. x) /. (t +. t)) in
-    let t = ((t *. t +. x) /. (t +. t)) in
-    let t = ((t *. t +. x) /. (t +. t)) in
-    let t = ((t *. t +. x) /. (t +. t)) in
-    let t = ((t *. t +. x) /. (t +. t)) in
     t
   else
     0.0
 in
-(*
-let rec sqrt x =
-    let rec inner t i =
-        if i = 0 then
-            t
-        else
-            inner ((t *. t +. x) /. (2. *. t)) (i - 1)
-    in inner (UNKNOWN sqrt_init float float x) 5
-in
-*)
 
 (* atan *)
 let rec kernel_atan a1 =
@@ -187,4 +161,12 @@ let rec fneg x = -. x in
 let rec abs_float x = fabs x in
 let rec fispos x = x >. 0.0 in
 let rec fisneg x = x <. 0.0 in
-print_int (int_of_float ((UNKNOWN sqrt_init float float 0.1) *. 10000.0))
+let rec finit x =
+  print_int (int_of_float ((UNKNOWN finv_init float float x) *. 100.0));
+  print_char 10
+in
+let rec loop n =
+  let f = read_float () in
+  finit f; loop n; print_char 0
+in
+loop 3

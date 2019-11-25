@@ -1,0 +1,30 @@
+#!/bin/bash
+
+unset LC_ALL LANG LC_CTYPE LC_COLLATE LC_NUMERIC LC_TIME LC_MONETARY LC_MESSAGES
+# language settei kesu
+
+input_file=base.sld
+if [ $# == 1 ]; then
+  input_file=$1
+fi
+
+# make input.bin
+echo "-----input.bin-----"
+cd binary_conversion
+./test.sh ../min-caml/raytracer/sld/$input_file
+cp out.bin ../simulator/simulator/sim/input.bin
+
+# simulate
+echo "-----simulate-----"
+cd ../simulator/simulator/sim/
+rm out.txt
+./test.sh raytrace.s input.bin 1
+mv out.txt out.ppm
+
+#LANG="ja_JP.UTF-8"
+#LC_COLLATE="ja_JP.UTF-8"
+#LC_CTYPE="ja_JP.UTF-8"
+#LC_MESSAGES="ja_JP.UTF-8"
+#LC_MONETARY="ja_JP.UTF-8"
+#LC_NUMERIC="ja_JP.UTF-8"
+#LC_TIME="ja_JP.UTF-8"

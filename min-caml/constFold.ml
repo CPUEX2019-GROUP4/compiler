@@ -26,12 +26,18 @@ let rec g env = function (* 定数畳み込みルーチン本体 (caml2html: constfold_g) *)
   | FSub(x, y) when memf x env && memf y env -> Float(findf x env -. findf y env)
   | FMul(x, y) when memf x env && memf y env -> Float(findf x env *. findf y env)
   | FDiv(x, y) when memf x env && memf y env -> Float(findf x env /. findf y env)
+  (* IfEq *)
   | IfEq(x, y, e1, e2) when memi x env && memi y env -> if findi x env = findi y env then g env e1 else g env e2
-  | IfEq(x, y, e1, e2) when memf x env && memf y env -> if findf x env = findf y env then g env e1 else g env e2
   | IfEq(x, y, e1, e2) -> IfEq(x, y, g env e1, g env e2)
+  (* IfLE *)
   | IfLE(x, y, e1, e2) when memi x env && memi y env -> if findi x env <= findi y env then g env e1 else g env e2
-  | IfLE(x, y, e1, e2) when memf x env && memf y env -> if findf x env <= findf y env then g env e1 else g env e2
   | IfLE(x, y, e1, e2) -> IfLE(x, y, g env e1, g env e2)
+  (* IfFLt *)
+  | IfFLt(x, y, e1, e2) when memf x env && memf y env -> if findf x env < findf y env then g env e1 else g env e2
+  | IfFLt(x, y, e1, e2) -> IfFLt(x, y, g env e1, g env e2)
+  (* IfFLt *)
+  | IfFZero(x, e1, e2) when memf x env -> if findf x env = 0.0 then g env e1 else g env e2
+  | IfFZero(x, e1, e2) -> IfFZero(x, g env e1, g env e2)
   | Let((x, t), e1, e2) -> (* letのケース (caml2html: constfold_let) *)
       let e1' = g env e1 in
       let e2' = g (M.add x e1' env) e2 in
