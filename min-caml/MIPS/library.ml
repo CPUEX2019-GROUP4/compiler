@@ -5,9 +5,6 @@ let rec finv x =
   let two = 2.0 in
   let t = (t *. (two -. x *. t)) in
   let t = (t *. (two -. x *. t)) in
-  let t = (t *. (two -. x *. t)) in
-  let t = (t *. (two -. x *. t)) in
-  let t = (t *. (two -. x *. t)) in
   t)
 in
 (* fdiv *)
@@ -107,9 +104,6 @@ in
 let rec sqrt x =
   if x >. 0.0 then
     let t = UNKNOWN sqrt_init float float x in
-    let t = ((t *. t +. x) /. (t +. t)) in
-    let t = ((t *. t +. x) /. (t +. t)) in
-    let t = ((t *. t +. x) /. (t +. t)) in
     let t = ((t *. t +. x) /. (t +. t)) in
     let t = ((t *. t +. x) /. (t +. t)) in
     t

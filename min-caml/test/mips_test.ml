@@ -5,9 +5,6 @@ let rec finv x =
   let two = 2.0 in
   let t = (t *. (two -. x *. t)) in
   let t = (t *. (two -. x *. t)) in
-  let t = (t *. (two -. x *. t)) in
-  let t = (t *. (two -. x *. t)) in
-  let t = (t *. (two -. x *. t)) in
   t)
 in
 (* fdiv *)
@@ -109,9 +106,6 @@ let rec sqrt x =
     let t = UNKNOWN sqrt_init float float x in
     let t = ((t *. t +. x) /. (t +. t)) in
     let t = ((t *. t +. x) /. (t +. t)) in
-    let t = ((t *. t +. x) /. (t +. t)) in
-    let t = ((t *. t +. x) /. (t +. t)) in
-    let t = ((t *. t +. x) /. (t +. t)) in
     t
   else
     0.0
@@ -161,10 +155,8 @@ let rec fneg x = -. x in
 let rec abs_float x = fabs x in
 let rec fispos x = x >. 0.0 in
 let rec fisneg x = x <. 0.0 in
-let rec sum_tail x y =
-  if x <= 0 then
-    y
-  else
-    sum_tail (x - 1) (y + x)
+let rec finit x =
+  print_int (int_of_float ((UNKNOWN finv_init float float x) *. 100000000.0));
+  print_char 10
 in
-print_int (sum_tail 10000 1)
+  finit 0.0; print_char 0
