@@ -18,25 +18,45 @@ let rec g env = function (* 定数畳み込みルーチン本体 (caml2html: constfold_g) *)
   | Var(x) when memi x env -> Int(findi x env)
   | Var(x) when memf x env -> Float(findf x env)
   | Var(x) when memt x env -> Tuple(findt x env)
+  (* neg *)
   | Neg(x) when memi x env -> Int(-(findi x env))
+  (* add *)
   | Add(x, y) when memi x env && memi y env -> Int(findi x env + findi y env) (* 足し算のケース (caml2html: constfold_add) *)
+(*  | Add(x, y) as e when memi x env -> if findi x env = 0 then Var(y) else e
+  | Add(x, y) as e when memi y env -> if findi y env = 0 then Var(x) else e
+*)  (* sub *)
   | Sub(x, y) when memi x env && memi y env -> Int(findi x env - findi y env)
+(*  | Sub(x, y) as e when memi x env -> if findi x env = 0 then Neg(y) else e
+  | Sub(x, y) as e when memi y env -> if findi y env = 0 then Var(x) else e
+*)  (* fneg *)
   | FNeg(x) when memf x env -> Float(-.(findf x env))
+  (* fadd *)
   | FAdd(x, y) when memf x env && memf y env -> Float(findf x env +. findf y env)
+(*  | FAdd(x, y) as e when memf x env -> if findf x env = 0.0 then Var(y) else e
+  | FAdd(x, y) as e when memf y env -> if findf y env = 0.0 then Var(x) else e
+*)  (* fsub *)
   | FSub(x, y) when memf x env && memf y env -> Float(findf x env -. findf y env)
+(*  | FSub(x, y) as e when memf x env -> if findf x env = 0.0 then FNeg(y) else e
+  | FSub(x, y) as e when memf y env -> if findf y env = 0.0 then Var(x) else e
+*)  (* fmul *)
   | FMul(x, y) when memf x env && memf y env -> Float(findf x env *. findf y env)
+(*  | FMul(x, y) as e when memf x env -> if findf x env = 1.0 then Var(y) else e
+  | FMul(x, y) as e when memf y env -> if findf y env = 1.0 then Var(x) else e
+*)(*| FDiv(x, y) when memf x env && memf y env -> Float(findf x env /. findf y env) *)
+  (* mul/div/ftoi/itof *)
   | Mul4(x)    when memi x env -> Int(findi x env * 4)
   | Mul10(x)   when memi x env -> Int(findi x env * 10)
   | Div2(x)    when memi x env -> Int(findi x env / 2)
   | Div10(x)   when memi x env -> Int(findi x env / 10)
   | ItoF(x)    when memi x env -> Float(float_of_int (findi x env))
   | FtoI(x)    when memf x env -> Int(int_of_float (findf x env))
-  | Out(x,n)   when memi x env -> Out("ZERO", findi x env + n)
+  (* out *)
+  | Out(x,n)   when memi x env -> Out("%r0", findi x env + n)
+  (* **_init *)
   | Unknown("finv_init", t1, t2, x)
                 when memf x env -> let f = findf x env in if f = 0.0 then Float 0.0 else Float (1. /. f)
   | Unknown("sqrt_init", t1, t2, x)
                 when memf x env -> let f = findf x env in Float (sqrt f)
-(*  | FDiv(x, y) when memf x env && memf y env -> Float(findf x env /. findf y env) *)
   (* IfEq *)
   | IfEq(x, y, e1, e2) when memi x env && memi y env -> if findi x env = findi y env then g env e1 else g env e2
   | IfEq(x, y, e1, e2) -> IfEq(x, y, g env e1, g env e2)
@@ -64,4 +84,4 @@ let rec g env = function (* 定数畳み込みルーチン本体 (caml2html: constfold_g) *)
   | LetTuple(xts, y, e) -> LetTuple(xts, y, g env e)
   | e -> e
 
-let f = g (M.add "ZERO" (Int 0) M.empty)
+let f = g (M.add "%r0" (Int 0) M.empty)

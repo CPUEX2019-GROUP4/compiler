@@ -55,6 +55,8 @@ let rec fv = function
 
 let toplevel : fundef list ref = ref []
 
+let zero = S.singleton "%r0"
+
 let rec g env known = function (* クロージャ変換ルーチン本体 (caml2html: closure_g) *)
   | KNormal.Unit -> Unit
   | KNormal.Int(i) -> Int(i)
@@ -92,7 +94,7 @@ let rec g env known = function (* クロージャ変換ルーチン本体 (caml2html: closure
          (thanks to nuevo-namasute and azounoman; test/cls-bug2.ml参照) *)
       let zs = S.diff (fv e1') (S.of_list (List.map fst yts)) in
       let known', e1' =
-        if S.is_empty zs then known', e1' else
+        if S.is_empty zs || S.equal zs zero then known', e1' else
         (* 駄目だったら状態(toplevelの値)を戻して、クロージャ変換をやり直す *)
         (Format.eprintf "free variable(s) %s found in function %s@." (Id.pp_list (S.elements zs)) x;
          Format.eprintf "function %s cannot be directly applied in fact@." x;

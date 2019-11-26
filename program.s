@@ -1,8 +1,7 @@
     ori r29 r0 3072
     ori r30 r0 10240
 #    main program starts
-    addi r1 r0 120
-    out r1 0
+    out r0 120
 end_of_program:
 nop
      beq r0 r0 end_of_program
