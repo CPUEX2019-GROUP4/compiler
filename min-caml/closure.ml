@@ -92,16 +92,16 @@ let rec g env known = function (* クロージャ変換ルーチン本体 (caml2html: closure
       (* 本当に自由変数がなかったか、変換結果e1'を確認する *)
       (* 注意: e1'にx自身が変数として出現する場合はclosureが必要!
          (thanks to nuevo-namasute and azounoman; test/cls-bug2.ml参照) *)
-      let zs = S.diff (fv e1') (S.of_list (List.map fst yts)) in
+      let zs = S.remove "%r0" (S.diff (fv e1') (S.of_list (List.map fst yts))) in
       let known', e1' =
-        if S.is_empty zs || S.equal zs zero then known', e1' else
+        if S.is_empty zs then known', e1' else
         (* 駄目だったら状態(toplevelの値)を戻して、クロージャ変換をやり直す *)
         (Format.eprintf "free variable(s) %s found in function %s@." (Id.pp_list (S.elements zs)) x;
          Format.eprintf "function %s cannot be directly applied in fact@." x;
          toplevel := toplevel_backup;
          let e1' = g (M.add_list yts env') known e1 in
          known, e1') in
-      let zs = S.elements (S.diff (fv e1') (S.add x (S.of_list (List.map fst yts)))) in (* 自由変数のリスト *)
+      let zs = S.elements (S.remove "%r0" (S.diff (fv e1') (S.add x (S.of_list (List.map fst yts))))) in (* 自由変数のリスト *)
       let zts = List.map (fun z -> (z, M.find z env')) zs in (* ここで自由変数zの型を引くために引数envが必要 *)
       toplevel := { name = (Id.L(x), t); args = yts; formal_fv = zts; body = e1' } :: !toplevel; (* トップレベル関数を追加 *)
       let e2' = g env' known' e2 in
