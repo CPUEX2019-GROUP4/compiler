@@ -31,7 +31,7 @@ let rec g env = function (* 定数畳み込みルーチン本体 (caml2html: constfold_g) *)
   | Div10(x)   when memi x env -> Int(findi x env / 10)
   | ItoF(x)    when memi x env -> Float(float_of_int (findi x env))
   | FtoI(x)    when memf x env -> Int(int_of_float (findf x env))
-  | Out(x,n)   when memi x env -> Out(Int 0, findi x env + n)
+  | Out(x,n)   when memi x env -> Out("ZERO", findi x env + n)
   | Unknown("finv_init", t1, t2, x)
                 when memf x env -> let f = findf x env in if f = 0.0 then Float 0.0 else Float (1. /. f)
   | Unknown("sqrt_init", t1, t2, x)
@@ -64,4 +64,4 @@ let rec g env = function (* 定数畳み込みルーチン本体 (caml2html: constfold_g) *)
   | LetTuple(xts, y, e) -> LetTuple(xts, y, g env e)
   | e -> e
 
-let f = g M.empty
+let f = g (M.add "ZERO" (Int 0) M.empty)
