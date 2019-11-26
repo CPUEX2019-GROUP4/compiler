@@ -155,7 +155,7 @@ let rec fneg x = -. x in
 let rec abs_float x = fabs x in
 let rec fispos x = x >. 0.0 in
 let rec fisneg x = x <. 0.0 in
-print_int (int_of_float (sqrt 2.0))
+print_int (int_of_float ((sqrt 2.0)*.1000.0))
 (*let rec finit x =
   print_int (int_of_float ((UNKNOWN finv_init float float x) *. 100000000.0));
   print_char 10
