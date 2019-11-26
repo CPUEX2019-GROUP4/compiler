@@ -148,6 +148,10 @@ and g' oc = function (* 各命令のアセンブリ生成 (caml2html: emit_gprime) *)
   | NonTail(x), Unknown(f,t1,t2,y) ->
       if f = "fsqr" then
         Printf.fprintf oc "    fmul %s %s %s\n" (reg x) (reg y) (reg y)  (************)
+      else if f = "inint" then
+        Printf.fprintf oc "    %s %s %s\n    out %s 0\n" f (reg x) (reg y) (reg x)   (************)
+      else if f = "inflt" then
+        Printf.fprintf oc "    %s %s %s\n    out %s 0\n" f (reg x) (reg y) (reg x)   (************)
       else
         Printf.fprintf oc "    %s %s %s\n    #unknown instruction\n" f (reg x) (reg y)   (************)
   (* 末尾だったら計算結果を第一レジスタにセットしてリターン (caml2html: emit_tailret) *)
