@@ -1,7 +1,7 @@
 open KNormal
 
 let memi x env =
-  try (match M.find x env with Int(_) -> true | _ -> false)
+  try (match M.find x env with Int(_) -> true | Var("%r0") -> true | _ -> false)
   with Not_found -> false
 let memf x env =
   try (match M.find x env with Float(_) -> true | _ -> false)
@@ -10,39 +10,39 @@ let memt x env =
   try (match M.find x env with Tuple(_) -> true | _ -> false)
   with Not_found -> false
 
-let findi x env = (match M.find x env with Int(i) -> i | _ -> raise Not_found)
+let findi x env = (match M.find x env with Int(i) -> i | Var("%r0") -> 0 | _ -> raise Not_found)
 let findf x env = (match M.find x env with Float(d) -> d | _ -> raise Not_found)
 let findt x env = (match M.find x env with Tuple(ys) -> ys | _ -> raise Not_found)
 
 let rec g env = function (* 定数畳み込みルーチン本体 (caml2html: constfold_g) *)
-  | Var(x) when memi x env -> Int(findi x env)
+  | Int(0) -> Var("%r0")
+  | Var(x) when memi x env -> let n = findi x env in if n <> 0 then Int(n) else Var("%r0")
   | Var(x) when memf x env -> Float(findf x env)
-  | Var(x) when memt x env -> Tuple(findt x env)
-  (* neg *)
+  | Var(x) when memt x env -> Tuple(findt x env) (* neg *)
   | Neg(x) when memi x env -> Int(-(findi x env))
   (* add *)
   | Add(x, y) when memi x env && memi y env -> Int(findi x env + findi y env) (* 足し算のケース (caml2html: constfold_add) *)
-(*  | Add(x, y) as e when memi x env -> if findi x env = 0 then Var(y) else e
+  | Add(x, y) as e when memi x env -> if findi x env = 0 then Var(y) else e
   | Add(x, y) as e when memi y env -> if findi y env = 0 then Var(x) else e
-*)  (* sub *)
+  (* sub *)
   | Sub(x, y) when memi x env && memi y env -> Int(findi x env - findi y env)
-(*  | Sub(x, y) as e when memi x env -> if findi x env = 0 then Neg(y) else e
+  | Sub(x, y) as e when memi x env -> if findi x env = 0 then Neg(y) else e
   | Sub(x, y) as e when memi y env -> if findi y env = 0 then Var(x) else e
-*)  (* fneg *)
+  (* fneg *)
   | FNeg(x) when memf x env -> Float(-.(findf x env))
   (* fadd *)
   | FAdd(x, y) when memf x env && memf y env -> Float(findf x env +. findf y env)
-(*  | FAdd(x, y) as e when memf x env -> if findf x env = 0.0 then Var(y) else e
+  | FAdd(x, y) as e when memf x env -> if findf x env = 0.0 then Var(y) else e
   | FAdd(x, y) as e when memf y env -> if findf y env = 0.0 then Var(x) else e
-*)  (* fsub *)
+  (* fsub *)
   | FSub(x, y) when memf x env && memf y env -> Float(findf x env -. findf y env)
-(*  | FSub(x, y) as e when memf x env -> if findf x env = 0.0 then FNeg(y) else e
+  | FSub(x, y) as e when memf x env -> if findf x env = 0.0 then FNeg(y) else e
   | FSub(x, y) as e when memf y env -> if findf y env = 0.0 then Var(x) else e
-*)  (* fmul *)
+  (* fmul *)
   | FMul(x, y) when memf x env && memf y env -> Float(findf x env *. findf y env)
-(*  | FMul(x, y) as e when memf x env -> if findf x env = 1.0 then Var(y) else e
+  | FMul(x, y) as e when memf x env -> if findf x env = 1.0 then Var(y) else e
   | FMul(x, y) as e when memf y env -> if findf y env = 1.0 then Var(x) else e
-*)(*| FDiv(x, y) when memf x env && memf y env -> Float(findf x env /. findf y env) *)
+(*| FDiv(x, y) when memf x env && memf y env -> Float(findf x env /. findf y env) *)
   (* mul/div/ftoi/itof *)
   | Mul4(x)    when memi x env -> Int(findi x env * 4)
   | Mul10(x)   when memi x env -> Int(findi x env * 10)

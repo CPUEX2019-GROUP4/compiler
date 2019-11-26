@@ -155,6 +155,7 @@ let rec fneg x = -. x in
 let rec abs_float x = fabs x in
 let rec fispos x = x >. 0.0 in
 let rec fisneg x = x <. 0.0 in
-let rec f x =
-  out 0 x
-in f 120
+let a = 0 in
+let b = 0 in
+let rec f x = a + b + x in
+print_int (f 20)

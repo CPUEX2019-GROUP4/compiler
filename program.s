@@ -1,7 +1,8 @@
     ori r29 r0 3072
     ori r30 r0 10240
 #    main program starts
-    out r0 120
+    out r0 50
+    out r0 48
 end_of_program:
 nop
      beq r0 r0 end_of_program

@@ -44,9 +44,9 @@ let rec fv = function
   | Neg(x) | FNeg(x) | Mul4(x) | Mul10(x) | Div2(x) | Div10(x) | FtoI(x) | ItoF(x) | Out(x,_) | Unknown(_,_,_,x)-> S.remove "%r0" (S.singleton x)
   | Add(x, y) | Sub(x, y) | FAdd(x, y) | FSub(x, y) | FMul(x, y) | FDiv(x, y) | Get(x, y) -> S.remove "%r0" (S.of_list [x; y])
   | IfFZero(x,e1,e2) -> S.add x (S.union (fv e1) (fv e2))
-  | IfEq(x, y, e1, e2)| IfLE(x, y, e1, e2) | IfFLt(x, y, e1, e2) -> S.add x (S.add y (S.union (fv e1) (fv e2)))
+  | IfEq(x, y, e1, e2)| IfLE(x, y, e1, e2) | IfFLt(x, y, e1, e2) -> S.remove "%r0" (S.add x (S.add y (S.union (fv e1) (fv e2))))
   | Let((x, t), e1, e2) -> S.union (fv e1) (S.remove x (fv e2))
-  | Var(x) -> S.singleton x
+  | Var(x) -> S.remove "%r0" (S.singleton x)
   | MakeCls((x, t), { entry = l; actual_fv = ys }, e) -> S.remove "%r0" (S.remove x (S.union (S.of_list ys) (fv e)))
   | AppCls(x, ys) -> S.remove "%r0" (S.of_list (x :: ys))
   | AppDir(_, xs) | Tuple(xs) -> S.remove "%r0" (S.of_list xs)
@@ -54,8 +54,6 @@ let rec fv = function
   | Put(x, y, z) -> S.remove "%r0" (S.of_list [x; y; z])
 
 let toplevel : fundef list ref = ref []
-
-let zero = S.singleton "%r0"
 
 let rec g env known = function (* クロージャ変換ルーチン本体 (caml2html: closure_g) *)
   | KNormal.Unit -> Unit
@@ -124,6 +122,8 @@ let rec g env known = function (* クロージャ変換ルーチン本体 (caml2html: closure
   | KNormal.Unknown(a,b,c,d) -> Unknown(a,b,c,d)
 
 let f e =
+  print_string "------------------closure.ml----------------";
+  print_newline ();
   toplevel := [];
   let e' = g M.empty S.empty e in
   Prog(List.rev !toplevel, e')

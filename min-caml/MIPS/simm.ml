@@ -39,4 +39,6 @@ let h { name = l; args = xs; fargs = ys; body = e; ret = t } = (* トップレベル関
   { name = l; args = xs; fargs = ys; body = g M.empty e; ret = t }
 
 let f (Prog(fundefs, e)) = (* プログラム全体の16bit即値最適化 *)
+  print_string "------------------simm.ml----------------";
+  print_newline ();
   Prog(List.map h fundefs, g M.empty e)
