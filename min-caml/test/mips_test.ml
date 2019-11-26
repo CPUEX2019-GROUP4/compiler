@@ -1,11 +1,11 @@
 (* finv *)
 let rec finv x =
-  (if fiszero x then x else
+(*  (if fiszero x then x else*)
   let t = UNKNOWN finv_init float float x in
   let two = 2.0 in
   let t = (t *. (two -. x *. t)) in
   let t = (t *. (two -. x *. t)) in
-  t)
+  t(*)*)
 in
 (* fdiv *)
 let rec fdiv x y = x *. (finv y) in
@@ -155,8 +155,10 @@ let rec fneg x = -. x in
 let rec abs_float x = fabs x in
 let rec fispos x = x >. 0.0 in
 let rec fisneg x = x <. 0.0 in
-let rec finit x =
+print_int (int_of_float (sqrt 2.0))
+(*let rec finit x =
   print_int (int_of_float ((UNKNOWN finv_init float float x) *. 100000000.0));
   print_char 10
 in
   finit 0.0; print_char 0
+  *)

@@ -1,11 +1,11 @@
 (* finv *)
 let rec finv x =
-  (if fiszero x then x else
+(*  (if fiszero x then x else*)
   let t = UNKNOWN finv_init float float x in
   let two = 2.0 in
   let t = (t *. (two -. x *. t)) in
   let t = (t *. (two -. x *. t)) in
-  t)
+  t(*)*)
 in
 (* fdiv *)
 let rec fdiv x y = x *. (finv y) in

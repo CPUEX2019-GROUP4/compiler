@@ -20,7 +20,7 @@ cd min-caml
 make min-caml
 cp MIPS/library.ml test/mips_test.ml
 cat test/$1.ml >> test/mips_test.ml
-./min-caml test/mips_test -inline 30
+./min-caml test/mips_test -inline 70
 rm test/$1.ans
 make test/$1.ans
 cp test/mips_test.s ../simulator/simulator/sim/mips_test.s

@@ -1,32 +1,28 @@
 ----- syntax.print -----
 LETREC finv (VAR of )
   (x : VAR of )
-  IF
-    FZero?
+  LET t (VAR of )
+    UNKNOWN APP      finv_init
       VAR x
-    VAR x
-    LET t (VAR of )
-      UNKNOWN APP        finv_init
-        VAR x
-    LET two (VAR of )
-      FLOAT 2.
-    LET t (VAR of )
-      FMUL
-        VAR t
-        FSUB
-          VAR two
-          FMUL
-            VAR x
-            VAR t
-    LET t (VAR of )
-      FMUL
-        VAR t
-        FSUB
-          VAR two
-          FMUL
-            VAR x
-            VAR t
-    VAR t
+  LET two (VAR of )
+    FLOAT 2.
+  LET t (VAR of )
+    FMUL
+      VAR t
+      FSUB
+        VAR two
+        FMUL
+          VAR x
+          VAR t
+  LET t (VAR of )
+    FMUL
+      VAR t
+      FSUB
+        VAR two
+        FMUL
+          VAR x
+          VAR t
+  VAR t
 LETREC fdiv (VAR of )
   (x : VAR of ), (y : VAR of )
   FMUL
@@ -7292,33 +7288,31 @@ APP
 ----- kNormal.print -----
 letrec finv : (FLOAT -> FLOAT) =
 variables : (x : FLOAT)
-  if x == 0.0 
-    x
-    let t : FLOAT =
-      unknown finv_init x
-    in
-    let two : FLOAT =
-      float 2.
-    in
-    let t : FLOAT =
-      let Td2528 : FLOAT =
-        let Td2527 : FLOAT =
-          fmul x t
-        in
-        fsub two Td2527
+  let t : FLOAT =
+    unknown finv_init x
+  in
+  let two : FLOAT =
+    float 2.
+  in
+  let t : FLOAT =
+    let Td2528 : FLOAT =
+      let Td2527 : FLOAT =
+        fmul x t
       in
-      fmul t Td2528
+      fsub two Td2527
     in
-    let t : FLOAT =
-      let Td2530 : FLOAT =
-        let Td2529 : FLOAT =
-          fmul x t
-        in
-        fsub two Td2529
+    fmul t Td2528
+  in
+  let t : FLOAT =
+    let Td2530 : FLOAT =
+      let Td2529 : FLOAT =
+        fmul x t
       in
-      fmul t Td2530
+      fsub two Td2529
     in
-    t
+    fmul t Td2530
+  in
+  t
 in
 letrec fdiv : (FLOAT -> (FLOAT -> FLOAT)) =
 variables : (x : FLOAT), (y : FLOAT)
