@@ -12,8 +12,8 @@ min-caml/raytracer/galois.ml
 min-caml/raytracer/galois.s
 gomi/
 data/
-program.txt
-commit.sh
+/program.txt
+/commit.sh
 binary_conversion/Untitled.ipynb
-syntax.txt
+/syntax.txt
 binary_conversion/.*

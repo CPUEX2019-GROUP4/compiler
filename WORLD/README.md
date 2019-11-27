@@ -31,7 +31,7 @@ input file for vivado simulator. (0-1 file)
 Take diff if you succeeded in making .ppm file from FPGA.
 
 ### base.sld
-total executed instructions:   168,739,659
+total executed instructions:   152,635,203
 
 ### contest.sld
-total executed instructions: 2,588,518,923
+total executed instructions: 2,298,880,686
