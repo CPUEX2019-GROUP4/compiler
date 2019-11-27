@@ -1,4 +1,3 @@
-let a = 0 in
-let b = 0 in
-let rec f x = a + b + x in
-print_int (f 20)
+let a = create_array 3 0 in
+let rec f x = a.(0) <- 4 in
+print_int (f 3; a.(0))
