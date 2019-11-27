@@ -18,6 +18,7 @@ type t = (* K正規化後の式 (caml2html: knormal_t) *)
   | FSub of Id.t * Id.t
   | FMul of Id.t * Id.t
   | FDiv of Id.t * Id.t
+  | LE   of Id.t * Id.t
   | IfEq of Id.t * Id.t * t * t (* 比較 + 分岐 (caml2html: knormal_branch) *)
   | IfLE of Id.t * Id.t * t * t (* 比較 + 分岐 *)
   | IfFLt of Id.t * Id.t * t * t (* float 比較 + 分岐 *)
@@ -39,7 +40,7 @@ and fundef = { name : Id.t * Type.t; args : (Id.t * Type.t) list; body : t }
 let rec fv = function (* 式に出現する（自由な）変数 (caml2html: knormal_fv) *)
   | Unit | Int(_) | Float(_) | ExtArray(_) -> S.empty
   | Neg(x) | FNeg(x) | Mul4(x) | Mul10(x) | Div2(x) | Div10(x) | FtoI(x) | ItoF(x) | Out(x,_) | Unknown(_,_,_,x) -> S.singleton x
-  | Add(x, y) | Sub(x, y) | FAdd(x, y) | FSub(x, y) | FMul(x, y) | FDiv(x, y) | Get(x, y) -> S.of_list [x; y]
+  | Add(x, y) | Sub(x, y) | FAdd(x, y) | FSub(x, y) | FMul(x, y) | FDiv(x, y) | Get(x, y) | LE(x,y)-> S.of_list [x; y]
   | IfFZero(x,e1,e2) -> S.add x (S.union (fv e1) (fv e2))
   | IfEq(x, y, e1, e2) | IfLE(x, y, e1, e2) | IfFLt(x, y, e1, e2)-> S.add x (S.add y (S.union (fv e1) (fv e2)))
   | Let((x, t), e1, e2) -> S.union (fv e1) (S.remove x (fv e2))
@@ -114,8 +115,12 @@ let rec g env = function (* K正規化ルーチン本体 (caml2html: knormal_g) *)
       insert_let (g env e1)
         (fun x -> insert_let (g env e2)
             (fun y -> FDiv(x, y), Type.Float))
-  | Syntax.Eq _ | Syntax.LE _ | Syntax.FLt _ | Syntax.FZero _ as cmp ->
+  | Syntax.Eq _ | Syntax.FLt _ | Syntax.FZero _ as cmp ->
       g env (Syntax.If(cmp, Syntax.Bool(true), Syntax.Bool(false)))
+  | Syntax.LE(e1, e2)  ->
+      insert_let (g env e1)
+        (fun x -> insert_let (g env e2)
+            (fun y -> LE(x, y), Type.Bool))
   | Syntax.If(Syntax.Not(e1), e2, e3) -> g env (Syntax.If(e1, e3, e2)) (* notによる分岐を変換 (caml2html: knormal_not) *)
   | Syntax.If(Syntax.Eq(e1, e2), e3, e4) ->
       insert_let (g env e1)
@@ -268,6 +273,7 @@ let rec print e i =
   | FSub (x,y) -> p ("fsub " ^ x ^ " " ^ y)
   | FMul (x,y) -> p ("fmul " ^ x ^ " " ^ y)
   | FDiv (x,y) -> p ("fdiv " ^ x ^ " " ^ y)
+  | LE (x,y) -> p (x ^ "<=" ^ y)
   | IfEq (a,b,e1,e2) -> p ("if " ^ a ^ " == " ^ b); print_newline ();
                         print e1 j; print_newline (); print e2 j
   | IfLE (a,b,e1,e2) -> p ("if " ^ a ^ " <= " ^ b); print_newline ();

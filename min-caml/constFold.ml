@@ -50,6 +50,7 @@ let rec g env = function (* 定数畳み込みルーチン本体 (caml2html: constfold_g) *)
   | Div10(x)   when memi x env -> Int(findi x env / 10)
   | ItoF(x)    when memi x env -> Float(float_of_int (findi x env))
   | FtoI(x)    when memf x env -> Int(int_of_float (findf x env))
+  | LE(x,y)    when memi x env && memi y env -> if x <= y then Int 1 else Int 0
   (* out *)
   | Out(x,n)   when memi x env -> Out("%r0", findi x env + n)
   (* **_init *)

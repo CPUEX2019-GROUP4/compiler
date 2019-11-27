@@ -31,7 +31,6 @@ let expand xts ini addf addi =
     xts
     ini
     (fun (offset, acc) x ->
-      let offset = align offset in
       (offset + 4, addf x offset acc))
     (fun (offset, acc) x t ->
       (offset + 4, addi x t offset acc))
@@ -66,6 +65,7 @@ let rec g env = function (* 式の仮想マシンコード生成 (caml2html: virtual_g) *)
   | Closure.FSub(x, y) -> Ans(FSub(x, y))
   | Closure.FMul(x, y) -> Ans(FMul(x, y))
   | Closure.FDiv(x, y) -> Ans(FDiv(x, y))
+  | Closure.LE(x,y) -> Ans(LE(V(x),y))
   | Closure.IfEq(x, y, e1, e2) ->
       (match find x env with
       | Type.Bool | Type.Int -> Ans(IfEq(x, V(y), g env e1, g env e2))
@@ -99,7 +99,7 @@ let rec g env = function (* 式の仮想マシンコード生成 (caml2html: virtual_g) *)
           (fun y offset store_fv -> seq(Stfd(y, x, C(offset)), store_fv))
           (fun y _ offset store_fv -> seq(Stw(y, x, C(offset)), store_fv)) in
       Let((x, t), Mr(reg_hp),
-          Let((reg_hp, Type.Int), Add(reg_hp, C(align offset)),
+          Let((reg_hp, Type.Int), Add(reg_hp, C(offset)),
               let z = Id.genid "l" in
               Let((z, Type.Int), SetL(l),
                   seq(Stw(z, x, C(0)),
@@ -119,7 +119,7 @@ let rec g env = function (* 式の仮想マシンコード生成 (caml2html: virtual_g) *)
           (fun x offset store -> seq(Stfd(x, y, C(offset)), store))
           (fun x _ offset store -> seq(Stw(x, y, C(offset)), store))  in
       Let((y, Type.Tuple(List.map (fun x -> find x env) xs)), Mr(reg_hp),
-          Let((reg_hp, Type.Int), Add(reg_hp, C(align offset)),
+          Let((reg_hp, Type.Int), Add(reg_hp, C(offset)),
               store))
   | Closure.LetTuple(xts, y, e2) ->
       let s = Closure.fv e2 in

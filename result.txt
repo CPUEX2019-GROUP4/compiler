@@ -1,0 +1,1536 @@
+2
+test.txt
+-----mips_test.s-----
+ocamldep emit.ml > ._d/emit.d
+ocamlc -c -g emit.ml
+----- syntax.print -----
+LETREC finv (VAR of )
+  (x : VAR of )
+  LET t (VAR of )
+    UNKNOWN APP      finv_init
+      VAR x
+  LET two (VAR of )
+    FLOAT 2.
+  LET t (VAR of )
+    FMUL
+      VAR t
+      FSUB
+        VAR two
+        FMUL
+          VAR x
+          VAR t
+  LET t (VAR of )
+    FMUL
+      VAR t
+      FSUB
+        VAR two
+        FMUL
+          VAR x
+          VAR t
+  VAR t
+LETREC fdiv (VAR of )
+  (x : VAR of ), (y : VAR of )
+  FMUL
+    VAR x
+    APP
+      VAR finv
+      VAR y
+LETREC print_int (VAR of )
+  (n : VAR of )
+  LET n (VAR of )
+    IF
+      NOT
+        LE
+          INT 0
+          VAR n
+      LET Tu1 (UNIT)
+        OUT
+          INT 45        0
+      NEG
+        VAR n
+      VAR n
+  IF
+    NOT
+      LE
+        INT 10
+        VAR n
+    OUT
+      VAR n    48
+    LET m (VAR of )
+      DIVIDE BY 10
+        VAR n
+    LET Tu2 (UNIT)
+      APP
+        VAR print_int
+        VAR m
+    OUT
+      SUB
+        VAR n
+        MULTIPLE 10
+          VAR m    48
+LETREC print_newline (VAR of )
+  (Tu3 : VAR of )
+  OUT
+    INT 0  10
+LETREC reduction_2pi_sub1 (VAR of )
+  (v : VAR of )
+  IF
+    FLt
+      GET
+        VAR v
+        INT 0
+      GET
+        VAR v
+        INT 1
+    UNIT
+    LET Tu4 (UNIT)
+      PUT
+        VAR v
+        INT 1
+        FMUL
+          GET
+            VAR v
+            INT 1
+          FLOAT 2.
+    APP
+      VAR reduction_2pi_sub1
+      VAR v
+LETREC reduction_2pi_sub2 (VAR of )
+  (v : VAR of )
+  IF
+    FLt
+      FLOAT 6.28318530718
+      GET
+        VAR v
+        INT 0
+    LET Tu6 (UNIT)
+      IF
+        FLt
+          GET
+            VAR v
+            INT 1
+          GET
+            VAR v
+            INT 0
+        PUT
+          VAR v
+          INT 0
+          FSUB
+            GET
+              VAR v
+              INT 0
+            GET
+              VAR v
+              INT 1
+        UNIT
+    LET Tu5 (UNIT)
+      PUT
+        VAR v
+        INT 1
+        APP
+          VAR fdiv
+          GET
+            VAR v
+            INT 1
+          FLOAT 2.
+    APP
+      VAR reduction_2pi_sub2
+      VAR v
+    UNIT
+LETREC reduction_2pi (VAR of )
+  (v : VAR of )
+  LET Tu8 (UNIT)
+    PUT
+      VAR v
+      INT 1
+      FLOAT 6.28318530718
+  LET Tu7 (UNIT)
+    APP
+      VAR reduction_2pi_sub1
+      VAR v
+  APP
+    VAR reduction_2pi_sub2
+    VAR v
+LETREC kernel_sin (VAR of )
+  (a : VAR of )
+  LET a2 (VAR of )
+    FMUL
+      VAR a
+      VAR a
+  LET a3 (VAR of )
+    FMUL
+      VAR a2
+      VAR a
+  LET a5 (VAR of )
+    FMUL
+      VAR a3
+      VAR a2
+  LET a7 (VAR of )
+    FMUL
+      VAR a5
+      VAR a2
+  FSUB
+    FADD
+      FSUB
+        VAR a
+        FMUL
+          FLOAT 0.16666668
+          VAR a3
+      FMUL
+        FLOAT 0.008332824
+        VAR a5
+    FMUL
+      FLOAT 0.00019587841
+      VAR a7
+LETREC kernel_cos (VAR of )
+  (a : VAR of )
+  LET a2 (VAR of )
+    FMUL
+      VAR a
+      VAR a
+  LET a4 (VAR of )
+    FMUL
+      VAR a2
+      VAR a2
+  LET a6 (VAR of )
+    FMUL
+      VAR a4
+      VAR a2
+  FSUB
+    FADD
+      FSUB
+        FLOAT 1.
+        FMUL
+          FLOAT 0.5
+          VAR a2
+      FMUL
+        FLOAT 0.04166368
+        VAR a4
+    FMUL
+      FLOAT 0.0013695068
+      VAR a6
+LETREC sin (VAR of )
+  (a : VAR of )
+  LET v (VAR of )
+    ARRAY
+      INT 3
+      VAR a
+  LET Tu13 (UNIT)
+    IF
+      FLt
+        VAR a
+        FLOAT 0.
+      PUT
+        VAR v
+        INT 0
+        NEG
+          VAR a
+      UNIT
+  LET Tu12 (UNIT)
+    APP
+      VAR reduction_2pi
+      VAR v
+  LET Tu11 (UNIT)
+    IF
+      FLt
+        FLOAT 3.14159265359
+        GET
+          VAR v
+          INT 0
+      LET Tu9 (UNIT)
+        PUT
+          VAR v
+          INT 0
+          FSUB
+            GET
+              VAR v
+              INT 0
+            FLOAT 3.14159265359
+      PUT
+        VAR v
+        INT 2
+        NEG
+          GET
+            VAR v
+            INT 2
+      UNIT
+  LET Tu10 (UNIT)
+    IF
+      FLt
+        FLOAT 1.57079632679
+        GET
+          VAR v
+          INT 0
+      PUT
+        VAR v
+        INT 0
+        FSUB
+          FLOAT 3.14159265359
+          GET
+            VAR v
+            INT 0
+      UNIT
+  LET x (VAR of )
+    IF
+      FLt
+        FLOAT 0.785398163397
+        GET
+          VAR v
+          INT 0
+      APP
+        VAR kernel_cos
+        FSUB
+          FLOAT 1.57079632679
+          GET
+            VAR v
+            INT 0
+      APP
+        VAR kernel_sin
+        GET
+          VAR v
+          INT 0
+  IF
+    FLt
+      GET
+        VAR v
+        INT 2
+      FLOAT 0.
+    NEG
+      VAR x
+    VAR x
+LETREC cos (VAR of )
+  (a : VAR of )
+  LET a (VAR of )
+    IF
+      FLt
+        VAR a
+        FLOAT 0.
+      NEG
+        VAR a
+      VAR a
+  LET v (VAR of )
+    ARRAY
+      INT 3
+      VAR a
+  LET Tu18 (UNIT)
+    APP
+      VAR reduction_2pi
+      VAR v
+  LET Tu17 (UNIT)
+    IF
+      FLt
+        FLOAT 3.14159265359
+        GET
+          VAR v
+          INT 0
+      LET Tu14 (UNIT)
+        PUT
+          VAR v
+          INT 0
+          FSUB
+            GET
+              VAR v
+              INT 0
+            FLOAT 3.14159265359
+      PUT
+        VAR v
+        INT 2
+        FLOAT -1.
+      UNIT
+  LET Tu16 (UNIT)
+    IF
+      FLt
+        FLOAT 1.57079632679
+        GET
+          VAR v
+          INT 0
+      LET Tu15 (UNIT)
+        PUT
+          VAR v
+          INT 0
+          FSUB
+            FLOAT 3.14159265359
+            GET
+              VAR v
+              INT 0
+      PUT
+        VAR v
+        INT 2
+        NEG
+          GET
+            VAR v
+            INT 2
+      UNIT
+  LET x (VAR of )
+    IF
+      FLt
+        GET
+          VAR v
+          INT 0
+        FLOAT 0.785398163397
+      APP
+        VAR kernel_cos
+        GET
+          VAR v
+          INT 0
+      APP
+        VAR kernel_sin
+        FSUB
+          FLOAT 1.57079632679
+          GET
+            VAR v
+            INT 0
+  IF
+    FLt
+      GET
+        VAR v
+        INT 2
+      FLOAT 0.
+    NEG
+      VAR x
+    VAR x
+LETREC sqrt (VAR of )
+  (x : VAR of )
+  IF
+    FLt
+      FLOAT 0.
+      VAR x
+    LET t (VAR of )
+      UNKNOWN APP        sqrt_init
+        VAR x
+    LET t (VAR of )
+      APP
+        VAR fdiv
+        FADD
+          FMUL
+            VAR t
+            VAR t
+          VAR x
+        FADD
+          VAR t
+          VAR t
+    LET t (VAR of )
+      APP
+        VAR fdiv
+        FADD
+          FMUL
+            VAR t
+            VAR t
+          VAR x
+        FADD
+          VAR t
+          VAR t
+    VAR t
+    FLOAT 0.
+LETREC kernel_atan (VAR of )
+  (a1 : VAR of )
+  LET a2 (VAR of )
+    FMUL
+      VAR a1
+      VAR a1
+  LET a3 (VAR of )
+    FMUL
+      VAR a2
+      VAR a1
+  LET a5 (VAR of )
+    FMUL
+      VAR a2
+      VAR a3
+  LET a7 (VAR of )
+    FMUL
+      VAR a2
+      VAR a5
+  LET a9 (VAR of )
+    FMUL
+      VAR a2
+      VAR a7
+  LET a11 (VAR of )
+    FMUL
+      VAR a2
+      VAR a9
+  LET a13 (VAR of )
+    FMUL
+      VAR a2
+      VAR a11
+  FADD
+    FSUB
+      FADD
+        FSUB
+          FADD
+            FSUB
+              VAR a1
+              FMUL
+                FLOAT 0.3333333
+                VAR a3
+            FMUL
+              FLOAT 0.2
+              VAR a5
+          FMUL
+            FLOAT 0.142857142
+            VAR a7
+        FMUL
+          FLOAT 0.111111104
+          VAR a9
+      FMUL
+        FLOAT 0.08976446
+        VAR a11
+    FMUL
+      FLOAT 0.060035485
+      VAR a13
+LETREC atan (VAR of )
+  (a : VAR of )
+  LET flag (VAR of )
+    FLt
+      FLOAT 0.
+      VAR a
+  LET a (VAR of )
+    IF
+      VAR flag
+      VAR a
+      NEG
+        VAR a
+  LET b (VAR of )
+    IF
+      FLt
+        VAR a
+        FLOAT 0.4375
+      APP
+        VAR kernel_atan
+        VAR a
+      IF
+        FLt
+          VAR a
+          FLOAT 2.4375
+        FADD
+          FLOAT 0.785398163397
+          APP
+            VAR kernel_atan
+            APP
+              VAR fdiv
+              FSUB
+                VAR a
+                FLOAT 1.
+              FADD
+                VAR a
+                FLOAT 1.
+        FSUB
+          FLOAT 1.57079632679
+          APP
+            VAR kernel_atan
+            APP
+              VAR fdiv
+              FLOAT 1.
+              VAR a
+  IF
+    VAR flag
+    VAR b
+    NEG
+      VAR b
+LETREC floor (VAR of )
+  (x : VAR of )
+  LET a (VAR of )
+    int_to_float
+      float_to_int
+        VAR x
+  IF
+    FLt
+      VAR x
+      VAR a
+    FSUB
+      VAR a
+      FLOAT 1.
+    VAR a
+LETREC fabs (VAR of )
+  (f : VAR of )
+  IF
+    FLt
+      VAR f
+      FLOAT 0.
+    NEG
+      VAR f
+    VAR f
+LETREC fhalf (VAR of )
+  (x : VAR of )
+  FMUL
+    VAR x
+    FLOAT 0.5
+LETREC fneg (VAR of )
+  (x : VAR of )
+  NEG
+    VAR x
+LETREC abs_float (VAR of )
+  (x : VAR of )
+  APP
+    VAR fabs
+    VAR x
+LETREC fispos (VAR of )
+  (x : VAR of )
+  FLt
+    FLOAT 0.
+    VAR x
+LETREC fisneg (VAR of )
+  (x : VAR of )
+  FLt
+    VAR x
+    FLOAT 0.
+LETREC and (VAR of )
+  (x : VAR of ), (y : VAR of )
+  IF
+    EQ
+      VAR x
+      BOOL true
+    VAR y
+    BOOL false
+APP
+  VAR print_int
+  IF
+    APP
+      VAR and
+      LE
+        INT 1
+        INT 2
+      NOT
+        LE
+          INT 2
+          INT 4
+    INT 0
+    INT 1oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+----- kNormal.print -----
+letrec finv : (FLOAT -> FLOAT) =
+variables : (x : FLOAT)
+  let t : FLOAT =
+    unknown finv_init x
+  in
+  let two : FLOAT =
+    float 2.
+  in
+  let t : FLOAT =
+    let Td201 : FLOAT =
+      let Td200 : FLOAT =
+        fmul x t
+      in
+      fsub two Td200
+    in
+    fmul t Td201
+  in
+  let t : FLOAT =
+    let Td203 : FLOAT =
+      let Td202 : FLOAT =
+        fmul x t
+      in
+      fsub two Td202
+    in
+    fmul t Td203
+  in
+  t
+in
+letrec fdiv : (FLOAT -> (FLOAT -> FLOAT)) =
+variables : (x : FLOAT), (y : FLOAT)
+  let Td199 : FLOAT =
+    app
+      finv
+      y
+  in
+  fmul x Td199
+in
+letrec print_int : (INT -> UNIT) =
+variables : (n : INT)
+  let n : INT =
+    let Ti194 : INT =
+      int 0
+    in
+    if Ti194 <= n
+      n
+      let Tu1 : UNIT =
+        let Ti195 : INT =
+          int 45
+        in
+        out Ti195 0
+      in
+      neg n
+  in
+  let Ti196 : INT =
+    int 10
+  in
+  if Ti196 <= n
+    let m : INT =
+      div n 10
+    in
+    let Tu2 : UNIT =
+      app
+        print_int
+        m
+    in
+    let Ti198 : INT =
+      let Ti197 : INT =
+        mul m 10
+      in
+      sub n Ti197
+    in
+    out Ti198 48
+    out n 48
+in
+letrec print_newline : (INT -> UNIT) =
+variables : (Tu3 : INT)
+  let Ti193 : INT =
+    int 0
+  in
+  out Ti193 10
+in
+letrec reduction_2pi_sub1 : (Array of FLOAT -> UNIT) =
+variables : (v : Array of FLOAT)
+  let Td185 : FLOAT =
+    let Ti184 : INT =
+      int 0
+    in
+    v.(Ti184)
+  in
+  let Td187 : FLOAT =
+    let Ti186 : INT =
+      int 1
+    in
+    v.(Ti186)
+  in
+  if Td185 <. Td187
+    unit ()
+    let Tu4 : UNIT =
+      let Ti188 : INT =
+        int 1
+      in
+      let Td192 : FLOAT =
+        let Td190 : FLOAT =
+          let Ti189 : INT =
+            int 1
+          in
+          v.(Ti189)
+        in
+        let Td191 : FLOAT =
+          float 2.
+        in
+        fmul Td190 Td191
+      in
+      v.(Ti188) <- Td192
+    in
+    app
+      reduction_2pi_sub1
+      v
+in
+letrec reduction_2pi_sub2 : (Array of FLOAT -> UNIT) =
+variables : (v : Array of FLOAT)
+  let Td166 : FLOAT =
+    float 6.28318530718
+  in
+  let Td168 : FLOAT =
+    let Ti167 : INT =
+      int 0
+    in
+    v.(Ti167)
+  in
+  if Td166 <. Td168
+    let Tu6 : UNIT =
+      let Td170 : FLOAT =
+        let Ti169 : INT =
+          int 1
+        in
+        v.(Ti169)
+      in
+      let Td172 : FLOAT =
+        let Ti171 : INT =
+          int 0
+        in
+        v.(Ti171)
+      in
+      if Td170 <. Td172
+        let Ti173 : INT =
+          int 0
+        in
+        let Td178 : FLOAT =
+          let Td175 : FLOAT =
+            let Ti174 : INT =
+              int 0
+            in
+            v.(Ti174)
+          in
+          let Td177 : FLOAT =
+            let Ti176 : INT =
+              int 1
+            in
+            v.(Ti176)
+          in
+          fsub Td175 Td177
+        in
+        v.(Ti173) <- Td178
+        unit ()
+    in
+    let Tu5 : UNIT =
+      let Ti179 : INT =
+        int 1
+      in
+      let Td183 : FLOAT =
+        let Td181 : FLOAT =
+          let Ti180 : INT =
+            int 1
+          in
+          v.(Ti180)
+        in
+        let Td182 : FLOAT =
+          float 2.
+        in
+        app
+          fdiv
+          Td181
+          Td182
+      in
+      v.(Ti179) <- Td183
+    in
+    app
+      reduction_2pi_sub2
+      v
+    unit ()
+in
+letrec reduction_2pi : (Array of FLOAT -> UNIT) =
+variables : (v : Array of FLOAT)
+  let Tu8 : UNIT =
+    let Ti164 : INT =
+      int 1
+    in
+    let Td165 : FLOAT =
+      float 6.28318530718
+    in
+    v.(Ti164) <- Td165
+  in
+  let Tu7 : UNIT =
+    app
+      reduction_2pi_sub1
+      v
+  in
+  app
+    reduction_2pi_sub2
+    v
+in
+letrec kernel_sin : (FLOAT -> FLOAT) =
+variables : (a : FLOAT)
+  let a2 : FLOAT =
+    fmul a a
+  in
+  let a3 : FLOAT =
+    fmul a2 a
+  in
+  let a5 : FLOAT =
+    fmul a3 a2
+  in
+  let a7 : FLOAT =
+    fmul a5 a2
+  in
+  let Td161 : FLOAT =
+    let Td158 : FLOAT =
+      let Td157 : FLOAT =
+        let Td156 : FLOAT =
+          float 0.16666668
+        in
+        fmul Td156 a3
+      in
+      fsub a Td157
+    in
+    let Td160 : FLOAT =
+      let Td159 : FLOAT =
+        float 0.008332824
+      in
+      fmul Td159 a5
+    in
+    fadd Td158 Td160
+  in
+  let Td163 : FLOAT =
+    let Td162 : FLOAT =
+      float 0.00019587841
+    in
+    fmul Td162 a7
+  in
+  fsub Td161 Td163
+in
+letrec kernel_cos : (FLOAT -> FLOAT) =
+variables : (a : FLOAT)
+  let a2 : FLOAT =
+    fmul a a
+  in
+  let a4 : FLOAT =
+    fmul a2 a2
+  in
+  let a6 : FLOAT =
+    fmul a4 a2
+  in
+  let Td153 : FLOAT =
+    let Td150 : FLOAT =
+      let Td147 : FLOAT =
+        float 1.
+      in
+      let Td149 : FLOAT =
+        let Td148 : FLOAT =
+          float 0.5
+        in
+        fmul Td148 a2
+      in
+      fsub Td147 Td149
+    in
+    let Td152 : FLOAT =
+      let Td151 : FLOAT =
+        float 0.04166368
+      in
+      fmul Td151 a4
+    in
+    fadd Td150 Td152
+  in
+  let Td155 : FLOAT =
+    let Td154 : FLOAT =
+      float 0.0013695068
+    in
+    fmul Td154 a6
+  in
+  fsub Td153 Td155
+in
+letrec sin : (FLOAT -> FLOAT) =
+variables : (a : FLOAT)
+  let v : Array of FLOAT =
+    let Ti111 : INT =
+      int 3
+    in
+    extfunapp
+      create_float_array
+      Ti111
+      a
+  in
+  let Tu13 : UNIT =
+    let Td112 : FLOAT =
+      float 0.
+    in
+    if a <. Td112
+      let Ti113 : INT =
+        int 0
+      in
+      let Td114 : FLOAT =
+        fneg a
+      in
+      v.(Ti113) <- Td114
+      unit ()
+  in
+  let Tu12 : UNIT =
+    app
+      reduction_2pi
+      v
+  in
+  let Tu11 : UNIT =
+    let Td115 : FLOAT =
+      float 3.14159265359
+    in
+    let Td117 : FLOAT =
+      let Ti116 : INT =
+        int 0
+      in
+      v.(Ti116)
+    in
+    if Td115 <. Td117
+      let Tu9 : UNIT =
+        let Ti118 : INT =
+          int 0
+        in
+        let Td122 : FLOAT =
+          let Td120 : FLOAT =
+            let Ti119 : INT =
+              int 0
+            in
+            v.(Ti119)
+          in
+          let Td121 : FLOAT =
+            float 3.14159265359
+          in
+          fsub Td120 Td121
+        in
+        v.(Ti118) <- Td122
+      in
+      let Ti123 : INT =
+        int 2
+      in
+      let Td126 : FLOAT =
+        let Td125 : FLOAT =
+          let Ti124 : INT =
+            int 2
+          in
+          v.(Ti124)
+        in
+        fneg Td125
+      in
+      v.(Ti123) <- Td126
+      unit ()
+  in
+  let Tu10 : UNIT =
+    let Td127 : FLOAT =
+      float 1.57079632679
+    in
+    let Td129 : FLOAT =
+      let Ti128 : INT =
+        int 0
+      in
+      v.(Ti128)
+    in
+    if Td127 <. Td129
+      let Ti130 : INT =
+        int 0
+      in
+      let Td134 : FLOAT =
+        let Td131 : FLOAT =
+          float 3.14159265359
+        in
+        let Td133 : FLOAT =
+          let Ti132 : INT =
+            int 0
+          in
+          v.(Ti132)
+        in
+        fsub Td131 Td133
+      in
+      v.(Ti130) <- Td134
+      unit ()
+  in
+  let x : FLOAT =
+    let Td135 : FLOAT =
+      float 0.785398163397
+    in
+    let Td137 : FLOAT =
+      let Ti136 : INT =
+        int 0
+      in
+      v.(Ti136)
+    in
+    if Td135 <. Td137
+      let Td141 : FLOAT =
+        let Td138 : FLOAT =
+          float 1.57079632679
+        in
+        let Td140 : FLOAT =
+          let Ti139 : INT =
+            int 0
+          in
+          v.(Ti139)
+        in
+        fsub Td138 Td140
+      in
+      app
+        kernel_cos
+        Td141
+      let Td143 : FLOAT =
+        let Ti142 : INT =
+          int 0
+        in
+        v.(Ti142)
+      in
+      app
+        kernel_sin
+        Td143
+  in
+  let Td145 : FLOAT =
+    let Ti144 : INT =
+      int 2
+    in
+    v.(Ti144)
+  in
+  let Td146 : FLOAT =
+    float 0.
+  in
+  if Td145 <. Td146
+    fneg x
+    x
+in
+letrec cos : (FLOAT -> FLOAT) =
+variables : (a : FLOAT)
+  let a : FLOAT =
+    let Td75 : FLOAT =
+      float 0.
+    in
+    if a <. Td75
+      fneg a
+      a
+  in
+  let v : Array of FLOAT =
+    let Ti76 : INT =
+      int 3
+    in
+    extfunapp
+      create_float_array
+      Ti76
+      a
+  in
+  let Tu18 : UNIT =
+    app
+      reduction_2pi
+      v
+  in
+  let Tu17 : UNIT =
+    let Td77 : FLOAT =
+      float 3.14159265359
+    in
+    let Td79 : FLOAT =
+      let Ti78 : INT =
+        int 0
+      in
+      v.(Ti78)
+    in
+    if Td77 <. Td79
+      let Tu14 : UNIT =
+        let Ti80 : INT =
+          int 0
+        in
+        let Td84 : FLOAT =
+          let Td82 : FLOAT =
+            let Ti81 : INT =
+              int 0
+            in
+            v.(Ti81)
+          in
+          let Td83 : FLOAT =
+            float 3.14159265359
+          in
+          fsub Td82 Td83
+        in
+        v.(Ti80) <- Td84
+      in
+      let Ti85 : INT =
+        int 2
+      in
+      let Td86 : FLOAT =
+        float -1.
+      in
+      v.(Ti85) <- Td86
+      unit ()
+  in
+  let Tu16 : UNIT =
+    let Td87 : FLOAT =
+      float 1.57079632679
+    in
+    let Td89 : FLOAT =
+      let Ti88 : INT =
+        int 0
+      in
+      v.(Ti88)
+    in
+    if Td87 <. Td89
+      let Tu15 : UNIT =
+        let Ti90 : INT =
+          int 0
+        in
+        let Td94 : FLOAT =
+          let Td91 : FLOAT =
+            float 3.14159265359
+          in
+          let Td93 : FLOAT =
+            let Ti92 : INT =
+              int 0
+            in
+            v.(Ti92)
+          in
+          fsub Td91 Td93
+        in
+        v.(Ti90) <- Td94
+      in
+      let Ti95 : INT =
+        int 2
+      in
+      let Td98 : FLOAT =
+        let Td97 : FLOAT =
+          let Ti96 : INT =
+            int 2
+          in
+          v.(Ti96)
+        in
+        fneg Td97
+      in
+      v.(Ti95) <- Td98
+      unit ()
+  in
+  let x : FLOAT =
+    let Td100 : FLOAT =
+      let Ti99 : INT =
+        int 0
+      in
+      v.(Ti99)
+    in
+    let Td101 : FLOAT =
+      float 0.785398163397
+    in
+    if Td100 <. Td101
+      let Td103 : FLOAT =
+        let Ti102 : INT =
+          int 0
+        in
+        v.(Ti102)
+      in
+      app
+        kernel_cos
+        Td103
+      let Td107 : FLOAT =
+        let Td104 : FLOAT =
+          float 1.57079632679
+        in
+        let Td106 : FLOAT =
+          let Ti105 : INT =
+            int 0
+          in
+          v.(Ti105)
+        in
+        fsub Td104 Td106
+      in
+      app
+        kernel_sin
+        Td107
+  in
+  let Td109 : FLOAT =
+    let Ti108 : INT =
+      int 2
+    in
+    v.(Ti108)
+  in
+  let Td110 : FLOAT =
+    float 0.
+  in
+  if Td109 <. Td110
+    fneg x
+    x
+in
+letrec sqrt : (FLOAT -> FLOAT) =
+variables : (x : FLOAT)
+  let Td68 : FLOAT =
+    float 0.
+  in
+  if Td68 <. x
+    let t : FLOAT =
+      unknown sqrt_init x
+    in
+    let t : FLOAT =
+      let Td70 : FLOAT =
+        let Td69 : FLOAT =
+          fmul t t
+        in
+        fadd Td69 x
+      in
+      let Td71 : FLOAT =
+        fadd t t
+      in
+      app
+        fdiv
+        Td70
+        Td71
+    in
+    let t : FLOAT =
+      let Td73 : FLOAT =
+        let Td72 : FLOAT =
+          fmul t t
+        in
+        fadd Td72 x
+      in
+      let Td74 : FLOAT =
+        fadd t t
+      in
+      app
+        fdiv
+        Td73
+        Td74
+    in
+    t
+    float 0.
+in
+letrec kernel_atan : (FLOAT -> FLOAT) =
+variables : (a1 : FLOAT)
+  let a2 : FLOAT =
+    fmul a1 a1
+  in
+  let a3 : FLOAT =
+    fmul a2 a1
+  in
+  let a5 : FLOAT =
+    fmul a2 a3
+  in
+  let a7 : FLOAT =
+    fmul a2 a5
+  in
+  let a9 : FLOAT =
+    fmul a2 a7
+  in
+  let a11 : FLOAT =
+    fmul a2 a9
+  in
+  let a13 : FLOAT =
+    fmul a2 a11
+  in
+  let Td65 : FLOAT =
+    let Td62 : FLOAT =
+      let Td59 : FLOAT =
+        let Td56 : FLOAT =
+          let Td53 : FLOAT =
+            let Td52 : FLOAT =
+              let Td51 : FLOAT =
+                float 0.3333333
+              in
+              fmul Td51 a3
+            in
+            fsub a1 Td52
+          in
+          let Td55 : FLOAT =
+            let Td54 : FLOAT =
+              float 0.2
+            in
+            fmul Td54 a5
+          in
+          fadd Td53 Td55
+        in
+        let Td58 : FLOAT =
+          let Td57 : FLOAT =
+            float 0.142857142
+          in
+          fmul Td57 a7
+        in
+        fsub Td56 Td58
+      in
+      let Td61 : FLOAT =
+        let Td60 : FLOAT =
+          float 0.111111104
+        in
+        fmul Td60 a9
+      in
+      fadd Td59 Td61
+    in
+    let Td64 : FLOAT =
+      let Td63 : FLOAT =
+        float 0.08976446
+      in
+      fmul Td63 a11
+    in
+    fsub Td62 Td64
+  in
+  let Td67 : FLOAT =
+    let Td66 : FLOAT =
+      float 0.060035485
+    in
+    fmul Td66 a13
+  in
+  fadd Td65 Td67
+in
+letrec atan : (FLOAT -> FLOAT) =
+variables : (a : FLOAT)
+  let flag : BOOL =
+    let Td35 : FLOAT =
+      float 0.
+    in
+    if Td35 <. a
+      int 1
+      int 0
+  in
+  let a : FLOAT =
+    let Ti36 : INT =
+      int 0
+    in
+    if flag == Ti36
+      fneg a
+      a
+  in
+  let b : FLOAT =
+    let Td37 : FLOAT =
+      float 0.4375
+    in
+    if a <. Td37
+      app
+        kernel_atan
+        a
+      let Td38 : FLOAT =
+        float 2.4375
+      in
+      if a <. Td38
+        let Td39 : FLOAT =
+          float 0.785398163397
+        in
+        let Td45 : FLOAT =
+          let Td44 : FLOAT =
+            let Td41 : FLOAT =
+              let Td40 : FLOAT =
+                float 1.
+              in
+              fsub a Td40
+            in
+            let Td43 : FLOAT =
+              let Td42 : FLOAT =
+                float 1.
+              in
+              fadd a Td42
+            in
+            app
+              fdiv
+              Td41
+              Td43
+          in
+          app
+            kernel_atan
+            Td44
+        in
+        fadd Td39 Td45
+        let Td46 : FLOAT =
+          float 1.57079632679
+        in
+        let Td49 : FLOAT =
+          let Td48 : FLOAT =
+            let Td47 : FLOAT =
+              float 1.
+            in
+            app
+              fdiv
+              Td47
+              a
+          in
+          app
+            kernel_atan
+            Td48
+        in
+        fsub Td46 Td49
+  in
+  let Ti50 : INT =
+    int 0
+  in
+  if flag == Ti50
+    fneg b
+    b
+in
+letrec floor : (FLOAT -> FLOAT) =
+variables : (x : FLOAT)
+  let a : FLOAT =
+    let Ti33 : INT =
+      ftoi x
+    in
+    itof Ti33
+  in
+  if x <. a
+    let Td34 : FLOAT =
+      float 1.
+    in
+    fsub a Td34
+    a
+in
+letrec fabs : (FLOAT -> FLOAT) =
+variables : (f : FLOAT)
+  let Td32 : FLOAT =
+    float 0.
+  in
+  if f <. Td32
+    fneg f
+    f
+in
+letrec fhalf : (FLOAT -> FLOAT) =
+variables : (x : FLOAT)
+  let Td31 : FLOAT =
+    float 0.5
+  in
+  fmul x Td31
+in
+letrec fneg : (FLOAT -> FLOAT) =
+variables : (x : FLOAT)
+  fneg x
+in
+letrec abs_float : (FLOAT -> FLOAT) =
+variables : (x : FLOAT)
+  app
+    fabs
+    x
+in
+letrec fispos : (FLOAT -> BOOL) =
+variables : (x : FLOAT)
+  let Td30 : FLOAT =
+    float 0.
+  in
+  if Td30 <. x
+    int 1
+    int 0
+in
+letrec fisneg : (FLOAT -> BOOL) =
+variables : (x : FLOAT)
+  let Td29 : FLOAT =
+    float 0.
+  in
+  if x <. Td29
+    int 1
+    int 0
+in
+letrec and : (BOOL -> (BOOL -> BOOL)) =
+variables : (x : BOOL), (y : BOOL)
+  let Ti28 : INT =
+    int 1
+  in
+  if x == Ti28
+    y
+    int 0
+in
+let Ti27 : INT =
+  let Tb25 : BOOL =
+    let Ti21 : INT =
+      let Ti19 : INT =
+        int 1
+      in
+      let Ti20 : INT =
+        int 2
+      in
+      if Ti19 <= Ti20
+        int 1
+        int 0
+    in
+    let Ti24 : INT =
+      let Ti22 : INT =
+        int 2
+      in
+      let Ti23 : INT =
+        int 4
+      in
+      if Ti22 <= Ti23
+        int 0
+        int 1
+    in
+    app
+      and
+      Ti21
+      Ti24
+  in
+  let Ti26 : INT =
+    int 0
+  in
+  if Tb25 == Ti26
+    int 1
+    int 0
+in
+app
+  print_int
+  Ti27
+------------------closure.ml----------------
+------------------virtual.ml----------------
+------------------simm.ml----------------
+ocaml test/test.ml > test/test.ans
+-----cat library.s-----
+-----input.bin-----
+converted from  test.txt  to  out.bin
+-----simulate-----
+make: Nothing to be done for `all'.
+------------------------------
+Preassembled successfully.
+mips_test.s ==> piyo.s
+------------------------------
+Assembled successfully.
+piyo.s ==> a.out
+------------------------------
+Running simulator...
+loaded 496 instructions.
+run only mode!!
+nop
+
+simulator terminated
+total executed instructions: 39
+----- out.txt ------
+1
+-----    .ans ------
+
+----- program.txt ------
+make: `swap' is up to date.
+saving to a.out.big

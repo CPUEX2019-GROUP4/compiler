@@ -1,3 +1,3 @@
-let a = create_array 3 0 in
-let rec f x = a.(0) <- 4 in
-print_int (f 3; a.(0))
+let rec and x y =
+  if x = true then y else false in
+print_int (if (and (3<=2) (0<2)) then 0 else 1)

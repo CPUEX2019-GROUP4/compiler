@@ -25,6 +25,7 @@ and exp =
   | FSub of Id.t * Id.t
   | FMul of Id.t * Id.t
   | FDiv of Id.t * Id.t
+  | LE of id_or_imm * Id.t
   | Lfd of Id.t * id_or_imm
   | Stfd of Id.t * Id.t * id_or_imm
   | Comment of string
@@ -63,5 +64,3 @@ val is_reg : Id.t -> bool
 
 val fv : t -> Id.t list
 val concat : t -> Id.t * Type.t -> t -> t
-
-val align : int -> int

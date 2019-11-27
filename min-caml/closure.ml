@@ -17,6 +17,7 @@ type t = (* クロージャ変換後の式 (caml2html: closure_t) *)
   | FSub of Id.t * Id.t
   | FMul of Id.t * Id.t
   | FDiv of Id.t * Id.t
+  | LE of Id.t * Id.t
   | IfEq of Id.t * Id.t * t * t
   | IfLE of Id.t * Id.t * t * t
   | IfFLt of Id.t * Id.t * t * t
@@ -42,7 +43,7 @@ type prog = Prog of fundef list * t
 let rec fv = function
   | Unit | Int(_) | Float(_) | ExtArray(_) -> S.empty
   | Neg(x) | FNeg(x) | Mul4(x) | Mul10(x) | Div2(x) | Div10(x) | FtoI(x) | ItoF(x) | Out(x,_) | Unknown(_,_,_,x)-> S.remove "%r0" (S.singleton x)
-  | Add(x, y) | Sub(x, y) | FAdd(x, y) | FSub(x, y) | FMul(x, y) | FDiv(x, y) | Get(x, y) -> S.remove "%r0" (S.of_list [x; y])
+  | Add(x, y) | Sub(x, y) | FAdd(x, y) | FSub(x, y) | FMul(x, y) | FDiv(x, y) | Get(x, y) | LE(x,y) -> S.remove "%r0" (S.of_list [x; y])
   | IfFZero(x,e1,e2) -> S.add x (S.union (fv e1) (fv e2))
   | IfEq(x, y, e1, e2)| IfLE(x, y, e1, e2) | IfFLt(x, y, e1, e2) -> S.remove "%r0" (S.add x (S.add y (S.union (fv e1) (fv e2))))
   | Let((x, t), e1, e2) -> S.union (fv e1) (S.remove x (fv e2))
@@ -73,6 +74,7 @@ let rec g env known = function (* クロージャ変換ルーチン本体 (caml2html: closure
   | KNormal.FSub(x, y) -> FSub(x, y)
   | KNormal.FMul(x, y) -> FMul(x, y)
   | KNormal.FDiv(x, y) -> FDiv(x, y)
+  | KNormal.LE(x,y) -> LE(x,y)
   | KNormal.IfEq(x, y, e1, e2) -> IfEq(x, y, g env known e1, g env known e2)
   | KNormal.IfLE(x, y, e1, e2) -> IfLE(x, y, g env known e1, g env known e2)
   | KNormal.IfFLt(x, y, e1, e2) -> IfFLt(x, y, g env known e1, g env known e2)
