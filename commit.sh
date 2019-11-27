@@ -1,3 +1,4 @@
+rm syntax.txt
 cd min-caml
 make clean
 cd ../
