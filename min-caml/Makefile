@@ -5,7 +5,7 @@
 
 RESULT = min-caml
 NCSUFFIX = .opt
-CC = gcc-6
+CC = gcc
 CFLAGS = -g -O2 -Wall
 OCAMLLDFLAGS=-warn-error -31
 
@@ -61,7 +61,7 @@ raytrace: $(RESULT) raytracer/minrt.ml libmincaml.S
 	cat MIPS/library.ml > raytracer/galois.ml
 	cat raytracer/globals.ml >> raytracer/galois.ml
 	cat raytracer/minrt.ml >> raytracer/galois.ml
-	./$(RESULT) raytracer/galois -inline 400 > ../syntax.txt
+	./$(RESULT) raytracer/galois -inline 300 > ../syntax.txt
 	cat MIPS/create_array.S >> raytracer/galois.s
 #	cat MIPS/sin.S >> raytracer/galois.s
 #	cat MIPS/print.S >> raytracer/galois.s
