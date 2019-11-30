@@ -18,7 +18,8 @@ let rec g env = function (* インライン展開ルーチン本体 (caml2html: inline_g) *)
   | Let(xt, e1, e2) -> Let(xt, g env e1, g env e2)
   | LetRec({ name = (x, t); args = yts; body = e1 }, e2) -> (* 関数定義の場合 (caml2html: inline_letrec) *)
       let free_variables = fv e1 in
-      let env = if size e1 > !threshold && S.mem x free_variables then env else M.add x (yts, e1) env in
+      let s = size e1 in
+      let env = if s > !threshold || (S.mem x free_variables && s > (!threshold) / 3) then env else M.add x (yts, e1) env in
       LetRec({ name = (x, t); args = yts; body = g env e1}, g env e2)
   | App(x, ys) when M.mem x env -> (* 関数適用の場合 (caml2html: inline_app) *)
       let (zs, e) = M.find x env in

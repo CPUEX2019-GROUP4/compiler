@@ -11,14 +11,17 @@ in
 let rec fdiv x y = x *. (finv y) in
 
 (* print_int *)
-let rec print_int n =
-  let n =
-    if (n < 0) then ((out 0 45); - n) else n in
+let rec print_uint n =
   if (n < 10) then
     (out 48 n)
   else
     let m = n / 10 in
-    ((print_int m); (out 48 (n - (m * 10))))
+    ((print_uint m); (out 48 (n - (m * 10))))
+in
+let rec print_int n =
+  let n =
+    if (n < 0) then ((out 0 45); - n) else n in
+  print_uint n
 in
 let rec print_newline _ = out 10 0 in
 
