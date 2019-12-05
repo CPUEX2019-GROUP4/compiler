@@ -4,7 +4,6 @@ let rec finv x =
   let t = UNKNOWN finv_init float float x in
   let two = 2.0 in
   let t = (t *. (two -. x *. t)) in
-  let t = (t *. (two -. x *. t)) in
   t(*)*)
 in
 (* fdiv *)

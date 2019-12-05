@@ -11,6 +11,7 @@ min-caml/test/mips_test.ml
 min-caml/test/mips_test.s
 min-caml/raytracer/galois.ml
 min-caml/raytracer/galois.s
+min-caml/rt/
 gomi/
 data/
 /program.txt
