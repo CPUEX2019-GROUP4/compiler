@@ -175,6 +175,11 @@ and g' oc = function (* 各命令のアセンブリ生成 (caml2html: emit_gprime) *)
       | Type.Float ->           g' oc (NonTail(fregs.(0)), exp));
       Printf.fprintf oc "    jr r31\n";           (*******************)
   | Tail, (Restore(x) as exp) ->
+      (********************
+       *
+       *  bug !?!?!?!?!?
+       *
+       ********************)
       (match locate x with
       | [i] -> g' oc (NonTail(regs.(0)), exp)
       | [i; j] when i + 1 = j -> g' oc (NonTail(fregs.(0)), exp)
