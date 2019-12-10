@@ -4,5 +4,5 @@ rm min-caml/test/mips_test.*
 cd min-caml
 make clean
 cd ../
-git add .
+git add min-caml
 git commit
