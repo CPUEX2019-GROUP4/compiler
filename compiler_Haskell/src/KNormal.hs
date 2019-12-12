@@ -86,8 +86,8 @@ k_body env (Syn.Var x)
 
 knormal :: Syn.Syntax -> RunRun K
 knormal e = do
-    liftIO $ print e
-    liftIO $ putStrLn "knormal ..."
+    eprint e
+    eputstrln "knormal ..."
     f <- get
     let idc = idcounter f
     let x = runExcept $ runStateT (k_body M.empty e) idc
@@ -97,10 +97,6 @@ knormal e = do
             let i = snd e'
             put (f {RunRun.idcounter = i})
             return $ fst . fst $ e'
-
-
-
-
 
 
 

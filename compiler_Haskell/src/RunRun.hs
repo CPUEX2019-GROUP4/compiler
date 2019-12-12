@@ -1,11 +1,13 @@
 module RunRun where
 
+--import Text.Printf(hPrintf, PrintfType)
+import System.IO
 import Data.Set (Set)
 import Control.Monad.State
 import Control.Monad.Except
 import Control.Monad.Identity()
 
-import qualified Closure_Type as Cl
+import qualified Closure_Type() --as Cl
 import Type
 
 type RunRun = StateT Env (ExceptT Error IO)
@@ -26,7 +28,7 @@ data Error = ParseErr String
 throw :: Error -> RunRun a
 throw = throwError
 
---runRunRun :: RunRun a -> Env -> IO (Either Error a)
+runRunRun :: RunRun a -> Env -> IO (Either Error a)
 runRunRun f env = runExceptT $ evalStateT f env
 
 
@@ -56,5 +58,9 @@ id_of_typ Int       = return 'i'
 id_of_typ Float     = return 'f'
 id_of_typ (Var _)   = throw (Fail "hage")
 
+eputstrln :: String -> RunRun ()
+eputstrln s = liftIO $ hPutStrLn stderr s
 
+eprint :: Show a => a -> RunRun ()
+eprint s = liftIO $ hPrint stderr s
 

@@ -1,10 +1,9 @@
 module Closure where
 
-import Control.Monad.IO.Class(liftIO)
 import Data.Set as S
 import Data.Map as M
 
-import qualified Syntax as Syn
+import qualified Syntax() --as Syn
 import RunRun
 import qualified KNormal as K
 import qualified Type as Ty
@@ -23,8 +22,8 @@ g _   _ (K.Var x) = return $ Var x
 
 closure :: K.K -> RunRun Prog
 closure e = do
-        liftIO $ print e
-        liftIO $ putStrLn "closure ..."
+        eprint e
+        eputstrln "closure ..."
         e' <- g M.empty S.empty e
-        liftIO $ print e'
+        eprint e'
         return $ Prog [] e'
