@@ -57,15 +57,11 @@ test/%.ans: test/%.ml
 test/%.cmp: test/%.res test/%.ans
 	diff $^ > $@
 
-raytrace: $(RESULT) raytracer/minrt.ml libmincaml.S
+raytrace: $(RESULT) raytracer/minrt.ml
 	cat MIPS/library.ml > raytracer/galois.ml
 	cat raytracer/globals.ml >> raytracer/galois.ml
 	cat raytracer/minrt.ml >> raytracer/galois.ml
-<<<<<<< HEAD
-	./$(RESULT) raytracer/galois -inline 400 > ../syntax.txt
-=======
 	./$(RESULT) raytracer/galois -inline 300 > ../syntax.txt
->>>>>>> 1ada23b0e552503dcaccd9d18420c06b068fa6c4
 	cat MIPS/create_array.S >> raytracer/galois.s
 #	cat MIPS/sin.S >> raytracer/galois.s
 #	cat MIPS/print.S >> raytracer/galois.s
