@@ -57,7 +57,7 @@ test/%.ans: test/%.ml
 test/%.cmp: test/%.res test/%.ans
 	diff $^ > $@
 
-raytrace: $(RESULT) raytracer/minrt.ml libmincaml.S
+raytrace: $(RESULT) raytracer/minrt.ml
 	cat MIPS/library.ml > raytracer/galois.ml
 	cat raytracer/globals.ml >> raytracer/galois.ml
 	cat raytracer/minrt.ml >> raytracer/galois.ml
