@@ -25,12 +25,14 @@ tokens :-
   "("                                 { \_ -> TokenLPAREN }
   ")"                                 { \_ -> TokenRPAREN }
   $lower ($lower|$digit|$upper|\_)*   { \s -> TokenVAR s }
+  ';'                                 { \s -> TokenSEMICOLON }
 
 {
 data Token
     = TokenINT Int | TokenVAR String
     | TokenLET | TokenIN
     | TokenPLUS | TokenMINUS | TokenEQ | TokenRPAREN | TokenLPAREN
+    | TokenSEMICOLON
     deriving (Eq,Show)
 
 

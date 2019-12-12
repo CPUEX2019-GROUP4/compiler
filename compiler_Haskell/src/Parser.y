@@ -4,6 +4,8 @@
 {-# OPTIONS_GHC -w #-}
 module Parser where
 
+import Control.Monad.IO.Class(liftIO)
+import System.IO
 import Prelude hiding (EQ, LT, GT)
 import Control.Applicative
 
@@ -28,6 +30,7 @@ import Lexer
       "-"                   { TokenMINUS }
       "("                   { TokenLPAREN }
       ")"                   { TokenRPAREN }
+      ";"                   { TokenSEMICOLON }
 
 %right prec_let
 -- %right ";"
@@ -58,12 +61,14 @@ exp:                        -- 一般
   | exp "+" exp             { Arith2 Add $1 $3 }
   | exp "-" exp             { Arith2 Sub $1 $3 }
   | exp "=" exp             { Cmp Eq  $1 $3 }
+  | exp ";" exp             { Let ("TuSemi.",Type.Unit) $1 $3 }
   | TokenLET newvar "=" exp TokenIN exp
     %prec prec_let          { Let $2 $4 $6 }
 ;
 
 newvar:
     TokenVAR {% do nt <- newtypevar; return ($1,Type.Var nt)}
+
 
 
 {
@@ -77,7 +82,9 @@ removeComments (x : ls) = do
     return (x : rest)
 
 parse :: [Token] -> RunRun Syntax
-parse toks = mparse =<< removeComments toks
+parse toks = do
+    eputstrln "parsing ..."
+    mparse =<< removeComments toks
 
 }
 

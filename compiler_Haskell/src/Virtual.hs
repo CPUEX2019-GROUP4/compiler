@@ -1,6 +1,5 @@
 module Virtual where
 
-import Control.Monad.IO.Class(liftIO)
 import qualified Data.Map as M
 import Asm
 import qualified Closure_Type as C
@@ -48,23 +47,24 @@ g env (C.Var x)
         where f = M.lookup x env
 
 h :: C.Fundef -> RunRun Afundef
-h (C.Fundef { C.name = (C.L x, t),
-    C.args = yts,
-    C.formal_fv = zts,
-    C.body = e }) = do
-            let (i, f) = separate yts
-            ini_ <- g (M.insert x t (M.fromList yts `M.union` (M.fromList zts `M.union` mapinit))) e
-            let (off, lo) = expand zts
-                    (4, ini_)
-                    (\z offset load -> (fletd (z, Lf x (C offset), load)))
-                    (\z t' offset load -> (Let (z,t') (Lw x (C offset)) load))
-            case t of
-                    _ -> throw $ Fail "wow"
+h _ = throw $ Fail "wow"
+--h (C.Fundef { C.name = (C.L x, t),
+--    C.args = yts,
+--    C.formal_fv = zts,
+--    C.body = e }) = do
+--            let (i, f) = separate yts
+--            ini_ <- g (M.insert x t (M.fromList yts `M.union` (M.fromList zts `M.union` mapinit))) e
+--            let (off, lo) = expand zts
+--                    (4, ini_)
+--                    (\z offset load -> (fletd (z, Lf x (C offset), load)))
+--                    (\z t' offset load -> (Let (z,t') (Lw x (C offset)) load))
+--            case t of
+--                    _ -> throw $ Fail "wow"
 
 virtual :: C.Prog -> RunRun Aprog
 virtual (C.Prog fundefs e) = do
-    liftIO $ putStrLn "virtual ..."
+    eputstrln "virtual ..."
     fundefs' <- mapM h fundefs
     e' <- g mapinit e
-    liftIO $ print e'
+    eprint e'
     return $ Aprog fundefs' e'

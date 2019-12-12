@@ -6,7 +6,7 @@ import Data.List
 import RunRun
 import Type
 import Syntax (Arith_binary(..), Compare(..))
-import Closure_Type (L(L))
+import Closure_Type (L)
 
 data Id_or_imm = V String | C Int deriving(Show, Eq)
 data T = Ans !Exp | Let !(String, Type) Exp T deriving(Show, Eq)
@@ -48,10 +48,10 @@ seq (e1,e2) = do
 
 regs :: Array Int String
 regs = array (1,25)
-    (zip [1..] (map (\x -> "%r" ++ show x) [1..25]))
+    (zip [1..] (map (\x -> "%r" ++ show (x :: Int)) [1..25]))
 fregs :: Array Int String
 fregs = array (1,32)
-    (zip [1..] (map (\x -> "%f" ++ show x) [0..31]))
+    (zip [1..] (map (\x -> "%f" ++ show (x :: Int)) [0..31]))
 allregs :: [String]
 allregs = elems regs
 allfregs :: [String]

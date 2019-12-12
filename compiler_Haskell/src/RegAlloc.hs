@@ -1,8 +1,8 @@
 module RegAlloc where
 
 import Prelude hiding(exp, all)
-import Control.Monad.State
-import Control.Monad.Except
+import Control.Monad.State()
+import Control.Monad.Except()
 import Data.List (find)
 import qualified Data.Array as Array
 import qualified Data.Map as M
@@ -63,18 +63,18 @@ alloc dest cont regenv x t =
     if is_reg x then return $ Alloc x else
     let free = fv cont in
     do
-        liftIO $ print free
+        eprint free
         (_,prefer) <- target x dest cont
         let live = foldl (\liv y ->
                 if is_reg y then S.insert y liv
                 else case M.lookup y regenv of
                     Nothing -> liv
                     Just y' -> S.insert y' liv) S.empty free
-        liftIO $ print live
+        eprint live
         case find (\r' -> S.notMember r' live) (prefer ++ all) of
                 Just r -> return $ Alloc r
                 Nothing-> do
-                        liftIO $ putStrLn "resister allocation failed"
+                        eputstrln "resister allocation failed"
                         let Just y = (find
                                 (\y'' -> not (is_reg y'') &&
                                 (case M.lookup y'' regenv of Just y' -> elem y' all; Nothing -> False))
@@ -106,18 +106,18 @@ g _ _ regenv (Let (x,_) _ _)
 g dest cont regenv (Let xt@(x,t) exp e) = do
     let cont' = Asm.concat e dest cont
     (e1', regenv1) <- g'_and_restore xt cont' regenv exp
-    liftIO $ putStrLn "g dest cont regenv (Let xt exp e)"
-    liftIO $ putStrLn "========="
-    liftIO $ print dest
-    liftIO $ print cont
-    liftIO $ print cont'
-    liftIO $ print regenv1
-    liftIO $ print xt
-    liftIO $ print exp
-    liftIO $ print e
-    liftIO $ putStrLn "========="
+    eputstrln "g dest cont regenv (Let xt exp e)"
+    eputstrln "========="
+    eprint dest
+    eprint cont
+    eprint cont'
+    eprint regenv1
+    eprint xt
+    eprint exp
+    eprint e
+    eputstrln "========="
     wow <- alloc dest cont' regenv1 x t
-    liftIO $ print wow
+    eprint wow
     case wow of
             Spill y -> do
                     let Just r = M.lookup y regenv1
@@ -172,7 +172,7 @@ return_reg x = return $ Right x
 
 regalloc :: Aprog -> RunRun Aprog
 regalloc (Aprog fundefs e) = do
-    liftIO $ putStrLn "regalloc ..."
+    eputstrln "regalloc ..."
     -- fundefs' <- map h fundefs
     (e', _) <- gentmp Type.Unit >>= \x -> g (x, Type.Unit) (Ans Nop) M.empty e
     return $ Aprog fundefs e'

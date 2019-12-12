@@ -1,6 +1,6 @@
 module Alpha where
 
-import Control.Monad.IO.Class (liftIO)
+
 import Data.Map as M
 import RunRun
 import KNormal
@@ -23,6 +23,6 @@ g env e
 
 alpha :: K -> RunRun K
 alpha x = do
-    liftIO $ print x
-    liftIO $ putStrLn "alpha ..."
+    eprint x
+    eputstrln "alpha ..."
     g M.empty x

@@ -1,12 +1,14 @@
 module Main where
 
-import Data.Set (Set, empty)
+import System.Environment (getArgs)
+import System.IO
+import Data.Set (empty)
 import Control.Monad.State()
 import Control.Monad.Except()
 import Control.Monad.Identity()
 
 import RunRun
-import Syntax
+import Syntax()
 import Type
 import Typing(typing)
 import Lexer
@@ -14,15 +16,18 @@ import Parser
 import KNormal
 import Alpha
 import Closure
-import Closure_Type
-import Asm
+import Closure_Type()
+import Asm()
 import Virtual
 import RegAlloc
 import Emit
 
---main :: IO (Either Error Syntax.Syntax)
+main :: IO ()
 main = do
-    str <- getContents
+    filename <- (!!0) <$> getArgs
+    readfile <- openFile filename ReadMode
+    str <- hGetContents readfile
+    oc <- openFile (take (length filename - 2) filename ++ "s") WriteMode
     a <- (`runRunRun` initEnv) $
         (parse (Lexer.lex str))
         >>= Typing.typing
@@ -31,8 +36,12 @@ main = do
         >>= Closure.closure
         >>= Virtual.virtual
         >>= RegAlloc.regalloc
-        >>= Emit.f
-    print a
+        >>= Emit.emit oc
+    hClose oc
+    case a of
+        Left err -> print err
+        Right () -> return ()
+    return ()
 
 
 initEnv :: Env
