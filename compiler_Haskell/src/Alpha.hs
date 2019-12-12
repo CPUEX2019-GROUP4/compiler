@@ -10,6 +10,7 @@ g env e
     | Unit              <- e = return Unit
     | Int _             <- e = return e
     | Float _           <- e = return e
+    | Out n x           <- e = return $ Out n (f x)
     | Arith2 arith x y  <- e = return $ Arith2 arith (f x) (f y)
     | Cmp cmp x y       <- e = return $ Cmp cmp (f x) (f y)
     | Let (x,t) e1 e2   <- e = do

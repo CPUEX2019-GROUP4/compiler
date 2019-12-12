@@ -24,15 +24,16 @@ tokens :-
   "="                                 { \_ -> TokenEQ }
   "("                                 { \_ -> TokenLPAREN }
   ")"                                 { \_ -> TokenRPAREN }
+  ";"                                 { \_ -> TokenSEMICOLON }
+  "print_char"                        { \_ -> TokenPrintChar }
   $lower ($lower|$digit|$upper|\_)*   { \s -> TokenVAR s }
-  ';'                                 { \s -> TokenSEMICOLON }
 
 {
 data Token
     = TokenINT Int | TokenVAR String
     | TokenLET | TokenIN
     | TokenPLUS | TokenMINUS | TokenEQ | TokenRPAREN | TokenLPAREN
-    | TokenSEMICOLON
+    | TokenSEMICOLON | TokenPrintChar
     deriving (Eq,Show)
 
 

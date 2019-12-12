@@ -16,6 +16,7 @@ data Exp =
   | FLi !Float
   | SetL !L
   | Mv !String
+  | Out !Int !String
   | Arith2 !Arith_binary !String !Id_or_imm
   | Slw !String !Id_or_imm
   | Lw !String !Id_or_imm
@@ -93,6 +94,7 @@ fv_exp (Restore _) = []
 fv_exp (Mv x) = [x]
 fv_exp (FMv x) = [x]
 fv_exp (Save x _) = [x]
+fv_exp (Out _ x) = [x]
 fv_exp (Arith2 _ x y') = x :  fv_id_pr_imm y'
 fv_exp (Slw x y') = x : fv_id_pr_imm y'
 fv_exp (Lf x y') = x : fv_id_pr_imm y'

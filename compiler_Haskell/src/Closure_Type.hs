@@ -14,6 +14,7 @@ data C =
   | Cmp !Syn.Compare !String !String
   | Let !(String, Ty.Type) !C !C
   | Var !String
+  | Out !Int !String
   deriving(Show)
 data Fundef = Fundef {
         name :: (L, Ty.Type),

@@ -13,6 +13,7 @@ g :: Map String Ty.Type -> Set String -> K.K -> RunRun C
 g _   _ K.Unit = return Unit
 g _   _ (K.Int i) = return $ Int i
 g _   _ (K.Float f) = return $ Float f
+g _   _ (K.Out n e) = return $ Out n e
 g _   _ (K.Arith2 arith e1 e2) = return $ Arith2 arith e1 e2
 g _   _ (K.Cmp cmp e1 e2) = return $ Cmp cmp e1 e2
 g env known (K.Let (x,t) e1 e2) =

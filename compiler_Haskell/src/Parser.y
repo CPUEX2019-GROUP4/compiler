@@ -31,9 +31,10 @@ import Lexer
       "("                   { TokenLPAREN }
       ")"                   { TokenRPAREN }
       ";"                   { TokenSEMICOLON }
+      TokenPrintChar        { TokenPrintChar }
 
 %right prec_let
--- %right ";"
+%right ";"
 -- %right prec_if
 -- %right "<-"
 -- %left ","
@@ -44,7 +45,7 @@ import Lexer
 -- "+." "-."
 -- %left "*." "/." "*" "/"
 -- %right prec_unary_minus
--- %left prec_app
+%left prec_app
 -- %left "."
 
 %%
@@ -61,6 +62,8 @@ exp:                        -- 一般
   | exp "+" exp             { Arith2 Add $1 $3 }
   | exp "-" exp             { Arith2 Sub $1 $3 }
   | exp "=" exp             { Cmp Eq  $1 $3 }
+  | TokenPrintChar exp
+    %prec prec_app          { Out 0 $2 }
   | exp ";" exp             { Let ("TuSemi.",Type.Unit) $1 $3 }
   | TokenLET newvar "=" exp TokenIN exp
     %prec prec_let          { Let $2 $4 $6 }
@@ -84,6 +87,7 @@ removeComments (x : ls) = do
 parse :: [Token] -> RunRun Syntax
 parse toks = do
     eputstrln "parsing ..."
+    eprint toks
     mparse =<< removeComments toks
 
 }
