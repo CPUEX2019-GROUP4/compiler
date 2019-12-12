@@ -1,6 +1,6 @@
 RESULT = Main
 
-main: Type.hs Syntax.hs Closure_Type.hs RunRun.hs Asm.hs Lexer.hs Parser.hs Typing.hs KNormal.hs Alpha.hs Closure.hs Virtual.hs RegAlloc.hs Emit.hs Main.hs
+main: Type.hs Syntax.hs Lexer.x Parser.y Closure_Type.hs RunRun.hs Asm.hs Lexer.hs Parser.hs Typing.hs KNormal.hs Alpha.hs Closure.hs Virtual.hs RegAlloc.hs Emit.hs Main.hs
 	ghc Main.hs -Wall
 
 Lexer.hs: Lexer.x
@@ -14,3 +14,4 @@ clean:
 
 test/%.s: $(RESULT) test/%.ml
 	./$(RESULT) test/$*.ml
+

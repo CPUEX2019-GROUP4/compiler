@@ -101,6 +101,8 @@ g' oc xx@(NonTail x, exp)
     | Mv y      <- exp, x == y = return ()
     | Mv y      <- exp =
             liftIO $ hPutStr oc $ printf "    mv %s %s\n" (reg x) (reg y)
+    | Out n y   <- exp =
+            liftIO $ hPutStr oc $ printf "    out %s %d\n" (reg y) n
     | Arith2 Add y (V z) <- exp =
             liftIO $ hPutStr oc $ printf "    add %s %s %s\n" (reg x) (reg y) (reg z)
     | Arith2 Add y (C z) <- exp =
@@ -150,6 +152,7 @@ g' oc xx@(NonTail x, exp)
     | Restore _ <- exp = throw $ Fail "my god ..."
 g' oc (Tail, exp)
     | Nop           <- exp = e
+    | Out _ _       <- exp = e
     | Sw _ _ _      <- exp = e
     | Sf _ _ _      <- exp = e
     | Save _ _      <- exp = e

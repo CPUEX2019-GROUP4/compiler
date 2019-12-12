@@ -12,7 +12,7 @@ data Type =
 --    | Fun [Type] Type
 --    | Tuple [Type]
 --    | Array Type
-    | Var Int
+    | Var !Int
     deriving (Eq, Show)
 
 type CounterT = StateT Int

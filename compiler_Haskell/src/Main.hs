@@ -28,8 +28,9 @@ main = do
     readfile <- openFile filename ReadMode
     str <- hGetContents readfile
     oc <- openFile (take (length filename - 2) filename ++ "s") WriteMode
-    a <- (`runRunRun` initEnv) $
-        (parse (Lexer.lex str))
+    a <- (`runRunRun` initEnv) $ do
+        let l = Lexer.lex str
+        parse l
         >>= Typing.typing
         >>= KNormal.knormal
         >>= Alpha.alpha

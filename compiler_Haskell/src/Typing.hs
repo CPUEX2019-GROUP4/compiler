@@ -125,6 +125,9 @@ infer e = do
 infer__ :: Syntax -> Type.TyEnv -> Type.ExtEnv -> TypeM Type.Type
 infer__ Unit _ _ = return Type.Unit
 infer__ (Int _) _ _ = return Type.Int
+infer__ (Out _ e1) _ _ = do
+    unifyM Type.Int (infer e1)
+    return Type.Unit
 infer__ (Arith2 _ e1 e2) _ _ = do
     unifyM Type.Int (infer e1)
     unifyM Type.Int (infer e2)
