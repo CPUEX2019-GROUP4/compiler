@@ -7,7 +7,7 @@ import Control.Monad.State
 import Control.Monad.Except
 import Control.Monad.Identity()
 
-import qualified Closure_Type() --as Cl
+import qualified Closure_Type as Cl
 import Type
 
 type RunRun = StateT Env (ExceptT Error IO)
@@ -18,7 +18,8 @@ data Env = Env {
     exttyenv :: ExtEnv,
     idcounter :: Int,
     stackset :: Set String,
-    stackmap :: [String]
+    stackmap :: [String],
+    toplevel :: [Cl.Fundef]
     }
 
 data Error = ParseErr String
@@ -38,6 +39,7 @@ newtypevar = do
     let n = tyVarCounter env
     put $ env { tyVarCounter = n+1 }
     return n
+
 genid :: String -> RunRun String
 genid s = do
     n <- idcounter <$> get
@@ -56,6 +58,8 @@ id_of_typ Unit      = return 'u'
 id_of_typ Bool      = return 'b'
 id_of_typ Int       = return 'i'
 id_of_typ Float     = return 'f'
+id_of_typ (Tuple _) = return 't'
+id_of_typ (Fun _ _) = return 'F'
 id_of_typ (Var _)   = throw (Fail "hage")
 
 eputstrln :: String -> RunRun ()

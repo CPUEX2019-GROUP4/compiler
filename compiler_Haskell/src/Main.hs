@@ -52,5 +52,6 @@ initEnv = Env {
             exttyenv = initExtenv,
             idcounter = 0,
             stackset = empty,
-            stackmap = []
+            stackmap = [],
+            toplevel = []
             }

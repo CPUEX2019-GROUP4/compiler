@@ -17,23 +17,39 @@ tokens :-
 
   $space+                             ;
   let                                 { \_ -> TokenLET }
+  rec                                 { \_ -> TokenREC }
   in                                  { \_ -> TokenIN }
+  if                                  { \_ -> TokenIF }
+  then                                { \_ -> TokenTHEN }
+  else                                { \_ -> TokenELSE }
   $digit+                             { \s -> TokenINT (read s) }
   "+"                                 { \_ -> TokenPLUS }
   "-"                                 { \_ -> TokenMINUS }
   "="                                 { \_ -> TokenEQ }
+  "<"                                 { \_ -> TokenLT }
+  ">"                                 { \_ -> TokenGT }
   "("                                 { \_ -> TokenLPAREN }
   ")"                                 { \_ -> TokenRPAREN }
   ";"                                 { \_ -> TokenSEMICOLON }
-  "print_char"                        { \_ -> TokenPrintChar }
+  ","                                 { \_ -> TokenCOMMA }
+  true                                { \_ -> TokenBOOL (True) }
+  false                               { \_ -> TokenBOOL (False) }
+  print_char                          { \_ -> TokenPrintChar }
+  read_int                            { \_ -> TokenReadInt }
   $lower ($lower|$digit|$upper|\_)*   { \s -> TokenVAR s }
 
 {
 data Token
     = TokenINT Int | TokenVAR String
-    | TokenLET | TokenIN
-    | TokenPLUS | TokenMINUS | TokenEQ | TokenRPAREN | TokenLPAREN
-    | TokenSEMICOLON | TokenPrintChar
+    | TokenBOOL Bool
+    | TokenLET | TokenREC | TokenIN
+    | TokenIF | TokenTHEN | TokenELSE
+    | TokenPLUS | TokenMINUS
+    | TokenEQ | TokenLT | TokenGT
+    | TokenRPAREN | TokenLPAREN
+    | TokenSEMICOLON | TokenCOMMA
+    | TokenPrintChar
+    | TokenReadInt
     deriving (Eq,Show)
 
 

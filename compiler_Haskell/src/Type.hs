@@ -9,8 +9,8 @@ data Type =
     | Bool
     | Int
     | Float
---    | Fun [Type] Type
---    | Tuple [Type]
+    | Fun [Type] Type
+    | Tuple [Type]
 --    | Array Type
     | Var !Int
     deriving (Eq, Show)

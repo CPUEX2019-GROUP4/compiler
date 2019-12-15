@@ -6,7 +6,7 @@ import Data.List
 import RunRun
 import Type
 import Syntax (Arith_binary(..), Compare(..))
-import Closure_Type (L)
+import Closure_Type (L(..))
 
 data Id_or_imm = V String | C Int deriving(Show, Eq)
 data T = Ans !Exp | Let !(String, Type) Exp T deriving(Show, Eq)
@@ -17,23 +17,26 @@ data Exp =
   | SetL !L
   | Mv !String
   | Out !Int !String
+  | In !Type
   | Arith2 !Arith_binary !String !Id_or_imm
   | Slw !String !Id_or_imm
   | Lw !String !Id_or_imm
   | Sw !String !String !Id_or_imm
   | FMv !String
   | Cmp !Compare !String !Id_or_imm
+  | If !String !T !T
   | Lf !String !Id_or_imm
   | Sf !String !String !Id_or_imm
+  | CallDir !L ![String] ![String]
   | Save !String !String
   | Restore !String
   deriving(Show, Eq)
 
 data Afundef = Afundef {
-            a_name :: !String,
-            a_args :: [String],
-            a_fargs :: [String],
-            a_body :: T,
+            a_name :: !L,
+            a_args :: ![String],
+            a_fargs :: ![String],
+            a_body :: !T,
             a_ret :: Type}
             deriving(Show, Eq)
 
@@ -48,15 +51,20 @@ seq (e1,e2) = do
         return $ Let (nid, Unit) e1 e2
 
 regs :: Array Int String
-regs = array (1,25)
-    (zip [1..] (map (\x -> "%r" ++ show (x :: Int)) [1..25]))
+regs = array (0,24)
+    (zip [0..] (map (\x -> "%r" ++ show (x :: Int)) [1..25]))
 fregs :: Array Int String
-fregs = array (1,32)
-    (zip [1..] (map (\x -> "%f" ++ show (x :: Int)) [0..31]))
+fregs = array (0,31)
+    (zip [0..] (map (\x -> "%f" ++ show (x :: Int)) [0..31]))
 allregs :: [String]
 allregs = elems regs
 allfregs :: [String]
 allfregs = elems fregs
+
+regs_len :: Int
+regs_len = 25
+fregs_len :: Int
+fregs_len = 32
 
 reg_cl :: String
 reg_cl = last allregs
@@ -95,13 +103,16 @@ fv_exp (Mv x) = [x]
 fv_exp (FMv x) = [x]
 fv_exp (Save x _) = [x]
 fv_exp (Out _ x) = [x]
+fv_exp (In _) = []
 fv_exp (Arith2 _ x y') = x :  fv_id_pr_imm y'
 fv_exp (Slw x y') = x : fv_id_pr_imm y'
 fv_exp (Lf x y') = x : fv_id_pr_imm y'
 fv_exp (Lw x y') = x : fv_id_pr_imm y'
 fv_exp (Cmp _ x y') = x : fv_id_pr_imm y'
+fv_exp (If x e1 e2) = x : remove_and_uniq S.empty (fv e1 ++ fv e2)
 fv_exp (Sw x y z') = x : y : fv_id_pr_imm z'
 fv_exp (Sf x y z') = x : y : fv_id_pr_imm z'
+fv_exp (CallDir _ ys zs) = ys ++ zs
 
 fv :: T -> [String]
 fv (Ans e) = fv_exp e
