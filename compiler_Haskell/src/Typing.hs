@@ -69,6 +69,7 @@ deref_typ (Type.Var n) = do
           Just t  -> deref_typ t >>= \t' -> add_subst n t' >> return t'
 deref_typ (Type.Fun t1s t2) = Type.Fun <$> mapM deref_typ t1s <*> deref_typ t2
 deref_typ (Type.Tuple ts) = Type.Tuple <$> mapM deref_typ ts
+deref_typ (Type.Array t) = Type.Array <$> deref_typ t
 deref_typ t = return t
 
 deref_id_typ :: (String, Type.Type) -> TypeM (String, Type.Type)
@@ -84,6 +85,9 @@ deref_term (LetRec (Func{name=xt,args=yts,body=e1}) e2) =
 deref_term (App e es) = App <$> deref_term e <*> mapM deref_term es
 deref_term (Tuple es) = Tuple <$> mapM deref_term es
 deref_term (LetTuple xts e1 e2) = LetTuple <$> mapM deref_id_typ xts <*> deref_term e1 <*> deref_term e2
+deref_term (Array e1 e2)  = Array <$> deref_term e1 <*> deref_term e2
+deref_term (Get e1 e2) = Get <$> deref_term e1 <*> deref_term e2
+deref_term (Put e1 e2 e3) = Put <$> deref_term e1 <*> deref_term e2 <*> deref_term e3
 deref_term (In t) = In <$> deref_typ t
 deref_term e = return e
 
@@ -99,7 +103,8 @@ occur__ n (Type.Var m) ss
     where
         mt = M.lookup m ss
 occur__ n (Type.Fun t1s t2) ss = any (\x -> occur__ n x ss) t1s || occur__ n t2 ss
-occur__ n (Type.Tuple ts) ss = any (\x -> occur__ n x ss) ts
+occur__ n (Type.Tuple ts) ss = any (\t -> occur__ n t ss) ts
+occur__ n (Type.Array t) ss = occur__ n t ss
 occur__ _ _ _ = False
 
 
@@ -116,6 +121,7 @@ unify__ tt1@(Type.Fun t1s t1) tt2@(Type.Fun t2s t2) _ = do
 unify__ t1_@(Type.Tuple t1s) t2_@(Type.Tuple t2s) _ = do
     if length t1s /= length t2s then Typing.throw $ UnifyError t1_ t2_ else return ()
     sequence_ $ zipWith unify t1s t2s
+unify__ (Type.Array t1) (Type.Array t2) _ = unify t1 t2
 unify__ t1 t2 ss
     | (Type.Var n) <- t1, Just t <- M.lookup n ss = unify t t2
     | (Type.Var n) <- t2, Just t <- M.lookup n ss = unify t1 t
@@ -131,15 +137,9 @@ unify__ t1 t2 ss
 
 
 unifyM :: Type.Type -> TypeM Type.Type -> TypeM ()
-unifyM t2 tm1 = do
-    t1 <- tm1
-    unify t1 t2
-
+unifyM t2 tm1 = (\t1 -> unify t1 t2) =<< tm1
 unifyM2 :: TypeM Type.Type -> TypeM Type.Type -> TypeM ()
-unifyM2 tm1 tm2 = do
-    t1 <- tm1
-    t2 <- tm2
-    unify t1 t2
+unifyM2 tm1 tm2 = (\t1 -> (\t2 -> unify t1 t2) =<< tm2) =<< tm1
 
 infer :: Syntax -> TypeM Type.Type
 infer e = do
@@ -184,6 +184,18 @@ infer__ (LetTuple xts e1 e2) env _ = do
     let nenv = M.union (M.fromList xts) env
     get >>= (\f -> put (f {Typing.tyenv = nenv}))
     infer e2
+infer__ (Array e1 e2) _ _ = do
+    unifyM Type.Int (infer e1)
+    Type.Array <$> infer e2
+infer__ (Get e1 e2) _ _ = do
+    unifyM Type.Int (infer e2)
+    t <- Type.Var <$> gentyp
+    unifyM (Type.Array t) (infer e1)
+    return t
+infer__ (Put e1 e2 e3) _ _ = do
+    unifyM Type.Int (infer e2)
+    unifyM2 (infer e1) (Type.Array <$> infer e3)
+    return Type.Unit
 infer__ (If e1 e2 e3) _ _ = do
     unifyM Type.Bool (infer e1)
     t <- infer e2

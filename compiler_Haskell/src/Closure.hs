@@ -27,6 +27,9 @@ fv (Let (x,_) e1 e2)        = S.union (fv e1) (S.delete x (fv e2))
 fv (Var x)                  = if x /= "%r0" then S.singleton x else S.empty
 fv (Tuple xs)               = S.delete "%r0" $ S.fromList xs
 fv (LetTuple xts y e)       = (S.insert y (fv e)) S.\\ (S.fromList . map fst) xts  -- don't need r0 check I guess...
+fv (Array _ x y)            = S.delete "%r0" $ S.fromList [x,y]
+fv (Get x y)                = S.delete "%r0" $ S.fromList [x,y]
+fv (Put x y z)              = S.delete "%r0" $ S.fromList [x,y,z]
 fv (MakeCls (x,_) (Cls{actual_fv=ys}) e)
                             = S.delete "%r0" $ S.delete x $ S.union (S.fromList ys) (fv e)
 fv (AppDir _ xs)            = S.delete "%r0" $ S.fromList xs
@@ -46,6 +49,9 @@ g env known (K.Let (x,t) e1 e2) = Let (x,t) <$> g env known e1 <*> g (M.insert x
 g _   _ (K.Var x)               = return $ Var x
 g _   _ (K.Tuple xs)            = return $ Tuple xs
 g env known (K.LetTuple xts y e)= LetTuple xts y <$> g (M.union (M.fromList xts) env) known e
+g _ _ (K.Array t x y)           = return $ Array t x y
+g _ _ (K.Get x y)               = return $ Get x y
+g _ _ (K.Put x y z)             = return $ Put x y z
 g env known (K.KLetRec (K.KFunc { K.kname = (x,t), K.kargs = yts, K.kbody = e1}) e2) = do
         toplevel_backup <- toplevel <$> get
         let env' = M.insert x t env

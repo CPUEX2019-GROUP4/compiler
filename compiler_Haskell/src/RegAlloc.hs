@@ -182,6 +182,12 @@ g' dest cont regenv (CallDir (L x) ys zs)
                 = throw $ Fail $ printf "cannot allocate resisters to %s\n" x
         | otherwise = g'_call dest cont regenv (CallDir (L x) <$>) ys zs
 g' _ _ _ (Save _ _) = throw $ Fail "ohmygod"
+g' _ _ regenv (Makearray t x' y)
+        | Type.Float <- t =
+            return $ (Ans <$> (Makearray t <$> find'_reg x' regenv <*> find_reg y Type.Float regenv)) >>= \x_' -> return (x_', regenv)
+        | otherwise =
+            return $ (Ans <$> (Makearray t <$> find'_reg x' regenv <*> find_reg y Type.Int regenv)) >>= \x_' -> return (x_', regenv)
+
 
 
 

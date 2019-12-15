@@ -30,6 +30,7 @@ data Exp =
   | CallDir !L ![String] ![String]
   | Save !String !String
   | Restore !String
+  | Makearray !Type !Id_or_imm !String
   deriving(Show, Eq)
 
 data Afundef = Afundef {
@@ -37,7 +38,7 @@ data Afundef = Afundef {
             a_args :: ![String],
             a_fargs :: ![String],
             a_body :: !T,
-            a_ret :: Type}
+            a_ret :: !Type}
             deriving(Show, Eq)
 
 data Aprog = Aprog [Afundef] T deriving(Show, Eq)
@@ -113,6 +114,7 @@ fv_exp (If x e1 e2) = x : remove_and_uniq S.empty (fv e1 ++ fv e2)
 fv_exp (Sw x y z') = x : y : fv_id_pr_imm z'
 fv_exp (Sf x y z') = x : y : fv_id_pr_imm z'
 fv_exp (CallDir _ ys zs) = ys ++ zs
+fv_exp (Makearray _ x' y) = y : fv_id_pr_imm x'
 
 fv :: T -> [String]
 fv (Ans e) = fv_exp e

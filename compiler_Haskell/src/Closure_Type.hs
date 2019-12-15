@@ -19,6 +19,9 @@ data C =
   | In !Ty.Type
   | Tuple ![String]
   | LetTuple ![(String, Ty.Type)] !String !C
+  | Array !Ty.Type !String !String
+  | Get !String !String
+  | Put !String !String !String
   | MakeCls !(String, Ty.Type) !Closure !C
   -- | AppCls !String ![String]      ----------- とりあえずなしで
   | AppDir !L ![String]
