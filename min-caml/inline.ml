@@ -15,14 +15,40 @@ let rec g env = function (* インライン展開ルーチン本体 (caml2html: inline_g) *)
   | IfLE(x, y, e1, e2) -> IfLE(x, y, g env e1, g env e2)
   | IfFLt(x, y, e1, e2) -> IfFLt(x, y, g env e1, g env e2)
   | IfFZero(x, e1,e2) -> IfFZero(x, g env e1, g env e2)
-  | Let(xt, e1, e2) -> Let(xt, g env e1, g env e2)
+  | Let(xt, e1, e2) ->
+      let s = size e1 in
+      let e1' =
+        if s < !threshold then
+          g env e1
+        else
+          e1
+      in
+      Let(xt, e1', g env e2)
   | LetRec({ name = (x, t); args = yts; body = e1 }, e2) -> (* 関数定義の場合 (caml2html: inline_letrec) *)
       let free_variables = fv e1 in
       let s = size e1 in
       let is_recursive = S.mem x free_variables in
-      let do_inlene = true in
-      let env = if s > !threshold || (is_recursive && s > (!threshold) / 3) then env else M.add x (yts, e1) env in
-      LetRec({ name = (x, t); args = yts; body = if do_inlene then g env e1 else e1 }, g env e2)
+      let env_x = M.add x (yts, e1) env in
+      let e1' =
+        if not is_recursive then
+          if s < !threshold then
+            g env e1
+          else
+            e1
+        else if s < !threshold / 3 then
+          g env_x e1
+        else if s < !threshold then
+          g env e1
+        else
+          e1
+      in
+      let e2' =
+        if s < !threshold / 3 then
+          g env_x e2
+        else
+          g env e2
+      in
+      LetRec({ name = (x, t); args = yts; body = e1' }, e2')
   | App(x, ys) when M.mem x env -> (* 関数適用の場合 (caml2html: inline_app) *)
       let (zs, e) = M.find x env in
       Format.eprintf "inlining %s@." x;
