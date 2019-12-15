@@ -59,6 +59,7 @@ id_of_typ Bool      = return 'b'
 id_of_typ Int       = return 'i'
 id_of_typ Float     = return 'f'
 id_of_typ (Tuple _) = return 't'
+id_of_typ (Array _) = return 'a'
 id_of_typ (Fun _ _) = return 'F'
 id_of_typ (Var _)   = throw (Fail "hage")
 

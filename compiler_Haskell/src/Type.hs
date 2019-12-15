@@ -11,7 +11,7 @@ data Type =
     | Float
     | Fun [Type] Type
     | Tuple [Type]
---    | Array Type
+    | Array Type
     | Var !Int
     deriving (Eq, Show)
 

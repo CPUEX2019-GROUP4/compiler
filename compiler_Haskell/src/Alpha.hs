@@ -40,6 +40,9 @@ g env e
     | LetTuple xts y e2 <- e = do
                             xts' <- mapM (\(x,t) -> (\x' -> (x',t)) <$> genid x) xts
                             LetTuple xts' (f y) <$> g (M.union (M.fromList $ zip (map fst xts) (map fst xts')) env) e2
+    | Array t x y       <- e = return $ Array t (f x) (f y)
+    | Get x y           <- e = return $ Get (f x) (f y)
+    | Put x y z         <- e = return $ Put (f x) (f y) (f z)
     where f x
             | Nothing <- a = x
             | Just y  <- a = y

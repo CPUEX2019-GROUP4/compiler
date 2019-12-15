@@ -37,15 +37,15 @@ expand xts ini addf addi =
 
 
 g :: M.Map String Type -> C.C -> RunRun T
-g _    C.Unit = return $ Ans Nop
-g _   (C.Int i) = return $ Ans (Li i)
-g _   (C.Float f) = return $ Ans (FLi f)
-g _   (C.Out n x) = return $ Ans (Out n x)
-g _   (C.In t) = return $ Ans (In t)
+g _    C.Unit           = return $ Ans Nop
+g _   (C.Int i)         = return $ Ans (Li i)
+g _   (C.Float f)       = return $ Ans (FLi f)
+g _   (C.Out n x)       = return $ Ans (Out n x)
+g _   (C.In t)          = return $ Ans (In t)
 g _   (C.Arith2 arith x y) = return $ Ans (Arith2 arith x (V y))
-g _   (C.Cmp cmp x y) = ------------ have to check type !!!!!!!!!
+g _   (C.Cmp cmp x y)   = ------------ have to check type !!!!!!!!!
         return $ Ans (Cmp cmp x (V y))
-g env (C.If x e1 e2) = do
+g env (C.If x e1 e2)    = do
         Ans <$> (If x <$> g env e1 <*> g env e2)
 g env (C.Let (x,t) e1 e2) = do
         e1' <- g env e1
@@ -77,7 +77,6 @@ g env (C.LetTuple xts y e2) = do
                 (\x t offset load -> if S.notMember x fvset then load else Let (x,t) (Lw y (C offset)) load)
                 )
         return lo
-
 g env (C.MakeCls (x,t) (C.Cls { C.entry = l, C.actual_fv = ys }) e2) = do
         e2' <- g (M.insert x t env) e2
         let (ofset, store_fv_tmp) = (expand
@@ -95,7 +94,45 @@ g env (C.MakeCls (x,t) (C.Cls { C.entry = l, C.actual_fv = ys }) e2) = do
 g env (C.AppDir (C.L x) ys) = do
         let (i,f) = separate (map (\y -> (y,env M.! y)) ys)
         return (Ans (CallDir (C.L x) i f))
-
+g _ (C.Array t x y) = return $ Ans $ Makearray t (V x) y
+g env (C.Get x y)
+        | Just (Type.Array Type.Unit)  <- t = return $ Ans Nop
+        | Just (Type.Array Type.Float) <- t = do
+                offset <- genid "o"
+                return $ if y /= "%r0" then
+                            Let (offset, Type.Int) (Slw y (C 2))
+                                    (Ans (Lf x (V offset)))
+                        else
+                            Ans (Lf x (C 0))
+        | Just (Type.Array _)          <- t = do
+                offset <- genid "o"
+                return $ if y /= "%r0" then
+                            Let (offset, Type.Int) (Slw y (C 2))
+                                    (Ans (Lw x (V offset)))
+                        else
+                            Ans (Lw x (C 0))
+        | otherwise = throw $ Fail "sushi."
+        where
+            t = M.lookup x env
+g env (C.Put x y z)
+        | Just (Type.Array Type.Unit)  <- t = return $ Ans Nop
+        | Just (Type.Array Type.Float) <- t = do
+                offset <- genid "o"
+                return $ if y /= "%r0" then
+                            Let (offset, Type.Int) (Slw y (C 2))
+                                    (Ans (Sf z x (V offset)))
+                        else
+                            Ans (Sf z x (C 0))
+        | Just (Type.Array _)          <- t = do
+                offset <- genid "o"
+                return $ if y /= "%r0" then
+                            Let (offset, Type.Int) (Slw y (C 2))
+                                    (Ans (Sw z x (V offset)))
+                        else
+                            Ans (Sw z x (C 0))
+        | otherwise = throw $ Fail "sushi.yeah."
+        where
+            t = M.lookup x env
 
 
 

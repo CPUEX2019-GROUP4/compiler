@@ -17,6 +17,9 @@ data Syntax =
   | In !Type
   | LetRec !Fundef !Syntax
   | App !Syntax ![Syntax]
+  | Array !Syntax !Syntax
+  | Get !Syntax !Syntax
+  | Put !Syntax !Syntax !Syntax
   deriving (Eq, Show)
 
 data Arith_binary =

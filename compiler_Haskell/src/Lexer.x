@@ -23,6 +23,7 @@ tokens :-
   then                                { \_ -> TokenTHEN }
   else                                { \_ -> TokenELSE }
   $digit+                             { \s -> TokenINT (read s) }
+  "<-"                                { \_ -> TokenARROW }
   "+"                                 { \_ -> TokenPLUS }
   "-"                                 { \_ -> TokenMINUS }
   "="                                 { \_ -> TokenEQ }
@@ -32,10 +33,14 @@ tokens :-
   ")"                                 { \_ -> TokenRPAREN }
   ";"                                 { \_ -> TokenSEMICOLON }
   ","                                 { \_ -> TokenCOMMA }
+  "."                                 { \_ -> TokenDOT }
   true                                { \_ -> TokenBOOL (True) }
   false                               { \_ -> TokenBOOL (False) }
   print_char                          { \_ -> TokenPrintChar }
   read_int                            { \_ -> TokenReadInt }
+  create_array                        { \_ -> TokenArrayCreate }
+  Array.create                        { \_ -> TokenArrayCreate }
+  Array.make                          { \_ -> TokenArrayCreate }
   $lower ($lower|$digit|$upper|\_)*   { \s -> TokenVAR s }
 
 {
@@ -44,12 +49,14 @@ data Token
     | TokenBOOL Bool
     | TokenLET | TokenREC | TokenIN
     | TokenIF | TokenTHEN | TokenELSE
+    | TokenARROW
     | TokenPLUS | TokenMINUS
     | TokenEQ | TokenLT | TokenGT
     | TokenRPAREN | TokenLPAREN
-    | TokenSEMICOLON | TokenCOMMA
+    | TokenSEMICOLON | TokenCOMMA | TokenDOT
     | TokenPrintChar
     | TokenReadInt
+    | TokenArrayCreate
     deriving (Eq,Show)
 
 

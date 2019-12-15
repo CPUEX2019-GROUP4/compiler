@@ -30,6 +30,7 @@ import Lexer
       "if"                  { TokenIF }
       "then"                { TokenTHEN }
       "else"                { TokenELSE }
+      "<-"                  { TokenARROW }
       "="                   { TokenEQ }
       "+"                   { TokenPLUS }
       "-"                   { TokenMINUS }
@@ -39,14 +40,15 @@ import Lexer
       ")"                   { TokenRPAREN }
       "SEMI"                { TokenSEMICOLON }
       ","                   { TokenCOMMA }
+      "."                   { TokenDOT }
       TokenPrintChar        { TokenPrintChar }
       TokenReadInt          { TokenReadInt }
+      "Array.make"          { TokenArrayCreate }
 
 %right prec_let
 %right ";"
 %right prec_if
--- %right "<-"
--- %left ","
+%right "<-"
 %nonassoc prec_tuple
 %left ","
 %left "=" ">" "<"
@@ -65,6 +67,7 @@ simple_exp:                 -- 括弧なしで引数になれる
   | TokenINT                    { Int $1 }
   | TokenBOOL                   { Bool $1 }
   | TokenVAR                    { Var $1 }
+  | simple_exp "." "(" exp ")"  { Get $1 $4 }
 ;
 
 exp:                        -- 一般
@@ -78,7 +81,9 @@ exp:                        -- 一般
         %prec prec_if       { If $2 $4 $6 }
   | TokenPrintChar exp
         %prec prec_app      { Out 0 $2 }
-  | TokenReadInt "(" ")"    { In Type.Int}
+  | TokenReadInt "(" ")"    { In Type.Int }
+  | "Array.make" simple_exp simple_exp
+        %prec prec_app      { Array $2 $3 }
   | simple_exp actual_args
         %prec prec_app      { App $1 $2 }
   | elems
@@ -90,6 +95,8 @@ exp:                        -- 一般
         %prec prec_let      { Let $2 $4 $6 }
   | TokenLET TokenREC fundef TokenIN exp
         %prec prec_let      { LetRec $3 $5 }
+  | simple_exp "." "(" exp ")" "<-" exp
+                            { Put $1 $4 $7 }
 ;
 
 fundef:

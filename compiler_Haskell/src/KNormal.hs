@@ -23,8 +23,11 @@ data K =
     | Var !String
     | Tuple ![String]
     | LetTuple ![(String,Type.Type)] !String !K
+    | Array !Type.Type !String !String
     | Out !Int !String
     | In !Type.Type
+    | Get !String !String
+    | Put !String !String !String
     deriving (Show, Eq)
 
 data KFundef =
@@ -44,6 +47,9 @@ fv (Let (x,_) e1 e2)    = S.union (fv e1) (S.delete x (fv e2))
 fv (If x e2 e3)         = S.insert x $ S.union (fv e2) (fv e3)
 fv (Tuple xs)           = S.fromList xs
 fv (LetTuple xts y e)   = S.insert y $ (fv e) S.\\ (S.fromList (map fst xts))
+fv (Array _ x y)        = S.fromList [x, y]
+fv (Get x y)            = S.fromList [x, y]
+fv (Put x y z)          = S.fromList [x, y, z]
 fv (Var x)              = S.singleton x
 fv (Out _ x)            = S.singleton x
 fv (KLetRec (KFunc { kname = (x,_), kargs = yts, kbody = e1}) e2) =
@@ -59,6 +65,7 @@ id_of_typ__ Type.Bool      = return 'b'
 id_of_typ__ Type.Int       = return 'i'
 id_of_typ__ Type.Float     = return 'f'
 id_of_typ__ (Type.Tuple _) = return 't'
+id_of_typ__ (Type.Array _) = return 'a'
 id_of_typ__ (Type.Fun _ _) = return 'F'
 id_of_typ__ (Type.Var _)   = throwError (Fail "hage")
 
@@ -123,6 +130,25 @@ k_body env (Syn.LetTuple xts e1 e2) = do
         (e2',t) <- k_body (M.union (M.fromList xts) env) e2
         (`runCont` id) $ do
             (\y -> return (LetTuple xts y e2', t)) <$> insert_let y'
+k_body env (Syn.Array e1 e2) = do
+        x' <- k_body env e1
+        y'@(_,t) <- k_body env e2
+        (`runCont` id) $ do
+            (\x y -> return (Array t x y, Type.Array t)) <$> insert_let x' <*> insert_let y'
+k_body env (Syn.Get e1 e2) = do
+        x'@(_,at) <- k_body env e1
+        let Type.Array t = at
+        y' <- k_body env e2
+        (`runCont` id) $ do
+            (\x y -> return (Get x y, t)) <$> insert_let x' <*> insert_let y'
+k_body env (Syn.Put e1 e2 e3) = do
+        x' <- k_body env e1
+        y' <- k_body env e2
+        z' <- k_body env e3
+        (`runCont` id) $ do
+            (\x y z -> return (Put x y z, Type.Unit)) <$> insert_let x'
+                        <*> insert_let y' <*> insert_let z'
+
 k_body env (Syn.App e es) = do -- とりあえず外部関数は禁止
         x' <- k_body env e
         let (_,Type.Fun _ t) = x'

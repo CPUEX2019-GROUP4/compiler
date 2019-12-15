@@ -164,8 +164,10 @@ g' oc xx@(NonTail x, exp)
             ofset <- offset y
             liftIO $ hPutStr oc $ printf "    lwcZ %s %s %d\n" (reg x) (reg reg_sp) ofset
     | Restore _ <- exp = throw $ Fail "my god ..."
-    | If y e1 e2 <- exp = do
+    | If y e1 e2 <- exp =
             g'_non_tail_if oc (NonTail x) e1 e2 (reg y)
+    | Makearray t n' v <- exp =
+            g'_array oc t x n' v
 g' oc (Tail, exp)
     | Nop           <- exp = e
     | Out _ _       <- exp = e
@@ -185,6 +187,7 @@ g' oc (Tail, exp)
     | Lw _ _        <- exp = e
     | Cmp _ _ _     <- exp = e
     | In Type.Int   <- exp = e
+    | Makearray _ _ _ <- exp = e
     where e = do
             g' oc (NonTail (regs ! 0), exp)
             liftIO $ hPutStr oc $ printf "    jr %s\n" (reg reg_lr)
@@ -274,6 +277,36 @@ g'_args oc x_reg_cl ys zs = do
         mapM_ (\(z,fr) ->
             liftIO $ hPutStr oc $ printf "    fmv %s %s\n" (reg fr) (reg z))
             (shuffle reg_fsw zrs)
+
+g'_array :: Handle -> Type -> String -> Id_or_imm -> String -> RunRun ()
+g'_array oc t x (V n) v = do
+            loop <- genid "arrayloop"
+            cont <- genid "arraycont"
+            exit <- genid "arrayexit"
+            liftIO $ hPutStr oc $ printf "    mv %s %s\n"    (reg reg_tmp) (reg n)
+            liftIO $ hPutStr oc $ printf "    mv %s %s\n"       (reg x) (reg reg_hp)
+            liftIO $ hPutStr oc $ printf "%s:\n"                loop
+            liftIO $ hPutStr oc $ printf "    bne %s r0 %s\n"   (reg reg_tmp) cont
+            liftIO $ hPutStr oc $ printf "    j %s\n"           exit
+            liftIO $ hPutStr oc $ printf "%s:\n"                cont
+            case t of
+                    Type.Float ->
+                        liftIO $ hPutStr oc $ printf "    swcZ %s %s 0\n"   (reg v) (reg reg_hp)
+                    _ ->
+                        liftIO $ hPutStr oc $ printf "    sw %s %s 0\n" (reg v) (reg reg_hp)
+            liftIO $ hPutStr oc $ printf "    subi %s %s 1\n"   (reg reg_tmp) (reg reg_tmp)
+            liftIO $ hPutStr oc $ printf "    addi %s %s 4\n"   (reg reg_hp) (reg reg_hp)
+            liftIO $ hPutStr oc $ printf "    j %s\n"           loop
+            liftIO $ hPutStr oc $ printf "%s:\n"                exit
+g'_array oc t x (C n) v = do
+            forM_ [0..(n-1)] $ \ofset ->
+                    case t of
+                            Float -> liftIO $ hPutStr oc $
+                                    printf "    swcZ %s %s %d\n" (reg v) (reg reg_hp) (4 * ofset)
+                            _     -> liftIO $ hPutStr oc $
+                                    printf "    sw %s %s %d\n" (reg v) (reg reg_hp) (4 * ofset)
+            liftIO $ hPutStr oc $ printf "    mv %s %s\n" (reg x) (reg reg_hp)
+            liftIO $ hPutStr oc $ printf "    addi %s %s %d\n" (reg reg_hp) (reg reg_hp) (n * 4)
 
 
 h :: Handle -> Afundef -> RunRun ()
