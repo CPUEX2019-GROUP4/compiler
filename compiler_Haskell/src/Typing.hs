@@ -3,7 +3,7 @@ module Typing where
 import Control.Monad.State
 import Control.Monad.Except
 import Control.Monad.Identity
-import Data.Map as M
+import Data.Map as M hiding(map)
 
 import RunRun
 import Syntax
@@ -27,6 +27,7 @@ type TypeM = StateT TypingEnvs (ExceptT TypeError Identity)
 
 typing :: Syntax -> RunRun Syntax
 typing e = do
+    eprint e
     eputstrln "typing ..."
     r <- get
     let env = TypingEnvs {
@@ -66,6 +67,8 @@ deref_typ (Type.Var n) = do
     case mt of
           Nothing -> add_subst n Type.Int >> return Type.Int
           Just t  -> deref_typ t >>= \t' -> add_subst n t' >> return t'
+deref_typ (Type.Fun t1s t2) = Type.Fun <$> mapM deref_typ t1s <*> deref_typ t2
+deref_typ (Type.Tuple ts) = Type.Tuple <$> mapM deref_typ ts
 deref_typ t = return t
 
 deref_id_typ :: (String, Type.Type) -> TypeM (String, Type.Type)
@@ -75,7 +78,15 @@ deref_term :: Syntax -> TypeM Syntax
 deref_term (Arith2 arith e1 e2) = Arith2 arith <$> deref_term e1 <*> deref_term e2
 deref_term (Cmp comp e1 e2) = Cmp comp <$> deref_term e1 <*> deref_term e2
 deref_term (Let xt e1 e2) = Let <$> deref_id_typ xt <*> deref_term e1 <*> deref_term e2
+deref_term (LetRec (Func{name=xt,args=yts,body=e1}) e2) =
+                LetRec <$> (Func <$> deref_id_typ xt
+                        <*> mapM deref_id_typ yts <*> deref_term e1) <*> deref_term e2
+deref_term (App e es) = App <$> deref_term e <*> mapM deref_term es
+deref_term (Tuple es) = Tuple <$> mapM deref_term es
+deref_term (LetTuple xts e1 e2) = LetTuple <$> mapM deref_id_typ xts <*> deref_term e1 <*> deref_term e2
+deref_term (In t) = In <$> deref_typ t
 deref_term e = return e
+
 
 occur :: Int -> Type.Type -> TypeM Bool
 occur n t = occur__ n t <$> Typing.subst <$> get
@@ -87,14 +98,25 @@ occur__ n (Type.Var m) ss
     | Just t <- mt = occur__ n t ss
     where
         mt = M.lookup m ss
+occur__ n (Type.Fun t1s t2) ss = any (\x -> occur__ n x ss) t1s || occur__ n t2 ss
+occur__ n (Type.Tuple ts) ss = any (\x -> occur__ n x ss) ts
 occur__ _ _ _ = False
+
 
 unify :: Type.Type -> Type.Type -> TypeM ()
 unify t1 t2 = getsubst >>= (unify__ t1 t2)
 
 unify__ :: Type.Type -> Type.Type -> Type.Subst -> TypeM ()
-unify__ t1 t2 ss
+unify__ t1 t2 _
     | t1 == t2 = return ()
+unify__ tt1@(Type.Fun t1s t1) tt2@(Type.Fun t2s t2) _ = do
+   if length t1s /= length t2s then Typing.throw $ UnifyError tt1 tt2 else return ()
+   sequence_ $ zipWith unify t1s t2s
+   unify t1 t2
+unify__ t1_@(Type.Tuple t1s) t2_@(Type.Tuple t2s) _ = do
+    if length t1s /= length t2s then Typing.throw $ UnifyError t1_ t2_ else return ()
+    sequence_ $ zipWith unify t1s t2s
+unify__ t1 t2 ss
     | (Type.Var n) <- t1, Just t <- M.lookup n ss = unify t t2
     | (Type.Var n) <- t2, Just t <- M.lookup n ss = unify t1 t
     | (Type.Var n) <- t1 = add_type_var n t2
@@ -105,6 +127,8 @@ unify__ t1 t2 ss
             tf <- occur n t
             if not tf then add_subst n t
             else Typing.throw $ UnifyError (Type.Var n) t
+
+
 
 unifyM :: Type.Type -> TypeM Type.Type -> TypeM ()
 unifyM t2 tm1 = do
@@ -125,6 +149,8 @@ infer e = do
 infer__ :: Syntax -> Type.TyEnv -> Type.ExtEnv -> TypeM Type.Type
 infer__ Unit _ _ = return Type.Unit
 infer__ (Int _) _ _ = return Type.Int
+infer__ (Bool _) _ _ = return Type.Bool
+infer__ (In t) _ _ = return t
 infer__ (Out _ e1) _ _ = do
     unifyM Type.Int (infer e1)
     return Type.Unit
@@ -139,6 +165,30 @@ infer__ (Let (x, t) e1 e2) _ _ = do
     unifyM t (infer e1)
     add_tyenv x t
     infer e2
+infer__ (LetRec (Func {name = (x,t), args = yts, body = e1}) e2) env _ = do
+    let nenv = M.insert x t env
+    let addmap = M.fromList yts
+    get >>= (\f -> put (f { Typing.tyenv = M.union addmap nenv }))    -- env を変更
+    unifyM t (Type.Fun (map snd yts) <$> (infer e1))
+    get >>= (\f -> put (f { Typing.tyenv = nenv }))                   -- nenv に戻す
+    infer e2
+infer__ (App e es) _ _ = do
+    t <- Type.Var <$> gentyp
+    tmp <- mapM infer es
+    unifyM (Type.Fun tmp t) (infer e)
+    return t
+infer__ (Tuple es) _ _ = Type.Tuple <$> mapM infer es
+infer__ (LetTuple xts e1 e2) env _ = do
+    let t = Type.Tuple $ map snd xts
+    unifyM t (infer e1)
+    let nenv = M.union (M.fromList xts) env
+    get >>= (\f -> put (f {Typing.tyenv = nenv}))
+    infer e2
+infer__ (If e1 e2 e3) _ _ = do
+    unifyM Type.Bool (infer e1)
+    t <- infer e2
+    unifyM t (infer e3)
+    return t
 infer__ (Var x) tenv ext
     | Just t <- M.lookup x tenv = return t
     | Just t <- M.lookup x ext = return t
@@ -146,6 +196,8 @@ infer__ (Var x) tenv ext
         n <- gentyp
         add_ext x (Type.Var n)
         return $ Type.Var n
+
+
 
 add_tyenv :: String -> Type.Type -> TypeM ()
 add_tyenv n t = get >>= (\f -> put (f { Typing.tyenv  = insert n t (Typing.tyenv  f) }))

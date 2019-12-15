@@ -7,5 +7,5 @@ make test/$1.s
 
 cp test/$1.s ../../simulator/simulator/sim/
 cd ../../simulator/simulator/sim
-./test.sh $1.s input.bin 1
+./test.sh $1.s input.bin 0
 mv out.txt ../../../compiler_Haskell/src/test/$1.sim

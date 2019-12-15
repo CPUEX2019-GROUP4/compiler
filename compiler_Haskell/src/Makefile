@@ -10,7 +10,7 @@ Parser.hs: Parser.y
 	happy $<
 
 clean:
-	rm *.o *.hi Lexer.hs Parser.hs test/*.s
+	rm *.o *.hi Lexer.hs Parser.hs test/*.s test/*.sim
 
 test/%.s: $(RESULT) test/%.ml
 	./$(RESULT) test/$*.ml

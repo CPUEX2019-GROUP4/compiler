@@ -1,15 +1,20 @@
 module Virtual where
 
+import Prelude hiding(seq)
+import Control.Monad.State (get)
 import qualified Data.Map as M
-import Asm
+import qualified Data.Set as S (notMember)
+import Asm hiding(fv)
 import qualified Closure_Type as C
+import Closure (fv)
 import Type
 import RunRun
+import Syntax (Arith_binary(..))
 
 mapinit :: M.Map String Type
 mapinit = M.singleton "%r0" Type.Int
 
-classify :: Foldable t1 => t1 (t2, Type) -> b -> (b -> t2 -> b) -> (b -> t2 -> Type -> b) -> b
+classify :: [(t2, Type)] -> b -> (b -> t2 -> b) -> (b -> t2 -> Type -> b) -> b
 classify xts ini addf addi = foldl f ini xts
                where
                f acc (x,t) = case t of
@@ -17,13 +22,14 @@ classify xts ini addf addi = foldl f ini xts
                         Type.Float-> addf acc x;
                         _ -> addi acc x t
 
-separate :: Foldable t1 => t1 (a, Type) -> ([a], [a])
+separate :: [(a, Type)] -> ([a], [a])
 separate xts = classify xts ([],[]) f1 f2
         where
             f1 (i,f) x = (i, f ++ [x])
             f2 (i,f) x _ = (i ++ [x], f)
 
-expand :: (Foldable t1, Num t2) => t1 (t3, Type) -> (t2, t4) -> (t3 -> t2 -> t4 -> t4) -> (t3 -> Type -> t2 -> t4 -> t4) -> (t2, t4)
+expand :: [(t3, Type)] -> (Int, t4) -> (t3 -> Int -> t4 -> t4)
+            -> (t3 -> Type -> Int -> t4 -> t4) -> (Int, t4)
 expand xts ini addf addi =
     (classify xts ini)
     (\(offset, acc) x -> (offset + 4, addf x offset acc))
@@ -35,37 +41,88 @@ g _    C.Unit = return $ Ans Nop
 g _   (C.Int i) = return $ Ans (Li i)
 g _   (C.Float f) = return $ Ans (FLi f)
 g _   (C.Out n x) = return $ Ans (Out n x)
+g _   (C.In t) = return $ Ans (In t)
 g _   (C.Arith2 arith x y) = return $ Ans (Arith2 arith x (V y))
-g _   (C.Cmp cmp x y) = return $ Ans (Cmp cmp x (V y))
+g _   (C.Cmp cmp x y) = ------------ have to check type !!!!!!!!!
+        return $ Ans (Cmp cmp x (V y))
+g env (C.If x e1 e2) = do
+        Ans <$> (If x <$> g env e1 <*> g env e2)
 g env (C.Let (x,t) e1 e2) = do
-    e1' <- g env e1
-    e2' <- g (M.insert x t env) e2
-    return $ Asm.concat e1' (x, t) e2'
+        e1' <- g env e1
+        e2' <- g (M.insert x t env) e2
+        return $ Asm.concat e1' (x, t) e2'
 g env (C.Var x)
         | Just Unit <-  f   = return $ Ans Nop
         | Just Float <- f   = return $ Ans (FMv x)
         | otherwise         = return $ Ans (Mv x)
         where f = M.lookup x env
+g env (C.Tuple xs) = do
+        y <- genid "t"
+        let (ofset, store_tmp) = (expand
+                (map (\x -> (x, env M.! x)) xs)
+                (0, return $ Ans(Mv y))
+                (\x offset store_elem -> store_elem >>= (\st -> seq (Sf x y (C offset), st)))
+                (\x _ offset store_elem -> store_elem >>= (\st -> seq (Sw x y (C offset), st)))
+                )
+        store <- store_tmp
+        return $ Let (y, (Tuple (map (\x -> env M.! x) xs))) (Mv reg_hp) $
+                        Let (reg_hp, Int) (Arith2 Add reg_hp (C ofset)) store
+g env (C.LetTuple xts y e2) = do
+        let fvset = fv e2
+        tmp <- g (M.union (M.fromList xts) env) e2
+        let (_, lo) = (expand -- value is not monadic here
+                xts
+                (0, tmp)
+                (\x offset load -> if S.notMember x fvset then load else fletd (x, Lf y (C offset), load))
+                (\x t offset load -> if S.notMember x fvset then load else Let (x,t) (Lw y (C offset)) load)
+                )
+        return lo
+
+g env (C.MakeCls (x,t) (C.Cls { C.entry = l, C.actual_fv = ys }) e2) = do
+        e2' <- g (M.insert x t env) e2
+        let (ofset, store_fv_tmp) = (expand
+                (map (\y -> (y, env M.! y)) ys)
+                (4,return e2')
+                (\y offset store_fv -> store_fv >>= (\sfv -> seq (Sf y x (C offset), sfv)))
+                (\y _ offset store_fv -> store_fv >>= (\sfv -> seq (Sw y x (C offset), sfv)))
+                )
+        store_fv <- store_fv_tmp
+        z <- genid "l"
+        tmp <- seq(Sw z x (C 0), store_fv)
+        return $ Let (x,t) (Mv reg_hp)
+                        (Let (reg_hp,Type.Int) (Arith2 Add reg_hp (C ofset))
+                                (Let (z,Type.Int) (SetL l) tmp))
+g env (C.AppDir (C.L x) ys) = do
+        let (i,f) = separate (map (\y -> (y,env M.! y)) ys)
+        return (Ans (CallDir (C.L x) i f))
+
+
+
 
 h :: C.Fundef -> RunRun Afundef
-h _ = throw $ Fail "wow"
---h (C.Fundef { C.name = (C.L x, t),
---    C.args = yts,
---    C.formal_fv = zts,
---    C.body = e }) = do
---            let (i, f) = separate yts
---            ini_ <- g (M.insert x t (M.fromList yts `M.union` (M.fromList zts `M.union` mapinit))) e
---            let (off, lo) = expand zts
---                    (4, ini_)
---                    (\z offset load -> (fletd (z, Lf x (C offset), load)))
---                    (\z t' offset load -> (Let (z,t') (Lw x (C offset)) load))
---            case t of
---                    _ -> throw $ Fail "wow"
+h (C.Fundef { C.name = (C.L x, t),
+    C.args = yts,
+    C.formal_fv = zts,
+    C.body = e }) = do
+            let (i, f) = separate yts
+            ini_ <- g (M.insert x t (M.fromList yts `M.union` (M.fromList zts `M.union` mapinit))) e
+            let (_, lo) = expand zts
+                    (4, ini_)
+                    (\z offset load -> (fletd (z, Lf x (C offset), load)))
+                    (\z t' offset load -> (Let (z,t') (Lw x (C offset)) load))
+            case t of
+                    Type.Fun _ t2 -> return $ Afundef { a_name = C.L x,
+                                                        a_args = i,
+                                                        a_fargs = f,
+                                                        a_body = lo,
+                                                        a_ret = t2}
+                    _ -> throw $ Fail "wow"
+
 
 virtual :: C.Prog -> RunRun Aprog
-virtual (C.Prog fundefs e) = do
+virtual (C.Prog e) = do
     eputstrln "virtual ..."
-    fundefs' <- mapM h fundefs
+    fundefs' <- ((mapM h . reverse . toplevel) =<< get)
     e' <- g mapinit e
     eprint e'
     return $ Aprog fundefs' e'

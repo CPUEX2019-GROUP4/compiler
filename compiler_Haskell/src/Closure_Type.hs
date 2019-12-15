@@ -5,16 +5,23 @@ import qualified Type as Ty
 
 
 data L = L String deriving (Show, Eq)
-data Prog = Prog [Fundef] C deriving(Show)
+data Prog = Prog C deriving(Show)
 data C =
     Unit
   | Int !Int
   | Float !Float
   | Arith2 !Syn.Arith_binary !String !String
   | Cmp !Syn.Compare !String !String
+  | If !String !C !C
   | Let !(String, Ty.Type) !C !C
   | Var !String
   | Out !Int !String
+  | In !Ty.Type
+  | Tuple ![String]
+  | LetTuple ![(String, Ty.Type)] !String !C
+  | MakeCls !(String, Ty.Type) !Closure !C
+  -- | AppCls !String ![String]      ----------- とりあえずなしで
+  | AppDir !L ![String]
   deriving(Show)
 data Fundef = Fundef {
         name :: (L, Ty.Type),
@@ -23,3 +30,6 @@ data Fundef = Fundef {
         body :: C
         }
         deriving(Show)
+
+data Closure = Cls { entry :: L, actual_fv :: [String] }
+        deriving (Show)
