@@ -11,7 +11,7 @@ import Control.Monad.IO.Class()
 import Asm
 import RunRun
 import Data.Bits as B
-import Syntax (Arith_binary(..), Compare(..))
+import Syntax (Arith_unary(..), Arith_binary(..), Compare(..))
 import Closure_Type (L(L))
 import Type (Type(..))
 
@@ -108,6 +108,20 @@ g' oc xx@(NonTail x, exp)
     | In (Type.Float) <- exp =
             liftIO $ hPutStr oc $ printf "    infloat %s\n" (reg x)
     | In _ <- exp = throw $ Fail "input is only available for int and float."
+
+    | Arith1 Neg y <- exp =
+            liftIO $ hPutStr oc $ printf "    sub %s r0 %s\n" (reg x) (reg y)
+    | Arith1 Mul4 y <- exp =
+            liftIO $ hPutStr oc $ printf "    sll %s %s 2\n" (reg x) (reg y)
+    | Arith1 Mul10 y <- exp = do
+            liftIO $ hPutStr oc $ printf "    sll %s %s 3\n" (reg x) (reg y)
+            liftIO $ hPutStr oc $ printf "    add %s %s %s\n" (reg x) (reg x) (reg y)
+            liftIO $ hPutStr oc $ printf "    add %s %s %s\n" (reg x) (reg x) (reg y)
+    | Arith1 Div2 y <- exp =
+            liftIO $ hPutStr oc $ printf "    div2 %s %s\n" (reg x) (reg y)
+    | Arith1 Div10 y <- exp =
+            liftIO $ hPutStr oc $ printf "    div10 %s %s\n" (reg x) (reg y)
+
     | Arith2 Add y (V z) <- exp =
             liftIO $ hPutStr oc $ printf "    add %s %s %s\n" (reg x) (reg y) (reg z)
     | Arith2 Add y (C z) <- exp =
@@ -182,6 +196,7 @@ g' oc (Tail, exp)
     | Li _          <- exp = e
     | SetL _        <- exp = e
     | Mv _          <- exp = e
+    | Arith1 _ _    <- exp = e
     | Arith2 _ _ _  <- exp = e
     | Slw _ _       <- exp = e
     | Lw _ _        <- exp = e

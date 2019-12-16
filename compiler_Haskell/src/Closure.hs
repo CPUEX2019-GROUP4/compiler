@@ -20,6 +20,7 @@ fv (Int _)                  = S.empty
 fv (Float _)                = S.empty
 fv (In _)                   = S.empty
 fv (Out _ x)                = if x /= "%r0" then S.singleton x else S.empty
+fv (Arith1 _ x)             = S.delete "%r0" $ S.singleton x
 fv (Arith2 _ x y)           = S.delete "%r0" $ S.fromList [x,y]
 fv (Cmp _ x y)              = S.delete "%r0" $ S.fromList [x,y]
 fv (If x e1 e2)             = S.delete "%r0" $ S.insert x $ S.union (fv e1) (fv e2)
@@ -42,6 +43,7 @@ g _   _ (K.Int i)               = return $ Int i
 g _   _ (K.Float f)             = return $ Float f
 g _   _ (K.Out n e)             = return $ Out n e
 g _   _ (K.In t)                = return $ In t
+g _   _ (K.Arith1 arith e1)     = return $ Arith1 arith e1
 g _   _ (K.Arith2 arith e1 e2)  = return $ Arith2 arith e1 e2
 g _   _ (K.Cmp cmp e1 e2)       = return $ Cmp cmp e1 e2
 g env known (K.If x e1 e2)      = If x <$> g env known e1 <*> g env known e2

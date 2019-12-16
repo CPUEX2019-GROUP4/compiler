@@ -17,6 +17,7 @@ g env e
     | Float _           <- e = return e
     | In _              <- e = return e
     | Out n x           <- e = return $ Out n (f x)
+    | Arith1 arith x    <- e = return $ Arith1 arith (f x)
     | Arith2 arith x y  <- e = return $ Arith2 arith (f x) (f y)
     | Cmp cmp x y       <- e = return $ Cmp cmp (f x) (f y)
     | If x e1 e2        <- e = do

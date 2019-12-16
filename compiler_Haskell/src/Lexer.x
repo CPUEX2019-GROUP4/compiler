@@ -26,7 +26,13 @@ tokens :-
   "<-"                                { \_ -> TokenARROW }
   "+"                                 { \_ -> TokenPLUS }
   "-"                                 { \_ -> TokenMINUS }
+  "*" $space* 4                       { \_ -> TokenMUL4 }
+  "*" $space* 10                      { \_ -> TokenMUL10 }
+  "/" $space* 2                       { \_ -> TokenDIV2 }
+  "/" $space* 10                      { \_ -> TokenDIV10 }
   "="                                 { \_ -> TokenEQ }
+  "<="                                { \_ -> TokenLE }
+  ">="                                { \_ -> TokenGE }
   "<"                                 { \_ -> TokenLT }
   ">"                                 { \_ -> TokenGT }
   "("                                 { \_ -> TokenLPAREN }
@@ -34,6 +40,7 @@ tokens :-
   ";"                                 { \_ -> TokenSEMICOLON }
   ","                                 { \_ -> TokenCOMMA }
   "."                                 { \_ -> TokenDOT }
+  not                                 { \_ -> TokenNOT }
   true                                { \_ -> TokenBOOL (True) }
   false                               { \_ -> TokenBOOL (False) }
   print_char                          { \_ -> TokenPrintChar }
@@ -45,13 +52,15 @@ tokens :-
 
 {
 data Token
-    = TokenINT Int | TokenVAR String
+    = TokenINT Int | TokenVAR String | TokenFloat Float
+    | TokenNOT
     | TokenBOOL Bool
     | TokenLET | TokenREC | TokenIN
     | TokenIF | TokenTHEN | TokenELSE
     | TokenARROW
+    | TokenMUL4 | TokenMUL10 | TokenDIV2 | TokenDIV10
     | TokenPLUS | TokenMINUS
-    | TokenEQ | TokenLT | TokenGT
+    | TokenEQ | TokenLT | TokenGT | TokenLE | TokenGE
     | TokenRPAREN | TokenLPAREN
     | TokenSEMICOLON | TokenCOMMA | TokenDOT
     | TokenPrintChar

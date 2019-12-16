@@ -10,6 +10,7 @@ data C =
     Unit
   | Int !Int
   | Float !Float
+  | Arith1 !Syn.Arith_unary  !String
   | Arith2 !Syn.Arith_binary !String !String
   | Cmp !Syn.Compare !String !String
   | If !String !C !C

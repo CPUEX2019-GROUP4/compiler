@@ -42,6 +42,7 @@ g _   (C.Int i)         = return $ Ans (Li i)
 g _   (C.Float f)       = return $ Ans (FLi f)
 g _   (C.Out n x)       = return $ Ans (Out n x)
 g _   (C.In t)          = return $ Ans (In t)
+g _   (C.Arith1 arith x)= return $ Ans (Arith1 arith x)
 g _   (C.Arith2 arith x y) = return $ Ans (Arith2 arith x (V y))
 g _   (C.Cmp cmp x y)   = ------------ have to check type !!!!!!!!!
         return $ Ans (Cmp cmp x (V y))

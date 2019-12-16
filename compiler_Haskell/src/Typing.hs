@@ -76,6 +76,8 @@ deref_id_typ :: (String, Type.Type) -> TypeM (String, Type.Type)
 deref_id_typ (x,t) = deref_typ t >>= \t' -> return (x, t')
 
 deref_term :: Syntax -> TypeM Syntax
+deref_term (Not e) = Not <$> deref_term e
+deref_term (Arith1 arith e1 )   = Arith1 arith <$> deref_term e1
 deref_term (Arith2 arith e1 e2) = Arith2 arith <$> deref_term e1 <*> deref_term e2
 deref_term (Cmp comp e1 e2) = Cmp comp <$> deref_term e1 <*> deref_term e2
 deref_term (Let xt e1 e2) = Let <$> deref_id_typ xt <*> deref_term e1 <*> deref_term e2
@@ -150,10 +152,14 @@ infer__ :: Syntax -> Type.TyEnv -> Type.ExtEnv -> TypeM Type.Type
 infer__ Unit _ _ = return Type.Unit
 infer__ (Int _) _ _ = return Type.Int
 infer__ (Bool _) _ _ = return Type.Bool
+infer__ (Not e) _ _ = unifyM Type.Bool (infer e) >> return Type.Bool
 infer__ (In t) _ _ = return t
 infer__ (Out _ e1) _ _ = do
     unifyM Type.Int (infer e1)
     return Type.Unit
+infer__ (Arith1 _ e1) _ _ = do
+    unifyM Type.Int (infer e1)
+    return Type.Int
 infer__ (Arith2 _ e1 e2) _ _ = do
     unifyM Type.Int (infer e1)
     unifyM Type.Int (infer e2)

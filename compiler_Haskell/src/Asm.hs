@@ -5,7 +5,7 @@ import Data.Array
 import Data.List
 import RunRun
 import Type
-import Syntax (Arith_binary(..), Compare(..))
+import Syntax (Arith_binary(..), Arith_unary(..), Compare(..))
 import Closure_Type (L(..))
 
 data Id_or_imm = V String | C Int deriving(Show, Eq)
@@ -18,6 +18,7 @@ data Exp =
   | Mv !String
   | Out !Int !String
   | In !Type
+  | Arith1 !Arith_unary  !String
   | Arith2 !Arith_binary !String !Id_or_imm
   | Slw !String !Id_or_imm
   | Lw !String !Id_or_imm
@@ -105,6 +106,7 @@ fv_exp (FMv x) = [x]
 fv_exp (Save x _) = [x]
 fv_exp (Out _ x) = [x]
 fv_exp (In _) = []
+fv_exp (Arith1 _ x) = [x]
 fv_exp (Arith2 _ x y') = x :  fv_id_pr_imm y'
 fv_exp (Slw x y') = x : fv_id_pr_imm y'
 fv_exp (Lf x y') = x : fv_id_pr_imm y'

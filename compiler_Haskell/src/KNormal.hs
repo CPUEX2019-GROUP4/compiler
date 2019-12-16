@@ -14,6 +14,7 @@ data K =
       Unit
     | Int !Int
     | Float !Float
+    | Arith1 !Syn.Arith_unary  !String
     | Arith2 !Syn.Arith_binary !String !String
     | Cmp !Syn.Compare !String !String
     | Let !(String, Type.Type) !K !K
@@ -41,6 +42,7 @@ fv Unit                 = S.empty
 fv (In _)               = S.empty
 fv (Int _)              = S.empty
 fv (Float _)            = S.empty
+fv (Arith1 _ x)         = S.singleton x
 fv (Arith2 _ x y)       = S.fromList [x, y]
 fv (Cmp _ x y)          = S.fromList [x, y]
 fv (Let (x,_) e1 e2)    = S.union (fv e1) (S.delete x (fv e2))
@@ -98,10 +100,18 @@ k_body _ (Syn.In t)       = return (In t, t)
 k_body _ (Syn.Bool b)     = return (Int (if b then 1 else 0), Type.Int)
 k_body _ (Syn.Int i)      = return (Int i, Type.Int)
 ----k_body (Syn.Float f)    = (Float f, Type.Float)
+k_body env (Syn.Not e) = do
+        x' <- k_body env e
+        (`runCont` id) $ do
+            (\x -> return (If x (Int 0) (Int 1), Type.Int)) <$> insert_let x'
 k_body env (Syn.Out n e1) = do
         x' <- k_body env e1
         (`runCont` id) $ do
             (\x -> return (Out n x, Type.Unit)) <$> insert_let x'
+k_body env (Syn.Arith1 arith e1) = do
+        x' <- k_body env e1
+        (`runCont` id) $ do
+            (\x -> return (Arith1 arith x, Type.Int)) <$> insert_let x'
 k_body env (Syn.Arith2 arith e1 e2) = do
         x' <- k_body env e1
         y' <- k_body env e2

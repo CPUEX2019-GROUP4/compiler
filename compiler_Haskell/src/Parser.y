@@ -24,6 +24,7 @@ import Lexer
       TokenINT              { TokenINT $$ }
       TokenBOOL             { TokenBOOL $$ }
       TokenVAR              { TokenVAR $$ }
+      "not"                 { TokenNOT }
       TokenLET              { TokenLET }
       TokenREC              { TokenREC }
       TokenIN               { TokenIN }
@@ -32,8 +33,14 @@ import Lexer
       "else"                { TokenELSE }
       "<-"                  { TokenARROW }
       "="                   { TokenEQ }
+      "*4"                  { TokenMUL4  }
+      "*10"                 { TokenMUL10 }
+      "/2"                  { TokenDIV2  }
+      "/10"                 { TokenDIV10 }
       "+"                   { TokenPLUS }
       "-"                   { TokenMINUS }
+      "<="                  { TokenLE }
+      ">="                  { TokenGE }
       "<"                   { TokenLT }
       ">"                   { TokenGT }
       "("                   { TokenLPAREN }
@@ -53,11 +60,12 @@ import Lexer
 %left ","
 %left "=" ">" "<"
 %left "+" "-"
+%left "*4" "*10" "/2" "/10"
 -- "+." "-."
 -- %left "*." "/." "*" "/"
--- %right prec_unary_minus
+%right prec_unary_minus
 %left prec_app
--- %left "."
+%left "."
 
 %%
 
@@ -72,9 +80,20 @@ simple_exp:                 -- 括弧なしで引数になれる
 
 exp:                        -- 一般
     simple_exp              { $1 }
+  | "not" exp
+        %prec prec_app      { Not $2 }
+  | "-" exp
+        %prec prec_unary_minus
+                            { case $2 of; Syntax.Float f -> (Syntax.Float (-f)); _ -> (Arith1 Neg $2) }
   | exp "+" exp             { Arith2 Add $1 $3 }
   | exp "-" exp             { Arith2 Sub $1 $3 }
+  | exp "*4"                { Arith1 Mul4  $1 }
+  | exp "*10"               { Arith1 Mul10 $1 }
+  | exp "/2"                { Arith1 Div2  $1 }
+  | exp "/10"               { Arith1 Div10 $1 }
   | exp "=" exp             { Cmp Eq  $1 $3 }
+  | exp "<=" exp            { Not $ Cmp Gt $1 $3 }
+  | exp ">=" exp            { Not $ Cmp Lt $1 $3 }
   | exp "<" exp             { Cmp Lt  $1 $3 }
   | exp ">" exp             { Cmp Gt  $1 $3 }
   | "if" exp "then" exp "else" exp
