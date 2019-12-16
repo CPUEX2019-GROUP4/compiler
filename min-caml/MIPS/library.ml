@@ -2,8 +2,7 @@
 let rec finv x =
 (*  (if fiszero x then x else*)
   let t = UNKNOWN finv_init float float x in
-  let two = 2.0 in
-  let t = (t *. (two -. x *. t)) in
+  let t = (t *. (2.0 -. x *. t)) in
   t(*)*)
 in
 (* fdiv *)
@@ -25,30 +24,6 @@ in
 let rec print_newline _ = out 10 0 in
 
 (* sin *)
-let rec reduction_2pi_sub1 v =
-  if (v.(0) <. v.(1)) then
-    ()
-  else
-    (v.(1) <- v.(1) *. 2.;
-    reduction_2pi_sub1 v)
-in
-let rec reduction_2pi_sub2 v =
-  if v.(0) >. 6.28318530717958 then
-    (if v.(0) >. v.(1) then
-      v.(0) <- v.(0) -. v.(1)
-    else
-      ()
-    );
-    v.(1) <- v.(1) /. 2.;
-    reduction_2pi_sub2 v
-  else
-    ()
-in
-let rec reduction_2pi v =
-  v.(1) <- 6.28318530717958;
-  reduction_2pi_sub1 v;
-  reduction_2pi_sub2 v
-in
 let rec kernel_sin a =
   let a2 = a *. a in
   let a3 = a2 *. a in
@@ -62,45 +37,50 @@ let rec kernel_cos a =
   let a6 = a4 *. a2 in
   1.0 -. (0.5 *. a2) +. (0.04166368 *. a4) -. (0.0013695068 *. a6)
 in
-
-let rec sin a =
-  let v = create_array 3 a in
-  (if a <. 0.0 then v.(0) <- -. a else ());
-  reduction_2pi v;
-  (if v.(0) >. 3.141592653589793238 then
-    (v.(0) <- v.(0) -. 3.141592653589793238;
-    v.(2) <- -. v.(2)) else ());
-  (if v.(0) >. 1.5707963267948966 then
-    v.(0) <- 3.141592653589793238 -. v.(0) else ());
+let rec sin x =
+  let qwert_pi = 0.7853981633974483 in
+  let half_pi = qwert_pi +. qwert_pi in
+  let pi = half_pi +. half_pi in
+  let dpi = pi +. pi in
+  let b = x /. dpi in
+  let n = float_of_int (int_of_float b) in
+  let x = x -. (dpi *. n) in
+  let x = if x >. 0.0 then x else x +. dpi in
+  (* pi *)
+  let sign = if x >. pi then false else true in
+  let xx = if x >. pi then x -. pi else x in
+  (* pi/2 *)
+  let x = if xx >. half_pi then pi -. xx else xx in
+  (* pi/4 *)
   let x =
-    if v.(0) >. 0.7853981633974483 then
-      kernel_cos (1.5707963267948966 -. v.(0))
+    if x >. qwert_pi then
+      kernel_cos (half_pi -. x)
     else
-      kernel_sin v.(0)
-  in if v.(2) <. 0. then -. x else x
+      kernel_sin x
+  in
+  if sign then x else -. x
 in
-
-let rec cos a =
-  let a = if a <. 0.0 then -. a else a in
-  let v = create_array 3 a in
-  reduction_2pi v;
-  (if v.(0) >. 3.141592653589793238 then
-    (v.(0) <- v.(0) -. 3.141592653589793238;
-     v.(2) <- -1.0)
-  else ());
-  (if v.(0) >.1.5707963267948966 then
-    (v.(0) <- 3.141592653589793 -. v.(0);
-     v.(2) <- -. v.(2))
-  else ());
-
+let rec cos x =
+  let qwert_pi = 0.7853981633974483 in
+  let half_pi = qwert_pi +. qwert_pi in
+  let pi = half_pi +. half_pi in
+  let dpi = pi +. pi in
+  let b = x /. dpi in
+  let n = float_of_int (int_of_float b) in
+  let x = x -. (dpi *. n) in
+  let x = if x >. 0.0 then x else -.x in
+  let sign = if x >. pi then -1 else 1 in
+  let x = if x >. pi then x -. pi else x in
+  let sign = if x >. half_pi then - sign else sign in
+  let x = if x >. half_pi then pi -. x else x in
   let x =
-    if v.(0) <. 0.7853981633974483 then
-      kernel_cos v.(0)
+    if x <. qwert_pi then
+      kernel_cos x
     else
-      kernel_sin (1.5707963267948966 -. v.(0))
-  in if v.(2) <. 0.0 then -. x else x
+      kernel_sin (half_pi -. x)
+  in
+  if sign = -1 then -. x else x
 in
-
 
 (* sqrt *)
 let rec sqrt x =
