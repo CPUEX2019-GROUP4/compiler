@@ -57,7 +57,7 @@ let rec g env = function (* 定数畳み込みルーチン本体 (caml2html: constfold_g) *)
   | Unknown("finv_init", t1, t2, x)
                 when memf x env -> let f = findf x env in if f = 0.0 then Float 0.0 else Float (1. /. f)
   | Unknown("sqrt_init", t1, t2, x)
-                when memf x env -> let f = findf x env in Float (sqrt f)
+                when memf x env -> let f = findf x env in if f <= 0.0 then Float 0.0 else Float (1.0 /. sqrt f)
   (* IfEq *)
   | IfEq(x, y, e1, e2) when memi x env && memi y env -> if findi x env = findi y env then g env e1 else g env e2
   | IfEq(x, y, e1, e2) -> IfEq(x, y, g env e1, g env e2)
