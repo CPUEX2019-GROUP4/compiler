@@ -36,6 +36,7 @@ import Lexer
       "else"                { TokenELSE }
       "<-"                  { TokenARROW }
       "="                   { TokenEQ }
+      "<>"                  { TokenNEQ }
       "*4"                  { TokenMUL4  }
       "*10"                 { TokenMUL10 }
       "/2"                  { TokenDIV2  }
@@ -50,6 +51,8 @@ import Lexer
       ">="                  { TokenGE }
       "<"                   { TokenLT }
       ">"                   { TokenGT }
+      "fless"               { TokenFLESS }
+      "fiszero"             { TokenFISZERO }
       "("                   { TokenLPAREN }
       ")"                   { TokenRPAREN }
       "SEMI"                { TokenSEMICOLON }
@@ -64,13 +67,14 @@ import Lexer
       "itof"                { TokenItoF }
       "ftoi"                { TokenFtoI }
 
+%nonassoc TokenIN
 %right prec_let
 %right "SEMI"
 %right prec_if
 %right "<-"
 %nonassoc prec_tuple
 %left ","
-%left "=" ">" "<"
+%left "=" "<>" ">" "<" "<=" ">="
 %left "+" "-" "+." "-."
 %left "*4" "*10" "/2" "/10" "*." "/."
 %right prec_unary_minus
@@ -105,28 +109,35 @@ exp:                        -- 一般
   | exp "*10"               { Arith1 Mul10 $1 }
   | exp "/2"                { Arith1 Div2  $1 }
   | exp "/10"               { Arith1 Div10 $1 }
-  | "finv_init" exp         { Float1 Finv_init $2 }
-  | "sqrt_init" exp         { Float1 Sqrt_init $2 }
+  | "finv_init" simple_exp
+        %prec prec_app      { Float1 Finv_init $2 }
+  | "sqrt_init" simple_exp
+        %prec prec_app      { Float1 Sqrt_init $2 }
   | exp "+." exp            { Float2 FAdd $1 $3 }
   | exp "-." exp            { Float2 FSub $1 $3 }
   | exp "*." exp            { Float2 FMul $1 $3 }
-  | exp "/." exp            { Float2 FDiv $1 $3 }
+  | exp "/." exp            { App (Var "fdiv") [$1,$3] }
   | exp "=" exp             { Cmp Eq  $1 $3 }
+  | exp "<>" exp            { Not $ Cmp Eq  $1 $3 }
   | exp "<=" exp            { Not $ Cmp Gt $1 $3 }
   | exp ">=" exp            { Not $ Cmp Lt $1 $3 }
   | exp "<" exp             { Cmp Lt  $1 $3 }
   | exp ">" exp             { Cmp Gt  $1 $3 }
+  | "fless" simple_exp simple_exp
+        %prec prec_app      { Cmp Lt $2 $3 }
+  | "fiszero" simple_exp
+        %prec prec_app      { Cmp Eq $2 (Float 0.0) }
   | "if" exp "then" exp "else" exp
         %prec prec_if       { If $2 $4 $6 }
   | TokenPrintChar exp
         %prec prec_app      { Out 0 $2 }
   | TokenReadInt "(" ")"    { In Type.Int }
   | TokenReadFloat "(" ")"  { In Type.Float }
-  | TokenPrintChar exp
+  | TokenPrintChar simple_exp
         %prec prec_app      { Out 0 $2 }
-  | "itof" exp
+  | "itof" simple_exp
         %prec prec_app      { Unary_op ItoF Type.Int Type.Float $2 }
-  | "ftoi" exp
+  | "ftoi" simple_exp
         %prec prec_app      { Unary_op FtoI Type.Float Type.Int $2 }
   | "Array.make" simple_exp simple_exp
         %prec prec_app      { Array $2 $3 }

@@ -16,11 +16,11 @@ import RunRun
 -- 関数の返り値や引数をできるだけ第一レジスタに.
 target' :: String -> (String, Type) -> Exp -> RunRun (Bool, [String])
 target' src (dest,t) (Mv x)
-    | x == src, is_reg dest, Type.Unit <- t = throw $ Fail "wow"
-    | x == src, is_reg dest, Type.Float <- t = throw $ Fail "wow"
+    | x == src, is_reg dest, Type.Unit <- t = throw $ Fail (x ++ src ++ "  " ++ show dest)
+    | x == src, is_reg dest, Type.Float <- t = throw $ Fail (x ++ src ++ "  " ++ show dest)
     | x == src, is_reg dest = return $ (False, [dest])
 target' src (dest,t) (FMv x)
-    | x == src, is_reg dest, Type.Float <- t = throw $ Fail "wow"
+    | x == src, is_reg dest, t /= Type.Float = throw $ Fail (x ++ src ++ "  " ++ show dest)
     | x == src, is_reg dest = return $ (False, [dest])
 target' src (dest,t) (If _ e1 e2) = do
         (c1, rs1) <- target src (dest,t) e1

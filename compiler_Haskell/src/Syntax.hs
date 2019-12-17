@@ -41,7 +41,7 @@ data Float_unary =
     FNeg | Sqrt_init | Finv_init
     deriving (Eq, Show)
 data Float_binary =
-    FAdd | FSub | FMul | FDiv
+    FAdd | FSub | FMul
     deriving (Eq, Show)
 
 data Compare =

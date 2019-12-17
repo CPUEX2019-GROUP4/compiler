@@ -10,10 +10,10 @@ import Data.Char (isDigit)
 %wrapper "basic"
 
 $space = [\ \t \n \r]
-$digit = 0-9        -- digits
+$digit = [0-9]        -- digits
 $lower = [a-z]
 $upper = [A-Z]
-@float = $digit+ (\. $digit*)? ([e E] [\+ \-] digit+)?
+@float = $digit+ (\. $digit*)? ([eE] [\+\-]? $digit+)?
 
 tokens :-
 
@@ -40,10 +40,13 @@ tokens :-
   "*."                                { \_ -> TokenFMUL }
   "/."                                { \_ -> TokenFDIV }
   "="                                 { \_ -> TokenEQ }
+  "<>"                                { \_ -> TokenNEQ }
   "<="                                { \_ -> TokenLE }
   ">="                                { \_ -> TokenGE }
   "<"                                 { \_ -> TokenLT }
   ">"                                 { \_ -> TokenGT }
+  "fless"                             { \_ -> TokenFLESS }
+  "fiszero"                           { \_ -> TokenFISZERO }
   "("                                 { \_ -> TokenLPAREN }
   ")"                                 { \_ -> TokenRPAREN }
   ";"                                 { \_ -> TokenSEMICOLON }
@@ -66,6 +69,7 @@ tokens :-
   Array.make                          { \_ -> TokenArrayCreate }
   $lower ($lower|$digit|$upper|\_)*   { \s -> TokenVAR s }
   $upper ($lower|$digit|$upper|\_)*   ;
+  \_                                  { \s -> TokenVAR s }
   .                                   ;
 
 {
@@ -81,7 +85,9 @@ data Token
     | TokenPLUS | TokenMINUS
     | TokenFINV_INIT | TokenSQRT_INIT
     | TokenFPLUS | TokenFMINUS | TokenFMUL | TokenFDIV
-    | TokenEQ | TokenLT | TokenGT | TokenLE | TokenGE
+    | TokenEQ | TokenNEQ | TokenLT | TokenGT | TokenLE | TokenGE
+    | TokenFLESS
+    | TokenFISZERO
     | TokenRPAREN | TokenLPAREN
     | TokenSEMICOLON | TokenCOMMA | TokenDOT
     | TokenItoF | TokenFtoI
