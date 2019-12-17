@@ -42,12 +42,17 @@ g _   (C.Int i)         = return $ Ans (Li i)
 g _   (C.Float f)       = return $ Ans (FLi f)
 g _   (C.Out n x)       = return $ Ans (Out n x)
 g _   (C.In t)          = return $ Ans (In t)
+g _   (C.Unary_op op t1 t2 x) = return $ Ans (Unary_op op t1 t2 x)
 g _   (C.Arith1 arith x)= return $ Ans (Arith1 arith x)
 g _   (C.Arith2 arith x y) = return $ Ans (Arith2 arith x (V y))
+g _   (C.Float1 arith x)= return $ Ans (Float1 arith x)
+g _   (C.Float2 arith x y) = return $ Ans (Float2 arith x y)
 g _   (C.Cmp cmp x y)   = ------------ have to check type !!!!!!!!!
         return $ Ans (Cmp cmp x (V y))
 g env (C.If x e1 e2)    = do
         Ans <$> (If x <$> g env e1 <*> g env e2)
+g env (C.FIfCmp cmp x y e1 e2)    = do
+        Ans <$> (FIfCmp cmp x y <$> g env e1 <*> g env e2)
 g env (C.Let (x,t) e1 e2) = do
         e1' <- g env e1
         e2' <- g (M.insert x t env) e2

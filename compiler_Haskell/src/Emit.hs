@@ -6,6 +6,8 @@ import Text.Printf(printf)
 import Data.List(elemIndex, partition)
 import Data.Set (insert, empty, intersection, notMember, Set)
 import Data.Array ((!))
+import Data.Int ()
+import Data.Char(toLower)
 import Control.Monad.State
 import Control.Monad.IO.Class()
 import Asm
@@ -14,6 +16,17 @@ import Data.Bits as B
 import Syntax (Arith_unary(..), Arith_binary(..), Compare(..))
 import Closure_Type (L(L))
 import Type (Type(..))
+
+import Foreign.C.Types
+
+foreign import ccall "getlo" c_getlo :: CFloat -> IO CShort
+foreign import ccall "gethi" c_gethi :: CFloat -> IO CShort
+
+getlo :: Float -> IO Int
+getlo = fmap fromIntegral . c_getlo . realToFrac
+gethi :: Float -> IO Int
+gethi = fmap fromIntegral . c_gethi . realToFrac
+
 
 stackadd :: String -> RunRun ()
 stackadd x = do
@@ -96,7 +109,15 @@ g' oc xx@(NonTail x, exp)
             let r = reg x
             liftIO $ hPutStr oc $ printf "    lui %s %d\n" r n
             liftIO $ hPutStr oc $ printf "    ori %s %s %d\n" r r m
-    | FLi _     <- exp = return () -- C 使わなあかんのか...
+    | FLi f     <- exp = do
+            n <- liftIO $ getlo f
+            m <- liftIO $ gethi f
+            let r = reg x
+            liftIO $ hPutStr oc $ printf "    flui %s %d\n" r n
+            if m /= 0 then
+                liftIO $ hPutStr oc $ printf "    fori %s %s %d\n" r r m
+            else
+                return ()
     | SetL (L y)<- exp = load_label oc x y
     | Mv y      <- exp, x == y = return ()
     | Mv y      <- exp =
@@ -106,8 +127,11 @@ g' oc xx@(NonTail x, exp)
     | In (Type.Int) <- exp =
             liftIO $ hPutStr oc $ printf "    inint %s\n" (reg x)
     | In (Type.Float) <- exp =
-            liftIO $ hPutStr oc $ printf "    infloat %s\n" (reg x)
+            liftIO $ hPutStr oc $ printf "    inflt %s\n" (reg x)
     | In _ <- exp = throw $ Fail "input is only available for int and float."
+
+    | Unary_op op _ _ y <- exp =
+            liftIO $ hPutStr oc $ printf "    %s %s %s\n" ((map toLower . show) op) (reg x) (reg y)
 
     | Arith1 Neg y <- exp =
             liftIO $ hPutStr oc $ printf "    sub %s r0 %s\n" (reg x) (reg y)
@@ -121,7 +145,6 @@ g' oc xx@(NonTail x, exp)
             liftIO $ hPutStr oc $ printf "    div2 %s %s\n" (reg x) (reg y)
     | Arith1 Div10 y <- exp =
             liftIO $ hPutStr oc $ printf "    div10 %s %s\n" (reg x) (reg y)
-
     | Arith2 Add y (V z) <- exp =
             liftIO $ hPutStr oc $ printf "    add %s %s %s\n" (reg x) (reg y) (reg z)
     | Arith2 Add y (C z) <- exp =
@@ -130,6 +153,10 @@ g' oc xx@(NonTail x, exp)
             liftIO $ hPutStr oc $ printf "    sub %s %s %s\n" (reg x) (reg y) (reg z)
     | Arith2 Sub y (C z) <- exp =
             liftIO $ hPutStr oc $ printf "    subi %s %s %d\n" (reg x) (reg y) z
+    | Float1 arith y <- exp =
+            liftIO $ hPutStr oc $ printf "    %s %s %s\n" ((map toLower . show) arith) (reg x) (reg y)
+    | Float2 arith y z <- exp =
+            liftIO $ hPutStr oc $ printf "    %s %s %s %s\n" ((map toLower . show) arith) (reg x) (reg y) (reg z)
     | Slw y (V z) <- exp =
             liftIO $ hPutStr oc $ printf "    sllv %s %s %s\n" (reg x) (reg y) (reg z)
     | Slw y (C z) <- exp =
@@ -152,14 +179,14 @@ g' oc xx@(NonTail x, exp)
     | Cmp Syntax.Eq y (C z) <- exp =
             liftIO $ hPutStr oc $ printf "    subi %s %s %d\n" (reg x) (reg y) z
     | Cmp Syntax.Lt y (V z) <- exp =
-            liftIO $ hPutStr oc $ printf "    slt %s %s %s\n" (reg x) (reg y) (reg z)
-    | Cmp Syntax.Lt y (C z) <- exp =
-            liftIO $ hPutStr oc $ printf "    slti %s %s %d\n" (reg x) (reg y) z
-    | Cmp Syntax.Gt y (V z) <- exp =
             liftIO $ hPutStr oc $ printf "    slt %s %s %s\n" (reg x) (reg z) (reg y)
-    | Cmp Syntax.Gt y (C z) <- exp = do
+    | Cmp Syntax.Lt y (C z) <- exp = do
             liftIO $ hPutStr oc $ printf "    ori %s r0 %d\n" (reg reg_tmp) z
             liftIO $ hPutStr oc $ printf "    slt %s %s %s\n" (reg x) (reg reg_tmp) (reg y)
+    | Cmp Syntax.Gt y (V z) <- exp =
+            liftIO $ hPutStr oc $ printf "    slt %s %s %s\n" (reg x) (reg y) (reg z)
+    | Cmp Syntax.Gt y (C z) <- exp =
+            liftIO $ hPutStr oc $ printf "    slti %s %s %d\n" (reg x) (reg y) z
     | Lf y (V z) <- exp = do
             liftIO $ hPutStr oc $ printf "    add %s %s %s\n" (reg_tmp) (reg y) (reg z)
             liftIO $ hPutStr oc $ printf "    lwcZ %s %s 0\n" (reg x) (reg_tmp)
@@ -178,10 +205,27 @@ g' oc xx@(NonTail x, exp)
             ofset <- offset y
             liftIO $ hPutStr oc $ printf "    lwcZ %s %s %d\n" (reg x) (reg reg_sp) ofset
     | Restore _ <- exp = throw $ Fail "my god ..."
-    | If y e1 e2 <- exp =
-            g'_non_tail_if oc (NonTail x) e1 e2 (reg y)
+    | If y e1 e2 <- exp = do
+            b_else <- genid "if_else"
+            b_cont <- genid "if_cont"
+            liftIO $ hPutStr oc $ printf "    bne %s r0 %s\n" (reg y) b_else
+            g'_non_tail_if oc (NonTail x) e1 e2 b_else b_cont
     | Makearray t n' v <- exp =
             g'_array oc t x n' v
+    | FIfCmp Lt y z e1 e2 <- exp = do
+            b_else <- genid "fless_else"
+            b_cont <- genid "fless_cont"
+            liftIO $ hPutStr oc $ printf "    fclt %s %s\n" (reg y) (reg z)
+            liftIO $ hPutStr oc $ printf "    bc1f %s\n" b_else
+            g'_non_tail_if oc (NonTail x) e1 e2 b_else b_cont
+    | FIfCmp Gt y z e1 e2 <- exp = g' oc (NonTail x, FIfCmp Lt z y e1 e2)
+    | FIfCmp Eq y z e1 e2 <- exp = do
+            b_else <- genid "feq_else"
+            b_cont <- genid "feq_cont"
+            liftIO $ hPutStr oc $ printf "    fsub %s %s %s\n" (reg reg_ftmp) (reg y) (reg z)
+            liftIO $ hPutStr oc $ printf "    fcz %s\n" (reg reg_ftmp)
+            liftIO $ hPutStr oc $ printf "    bc1f %s\n" b_else
+            g'_non_tail_if oc (NonTail x) e1 e2 b_else b_cont
 g' oc (Tail, exp)
     | Nop           <- exp = e
     | Out _ _       <- exp = e
@@ -196,6 +240,7 @@ g' oc (Tail, exp)
     | Li _          <- exp = e
     | SetL _        <- exp = e
     | Mv _          <- exp = e
+    | Unary_op _ _ t2 _ <- exp, t2 /= Type.Float = e
     | Arith1 _ _    <- exp = e
     | Arith2 _ _ _  <- exp = e
     | Slw _ _       <- exp = e
@@ -211,12 +256,30 @@ g' oc (Tail, exp)
     | FMv _         <- exp = e
     | Lf _ _        <- exp = e
     | In Type.Float <- exp = e
+    | Unary_op _ _ _ _ <- exp = e
+    | Float1 _ _    <- exp = e
+    | Float2 _ _ _  <- exp = e
     where e = do
             g' oc (NonTail (fregs ! 0), exp)
             liftIO $ hPutStr oc $ printf "    jr %s\n" (reg reg_lr)
 g' _ (Tail, In _) = throw $ Fail "input is only available for int and float."
 g' _ (Tail, Restore _) = throw $ Fail "restore at tail !?!?"
-g' oc (Tail, If y e1 e2) = g'_tail_if oc e1 e2 (reg y)
+g' oc (Tail, If y e1 e2) = do
+            b_else <- genid "if_else"
+            liftIO $ hPutStr oc $ printf "    bne %s r0 %s\n" (reg y) b_else
+            g'_tail_if oc e1 e2 b_else
+g' oc (Tail, FIfCmp Lt y z e1 e2) = do
+            b_else <- genid "fless_else"
+            liftIO $ hPutStr oc $ printf "    fclt %s %s\n" (reg y) (reg z)
+            liftIO $ hPutStr oc $ printf "    bc1f %s\n" b_else
+            g'_tail_if oc e1 e2 b_else
+g' oc (Tail, FIfCmp Gt y z e1 e2) = g' oc (Tail, FIfCmp Lt z y e1 e2)
+g' oc (Tail, FIfCmp Eq y z e1 e2) = do
+            b_else <- genid "fless_else"
+            liftIO $ hPutStr oc $ printf "    fsub %s %s %s\n" (reg reg_ftmp) (reg y) (reg z)
+            liftIO $ hPutStr oc $ printf "    fcz %s\n" (reg reg_ftmp)
+            liftIO $ hPutStr oc $ printf "    bc1f %s\n" b_else
+            g'_tail_if oc e1 e2 b_else
 g' oc (Tail, CallDir (L x) ys zs) = do
             g'_args oc [] ys zs
             liftIO $ hPutStr oc $ printf "    j %s\n" x
@@ -253,9 +316,7 @@ g'_stackset oc (NonTail _, Save x y) stset
 g'_stackset _ _ _ = throw $ Fail "e?"
 
 g'_tail_if :: Handle -> T -> T -> String -> RunRun ()
-g'_tail_if oc e1 e2 bool = do
-        b_else <- genid "if_else"
-        liftIO $ hPutStr oc $ printf "    beq %s r0 %s\n" bool b_else
+g'_tail_if oc e1 e2 b_else = do
         stackset_back <- stackset <$> get
         g oc (Tail, e1)
         liftIO $ hPutStr oc $ printf "%s:\n" b_else
@@ -263,11 +324,8 @@ g'_tail_if oc e1 e2 bool = do
         g oc (Tail, e2)
 
 
-g'_non_tail_if :: Handle -> Dest -> T -> T -> String -> RunRun ()
-g'_non_tail_if oc dest e1 e2 bool = do
-        b_else <- genid "if_else"
-        b_cont <- genid "if_cont"
-        liftIO $ hPutStr oc $ printf "    bne %s r0 %s\n" bool b_else
+g'_non_tail_if :: Handle -> Dest -> T -> T -> String -> String -> RunRun ()
+g'_non_tail_if oc dest e1 e2 b_else b_cont = do
         stackset_back <- stackset <$> get
         g oc (dest,e1)
         stackset1 <- stackset <$> get
@@ -288,7 +346,7 @@ g'_args oc x_reg_cl ys zs = do
             liftIO $ hPutStr oc $ printf "    mv %s %s\n" (reg r) (reg y))
             (shuffle reg_sw yrs)
         let (_, zrs) = (\f -> foldl f (0,[]) zs)
-                (\(d,zrs') z -> (d+1, (z,regs ! d) : zrs'))
+                (\(d,zrs') z -> (d+1, (z,fregs ! d) : zrs'))
         mapM_ (\(z,fr) ->
             liftIO $ hPutStr oc $ printf "    fmv %s %s\n" (reg fr) (reg z))
             (shuffle reg_fsw zrs)
@@ -342,5 +400,5 @@ emit oc (Aprog fundefs e) = do
     g oc (NonTail "R0", e)
     liftIO $ hPutStr oc $ printf "end_of_program:\n    nop\n"
     liftIO $ hPutStr oc $ printf "    beq r0 r0 end_of_program\n"
-    mapM_ (\func -> h oc func) fundefs
+    mapM_ (\func -> eprint func >> h oc func) fundefs
 

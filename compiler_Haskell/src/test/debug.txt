@@ -1,5 +1,221 @@
-Let ("a",Var 0)
-    (Array (Int 10) (Int 0))
-(Let ("TuSemi.",Unit)
-    (Put (Var "a") (Int 1) (Int 1))
-(Out 0 (Arith2 Add (Int 48) (Get (Var "a") (Int 1)))))
+KLetRec (KFunc {kname = ("dbl.39",Fun [Float] Float), kargs = [("f.40",Float)], kbody = Float2 FAdd "f.40" "f.40"})
+(KLetRec (KFunc {kname = ("yloop.41",Fun [Int] Unit), kargs = [("y.42",Int)],
+kbody = Let ("Ti38.43",Int)
+    (Let ("Ti37.44",Int) (Int 256) (Cmp Lt "y.42" "Ti37.44"))
+    (If "Ti38.43"
+        (KLetRec (KFunc {kname = ("xloop.45",Var 4), kargs = [("x.46",Var 5),("y.47",Var 6)],
+        kbody = Let ("Ti36.48",Int)
+                        (Let ("Ti35.49",Int) (Int 256) (Cmp Lt "x.46" "Ti35.49"))
+                    (If "Ti36.48"
+                        (Let ("cr.50",Var 7)
+                            (Let ("Tf8.51",Float)
+                                (Let ("Tf6.52",Float)
+                                    (Let ("Tf5.53",Float)
+                                        (Unary_op ItoF Int Float "x.46")
+                                    (KApp "dbl.39" ["Tf5.53"]))
+                                (Let ("Tf7.54",Float)
+                                    (Float 256.0)
+                                (Float2 FDiv "Tf6.52" "Tf7.54")))
+                            (Let ("Tf9.55",Float)
+                                (Float 1.5)
+                            (Float2 FSub "Tf8.51" "Tf9.55")))
+                        (Let ("ci.56",Var 8)
+                            (Let ("Tf13.57",Float)
+                                (Let ("Tf11.58",Float)
+                                    (Let ("Tf10.59",Float)
+                                        (Unary_op ItoF Int Float "y.47")
+                                    (KApp "dbl.39" ["Tf10.59"]))
+                                (Let ("Tf12.60",Float)
+                                    (Float 256.0)
+                                (Float2 FDiv "Tf11.58" "Tf12.60")))
+                            (Let ("Tf14.61",Float)
+                                (Float 1.0)
+                            (Float2 FSub "Tf13.57" "Tf14.61")))
+                        (KLetRec (KFunc {kname = ("iloop.62",Var 9),
+                        kargs = [("i.63",Var 10),("zr.64",Var 11),("zi.65",Var 12),("zr2.66",Var 13),("zi2.67",Var 14),("cr.68",Var 15),("ci.69",Var 16)],
+                        kbody = Let ("Ti34.70",Int)
+                                    (Let ("Ti33.71",Int) (Int 0) (Cmp Eq "i.63" "Ti33.71"))
+                                    (If "Ti34.70"
+                                        (Let ("Ti22.72",Int) (Int 49) (Out 0 "Ti22.72"))
+                                        (Let ("tr.73",Var 17)
+                                            (Let ("Tf23.74",Float)
+                                                (Float2 FSub "zr2.66" "zi2.67")
+                                            (Float2 FAdd "Tf23.74" "cr.68"))
+                                        (Let ("ti.75",Var 18)
+                                            (Let ("Tf25.76",Float)
+                                                (Let ("Tf24.77",Float)
+                                                    (KApp "dbl.39" ["zr.64"])
+                                                (Float2 FMul "Tf24.77" "zi.65"))
+                                            (Float2 FAdd "Tf25.76" "ci.69"))
+                                        (Let ("zr.78",Var 19)
+                                            (Var "tr.73")
+                                        (Let ("zi.79",Var 20)
+                                            (Var "ti.75")
+                                        (Let ("zr2.80",Var 21)
+                                            (Float2 FMul "zr.78" "zr.78")
+                                        (Let ("zi2.81",Var 22)
+                                            (Float2 FMul "zi.79" "zi.79")
+                                        (Let ("Tf31.82",Float)
+                                            (Float2 FAdd "zr2.80" "zi2.81")
+                                        (Let ("Tf32.83",Float)
+                                            (Let ("Tf26.84",Float)
+                                                (Float 2.0)
+                                            (Let ("Tf27.85",Float)
+                                                (Float 2.0)
+                                            (Float2 FMul "Tf26.84" "Tf27.85")))
+                                        (FIfCmp Gt "Tf31.82" "Tf32.83"
+                                            (Let ("Ti28.86",Int) (Int 48) (Out 0 "Ti28.86"))
+                                            (Let ("Ti30.87",Int)
+                                                (Let ("Ti29.88",Int)
+                                                    (Int 1)
+                                                (Arith2 Sub "i.63" "Ti29.88"))
+                                    (KApp "iloop.62" ["Ti30.87","zr.78","zi.79","zr2.80","zi2.81","cr.68","ci.69"]))))))))))))})
+                        (Let ("TuSemi..89",Unit)
+                            (Let ("Ti15.90",Int)
+                                (Int 1000)
+                            (Let ("Tf16.91",Float)
+                                (Float 0.0)
+                            (Let ("Tf17.92",Float)
+                                (Float 0.0)
+                            (Let ("Tf18.93",Float)
+                                (Float 0.0)
+                            (Let ("Tf19.94",Float)
+                                (Float 0.0)
+                            (KApp "iloop.62" ["Ti15.90","Tf16.91","Tf17.92","Tf18.93","Tf19.94","cr.50","ci.56"]))))))
+                        (Let ("Ti21.95",Int)
+                            (Let ("Ti20.96",Int)
+                                (Int 1)
+                            (Arith2 Add "x.46" "Ti20.96"))
+                        (KApp "xloop.45" ["Ti21.95","y.47"]))))))
+        Unit)})
+        (Let ("TuSemi..97",Unit)
+            (Let ("Ti1.98",Int)
+                (Int 0)
+            (KApp "xloop.45" ["Ti1.98","y.42"]))
+        (Let ("TuSemi..99",Unit)
+            (Let ("Ti2.100",Int)
+                (Int 10)
+            (Out 0 "Ti2.100"))
+        (Let ("Ti4.101",Int)
+            (Let ("Ti3.102",Int)
+                (Int 1)
+            (Arith2 Add "y.42" "Ti3.102"))
+        (KApp "yloop.41" ["Ti4.101"])))))
+Unit)})
+
+(Let ("Ti0.103",Int) (Int 0) (KApp "yloop.41" ["Ti0.103"])))
+
+
+
+
+TypingEnvs
+{extenv = fromList [],
+tyenv = fromList [("dbl",Var 0),("yloop",Var 2)],
+subst = fromList [  (0,Fun [Float] Float),
+                    (1,Float),
+                    (2,Fun [Int] Unit),
+                    (3,Int),
+                    (4,Fun [Int,Var 6] (Var 28)),
+                    (5,Int),
+                    (6,Int),
+                    (7,Float),
+                    (8,Float),
+                    (9,Fun [Int,Var 19,Var 20,Var 21,Var 22,Var 15,Var 16] (Var 26)),
+                    (10,Int),
+                    (11,Float),
+                    (12,Float),
+                    (13,Float),
+                    (14,Float),
+                    (15,Float),
+                    (16,Float),
+                    (17,Float),
+                    (18,Float),
+                    (19,Float),
+                    (20,Float),
+                    (21,Float),(22,Float),(23,Float),(24,Float),(25,Float),
+                    (26,Unit),(27,Unit),(28,Unit),(29,Unit),(30,Unit),(31,Unit)
+                ],
+tyVarCounter = 32}
+
+
+
+
+Afundef {a_name = L "iloop.62",
+a_args = ["%r1"],
+a_fargs = ["%r1","%r2","%r3","%r4","%r5","%r6"],
+a_body =
+Let ("%r7",Int)
+    (Li 0)
+(Let ("%r7",Int)
+    (Cmp Eq "%r1" (V "%r7"))
+(Ans (If "%r7"
+    (Let ("%r1",Int)
+        (Li 49)
+    (Ans (Out 0 "%r1")))
+(Let ("%f0",Float)
+    (Float2 FSub "%r3" "%r4")
+    (Let ("%f0",Float)
+        (Float2 FAdd "%f0" "%r5")
+    (Let ("Tu109",Unit)
+        (Save "%r5" "cr.68")
+    (Let ("Tu108",Unit)
+        (Save "%r1" "i.63")
+    (Let ("Tu107",Unit)
+        (Save "%f0" "tr.73")
+    (Let ("Tu106",Unit)
+        (Save "%r6" "ci.69")
+    (Let ("Tu105",Unit)
+        (Save "%r2" "zi.65")
+    (Let ("%f0",Float)
+        (CallDir (L "dbl.39") [] ["%r1"])
+    (Let ("%f1",Float)
+        (Restore "zi.65")
+    (Let ("%f0",Float)
+        (Float2 FMul "%f0" "%f1")
+    (Let ("%f1",Float)
+        (Restore "ci.69")
+    (Let ("%f0",Float)
+        (Float2 FAdd "%f0" "%f1")
+    (Let ("%f2",Float)
+        (Restore "tr.73")
+    (Let ("%f2",Float)
+        (FMv "%f2")
+    (Let ("%f0",Float)
+        (FMv "%f0")
+    (Let ("%f3",Float)
+        (Float2 FMul "%f2" "%f2")
+    (Let ("%f4",Float)
+        (Float2 FMul "%f0" "%f0")
+    (Let ("%f5",Float)
+        (Float2 FAdd "%f3" "%f4")
+    (Let ("%f6",Float)
+        (FLi 2.0)
+    (Let ("%f7",Float)
+        (FLi 2.0)
+    (Let ("%f6",Float)
+        (Float2 FMul "%f6" "%f7")
+    (Ans (FIfCmp Gt "%f5" "%f6"
+        (Let ("%r1",Int)
+            (Li 48)
+        (Ans (Out 0 "%r1")))
+        (Let ("%r1",Int)
+            (Li 1)
+        (Let ("%r2",Int)
+            (Restore "i.63")
+        (Let ("%r1",Int)
+            (Arith2 Sub "%r2" (V "%r1"))
+        (Let ("%f5",Float)
+            (Restore "cr.68")
+        (Ans (CallDir (L "iloop.62") ["%r1"] ["%f2","%f0","%f3","%f4","%f5","%f1"])))))))))))))))))))))))))))))))), a_ret = Unit}
+
+
+Afundef {a_name = L "xloop.45", a_args = ["%r1","%r2"], a_fargs = [], a_body = Let ("%r3",Int) (Li 2) (Let ("%r3",Int) (Cmp Lt "%r1" (V "%r3")) (Ans (If "%r3" (Let ("%f0",Float) (Unary_op ItoF Int Float "%r1") (Let ("Tu112",Unit) (Save "%r1" "x.46") (Let ("Tu111",Unit) (Save "%r2" "y.47") (Let ("%f0",Float) (CallDir (L "dbl.39") [] ["%f0"]) (Let ("%f1",Float) (FLi 256.0) (Let ("%f0",Float) (Float2 FDiv "%f0" "%f1") (Let ("%f1",Float) (FLi 1.5) (Let ("%f0",Float) (Float2 FSub "%f0" "%f1") (Let ("%r1",Int) (Restore "y.47") (Let ("%f1",Float) (Unary_op ItoF Int Float "%r1") (Let ("Tu114",Unit) (Save "%r1" "y.47") (Let ("Tu113",Unit) (Save "%f0" "cr.50") (Let ("%f0",Float) (CallDir (L "dbl.39") [] ["%f1"]) (Let ("%f1",Float) (FLi 256.0) (Let ("%f0",Float) (Float2 FDiv "%f0" "%f1") (Let ("%f1",Float) (FLi 1.0) (Let ("%f0",Float) (Float2 FSub "%f0" "%f1") (Let ("%r1",Int) (Li 10) (Let ("%f1",Float) (FLi 0.0) (Let ("%f2",Float) (FLi 0.0) (Let ("%f3",Float) (FLi 0.0) (Let ("%f4",Float) (FLi 0.0) (Let ("%f5",Float) (Restore "cr.50") (Let ("%r0",Unit) (CallDir (L "iloop.62") ["%r1"] ["%f1","%f2","%f3","%f4","%f5","%f0"]) (Let ("%r1",Int) (Li 1) (Let ("%r2",Int) (Restore "x.46") (Let ("%r1",Int) (Arith2 Add "%r2" (V "%r1")) (Let ("%r2",Int) (Restore "y.47") (Ans (CallDir (L "xloop.45") ["%r1","%r2"] [])))))))))))))))))))))))))))))) (Ans Nop)))), a_ret = Unit}
+
+
+Afundef {a_name = L "yloop.41", a_args = ["%r1"], a_fargs = [], a_body = Let ("%r2",Int) (Li 2) (Let ("%r2",Int) (Cmp Lt "%r1" (V "%r2")) (Ans (If "%r2" (Let ("%r2",Int) (Li 0) (Let ("Tu116",Unit) (Save "%r1" "y.42") (Let ("%r0",Unit) (CallDir (L "xloop.45") ["%r2","%r1"] []) (Let ("%r1",Int) (Li 10) (Let ("%r0",Unit) (Out 0 "%r1") (Let ("%r1",Int) (Li 1) (Let ("%r2",Int) (Restore "y.42") (Let ("%r1",Int) (Arith2 Add "%r2" (V "%r1")) (Ans (CallDir (L "yloop.41") ["%r1"] [])))))))))) (Ans Nop)))), a_ret = Unit}
+
+
+
+
+Afundef {a_name = L "xloop.45", a_args = ["%r1","%r2"], a_fargs = [], a_body = Let ("%r3",Int) (Li 256) (Let ("%r3",Int) (Cmp Lt "%r1" (V "%r3")) (Ans (If "%r3" (Let ("%f0",Float) (Unary_op ItoF Int Float "%r1") (Let ("Tu112",Unit) (Save "%r1" "x.46") (Let ("Tu111",Unit) (Save "%r2" "y.47") (Let ("%f0",Float) (CallDir (L "dbl.39") [] ["%f0"]) (Let ("%f1",Float) (FLi 256.0) (Let ("%f0",Float) (Float2 FDiv "%f0" "%f1") (Let ("%f1",Float) (FLi 1.5) (Let ("%f0",Float) (Float2 FSub "%f0" "%f1") (Let ("%r1",Int) (Restore "y.47") (Let ("%f1",Float) (Unary_op ItoF Int Float "%r1") (Let ("Tu114",Unit) (Save "%r1" "y.47") (Let ("Tu113",Unit) (Save "%f0" "cr.50") (Let ("%f0",Float) (CallDir (L "dbl.39") [] ["%f1"]) (Let ("%f1",Float) (FLi 256.0) (Let ("%f0",Float) (Float2 FDiv "%f0" "%f1") (Let ("%f1",Float) (FLi 1.0) (Let ("%f0",Float) (Float2 FSub "%f0" "%f1") (Let ("%r1",Int) (Li 1000) (Let ("%f1",Float) (FLi 0.0) (Let ("%f2",Float) (FLi 0.0) (Let ("%f3",Float) (FLi 0.0) (Let ("%f4",Float) (FLi 0.0) (Let ("%f5",Float) (Restore "cr.50") (Let ("%r0",Unit) (CallDir (L "iloop.62") ["%r1"] ["%f1","%f2","%f3","%f4","%f5","%f0"]) (Let ("%r1",Int) (Li 1) (Let ("%r2",Int) (Restore "x.46") (Let ("%r1",Int) (Arith2 Add "%r2" (V "%r1")) (Let ("%r2",Int) (Restore "y.47") (Ans (CallDir (L "xloop.45") ["%r1","%r2"] [])))))))))))))))))))))))))))))) (Ans Nop)))), a_ret = Unit}
+

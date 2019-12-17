@@ -14,9 +14,13 @@ data K =
       Unit
     | Int !Int
     | Float !Float
+    | Unary_op !Syn.Unary_operator !Type.Type !Type.Type !String
     | Arith1 !Syn.Arith_unary  !String
     | Arith2 !Syn.Arith_binary !String !String
+    | Float1 !Syn.Float_unary  !String
+    | Float2 !Syn.Float_binary !String !String
     | Cmp !Syn.Compare !String !String
+    | FIfCmp !Syn.Compare !String !String !K !K
     | Let !(String, Type.Type) !K !K
     | KLetRec !KFundef !K
     | KApp !String ![String]
@@ -42,9 +46,13 @@ fv Unit                 = S.empty
 fv (In _)               = S.empty
 fv (Int _)              = S.empty
 fv (Float _)            = S.empty
+fv (Unary_op _ _ _ x)   = S.singleton x
 fv (Arith1 _ x)         = S.singleton x
 fv (Arith2 _ x y)       = S.fromList [x, y]
+fv (Float1 _ x)         = S.singleton x
+fv (Float2 _ x y)       = S.fromList [x, y]
 fv (Cmp _ x y)          = S.fromList [x, y]
+fv (FIfCmp _ x y e1 e2) = S.insert x $ S.insert y $ S.union (fv e1) (fv e2)
 fv (Let (x,_) e1 e2)    = S.union (fv e1) (S.delete x (fv e2))
 fv (If x e2 e3)         = S.insert x $ S.union (fv e2) (fv e3)
 fv (Tuple xs)           = S.fromList xs
@@ -97,9 +105,9 @@ ilet s = (cont $ \_ -> s) >>= insert_let
 k_body :: Map String Type.Type -> Syn.Syntax -> StateT Int (Except Error) (K, Type.Type)
 k_body _ Syn.Unit         = return (Unit, Type.Unit)
 k_body _ (Syn.In t)       = return (In t, t)
-k_body _ (Syn.Bool b)     = return (Int (if b then 1 else 0), Type.Int)
+k_body _ (Syn.Bool b)     = return (Int (if b then 0 else 1), Type.Int)
 k_body _ (Syn.Int i)      = return (Int i, Type.Int)
-----k_body (Syn.Float f)    = (Float f, Type.Float)
+k_body _ (Syn.Float f)    = return (Float f, Type.Float)
 k_body env (Syn.Not e) = do
         x' <- k_body env e
         (`runCont` id) $ do
@@ -108,6 +116,13 @@ k_body env (Syn.Out n e1) = do
         x' <- k_body env e1
         (`runCont` id) $ do
             (\x -> return (Out n x, Type.Unit)) <$> insert_let x'
+k_body env (Syn.Unary_op op t1 t2 e) = do
+        x' <- k_body env e
+        let convert_type t = case t of Type.Float -> t; _ -> Type.Int
+        let t1' = convert_type t1
+        let t2' = convert_type t2
+        (`runCont` id) $ do
+            (\x -> return (Unary_op op t1' t2' x, t2')) <$> insert_let x'
 k_body env (Syn.Arith1 arith e1) = do
         x' <- k_body env e1
         (`runCont` id) $ do
@@ -117,11 +132,23 @@ k_body env (Syn.Arith2 arith e1 e2) = do
         y' <- k_body env e2
         (`runCont` id) $ do
             (\x y -> return (Arith2 arith x y, Type.Int)) <$> insert_let x' <*> insert_let y'
-k_body env (Syn.Cmp cmp e1 e2) = do
+k_body env (Syn.Float1 arith e1) = do
+        x' <- k_body env e1
+        (`runCont` id) $ do
+            (\x -> return (Float1 arith x, Type.Float)) <$> insert_let x'
+k_body env (Syn.Float2 arith e1 e2) = do
         x' <- k_body env e1
         y' <- k_body env e2
         (`runCont` id) $ do
-            (\x y -> return (Cmp cmp x y, Type.Int)) <$> insert_let x' <*> insert_let y'
+            (\x y -> return (Float2 arith x y, Type.Float)) <$> insert_let x' <*> insert_let y'
+k_body env (Syn.Cmp cmp e1 e2) = do
+        x' <- k_body env e1
+        y'@(_,t) <- k_body env e2
+        case t of
+                Type.Float -> (`runCont` id) $ do
+                        (\x y -> return (FIfCmp cmp x y (Int 0) (Int 1), Type.Int)) <$> insert_let x' <*> insert_let y'
+                _ -> (`runCont` id) $ do
+                        (\x y -> return (Cmp cmp x y, Type.Int)) <$> insert_let x' <*> insert_let y'
 k_body env (Syn.Let (x,t) e1 e2) = do
         (e1', _) <- k_body env e1
         (e2', t2) <- k_body (M.insert x t env) e2
@@ -165,12 +192,32 @@ k_body env (Syn.App e es) = do -- とりあえず外部関数は禁止
         ys' <- mapM (k_body env) es
         (`runCont` id) $ do
             (\x ys -> return (KApp x ys, t)) <$> insert_let x' <*> mapM insert_let ys'
-k_body env (Syn.If e1 e2 e3) = do
+k_body env (Syn.If e1 e2 e3)
+    | Syn.Not e1'           <- e1 = k_body env (Syn.If e1' e3 e2)
+    | Syn.Cmp cmp ex ey     <- e1 = do
+            x'@(_,_) <- k_body env ex
+            y'@(_,ty) <- k_body env ey
+            (e2',_) <- k_body env e2
+            (e3',t) <- k_body env e3
+            case ty of
+                    Type.Float -> do
+                            (`runCont` id) $ do
+                                (\x y -> return (FIfCmp cmp x y e2' e3', t)) <$> insert_let x' <*> insert_let y'
+                    _ -> do
+                            xx <- (`runCont` id) $ do
+                                    ((\x y -> return (Cmp cmp x y, Type.Int)) <$> insert_let x' <*> insert_let y')
+                            (`runCont` id) $ do
+                                    (\x -> return (If x e2' e3', t)) <$> insert_let xx
+    | otherwise = do
         x' <- k_body env e1
         (e2',_) <- k_body env e2
         (e3',t) <- k_body env e3
         (`runCont` id) $ do
             (\x -> return (If x e2' e3', t)) <$> insert_let x'
+
+
+
+
 k_body env (Syn.Var x)
     | Just t <- mt = return (Var x, t)
     | Nothing <- mt = throwError $ Fail "extarray"  -- extarray

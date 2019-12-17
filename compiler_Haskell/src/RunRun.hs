@@ -21,6 +21,7 @@ data Env = Env {
     stackmap :: [String],
     toplevel :: [Cl.Fundef]
     }
+    deriving (Show)
 
 data Error = ParseErr String
            | Fail String

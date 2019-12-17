@@ -17,12 +17,14 @@ g env e
     | Float _           <- e = return e
     | In _              <- e = return e
     | Out n x           <- e = return $ Out n (f x)
+    | Unary_op op t1 t2 x<- e = return $ Unary_op op t1 t2 (f x)
     | Arith1 arith x    <- e = return $ Arith1 arith (f x)
     | Arith2 arith x y  <- e = return $ Arith2 arith (f x) (f y)
+    | Float1 arith x    <- e = return $ Float1 arith (f x)
+    | Float2 arith x y  <- e = return $ Float2 arith (f x) (f y)
     | Cmp cmp x y       <- e = return $ Cmp cmp (f x) (f y)
-    | If x e1 e2        <- e = do
-                            let Just x' = M.lookup x env
-                            If x' <$> g env e1 <*> g env e2
+    | FIfCmp cmp x y e1 e2 <- e = FIfCmp cmp (f x) (f y) <$> g env e1 <*> g env e2
+    | If x e1 e2        <- e = If (f x) <$> g env e1 <*> g env e2
     | Let (x,t) e1 e2   <- e = do
                             x' <- genid x
                             Let (x',t) <$> (g env e1) <*> (g (M.insert x x' env) e2)

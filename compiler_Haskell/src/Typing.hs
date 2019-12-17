@@ -47,6 +47,8 @@ typing e = do
             put (r { RunRun.tyVarCounter = Typing.tyVarCounter s,
                 RunRun.tyenv = Typing.tyenv s,
                 RunRun.exttyenv = Typing.extenv s})
+            eprint =<< get
+            eprint s
             return $ fst e'
 
 
@@ -76,22 +78,27 @@ deref_id_typ :: (String, Type.Type) -> TypeM (String, Type.Type)
 deref_id_typ (x,t) = deref_typ t >>= \t' -> return (x, t')
 
 deref_term :: Syntax -> TypeM Syntax
-deref_term (Not e) = Not <$> deref_term e
-deref_term (Arith1 arith e1 )   = Arith1 arith <$> deref_term e1
-deref_term (Arith2 arith e1 e2) = Arith2 arith <$> deref_term e1 <*> deref_term e2
-deref_term (Cmp comp e1 e2) = Cmp comp <$> deref_term e1 <*> deref_term e2
+deref_term (Not e)                  = Not <$> deref_term e
+deref_term (Unary_op op t1 t2 e1)   = Unary_op op t1 t2 <$> deref_term e1
+deref_term (Arith1 arith e1 )       = Arith1 arith <$> deref_term e1
+deref_term (Arith2 arith e1 e2)     = Arith2 arith <$> deref_term e1 <*> deref_term e2
+deref_term (Float1 arith e1)        = Float1 arith <$> deref_term e1
+deref_term (Float2 arith e1 e2)     = Float2 arith <$> deref_term e1 <*> deref_term e2
+deref_term (Cmp comp e1 e2)         = Cmp comp <$> deref_term e1 <*> deref_term e2
+deref_term (If e1 e2 e3)            = If <$> deref_term e1 <*> deref_term e2 <*> deref_term e3
 deref_term (Let xt e1 e2) = Let <$> deref_id_typ xt <*> deref_term e1 <*> deref_term e2
 deref_term (LetRec (Func{name=xt,args=yts,body=e1}) e2) =
                 LetRec <$> (Func <$> deref_id_typ xt
                         <*> mapM deref_id_typ yts <*> deref_term e1) <*> deref_term e2
-deref_term (App e es) = App <$> deref_term e <*> mapM deref_term es
-deref_term (Tuple es) = Tuple <$> mapM deref_term es
-deref_term (LetTuple xts e1 e2) = LetTuple <$> mapM deref_id_typ xts <*> deref_term e1 <*> deref_term e2
-deref_term (Array e1 e2)  = Array <$> deref_term e1 <*> deref_term e2
-deref_term (Get e1 e2) = Get <$> deref_term e1 <*> deref_term e2
-deref_term (Put e1 e2 e3) = Put <$> deref_term e1 <*> deref_term e2 <*> deref_term e3
-deref_term (In t) = In <$> deref_typ t
-deref_term e = return e
+deref_term (App e es)               = App <$> deref_term e <*> mapM deref_term es
+deref_term (Tuple es)               = Tuple <$> mapM deref_term es
+deref_term (LetTuple xts e1 e2)     = LetTuple <$> mapM deref_id_typ xts <*> deref_term e1 <*> deref_term e2
+deref_term (Array e1 e2)            = Array <$> deref_term e1 <*> deref_term e2
+deref_term (Get e1 e2)              = Get <$> deref_term e1 <*> deref_term e2
+deref_term (Put e1 e2 e3)           = Put <$> deref_term e1 <*> deref_term e2 <*> deref_term e3
+deref_term (Out n e1)               = Out n <$> deref_term e1
+deref_term (In t)                   = In <$> deref_typ t
+deref_term e                        = return e
 
 
 occur :: Int -> Type.Type -> TypeM Bool
@@ -151,12 +158,16 @@ infer e = do
 infer__ :: Syntax -> Type.TyEnv -> Type.ExtEnv -> TypeM Type.Type
 infer__ Unit _ _ = return Type.Unit
 infer__ (Int _) _ _ = return Type.Int
+infer__ (Float _) _ _ = return Type.Float
 infer__ (Bool _) _ _ = return Type.Bool
 infer__ (Not e) _ _ = unifyM Type.Bool (infer e) >> return Type.Bool
 infer__ (In t) _ _ = return t
 infer__ (Out _ e1) _ _ = do
     unifyM Type.Int (infer e1)
     return Type.Unit
+infer__ (Unary_op _ t1 t2 e) _ _ = do
+    unifyM t1 (infer e)
+    return t2
 infer__ (Arith1 _ e1) _ _ = do
     unifyM Type.Int (infer e1)
     return Type.Int
@@ -164,6 +175,13 @@ infer__ (Arith2 _ e1 e2) _ _ = do
     unifyM Type.Int (infer e1)
     unifyM Type.Int (infer e2)
     return Type.Int
+infer__ (Float1 _ e1) _ _ = do
+    unifyM Type.Float (infer e1)
+    return Type.Float
+infer__ (Float2 _ e1 e2) _ _ = do
+    unifyM Type.Float (infer e1)
+    unifyM Type.Float (infer e2)
+    return Type.Float
 infer__ (Cmp _ e1 e2) _ _ = do
     unifyM2 (infer e1) (infer e2)
     return Type.Bool

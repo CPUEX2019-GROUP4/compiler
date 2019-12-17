@@ -21,7 +21,10 @@ import Lexer
 %monad { RunRun } { (>>=) } { return }
 
 %token
+      "(*"                  { CommentL }
+      "*)"                  { CommentR }
       TokenINT              { TokenINT $$ }
+      TokenFLOAT            { TokenFLOAT $$ }
       TokenBOOL             { TokenBOOL $$ }
       TokenVAR              { TokenVAR $$ }
       "not"                 { TokenNOT }
@@ -39,6 +42,10 @@ import Lexer
       "/10"                 { TokenDIV10 }
       "+"                   { TokenPLUS }
       "-"                   { TokenMINUS }
+      "+."                  { TokenFPLUS }
+      "-."                  { TokenFMINUS }
+      "*."                  { TokenFMUL }
+      "/."                  { TokenFDIV }
       "<="                  { TokenLE }
       ">="                  { TokenGE }
       "<"                   { TokenLT }
@@ -48,21 +55,24 @@ import Lexer
       "SEMI"                { TokenSEMICOLON }
       ","                   { TokenCOMMA }
       "."                   { TokenDOT }
+      "finv_init"           { TokenFINV_INIT }
+      "sqrt_init"           { TokenSQRT_INIT }
       TokenPrintChar        { TokenPrintChar }
       TokenReadInt          { TokenReadInt }
+      TokenReadFloat        { TokenReadFloat }
       "Array.make"          { TokenArrayCreate }
+      "itof"                { TokenItoF }
+      "ftoi"                { TokenFtoI }
 
 %right prec_let
-%right ";"
+%right "SEMI"
 %right prec_if
 %right "<-"
 %nonassoc prec_tuple
 %left ","
 %left "=" ">" "<"
-%left "+" "-"
-%left "*4" "*10" "/2" "/10"
--- "+." "-."
--- %left "*." "/." "*" "/"
+%left "+" "-" "+." "-."
+%left "*4" "*10" "/2" "/10" "*." "/."
 %right prec_unary_minus
 %left prec_app
 %left "."
@@ -73,6 +83,7 @@ simple_exp:                 -- 括弧なしで引数になれる
     "(" exp ")"                 { $2 }
   | "(" ")"                     { Unit }
   | TokenINT                    { Int $1 }
+  | TokenFLOAT                  { Float $1 }
   | TokenBOOL                   { Bool $1 }
   | TokenVAR                    { Var $1 }
   | simple_exp "." "(" exp ")"  { Get $1 $4 }
@@ -85,12 +96,21 @@ exp:                        -- 一般
   | "-" exp
         %prec prec_unary_minus
                             { case $2 of; Syntax.Float f -> (Syntax.Float (-f)); _ -> (Arith1 Neg $2) }
+  | "-." exp
+        %prec prec_unary_minus
+                            { Float1 FNeg $2 }
   | exp "+" exp             { Arith2 Add $1 $3 }
   | exp "-" exp             { Arith2 Sub $1 $3 }
   | exp "*4"                { Arith1 Mul4  $1 }
   | exp "*10"               { Arith1 Mul10 $1 }
   | exp "/2"                { Arith1 Div2  $1 }
   | exp "/10"               { Arith1 Div10 $1 }
+  | "finv_init" exp         { Float1 Finv_init $2 }
+  | "sqrt_init" exp         { Float1 Sqrt_init $2 }
+  | exp "+." exp            { Float2 FAdd $1 $3 }
+  | exp "-." exp            { Float2 FSub $1 $3 }
+  | exp "*." exp            { Float2 FMul $1 $3 }
+  | exp "/." exp            { Float2 FDiv $1 $3 }
   | exp "=" exp             { Cmp Eq  $1 $3 }
   | exp "<=" exp            { Not $ Cmp Gt $1 $3 }
   | exp ">=" exp            { Not $ Cmp Lt $1 $3 }
@@ -101,6 +121,13 @@ exp:                        -- 一般
   | TokenPrintChar exp
         %prec prec_app      { Out 0 $2 }
   | TokenReadInt "(" ")"    { In Type.Int }
+  | TokenReadFloat "(" ")"  { In Type.Float }
+  | TokenPrintChar exp
+        %prec prec_app      { Out 0 $2 }
+  | "itof" exp
+        %prec prec_app      { Unary_op ItoF Type.Int Type.Float $2 }
+  | "ftoi" exp
+        %prec prec_app      { Unary_op FtoI Type.Float Type.Int $2 }
   | "Array.make" simple_exp simple_exp
         %prec prec_app      { Array $2 $3 }
   | simple_exp actual_args
@@ -154,17 +181,24 @@ newvar:
 parseError :: [Token] -> RunRun a
 parseError toks = throw $ ParseErr (show toks)
 
-removeComments :: [Token] -> RunRun [Token]
-removeComments [] = return []
-removeComments (x : ls) = do
-    rest <- removeComments ls
-    return (x : rest)
+removeComments :: Int -> [Token] -> RunRun [Token]
+removeComments 0 [] = return []
+removeComments n [] = throw $ Fail "unclosed comments"
+removeComments n (CommentL : ls) = removeComments (n+1) ls
+removeComments 0 (CommentR : ls) = throw $ Fail "unexpected end of comment"
+removeComments n (CommentR : ls) = removeComments (n-1) ls
+removeComments 0 (x:ls)          = do
+    rest <- removeComments 0 ls
+    return $ x : rest
+removeComments n (x:ls)          = do
+    rest <- removeComments n ls
+    return $ rest
 
 parse :: [Token] -> RunRun Syntax
 parse toks = do
     eputstrln "parsing ..."
     eprint toks
-    mparse =<< removeComments toks
+    mparse =<< removeComments 0 toks
 
 }
 

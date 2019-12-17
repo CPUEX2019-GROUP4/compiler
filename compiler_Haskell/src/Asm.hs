@@ -5,7 +5,7 @@ import Data.Array
 import Data.List
 import RunRun
 import Type
-import Syntax (Arith_binary(..), Arith_unary(..), Compare(..))
+import Syntax (Arith_binary(..), Arith_unary(..), Float_binary(..), Float_unary(..), Unary_operator(..), Compare(..))
 import Closure_Type (L(..))
 
 data Id_or_imm = V String | C Int deriving(Show, Eq)
@@ -18,14 +18,18 @@ data Exp =
   | Mv !String
   | Out !Int !String
   | In !Type
+  | Unary_op !Unary_operator !Type !Type !String
   | Arith1 !Arith_unary  !String
   | Arith2 !Arith_binary !String !Id_or_imm
+  | Float1 !Float_unary !String
+  | Float2 !Float_binary !String !String
   | Slw !String !Id_or_imm
   | Lw !String !Id_or_imm
   | Sw !String !String !Id_or_imm
   | FMv !String
   | Cmp !Compare !String !Id_or_imm
   | If !String !T !T
+  | FIfCmp !Compare !String !String !T !T
   | Lf !String !Id_or_imm
   | Sf !String !String !Id_or_imm
   | CallDir !L ![String] ![String]
@@ -56,8 +60,8 @@ regs :: Array Int String
 regs = array (0,24)
     (zip [0..] (map (\x -> "%r" ++ show (x :: Int)) [1..25]))
 fregs :: Array Int String
-fregs = array (0,31)
-    (zip [0..] (map (\x -> "%f" ++ show (x :: Int)) [0..31]))
+fregs = array (0,30)
+    (zip [0..] (map (\x -> "%f" ++ show (x :: Int)) [0..30]))
 allregs :: [String]
 allregs = elems regs
 allfregs :: [String]
@@ -83,6 +87,9 @@ reg_lr = "%r31"
 reg_tmp :: String
 reg_tmp = "%r28"
 
+reg_ftmp :: String
+reg_ftmp = "%f31"
+
 is_reg :: String -> Bool
 is_reg ('%':_) = True
 is_reg _ = False
@@ -106,13 +113,17 @@ fv_exp (FMv x) = [x]
 fv_exp (Save x _) = [x]
 fv_exp (Out _ x) = [x]
 fv_exp (In _) = []
+fv_exp (Unary_op _ _ _ x) = [x]
 fv_exp (Arith1 _ x) = [x]
 fv_exp (Arith2 _ x y') = x :  fv_id_pr_imm y'
+fv_exp (Float1 _ x) = [x]
+fv_exp (Float2 _ x y) = [x, y]
 fv_exp (Slw x y') = x : fv_id_pr_imm y'
 fv_exp (Lf x y') = x : fv_id_pr_imm y'
 fv_exp (Lw x y') = x : fv_id_pr_imm y'
 fv_exp (Cmp _ x y') = x : fv_id_pr_imm y'
 fv_exp (If x e1 e2) = x : remove_and_uniq S.empty (fv e1 ++ fv e2)
+fv_exp (FIfCmp _ x y e1 e2) = x : y : remove_and_uniq S.empty (fv e1 ++ fv e2)
 fv_exp (Sw x y z') = x : y : fv_id_pr_imm z'
 fv_exp (Sf x y z') = x : y : fv_id_pr_imm z'
 fv_exp (CallDir _ ys zs) = ys ++ zs

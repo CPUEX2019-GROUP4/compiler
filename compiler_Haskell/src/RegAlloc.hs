@@ -160,14 +160,24 @@ g' _ _ regenv (FMv x) = return $
         (Ans <$> (FMv <$> find_reg x Type.Float regenv)) >>= \x' -> return (x', regenv)
 g' _ _ regenv (Out n x) = return $
         (Ans <$> (Out n <$> find_reg x Type.Int regenv)) >>= \x' -> return (x', regenv)
+g' _ _ regenv (Unary_op op t1 t2 x) = return $
+        (Ans <$> (Unary_op op t1 t2 <$> find_reg x t1 regenv)) >>= \x' -> return (x', regenv)
 g' _ _ regenv (Arith1 arith x) = return $
         (Ans <$> (Arith1 arith <$> find_reg x Type.Int regenv)) >>= \x' -> return (x', regenv)
 g' _ _ regenv (Arith2 arith x y') = return $
         (Ans <$> (Arith2 arith <$> find_reg x Type.Int regenv <*> find'_reg y' regenv)) >>= \x' -> return (x', regenv)
+g' _ _ regenv (Float1 arith x) = return $
+        (Ans <$> (Float1 arith <$> find_reg x Type.Float regenv)) >>= \x' -> return (x', regenv)
+g' _ _ regenv (Float2 arith x y) = return $
+        (Ans <$> (Float2 arith <$> find_reg x Type.Float regenv <*> find_reg y Type.Float regenv)) >>= \x' -> return (x', regenv)
 g' _ _ regenv (Cmp cmp x y') = return $
         (Ans <$> (Cmp cmp <$> find_reg x Type.Int regenv <*> find'_reg y' regenv)) >>= \x' -> return (x', regenv)
 g' dest cont regenv (If x e1 e2) =
         g'_if dest cont regenv (\e1' e2' -> ((\x'' -> If x'' e1' e2') <$> find_reg x Type.Int regenv)) e1 e2
+g' dest cont regenv (FIfCmp cmp x y e1 e2) =
+        g'_if dest cont regenv
+            (\e1' e2' -> ((\x'' y'' -> FIfCmp cmp x'' y'' e1' e2') <$> find_reg x Type.Float regenv <*> find_reg y Type.Float regenv))
+                e1 e2
 g' _ _ regenv (Lw x y') = return $
         (Ans <$> (Lw <$> find_reg x Type.Int regenv <*> find'_reg y' regenv)) >>= \x' -> return (x', regenv)
 g' _ _ regenv (Slw x y') = return $
@@ -176,9 +186,9 @@ g' _ _ regenv (Sw x y z') = return $
         (Ans <$> (Sw <$> find_reg x Type.Int regenv <*> find_reg y Type.Int regenv  <*> find'_reg z' regenv)) >>=
         \x' -> return (x', regenv)
 g' _ _ regenv (Lf x y') = return $
-        (Ans <$> (Lf <$> find_reg x Type.Int regenv <*> find'_reg y' regenv)) >>= \x' -> return (x', regenv)
+        (Ans <$> (Lf <$> find_reg x Type.Float regenv <*> find'_reg y' regenv)) >>= \x' -> return (x', regenv)
 g' _ _ regenv (Sf x y z') = return $
-        (Ans <$> (Sf <$> find_reg x Type.Float regenv <*> find_reg y Type.Int regenv <*> find'_reg z' regenv)) >>= \x' -> return (x', regenv)
+        (Ans <$> (Sf <$> find_reg x Type.Float regenv <*> find_reg y Type.Float regenv <*> find'_reg z' regenv)) >>= \x' -> return (x', regenv)
 g' dest cont regenv (CallDir (L x) ys zs)
         | length ys > regs_len - 1 || length zs > fregs_len - 1
                 = throw $ Fail $ printf "cannot allocate resisters to %s\n" x
@@ -245,7 +255,7 @@ reg_fun (Afundef {a_name=L x, a_args=ys, a_fargs=zs, a_body=e, a_ret=t}) = do
         let (_,farg_regs,regenv'') =
                 (\f -> foldl f (0, [], regenv') zs)
                     (\(d,farg_regs',regenv_tmp) z ->
-                        let fr = regs Array.! d in
+                        let fr = fregs Array.! d in
                         (d+1,farg_regs' ++ [fr],M.insert z fr regenv_tmp)) -- assert (not (is_reg y))
         a <- case t of
                 Unit -> gentmp Unit

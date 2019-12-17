@@ -10,10 +10,14 @@ data C =
     Unit
   | Int !Int
   | Float !Float
+  | Unary_op !Syn.Unary_operator !Ty.Type !Ty.Type !String
   | Arith1 !Syn.Arith_unary  !String
   | Arith2 !Syn.Arith_binary !String !String
+  | Float1 !Syn.Float_unary !String
+  | Float2 !Syn.Float_binary !String !String
   | Cmp !Syn.Compare !String !String
   | If !String !C !C
+  | FIfCmp !Syn.Compare !String !String !C !C
   | Let !(String, Ty.Type) !C !C
   | Var !String
   | Out !Int !String
