@@ -19,7 +19,8 @@ data Env = Env {
     idcounter :: Int,
     stackset :: Set String,
     stackmap :: [String],
-    toplevel :: [Cl.Fundef]
+    toplevel :: [Cl.Fundef],
+    inlinenum :: Int
     }
     deriving (Show)
 

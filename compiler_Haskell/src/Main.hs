@@ -21,6 +21,11 @@ import Asm()
 import Virtual
 import RegAlloc
 import Emit
+import Beta()
+import Assoc()
+import Inline()
+import Elim()
+import Simm()
 
 main :: IO ()
 main = do
@@ -53,5 +58,6 @@ initEnv = Env {
             idcounter = 0,
             stackset = empty,
             stackmap = [],
-            toplevel = []
+            toplevel = [],
+            inlinenum = 10
             }
