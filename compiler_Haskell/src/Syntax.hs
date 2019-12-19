@@ -45,7 +45,7 @@ data Float_binary =
     deriving (Eq, Show)
 
 data Compare =
-    Eq | Lt | Gt
+    Eq | Lt | Gt | Ne
     deriving (Eq, Show)
 
 data Fundef =

@@ -11,6 +11,7 @@ type Memo = StateT (Map String (Set String)) RunRun
 
 elim :: K -> RunRun K
 elim e = do
+    eputstrln "elim ..."
     fst <$> (runStateT (e_body e) M.empty)
 
 
@@ -24,6 +25,7 @@ effect (KApp _ _)           = True
 effect (In _)               = True
 effect (Out _ _)            = True
 effect (Put _ _ _)          = True
+effect (Malloc _ _ _ _)       = True
 effect _ = False
 
 
@@ -59,8 +61,6 @@ e_body (LetTuple xts y e)       = do
                                             lift $ eputstrln $ "eliminating variables " ++ (show xs) ++ "@."
                                             return e'
 e_body e = return e
-
-
 
 
 

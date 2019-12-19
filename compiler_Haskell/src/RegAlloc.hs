@@ -71,14 +71,14 @@ alloc dest cont regenv x t =
     if is_reg x then return $ Alloc x else
     let free = fv cont in
     do
-        eprint free
+        -- eprint free
         (_,prefer) <- target x dest cont
         let live = foldl (\liv y ->
                 if is_reg y then S.insert y liv
                 else case M.lookup y regenv of
                     Nothing -> liv
                     Just y' -> S.insert y' liv) S.empty free
-        eprint live
+        -- eprint live
         case find (\r' -> S.notMember r' live) (prefer ++ all) of
                 Just r -> return $ Alloc r
                 Nothing-> do
@@ -114,6 +114,7 @@ g _ _ regenv (Let (x,_) _ _)
 g dest cont regenv (Let xt@(x,t) exp e) = do
     let cont' = Asm.concat e dest cont
     (e1', regenv1) <- g'_and_restore xt cont' regenv exp
+{-
     eputstrln "g dest cont regenv (Let xt exp e)"
     eputstrln "========="
     eprint dest
@@ -124,15 +125,16 @@ g dest cont regenv (Let xt@(x,t) exp e) = do
     eprint exp
     eprint e
     eputstrln "========="
+-}
     wow <- alloc dest cont' regenv1 x t
-    eprint wow
+    --eprint wow
     case wow of
             Spill y -> do
                     let Just r = M.lookup y regenv1 ---------------- yavai
                     (e2', regenv2) <- (\x'' -> g dest cont x'' e) =<< (add_regenv x r (M.delete y regenv1))
                     let Just x'' = M.lookup y regenv
                     let save = Save x'' y
-                    (\p -> return (p, regenv2)) =<< Asm.seq (save, Asm.concat e1' (r,t) e2')
+                    (\p -> return (p, regenv2)) =<< Asm.seq save (Asm.concat e1' (r,t) e2')
             Alloc r -> do
                     (e2', regenv2) <- (\p -> g dest cont p e) =<< (add_regenv x r regenv1)
                     return $ (Asm.concat e1' (r,t) e2', regenv2)
@@ -225,7 +227,7 @@ g'_if dest cont regenv constr e1 e2 = do
                             let Just tmp = M.lookup x regenv
                             e' <- e
                             case e' of
-                                Right e'' -> Right <$> Asm.seq (Save tmp x, e'')
+                                Right e'' -> Right <$> Asm.seq (Save tmp x) e''
                                 Left er -> return (Left er))
         return $ (\t -> (t,regenv)) <$> tmp
 
@@ -235,7 +237,7 @@ g'_call :: ([Char], b) -> T -> M.Map [Char] String
                  -> [String] -> [String] -> RunRun (Either (String, Type) (T, M.Map k a))
 g'_call dest cont regenv constr ys zs = do
         exp <- foldM (\e x -> if x == fst dest || M.notMember x regenv then return e else -- e :: either b, x :: a
-                mapM (\e' -> seq (Save (regenv M.! x) x, e')) e)
+                mapM (\e' -> seq (Save (regenv M.! x) x) e') e)
                 (Ans <$> (constr
                     (mapM (\y -> find_reg y Type.Int regenv) ys)
                     <*> (mapM (\z -> find_reg z Type.Float regenv) zs)))

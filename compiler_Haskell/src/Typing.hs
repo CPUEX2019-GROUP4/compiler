@@ -27,7 +27,7 @@ type TypeM = StateT TypingEnvs (ExceptT TypeError Identity)
 
 typing :: Syntax -> RunRun Syntax
 typing e = do
-    eprint e
+--    eprint e
     eputstrln "typing ..."
     r <- get
     let env = TypingEnvs {
@@ -37,12 +37,12 @@ typing e = do
                     Typing.tyVarCounter = RunRun.tyVarCounter r
                     }
     let e_e' = (runIdentity . runExceptT) (runStateT (typingTM e) env)
-    eputstrln "typing point1 ..."
-    eprint e_e'
+--    eputstrln "typing point1 ..."
+--    eprint e_e'
     case e_e' of
         Left err -> RunRun.throw (Fail (show err))
         Right e' -> do
-            eputstrln "typing point2 ..."
+--            eputstrln "typing point2 ..."
             let s = snd e'
             put (r { RunRun.tyVarCounter = Typing.tyVarCounter s,
                 RunRun.tyenv = Typing.tyenv s,

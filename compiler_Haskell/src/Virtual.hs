@@ -1,7 +1,7 @@
 module Virtual where
 
 import Prelude hiding(seq)
-import Control.Monad.State (get)
+import Control.Monad.State (get, foldM)
 import qualified Data.Map as M
 import qualified Data.Set as S (notMember)
 import Asm hiding(fv)
@@ -36,18 +36,19 @@ expand xts ini addf addi =
     (\(offset, acc) x t -> (offset + 4, addi x t offset acc))
 
 
-g :: M.Map String Type -> C.C -> RunRun T
-g _    C.Unit           = return $ Ans Nop
-g _   (C.Int i)         = return $ Ans (Li i)
-g _   (C.Float f)       = return $ Ans (FLi f)
-g _   (C.Out n x)       = return $ Ans (Out n x)
-g _   (C.In t)          = return $ Ans (In t)
-g _   (C.Unary_op op t1 t2 x) = return $ Ans (Unary_op op t1 t2 x)
-g _   (C.Arith1 arith x)= return $ Ans (Arith1 arith x)
-g _   (C.Arith2 arith x y) = return $ Ans (Arith2 arith x (V y))
-g _   (C.Float1 arith x)= return $ Ans (Float1 arith x)
-g _   (C.Float2 arith x y) = return $ Ans (Float2 arith x y)
-g _   (C.Cmp cmp x y)   = ------------ have to check type !!!!!!!!!
+-- g env globals exp
+g :: M.Map String Type.Type -> C.C -> RunRun T
+g _  C.Unit           = return $ Ans Nop
+g _ (C.Int i)         = return $ Ans (Li i)
+g _ (C.Float f)       = return $ Ans (FLi f)
+g _ (C.Out n x)       = return $ Ans (Out n x)
+g _ (C.In t)          = return $ Ans (In t)
+g _ (C.Unary_op op t1 t2 x) = return $ Ans (Unary_op op t1 t2 x)
+g _ (C.Arith1 arith x)= return $ Ans (Arith1 arith x)
+g _ (C.Arith2 arith x y) = return $ Ans (Arith2 arith x (V y))
+g _ (C.Float1 arith x)= return $ Ans (Float1 arith x)
+g _ (C.Float2 arith x y) = return $ Ans (Float2 arith x y)
+g _ (C.Cmp cmp x y)   = ------------ have to check type !!!!!!!!!
         return $ Ans (Cmp cmp x (V y))
 g env (C.If x e1 e2)    = do
         Ans <$> (If x <$> g env e1 <*> g env e2)
@@ -58,7 +59,7 @@ g env (C.Let (x,t) e1 e2) = do
         e2' <- g (M.insert x t env) e2
         return $ Asm.concat e1' (x, t) e2'
 g env (C.Var x)
-        | Just Unit <-  f   = return $ Ans Nop
+        | Just Unit  <- f   = return $ Ans Nop
         | Just Float <- f   = return $ Ans (FMv x)
         | otherwise         = return $ Ans (Mv x)
         where f = M.lookup x env
@@ -67,14 +68,14 @@ g env (C.Tuple xs) = do
         let (ofset, store_tmp) = (expand
                 (map (\x -> (x, env M.! x)) xs)
                 (0, return $ Ans(Mv y))
-                (\x offset store_elem -> store_elem >>= (\st -> seq (Sf x y (C offset), st)))
-                (\x _ offset store_elem -> store_elem >>= (\st -> seq (Sw x y (C offset), st)))
+                (\x offset store_elem -> store_elem >>= (\st -> seq (Sf x y (C offset)) st))
+                (\x _ offset store_elem -> store_elem >>= (\st -> seq (Sw x y (C offset)) st))
                 )
         store <- store_tmp
         return $ Let (y, (Tuple (map (\x -> env M.! x) xs))) (Mv reg_hp) $
                         Let (reg_hp, Int) (Arith2 Add reg_hp (C ofset)) store
 g env (C.LetTuple xts y e2) = do
-        let fvset = fv e2
+        let fvset = fv e2 -- Closure.fv
         tmp <- g (M.union (M.fromList xts) env) e2
         let (_, lo) = (expand -- value is not monadic here
                 xts
@@ -88,12 +89,12 @@ g env (C.MakeCls (x,t) (C.Cls { C.entry = l, C.actual_fv = ys }) e2) = do
         let (ofset, store_fv_tmp) = (expand
                 (map (\y -> (y, env M.! y)) ys)
                 (4,return e2')
-                (\y offset store_fv -> store_fv >>= (\sfv -> seq (Sf y x (C offset), sfv)))
-                (\y _ offset store_fv -> store_fv >>= (\sfv -> seq (Sw y x (C offset), sfv)))
+                (\y offset store_fv -> store_fv >>= (\sfv -> seq (Sf y x (C offset)) sfv))
+                (\y _ offset store_fv -> store_fv >>= (\sfv -> seq (Sw y x (C offset)) sfv))
                 )
         store_fv <- store_fv_tmp
         z <- genid "l"
-        tmp <- seq(Sw z x (C 0), store_fv)
+        tmp <- seq (Sw z x (C 0)) store_fv
         return $ Let (x,t) (Mv reg_hp)
                         (Let (reg_hp,Type.Int) (Arith2 Add reg_hp (C ofset))
                                 (Let (z,Type.Int) (SetL l) tmp))
@@ -117,7 +118,8 @@ g env (C.Get x y)
                                     (Ans (Lw x (V offset)))
                         else
                             Ans (Lw x (C 0))
-        | otherwise = throw $ Fail "sushi."
+        | otherwise = do
+                        throw $ Fail "ext array ... oh ..."
         where
             t = M.lookup x env
 g env (C.Put x y z)
@@ -136,9 +138,44 @@ g env (C.Put x y z)
                                     (Ans (Sw z x (V offset)))
                         else
                             Ans (Sw z x (C 0))
-        | otherwise = throw $ Fail "sushi.yeah."
+        | otherwise = do
+                        throw $ Fail "ext array ... sorry ..."
         where
             t = M.lookup x env
+g env (C.Malloc n p (C.A x))
+        | Type.Unit  <- t = return $ Ans Nop
+        | Type.Float <- t = do
+                addr_ <- genid "p"
+                Let (addr_, (Array Type.Float)) (Li p) <$>
+                        (store_same_value n
+                            (\offset -> Sf x addr_ (C (offset * 4)))
+                                (Ans Nop))
+        | otherwise = do
+                addr_ <- genid "p"
+                Let (addr_, (Array t)) (Li p) <$>
+                        (store_same_value n
+                            (\offset -> Sw x addr_ (C (offset * 4)))
+                                (Ans Nop))
+        where
+            t = env M.! x
+g env (C.Malloc _ p (C.T xs)) = do
+        y <- genid "t"
+        let (_, store_tmp) = (expand
+                (map (\x -> (x, env M.! x)) xs)
+                (0, return $ Ans(Mv y))
+                (\x offset store_elem -> store_elem >>= (\st -> seq (Sf x y (C offset)) st))
+                (\x _ offset store_elem -> store_elem >>= (\st -> seq (Sw x y (C offset)) st))
+                )
+        store <- store_tmp
+        return $ Let (y, (Tuple (map (\x -> env M.! x) xs))) (Li p) store
+
+
+
+
+store_same_value :: Int -> (Int -> Exp) -> T -> RunRun T
+store_same_value n constr ans =
+    foldM (\acc offset -> seq (constr offset) acc) ans [1..n]
+
 
 
 
@@ -148,7 +185,8 @@ h (C.Fundef { C.name = (C.L x, t),
     C.formal_fv = zts,
     C.body = e }) = do
             let (i, f) = separate yts
-            ini_ <- g (M.insert x t (M.fromList yts `M.union` (M.fromList zts `M.union` mapinit))) e
+            global <- (M.map typ . globals) <$> get
+            ini_ <- g (M.insert x t (M.fromList yts `M.union` (M.fromList zts `M.union` (global `M.union` mapinit)))) e
             let (_, lo) = expand zts
                     (4, ini_)
                     (\z offset load -> (fletd (z, Lf x (C offset), load)))
@@ -162,10 +200,17 @@ h (C.Fundef { C.name = (C.L x, t),
                     _ -> throw $ Fail "wow"
 
 
+findGlobal :: String -> RunRun (Maybe Global)
+findGlobal x = ((M.lookup x) . globals) <$> get
+
+
+
+
+
 virtual :: C.Prog -> RunRun Aprog
 virtual (C.Prog e) = do
     eputstrln "virtual ..."
-    fundefs' <- ((mapM h . reverse . toplevel) =<< get)
     e' <- g mapinit e
     eprint e'
+    fundefs' <- ((mapM h . reverse . toplevel) =<< get)
     return $ Aprog fundefs' e'

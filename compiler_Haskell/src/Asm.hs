@@ -51,8 +51,8 @@ data Aprog = Aprog [Afundef] T deriving(Show, Eq)
 fletd :: (String,Exp,T) -> T
 fletd (x,e1,e2) = Let (x, Float) e1 e2
 
-seq :: (Exp,T) -> RunRun T
-seq (e1,e2) = do
+seq :: Exp -> T -> RunRun T
+seq e1 e2 = do
         nid <- gentmp Unit
         return $ Let (nid, Unit) e1 e2
 

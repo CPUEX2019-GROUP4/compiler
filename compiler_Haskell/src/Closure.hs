@@ -14,6 +14,7 @@ import qualified KNormal as K hiding (fv)
 import qualified Type as Ty
 import Closure_Type
 
+
 fv :: C -> S.Set String
 fv Unit                     = S.empty
 fv (Int _)                  = S.empty
@@ -38,6 +39,8 @@ fv (Put x y z)              = S.delete "%r0" $ S.fromList [x,y,z]
 fv (MakeCls (x,_) (Cls{actual_fv=ys}) e)
                             = S.delete "%r0" $ S.delete x $ S.union (S.fromList ys) (fv e)
 fv (AppDir _ xs)            = S.delete "%r0" $ S.fromList xs
+fv (Malloc _ _ (A x))     = if x /= "%r0" then S.singleton x else S.empty
+fv (Malloc _ _ (T xs))      = S.delete "%r0" $ S.fromList xs
 
 
 
@@ -62,25 +65,30 @@ g env known (K.LetTuple xts y e)= LetTuple xts y <$> g (M.union (M.fromList xts)
 g _ _ (K.Array t x y)           = return $ Array t x y
 g _ _ (K.Get x y)               = return $ Get x y
 g _ _ (K.Put x y z)             = return $ Put x y z
+g _ _ (K.Malloc _ n p (K.A x))  = return $ Malloc n p (A x)
+g _ _ (K.Malloc _ n p (K.T xs)) = return $ Malloc n p (T xs)
 g env known (K.KLetRec (K.KFunc { K.kname = (x,t), K.kargs = yts, K.kbody = e1}) e2) = do
         toplevel_backup <- toplevel <$> get
         let env' = M.insert x t env
         let known' = S.insert x known
         let env_ = M.union (M.fromList yts) env'
         e1' <- g env_ known' e1
-        let zs = (fv e1') S.\\ (S.fromList (map fst yts))
+--        globals' <- (keysSet . globals) <$> get
+        let fe1' = fv e1' --S.\\ globals'
+        let zs = fe1' S.\\ (S.fromList (map fst yts))
         (known'', e1'') <-
                 if S.null zs then
                     return (known', e1')
                 else do
                     liftIO $ (hPrintf stderr
                             "free variable(s) %s found in function %s@.\n" (show zs) x)
+                    eprint e1
                     liftIO $ (hPrintf stderr
                             "function %s cannot be directly applied in fact@.\n" x)
                     (\f -> put (f {toplevel=toplevel_backup})) =<< get
                     e1''' <- g env_ known e1
                     return (known, e1''')
-        let zs' = S.toList ((fv e1') S.\\ (S.insert x (S.fromList (map fst yts))))
+        let zs' = S.toList (fe1' S.\\ (S.insert x (S.fromList (map fst yts))))
         let zts = map (\z -> (z, env' M.! z)) zs'
         toplevel_tmp <- toplevel <$> get
         let newfun = Fundef { name = (L x, t),
@@ -98,15 +106,14 @@ g _ known (K.KApp x ys)
         | S.member x known = do
                 liftIO $ hPrintf stderr "directly applying %s@.\n" x
                 return $ AppDir (L x) ys
-        | otherwise = throw $ Fail "AppCls is not valid yet ..."
-
+        | otherwise = throw $ Fail $ x ++ "AppCls is not valid yet ..."
 
 
 
 closure :: K.K -> RunRun Prog
 closure e = do
-        eprint e
+        -- eprint e
         eputstrln "closure ..."
         e' <- g M.empty S.empty e
-        eprint e'
+        -- eprint e'
         return $ Prog e'

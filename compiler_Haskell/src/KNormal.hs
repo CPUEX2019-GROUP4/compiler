@@ -33,12 +33,17 @@ data K =
     | In !Type.Type
     | Get !String !String
     | Put !String !String !String
+    | Malloc !Type.Type !Int !Int !MallocInit -- type, size, pointer, init
     deriving (Show, Eq)
 
 data KFundef =
     KFunc { kname :: !(String, Type.Type),
             kargs :: ![(String, Type.Type)],
             kbody :: !K }
+    deriving(Show, Eq)
+
+data MallocInit = A !String
+                | T ![String]
     deriving(Show, Eq)
 
 fv :: K -> Set String
@@ -66,7 +71,8 @@ fv (KLetRec (KFunc { kname = (x,_), kargs = yts, kbody = e1}) e2) =
         let zs = (fv e1) S.\\ (S.fromList (map fst yts)) in
         (S.union zs (fv e2)) S.\\ (S.singleton x)
 fv (KApp e es)          = S.fromList (e:es)
-
+fv (Malloc _ _ _ (A x)) = S.singleton x
+fv (Malloc _ _ _ (T xs))= S.fromList xs
 
 
 id_of_typ__ :: Type.Type -> StateT Int (Except Error) Char
@@ -105,7 +111,7 @@ ilet s = (cont $ \_ -> s) >>= insert_let
 k_body :: Map String Type.Type -> Syn.Syntax -> StateT Int (Except Error) (K, Type.Type)
 k_body _ Syn.Unit         = return (Unit, Type.Unit)
 k_body _ (Syn.In t)       = return (In t, t)
-k_body _ (Syn.Bool b)     = return (Int (if b then 0 else 1), Type.Int)
+k_body _ (Syn.Bool b)     = return (Int (if b then 1 else 0), Type.Int)
 k_body _ (Syn.Int i)      = return (Int i, Type.Int)
 k_body _ (Syn.Float f)    = return (Float f, Type.Float)
 k_body env (Syn.Not e) = do
@@ -146,7 +152,7 @@ k_body env (Syn.Cmp cmp e1 e2) = do
         y'@(_,t) <- k_body env e2
         case t of
                 Type.Float -> (`runCont` id) $ do
-                        (\x y -> return (FIfCmp cmp x y (Int 0) (Int 1), Type.Int)) <$> insert_let x' <*> insert_let y'
+                        (\x y -> return (FIfCmp cmp x y (Int 1) (Int 0), Type.Int)) <$> insert_let x' <*> insert_let y'
                 _ -> (`runCont` id) $ do
                         (\x y -> return (Cmp cmp x y, Type.Int)) <$> insert_let x' <*> insert_let y'
 k_body env (Syn.Let (x,t) e1 e2) = do
@@ -214,19 +220,15 @@ k_body env (Syn.If e1 e2 e3)
         (e3',t) <- k_body env e3
         (`runCont` id) $ do
             (\x -> return (If x e2' e3', t)) <$> insert_let x'
-
-
-
-
 k_body env (Syn.Var x)
     | Just t <- mt = return (Var x, t)
-    | Nothing <- mt = throwError $ Fail "extarray"  -- extarray
+    | Nothing <- mt = throwError $ Fail (x ++ "extarray")  -- extarray
     where mt = M.lookup x env
 
 
 knormal :: Syn.Syntax -> RunRun K
 knormal e = do
-    eprint e
+--    eprint e
     eputstrln "knormal ..."
     f <- get
     let idc = idcounter f

@@ -1,6 +1,7 @@
 module Alpha where
 
 import Data.Map as M hiding(map)
+import Control.Monad.State()
 import RunRun
 import KNormal
 
@@ -46,10 +47,15 @@ g env e
     | Array t x y       <- e = return $ Array t (f x) (f y)
     | Get x y           <- e = return $ Get (f x) (f y)
     | Put x y z         <- e = return $ Put (f x) (f y) (f z)
+    | Malloc t n p (A x)<- e = do
+                    return $ Malloc t n p (A (f x))
+    | Malloc t n p (T xs)<- e = do
+                    return $ Malloc t n p (T (map f xs))
     where f x
             | Nothing <- a = x
             | Just y  <- a = y
             where a = M.lookup x env
+
 
 alpha :: K -> RunRun K
 alpha x = do

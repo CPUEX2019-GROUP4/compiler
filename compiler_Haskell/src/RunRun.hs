@@ -3,6 +3,7 @@ module RunRun where
 --import Text.Printf(hPrintf, PrintfType)
 import System.IO
 import Data.Set (Set)
+import Data.Map (Map)
 import Control.Monad.State
 import Control.Monad.Except
 import Control.Monad.Identity()
@@ -20,12 +21,18 @@ data Env = Env {
     stackset :: Set String,
     stackmap :: [String],
     toplevel :: [Cl.Fundef],
-    inlinenum :: Int
+    inlinenum :: Int,
+    globals :: Map String Global,
+    hp :: Int,
+    sp :: Int
     }
     deriving (Show)
 
 data Error = ParseErr String
            | Fail String
+            deriving Show
+
+data Global = Global { typ :: Type, addr :: Int }
             deriving Show
 
 throw :: Error -> RunRun a

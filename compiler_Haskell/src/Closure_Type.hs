@@ -30,6 +30,7 @@ data C =
   | MakeCls !(String, Ty.Type) !Closure !C
   -- | AppCls !String ![String]      ----------- とりあえずなしで
   | AppDir !L ![String]
+  | Malloc !Int !Int !MallocInit
   deriving(Show)
 data Fundef = Fundef {
         name :: (L, Ty.Type),
@@ -41,3 +42,7 @@ data Fundef = Fundef {
 
 data Closure = Cls { entry :: L, actual_fv :: [String] }
         deriving (Show)
+
+data MallocInit = A !String
+                | T ![String]
+    deriving(Show, Eq)

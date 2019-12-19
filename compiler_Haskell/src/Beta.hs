@@ -7,6 +7,7 @@ import Data.Map hiding(map)
 
 beta :: K -> RunRun K
 beta e = do
+    eputstrln "beta ..."
     let env = empty
     b env e
 
@@ -39,6 +40,8 @@ b env e
     | Out n x                     <- e      = return $ Out n (find x)
     | Get x y                     <- e      = return $ Get (find x) (find y)
     | Put x y z                   <- e      = return $ Put (find x) (find y) (find z)
+    | Malloc t n p (A x)          <- e      = return $ Malloc t n p (A (find x))
+    | Malloc t n p (T xs)         <- e      = return $ Malloc t n p (T (map find xs))
     where
         find x = case lookup x env of
                 Just x' -> x'

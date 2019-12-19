@@ -174,19 +174,30 @@ g' oc xx@(NonTail x, exp)
     | FMv y      <- exp, x == y = return ()
     | FMv y      <- exp =
             liftIO $ hPutStr oc $ printf "    fmv %s %s\n" (reg x) (reg y)
-    | Cmp Syntax.Eq y (V z) <- exp =
+    | Cmp Syntax.Eq y (V z) <- exp = do
+            liftIO $ hPutStr oc $ printf "    slt %s %s %s\n" (reg x)       (reg y) (reg z)
+            liftIO $ hPutStr oc $ printf "    slt %s %s %s\n" (reg reg_tmp) (reg z) (reg y)
+            liftIO $ hPutStr oc $ printf "    add %s %s %s\n" (reg x) (reg x) (reg reg_tmp)
+            liftIO $ hPutStr oc $ printf "    slti %s %s 1\n" (reg x) (reg x)
+    | Cmp Syntax.Eq y (C z) <- exp = do
+            liftIO $ hPutStr oc $ printf "    sub %s r0 %d\n" (reg reg_tmp) (reg y)
+            liftIO $ hPutStr oc $ printf "    slti %s %s %d\n" (reg x) (reg y) z
+            liftIO $ hPutStr oc $ printf "    slti %s %s %d\n" (reg reg_tmp) (reg reg_tmp) (-z)
+            liftIO $ hPutStr oc $ printf "    add %s %s %s\n" (reg x) (reg x) (reg reg_tmp)
+            liftIO $ hPutStr oc $ printf "    slti %s %s 1\n" (reg x) (reg x)
+    | Cmp Syntax.Ne y (V z) <- exp =
             liftIO $ hPutStr oc $ printf "    sub %s %s %s\n" (reg x) (reg y) (reg z)
-    | Cmp Syntax.Eq y (C z) <- exp =
+    | Cmp Syntax.Ne y (C z) <- exp =
             liftIO $ hPutStr oc $ printf "    subi %s %s %d\n" (reg x) (reg y) z
     | Cmp Syntax.Lt y (V z) <- exp =
+            liftIO $ hPutStr oc $ printf "    slt %s %s %s\n" (reg x) (reg y) (reg z)
+    | Cmp Syntax.Lt y (C z) <- exp =
+            liftIO $ hPutStr oc $ printf "    slti %s %s %d\n" (reg x) (reg y) z
+    | Cmp Syntax.Gt y (V z) <- exp =
             liftIO $ hPutStr oc $ printf "    slt %s %s %s\n" (reg x) (reg z) (reg y)
-    | Cmp Syntax.Lt y (C z) <- exp = do
+    | Cmp Syntax.Gt y (C z) <- exp = do
             liftIO $ hPutStr oc $ printf "    ori %s r0 %d\n" (reg reg_tmp) z
             liftIO $ hPutStr oc $ printf "    slt %s %s %s\n" (reg x) (reg reg_tmp) (reg y)
-    | Cmp Syntax.Gt y (V z) <- exp =
-            liftIO $ hPutStr oc $ printf "    slt %s %s %s\n" (reg x) (reg y) (reg z)
-    | Cmp Syntax.Gt y (C z) <- exp =
-            liftIO $ hPutStr oc $ printf "    slti %s %s %d\n" (reg x) (reg y) z
     | Lf y (V z) <- exp = do
             liftIO $ hPutStr oc $ printf "    add %s %s %s\n" (reg_tmp) (reg y) (reg z)
             liftIO $ hPutStr oc $ printf "    lwcZ %s %s 0\n" (reg x) (reg_tmp)
@@ -196,7 +207,7 @@ g' oc xx@(NonTail x, exp)
             liftIO $ hPutStr oc $ printf "    add %s %s %s\n" (reg reg_tmp) (reg y) (reg z)
             liftIO $ hPutStr oc $ printf "    swcZ %s %s 0\n" (reg a) (reg reg_tmp)
     | Sf a y (C z) <- exp =
-            liftIO $ hPutStr oc $ printf "    swcZ %s %s 0\n" (reg a) (reg y) z
+            liftIO $ hPutStr oc $ printf "    swcZ %s %s %d\n" (reg a) (reg y) z
     | Save _ _  <- exp = g'_stackset oc xx =<< (stackset <$> get)
     | Restore y <- exp, elem x allregs = do
             ofset <- offset y
@@ -208,7 +219,7 @@ g' oc xx@(NonTail x, exp)
     | If y e1 e2 <- exp = do
             b_else <- genid "if_else"
             b_cont <- genid "if_cont"
-            liftIO $ hPutStr oc $ printf "    bne %s r0 %s\n" (reg y) b_else
+            liftIO $ hPutStr oc $ printf "    beq %s r0 %s\n" (reg y) b_else
             g'_non_tail_if oc (NonTail x) e1 e2 b_else b_cont
     | Makearray t n' v <- exp =
             g'_array oc t x n' v
@@ -225,6 +236,13 @@ g' oc xx@(NonTail x, exp)
             liftIO $ hPutStr oc $ printf "    fsub %s %s %s\n" (reg reg_ftmp) (reg y) (reg z)
             liftIO $ hPutStr oc $ printf "    fcz %s\n" (reg reg_ftmp)
             liftIO $ hPutStr oc $ printf "    bc1f %s\n" b_else
+            g'_non_tail_if oc (NonTail x) e1 e2 b_else b_cont
+    | FIfCmp Ne y z e1 e2 <- exp = do
+            b_else <- genid "feq_else"
+            b_cont <- genid "feq_cont"
+            liftIO $ hPutStr oc $ printf "    fsub %s %s %s\n" (reg reg_ftmp) (reg y) (reg z)
+            liftIO $ hPutStr oc $ printf "    fcz %s\n" (reg reg_ftmp)
+            liftIO $ hPutStr oc $ printf "    bc1t %s\n" b_else
             g'_non_tail_if oc (NonTail x) e1 e2 b_else b_cont
 g' oc (Tail, exp)
     | Nop           <- exp = e
@@ -266,7 +284,7 @@ g' _ (Tail, In _) = throw $ Fail "input is only available for int and float."
 g' _ (Tail, Restore _) = throw $ Fail "restore at tail !?!?"
 g' oc (Tail, If y e1 e2) = do
             b_else <- genid "if_else"
-            liftIO $ hPutStr oc $ printf "    bne %s r0 %s\n" (reg y) b_else
+            liftIO $ hPutStr oc $ printf "    beq %s r0 %s\n" (reg y) b_else
             g'_tail_if oc e1 e2 b_else
 g' oc (Tail, FIfCmp Lt y z e1 e2) = do
             b_else <- genid "fless_else"
@@ -279,6 +297,12 @@ g' oc (Tail, FIfCmp Eq y z e1 e2) = do
             liftIO $ hPutStr oc $ printf "    fsub %s %s %s\n" (reg reg_ftmp) (reg y) (reg z)
             liftIO $ hPutStr oc $ printf "    fcz %s\n" (reg reg_ftmp)
             liftIO $ hPutStr oc $ printf "    bc1f %s\n" b_else
+            g'_tail_if oc e1 e2 b_else
+g' oc (Tail, FIfCmp Ne y z e1 e2) = do
+            b_else <- genid "fless_else"
+            liftIO $ hPutStr oc $ printf "    fsub %s %s %s\n" (reg reg_ftmp) (reg y) (reg z)
+            liftIO $ hPutStr oc $ printf "    fcz %s\n" (reg reg_ftmp)
+            liftIO $ hPutStr oc $ printf "    bc1t %s\n" b_else
             g'_tail_if oc e1 e2 b_else
 g' oc (Tail, CallDir (L x) ys zs) = do
             g'_args oc [] ys zs
@@ -352,6 +376,7 @@ g'_args oc x_reg_cl ys zs = do
             (shuffle reg_fsw zrs)
 
 g'_array :: Handle -> Type -> String -> Id_or_imm -> String -> RunRun ()
+g'_array oc t x (V "%r0") v = g'_array oc t x (C 0) v
 g'_array oc t x (V n) v = do
             loop <- genid "arrayloop"
             cont <- genid "arraycont"
@@ -391,10 +416,13 @@ h oc (Afundef{ a_name = L x, a_args = _, a_fargs =_, a_body = e, a_ret = _ }) = 
 emit :: Handle -> Aprog -> RunRun ()
 emit oc (Aprog fundefs e) = do
     eputstrln "emit ..."
-    eprint e
+    -- eprint e
     eputstrln "assembly"
-    liftIO $ hPutStr oc $ printf "    ori %s r0 3072\n" (reg reg_sp)
-    liftIO $ hPutStr oc $ printf "    ori %s r0 10240\n" (reg reg_hp)
+    stack <- sp <$> get
+    heap  <- hp <$> get
+    eprint =<< (globals <$> get)
+    liftIO $ hPutStr oc $ printf "    ori %s r0 %d\n" (reg reg_sp) stack
+    liftIO $ hPutStr oc $ printf "    ori %s r0 %d\n" (reg reg_hp) heap
     f <- get
     put $ f { stackset = empty, stackmap = [] }
     g oc (NonTail "R0", e)

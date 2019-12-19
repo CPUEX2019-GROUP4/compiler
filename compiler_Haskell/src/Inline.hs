@@ -8,6 +8,9 @@ import RunRun
 import Type (Type)
 import Alpha (g)
 
+inline :: K -> RunRun K
+inline e = i_body M.empty e
+
 i_body :: Map String ([(String,Type)], K) -> K -> RunRun K
 i_body env (If x e1 e2) =
                 If x <$> i_body env e1 <*> i_body env e2

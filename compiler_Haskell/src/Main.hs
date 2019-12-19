@@ -3,7 +3,8 @@ module Main where
 import System.Environment (getArgs)
 import System.IO
 import Data.Set (empty)
-import Control.Monad.State()
+import qualified Data.Map as M (empty)
+import Control.Monad(foldM)
 import Control.Monad.Except()
 import Control.Monad.Identity()
 
@@ -21,11 +22,14 @@ import Asm()
 import Virtual
 import RegAlloc
 import Emit
-import Beta()
-import Assoc()
-import Inline()
-import Elim()
-import Simm()
+import Beta
+import Assoc
+import Inline
+import Elim
+import Simm
+import ConstFold
+import Global
+import ConvertGlobal
 
 main :: IO ()
 main = do
@@ -39,8 +43,12 @@ main = do
         >>= Typing.typing
         >>= KNormal.knormal
         >>= Alpha.alpha
+        >>= iter 10
+        >>= Global.global
+        >>= ConvertGlobal.convertGlobal
         >>= Closure.closure
         >>= Virtual.virtual
+        >>= Simm.simm
         >>= RegAlloc.regalloc
         >>= Emit.emit oc
     hClose oc
@@ -48,6 +56,17 @@ main = do
         Left err -> print err
         Right () -> return ()
     return ()
+
+iter :: Int -> K -> RunRun K
+iter n e = foldM (\m _ -> opt m) e [1..n]
+
+opt :: K -> RunRun K
+opt e = return e
+        >>= Beta.beta
+        >>= Assoc.assoc
+        >>= Inline.inline
+        >>= ConstFold.constfold
+        >>= Elim.elim
 
 
 initEnv :: Env
@@ -59,5 +78,8 @@ initEnv = Env {
             stackset = empty,
             stackmap = [],
             toplevel = [],
-            inlinenum = 10
+            inlinenum = 10,
+            globals = M.empty,
+            hp = 10240,
+            sp = 5040
             }

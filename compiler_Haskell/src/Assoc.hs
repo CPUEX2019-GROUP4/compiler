@@ -4,7 +4,9 @@ import RunRun
 import KNormal
 
 assoc :: K -> RunRun K
-assoc e = return (a_body e)
+assoc e = do
+        eputstrln "assoc ..."
+        return (a_body e)
 
 a_body :: K -> K
 a_body (FIfCmp cmp x y e1 e2) =
