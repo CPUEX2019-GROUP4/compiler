@@ -10,6 +10,7 @@ import qualified Type as T
 global :: K -> RunRun K
 global e = do
     eputstrln "global ..."
+--    eprint e
     g_body M.empty e
 
 g_body :: Map String Int -> K -> RunRun K
@@ -20,6 +21,10 @@ g_body env (Let (x,t) (Array t' n v) e2)
                     eputstrln $ "assuming " ++ x ++ " as a global Array@"
                     pointer <- g_bodyadd x t n'
                     Let (x,t) (Malloc t' n' pointer (A v)) <$> g_body env e2
+g_body env (Let (x,t) (Array t' "%r0" v) e2) = do
+                    eputstrln $ "assuming " ++ x ++ " as a global Array@"
+                    pointer <- g_bodyadd x t 0
+                    Let (x,t) (Malloc t' 0 pointer (A v)) <$> g_body env e2
 g_body env (Let (x,t) (Tuple xs) e2) = do
                     eputstrln $ "assuming " ++ x ++ " as a global Tuple@"
                     let n = length xs
@@ -38,7 +43,6 @@ g_body _ e = return e
 
 g_bodyadd :: String -> T.Type -> Int -> RunRun Int
 g_bodyadd x t n = do
---        eputstrln "global ..."
         f <- get
         let heap = hp f
         let global__ = globals f

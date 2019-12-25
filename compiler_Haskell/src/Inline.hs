@@ -8,8 +8,13 @@ import RunRun
 import Type (Type)
 import Alpha (g)
 
+import Syntax(Compare(..), Arith_binary(..))
+
 inline :: K -> RunRun K
-inline e = i_body M.empty e
+inline e = do
+--        eprint e
+        eputstrln "inlining ..."
+        i_body M.empty e
 
 i_body :: Map String ([(String,Type)], K) -> K -> RunRun K
 i_body env (If x e1 e2) =
@@ -49,8 +54,6 @@ size (Let _ e1 e2) = 1 + size e1 + size e2
 size (KLetRec f e2) = 1 + size (kbody f) + size e2
 size (LetTuple _ _ e) = 1 + size e
 size _ = 1
-
-
 
 
 foldl2M :: (acc -> a -> b -> acc) -> acc -> [a] -> [b] -> RunRun acc

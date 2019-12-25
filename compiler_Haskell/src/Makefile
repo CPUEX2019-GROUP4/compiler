@@ -1,6 +1,6 @@
 RESULT = Main
 
-main: float.o Type.hs Syntax.hs Lexer.x Parser.y Closure_Type.hs RunRun.hs Asm.hs Lexer.hs Parser.hs Typing.hs KNormal.hs Alpha.hs Beta.hs Assoc.hs Inline.hs ConstFold.hs Elim.hs Global.hs ConvertGlobal.hs Closure.hs Virtual.hs RegAlloc.hs Simm.hs Emit.hs Main.hs
+Main: float.o Type.hs Syntax.hs Lexer.x Parser.y Closure_Type.hs RunRun.hs Asm.hs Lexer.hs Parser.hs Typing.hs KNormal.hs Alpha.hs Beta.hs Assoc.hs Inline.hs ConstFold.hs Elim.hs Global.hs ConvertGlobal.hs Closure.hs Virtual.hs RegAlloc.hs Simm.hs Emit.hs Main.hs
 	ghc Main.hs float.o -Wall
 
 float.o: float.c
@@ -20,4 +20,5 @@ test/%.s: $(RESULT) test/%.ml
 	cat test/$*.ml >> test/test.ml
 	./$(RESULT) test/test.ml
 	mv test/test.s test/$*.s
+
 

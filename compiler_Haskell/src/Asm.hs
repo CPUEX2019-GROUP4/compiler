@@ -2,7 +2,7 @@ module Asm where
 
 import qualified Data.Set as S
 import Data.Array
-import Data.List
+import Data.List()
 import RunRun
 import Type
 import Syntax (Arith_binary(..), Arith_unary(..), Float_binary(..), Float_unary(..), Unary_operator(..), Compare(..))
@@ -94,9 +94,10 @@ is_reg :: String -> Bool
 is_reg ('%':_) = True
 is_reg _ = False
 
-remove_and_uniq :: Eq a => S.Set a -> [a] -> [a]
-remove_and_uniq seta xs =
-    S.toList seta `union` xs
+-- ys \\ xs
+remove_and_uniq :: Ord a => S.Set a -> [a] -> [a]
+remove_and_uniq xs_set ys_list =
+    S.toList $ S.fromList ys_list S.\\ xs_set
 
 fv_id_pr_imm :: Id_or_imm -> [String]
 fv_id_pr_imm (V x) = [x]
@@ -122,20 +123,20 @@ fv_exp (Slw x y') = x : fv_id_pr_imm y'
 fv_exp (Lf x y') = x : fv_id_pr_imm y'
 fv_exp (Lw x y') = x : fv_id_pr_imm y'
 fv_exp (Cmp _ x y') = x : fv_id_pr_imm y'
-fv_exp (If x e1 e2) = x : remove_and_uniq S.empty (fv e1 ++ fv e2)
-fv_exp (FIfCmp _ x y e1 e2) = x : y : remove_and_uniq S.empty (fv e1 ++ fv e2)
+fv_exp (If x e1 e2) = x : remove_and_uniq S.empty (fv' e1 ++ fv' e2)
+fv_exp (FIfCmp _ x y e1 e2) = x : y : remove_and_uniq S.empty (fv' e1 ++ fv' e2)
 fv_exp (Sw x y z') = x : y : fv_id_pr_imm z'
 fv_exp (Sf x y z') = x : y : fv_id_pr_imm z'
 fv_exp (CallDir _ ys zs) = ys ++ zs
 fv_exp (Makearray _ x' y) = y : fv_id_pr_imm x'
 
-fv :: T -> [String]
-fv (Ans e) = fv_exp e
-fv (Let (x,_) ex' e) =
-        fv_exp ex' ++ remove_and_uniq (S.singleton x) (fv e)
-
 fv' :: T -> [String]
-fv' e = remove_and_uniq S.empty (fv e)
+fv' (Ans e) = fv_exp e
+fv' (Let (x,_) ex' e) =
+        fv_exp ex' ++ remove_and_uniq (S.singleton x) (fv' e)
+
+fv :: T -> [String]
+fv e = remove_and_uniq S.empty (fv' e)
 
 concat :: T -> (String, Type) -> T -> T
 concat (Ans ex) xt e2 = Let xt ex e2

@@ -222,13 +222,13 @@ k_body env (Syn.If e1 e2 e3)
             (\x -> return (If x e2' e3', t)) <$> insert_let x'
 k_body env (Syn.Var x)
     | Just t <- mt = return (Var x, t)
-    | Nothing <- mt = throwError $ Fail (x ++ "extarray")  -- extarray
+    | Nothing <- mt = throwError $ Fail (x ++ " extarray")  -- extarray
     where mt = M.lookup x env
 
 
 knormal :: Syn.Syntax -> RunRun K
 knormal e = do
---    eprint e
+    eprint e
     eputstrln "knormal ..."
     f <- get
     let idc = idcounter f

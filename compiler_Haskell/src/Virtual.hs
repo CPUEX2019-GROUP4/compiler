@@ -145,21 +145,19 @@ g env (C.Put x y z)
 g env (C.Malloc n p (C.A x))
         | Type.Unit  <- t = return $ Ans Nop
         | Type.Float <- t = do
-                addr_ <- genid "p"
-                Let (addr_, (Array Type.Float)) (Li p) <$>
-                        (store_same_value n
-                            (\offset -> Sf x addr_ (C (offset * 4)))
-                                (Ans Nop))
+                addr_ <- genid "ap"
+                store <- (store_same_value n
+                            (\offset -> Sf x addr_ (C (offset * 4))) (Ans (Li p)))
+                return $ Let (addr_,t) (Li p) store
         | otherwise = do
-                addr_ <- genid "p"
-                Let (addr_, (Array t)) (Li p) <$>
-                        (store_same_value n
-                            (\offset -> Sw x addr_ (C (offset * 4)))
-                                (Ans Nop))
+                addr_ <- genid "ap"
+                store <- (store_same_value n
+                            (\offset -> Sw x addr_ (C (offset * 4))) (Ans (Li p)))
+                return $ Let (addr_,t) (Li p) store
         where
             t = env M.! x
 g env (C.Malloc _ p (C.T xs)) = do
-        y <- genid "t"
+        y <- genid "tp"
         let (_, store_tmp) = (expand
                 (map (\x -> (x, env M.! x)) xs)
                 (0, return $ Ans(Mv y))
@@ -167,14 +165,15 @@ g env (C.Malloc _ p (C.T xs)) = do
                 (\x _ offset store_elem -> store_elem >>= (\st -> seq (Sw x y (C offset)) st))
                 )
         store <- store_tmp
-        return $ Let (y, (Tuple (map (\x -> env M.! x) xs))) (Li p) store
+        return $ Let (y, (Tuple (map (\x -> env M.! x) xs))) (Li p) $ store
+
 
 
 
 
 store_same_value :: Int -> (Int -> Exp) -> T -> RunRun T
 store_same_value n constr ans =
-    foldM (\acc offset -> seq (constr offset) acc) ans [1..n]
+    foldM (\acc offset -> seq (constr offset) acc) ans [0..(n-1)]
 
 
 
@@ -205,12 +204,11 @@ findGlobal x = ((M.lookup x) . globals) <$> get
 
 
 
-
-
 virtual :: C.Prog -> RunRun Aprog
 virtual (C.Prog e) = do
     eputstrln "virtual ..."
     e' <- g mapinit e
-    eprint e'
+--    eprint e'
     fundefs' <- ((mapM h . reverse . toplevel) =<< get)
+--    eprint fundefs'
     return $ Aprog fundefs' e'

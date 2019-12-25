@@ -8,6 +8,7 @@ import qualified Data.Map as M
 
 constfold :: K -> RunRun K
 constfold e = do
+--        eprint e
         eputstrln "constfold ..."
         return $ f (M.singleton "%r0" (Int 0)) e
 
@@ -30,7 +31,7 @@ f env e
       Just (Float a)        <- find x,
       Just (Float b)        <- find y   = Float (calc_f2 arith a b)
     | If x e1 e2            <- e,
-      Just (Int n)          <- find x   = if n == 0 then f env e1 else f env e2
+      Just (Int n)          <- find x   = if n == 1 then f env e1 else f env e2
     | Cmp cmp x y           <- e,
       Just (Int a)          <- find x,
       Just (Int b)          <- find y   = if calc_cmp cmp a b then Int 1 else Int 0
@@ -44,7 +45,7 @@ f env e
 f env (Let (x,t) e1 e2)
     | Int   _ <- e1' = ans1
     | Float _ <- e1' = ans1
-    | Tuple _ <- e1' = ans1
+--    | Tuple _ <- e1' = ans1
     | _       <- e1' = ans2
     | Malloc _ _ _ (T xs) <- e1' = Let (x,t) e1' (f (M.insert x (Tuple xs) env) e2)
     where

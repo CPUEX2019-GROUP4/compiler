@@ -9,3 +9,6 @@ cp test/$1.s ../../simulator/simulator/sim/
 cd ../../simulator/simulator/sim
 ./test.sh $1.s input.bin $2
 mv out.txt ../../../compiler_Haskell/src/test/$1.sim
+echo ""
+cat ../../../compiler_Haskell/src/test/$1.sim
+echo ""

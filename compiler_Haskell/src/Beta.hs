@@ -7,6 +7,7 @@ import Data.Map hiding(map)
 
 beta :: K -> RunRun K
 beta e = do
+--    eprint e
     eputstrln "beta ..."
     let env = empty
     b env e

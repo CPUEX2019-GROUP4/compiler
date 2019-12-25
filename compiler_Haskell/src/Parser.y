@@ -147,7 +147,8 @@ exp:                        -- 一般
         %prec prec_tuple    { Tuple $1 }
   | TokenLET "(" pat ")" "=" exp TokenIN exp
         %prec prec_let      { LetTuple $3 $6 $8 }
-  | exp "SEMI" exp          { Let ("TuSemi.",Type.Unit) $1 $3 }
+  | exp "SEMI" exp
+        %prec "SEMI"        { Let ("TuSemi.",Type.Unit) $1 $3 }
   | TokenLET newvar "=" exp TokenIN exp
         %prec prec_let      { Let $2 $4 $6 }
   | TokenLET TokenREC fundef TokenIN exp
@@ -208,7 +209,7 @@ removeComments n (x:ls)          = do
 parse :: [Token] -> RunRun Syntax
 parse toks = do
     eputstrln "parsing ..."
-    eprint toks
+--    eprint toks
     mparse =<< removeComments 0 toks
 
 }

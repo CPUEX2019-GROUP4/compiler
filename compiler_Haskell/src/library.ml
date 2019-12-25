@@ -146,3 +146,5 @@ let rec abs_float x = fabs x in
 let rec fispos x = x > 0.0 in
 let rec fisneg x = x < 0.0 in
 
+(* truncate *)
+let rec truncate x = int_of_float x in

@@ -5,6 +5,7 @@ import KNormal
 
 assoc :: K -> RunRun K
 assoc e = do
+--        eprint e
         eputstrln "assoc ..."
         return (a_body e)
 

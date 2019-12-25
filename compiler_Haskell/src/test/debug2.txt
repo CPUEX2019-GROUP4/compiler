@@ -1,0 +1,83 @@
+KLetRec (KFunc {kname = ("yloop.321",Fun [Int] Unit), kargs = [("y.322",Int)], kbody = Let ("Ti50.324",Int) (Int 256) (Let ("Ti51.323",Int) (Cmp Lt "y.322" "Ti50.324") (If "Ti51.323" (KLetRec (KFunc {kname = ("xloop.325",Fun [Int,Int] Unit), kargs = [("x.326",Int),("y.327",Int)], kbody = Let ("Ti48.329",Int) (Int 256) (Let ("Ti49.328",Int) (Cmp Lt "x.326" "Ti48.329") (If "Ti49.328" (Let ("TuSemi..352.587",Unit) (Out 49 "%r0") (Let ("TuSemi..373",Unit) (Out 32 "%r0") (Let ("Ti31.380",Int) (Int 1) (Let ("Ti32.379",Int) (Arith2 Add "x.326" "Ti31.380") (Let ("Ti48.329.600",Int) (Int 256) (Let ("Ti49.328.601",Int) (Cmp Lt "Ti32.379" "Ti48.329.600") (If "Ti49.328.601" (Let ("TuSemi..352.587.602",Unit) (Out 49 "%r0") (Let ("TuSemi..373.603",Unit) (Out 32 "%r0") (Let ("Ti31.380.604",Int) (Int 1) (Let ("Ti32.379.605",Int) (Arith2 Add "Ti32.379" "Ti31.380.604") (KApp "xloop.325" ["Ti32.379.605","y.327"]))))) Unit))))))) Unit))}) (Let ("TuSemi..381",Unit) (Let ("Ti48.329.606",Int) (Int 256) (Let ("Ti49.328.607",Int) (Int 1) Unit)) (Let ("TuSemi..383",Unit) (Out 10 "%r0") (Let ("Ti14.386",Int) (Int 1) (Let ("Ti15.385",Int) (Arith2 Add "y.322" "Ti14.386") (Let ("Ti50.324.612",Int) (Int 256) (Let ("Ti51.323.613",Int) (Cmp Lt "Ti15.385" "Ti50.324.612") (If "Ti51.323.613" (KLetRec (KFunc {kname = ("xloop.325.614",Fun [Int,Int] Unit), kargs = [("x.326.615",Int),("y.327.616",Int)], kbody = Let ("Ti48.329.617",Int) (Int 256) (Let ("Ti49.328.618",Int) (Cmp Lt "x.326.615" "Ti48.329.617") (If "Ti49.328.618" (Let ("TuSemi..352.587.619",Unit) (Out 49 "%r0") (Let ("TuSemi..373.620",Unit) (Out 32 "%r0") (Let ("Ti31.380.621",Int) (Int 1) (Let ("Ti32.379.622",Int) (Arith2 Add "x.326.615" "Ti31.380.621") (KApp "xloop.325.614" ["Ti32.379.622","y.327.616"]))))) Unit))}) (Let ("TuSemi..381.623",Unit) (KApp "xloop.325.614" ["%r0","Ti15.385"]) (Let ("TuSemi..383.624",Unit) (Out 10 "%r0") (Let ("Ti14.386.625",Int) (Int 1) (Let ("Ti15.385.626",Int) (Arith2 Add "Ti15.385" "Ti14.386.625") (KApp "yloop.321" ["Ti15.385.626"])))))) Unit)))))))) Unit))}) (Let ("TuSemi..387",Unit) (Out 80 "%r0") (Let ("TuSemi..389",Unit) (Out 49 "%r0") (Let ("TuSemi..391",Unit) (Out 10 "%r0") (Let ("TuSemi..393",Unit) (Out 50 "%r0") (Let ("TuSemi..395",Unit) (Out 53 "%r0") (Let ("TuSemi..397",Unit) (Out 54 "%r0") (Let ("TuSemi..399",Unit) (Out 32 "%r0") (Let ("TuSemi..401",Unit) (Out 50 "%r0") (Let ("TuSemi..403",Unit) (Out 53 "%r0") (Let ("TuSemi..405",Unit) (Out 54 "%r0") (Let ("TuSemi..407",Unit) (Out 10 "%r0") (Let ("Ti50.324.627",Int) (Int 256) (Let ("Ti51.323.628",Int) (Int 1) Unit)))))))))))))
+eliminating variable Ti51.323.628@.
+eliminating variable Ti50.324.627@.
+
+
+
+KLetRec (KFunc {kname = ("yloop.321",Fun [Int] Unit), kargs = [("y.322",Int)], kbody = Let ("Ti50.324",Int) (Int 256) (Let ("Ti51.323",Int) (Cmp Lt "y.322" "Ti50.324") (If "Ti51.323" 
+(KLetRec (KFunc {kname = ("xloop.325",Fun [Int,Int] Unit), kargs = [("x.326",Int),("y.327",Int)], kbody = Let ("Ti48.329",Int) (Int 256) (Let ("Ti49.328",Int) (Cmp Lt "x.326" "Ti48.329") (If "Ti49.328" (Let ("TuSemi..352.587",Unit) (Out 49 "%r0") (Let ("TuSemi..373",Unit) (Out 32 "%r0") (Let ("Ti31.380",Int) (Int 1) (Let ("Ti32.379",Int) (Arith2 Add "x.326" "Ti31.380") (Let ("Ti48.329.600",Int) (Int 256) (Let ("Ti49.328.601",Int) (Cmp Lt "Ti32.379" "Ti48.329.600") (If "Ti49.328.601" (Let ("TuSemi..352.587.602",Unit) (Out 49 "%r0") (Let ("TuSemi..373.603",Unit) (Out 32 "%r0") (Let ("Ti31.380.604",Int) (Int 1) (Let ("Ti32.379.605",Int) (Arith2 Add "Ti32.379" "Ti31.380.604") (KApp "xloop.325" ["Ti32.379.605","y.327"]))))) Unit))))))) Unit))
+}) (Let ("TuSemi..381",Unit) (Let ("Ti48.329.606",Int) (Int 256) (Let ("Ti49.328.607",Int) (Cmp Lt "%r0" "Ti48.329.606") (If "Ti49.328.607" (Let ("TuSemi..352.587.608",Unit) (Out 49 "%r0") (Let ("TuSemi..373.609",Unit) (Out 32 "%r0") (Let ("Ti31.380.610",Int) (Int 1) (Let ("Ti32.379.611",Int) (Arith2 Add "%r0" "Ti31.380.610") (KApp "xloop.325" ["Ti32.379.611","y.322"]))))) Unit))) (Let ("TuSemi..383",Unit) (Out 10 "%r0") (Let ("Ti14.386",Int) (Int 1) (Let ("Ti15.385",Int) (Arith2 Add "y.322" "Ti14.386") (Let ("Ti50.324.612",Int) (Int 256) (Let ("Ti51.323.613",Int) (Cmp Lt "Ti15.385" "Ti50.324.612") (If "Ti51.323.613" 
+(KLetRec (KFunc {kname = ("xloop.325.614",Fun [Int,Int] Unit), kargs = [("x.326.615",Int),("y.327.616",Int)], kbody = Let ("Ti48.329.617",Int) (Int 256) (Let ("Ti49.328.618",Int) (Cmp Lt "x.326.615" "Ti48.329.617") (If "Ti49.328.618" (Let ("TuSemi..352.587.619",Unit) (Out 49 "%r0") (Let ("TuSemi..373.620",Unit) (Out 32 "%r0") (Let ("Ti31.380.621",Int) (Int 1) (Let ("Ti32.379.622",Int) (Arith2 Add "x.326.615" "Ti31.380.621") (KApp "xloop.325.614" ["Ti32.379.622","y.327.616"]))))) Unit))
+}) (Let ("TuSemi..381.623",Unit) (KApp "xloop.325.614" ["%r0","Ti15.385"]) (Let ("TuSemi..383.624",Unit) (Out 10 "%r0") (Let ("Ti14.386.625",Int) (Int 1) (Let ("Ti15.385.626",Int) (Arith2 Add "Ti15.385" "Ti14.386.625") (KApp "yloop.321" ["Ti15.385.626"])))))) Unit)))))))) Unit))
+})
+(Let ("TuSemi..387",Unit) (Out 80 "%r0") (Let ("TuSemi..389",Unit) (Out 49 "%r0") (Let ("TuSemi..391",Unit) (Out 10 "%r0") (Let ("TuSemi..393",Unit) (Out 50 "%r0") (Let ("TuSemi..395",Unit) (Out 53 "%r0") (Let ("TuSemi..397",Unit) (Out 54 "%r0") (Let ("TuSemi..399",Unit) (Out 32 "%r0") (Let ("TuSemi..401",Unit) (Out 50 "%r0") (Let ("TuSemi..403",Unit) (Out 53 "%r0") (Let ("TuSemi..405",Unit) (Out 54 "%r0") (Let ("TuSemi..407",Unit) (Out 10 "%r0") (Let ("Ti50.324.627",Int) (Int 256) (Let ("Ti51.323.628",Int) (Cmp Lt "%r0" "Ti50.324.627") (If "Ti51.323.628" (KLetRec (KFunc {kname = ("xloop.325.629",Fun [Int,Int] Unit), kargs = [("x.326.630",Int),("y.327.631",Int)], kbody = Let ("Ti48.329.632",Int) (Int 256) (Let ("Ti49.328.633",Int) (Cmp Lt "x.326.630" "Ti48.329.632") (If "Ti49.328.633" (Let ("TuSemi..352.587.634",Unit) (Out 49 "%r0") (Let ("TuSemi..373.635",Unit) (Out 32 "%r0") (Let ("Ti31.380.636",Int) (Int 1) (Let ("Ti32.379.637",Int) (Arith2 Add "x.326.630" "Ti31.380.636") (KApp "xloop.325.629" ["Ti32.379.637","y.327.631"]))))) Unit))}) (Let ("TuSemi..381.638",Unit) (KApp "xloop.325.629" ["%r0","%r0"]) (Let ("TuSemi..383.639",Unit) (Out 10 "%r0") (Let ("Ti14.386.640",Int) (Int 1) (Let ("Ti15.385.641",Int) (Arith2 Add "%r0" "Ti14.386.640") 
+(KApp "yloop.321" ["Ti15.385.641"]))))))
+Unit))))))))))))))
+
+
+
+KLetRec (KFunc {kname = ("yloop.321",Fun [Int] Unit),kargs = [("y.322",Int)],
+ kbody = Let ("Ti50.324",Int) (Int 256)
+        (Let ("Ti51.323",Int) (Cmp Lt "y.322" "Ti50.324")
+        (If "Ti51.323" 
+            (KLetRec (KFunc {kname = ("xloop.325",Fun [Int,Int] Unit), kargs = [("x.326",Int),("y.327",Int)],
+            kbody = Let ("Ti48.329",Int) (Int 256)
+            (Let ("Ti49.328",Int) (Cmp Lt "x.326" "Ti48.329")
+            (If "Ti49.328" (Let ("TuSemi..352.587",Unit) (Out 49 "%r0")
+                (Let ("TuSemi..373",Unit) (Out 32 "%r0")
+                (Let ("Ti31.380",Int) (Int 1)
+                (Let ("Ti32.379",Int) (Arith2 Add "x.326" "Ti31.380")
+                (KApp "xloop.325" ["Ti32.379","y.327"])))))
+            Unit))})
+            (Let ("TuSemi..381",Unit) (KApp "xloop.325" ["%r0","y.322"])
+            (Let ("TuSemi..383",Unit) (Out 10 "%r0")
+            (Let ("Ti14.386",Int) (Int 1)
+            (Let ("Ti15.385",Int) (Arith2 Add "y.322" "Ti14.386")
+            (KApp "yloop.321" ["Ti15.385"]))))))
+            
+            Unit))})
+(Let ("TuSemi..387",Unit) (Out 80 "%r0")
+ (Let ("TuSemi..389",Unit) (Out 49 "%r0")
+  (Let ("TuSemi..391",Unit) (Out 10 "%r0")
+   (Let ("TuSemi..393",Unit) (Out 50 "%r0")
+    (Let ("TuSemi..395",Unit) (Out 53 "%r0")
+     (Let ("TuSemi..397",Unit) (Out 54 "%r0")
+      (Let ("TuSemi..399",Unit) (Out 32 "%r0")
+       (Let ("TuSemi..401",Unit) (Out 50 "%r0")
+        (Let ("TuSemi..403",Unit) (Out 53 "%r0")
+         (Let ("TuSemi..405",Unit) (Out 54 "%r0")
+          (Let ("TuSemi..407",Unit) (Out 10 "%r0")
+           (KApp "yloop.321" ["%r0"]))))))))))))
+
+
+
+ (Let ("TuSemi..387",Unit) (Out 80 "%r0")
+  (Let ("TuSemi..389",Unit) (Out 49 "%r0")
+   (Let ("TuSemi..391",Unit) (Out 10 "%r0")
+    (Let ("TuSemi..393",Unit) (Out 50 "%r0")
+     (Let ("TuSemi..395",Unit) (Out 53 "%r0")
+      (Let ("TuSemi..397",Unit) (Out 54 "%r0")
+       (Let ("TuSemi..399",Unit) (Out 32 "%r0")
+        (Let ("TuSemi..401",Unit) (Out 50 "%r0")
+         (Let ("TuSemi..403",Unit) (Out 53 "%r0")
+          (Let ("TuSemi..405",Unit) (Out 54 "%r0")
+           (Let ("TuSemi..407",Unit) (Out 10 "%r0")
+            (Let ("Ti50.324.627",Int) (Int 256)
+             (Let ("Ti51.323.628",Int) (Cmp Lt "%r0" "Ti50.324.627")
+              (If "Ti51.323.628"
+               (KLetRec (KFunc {kname = ("xloop.325.629",Fun [Int,Int] Unit),
+                kargs = [("x.326.630",Int),("y.327.631",Int)],
+                 kbody = Let ("Ti48.329.632",Int) (Int 256)
+                  (Let ("Ti49.328.633",Int) (Cmp Lt "x.326.630" "Ti48.329.632")
+                   (If "Ti49.328.633"
+                    (Let ("TuSemi..352.587.634",Unit) (Out 49 "%r0")(Let ("TuSemi..373.635",Unit) (Out 32 "%r0")
+                     (Let ("Ti31.380.636",Int) (Int 1)
+                      (Let ("Ti32.379.637",Int) (Arith2 Add "x.326.630" "Ti31.380.636")
+                       (KApp "xloop.325.629" ["Ti32.379.637","y.327.631"]))))) Unit))})
+               (Let ("TuSemi..381.638",Unit) (KApp "xloop.325.629" ["%r0","%r0"])
+                (Let ("TuSemi..383.639",Unit) (Out 10 "%r0")
+                 (Let ("Ti14.386.640",Int) (Int 1)
+                  (Let ("Ti15.385.641",Int) (Arith2 Add "%r0" "Ti14.386.640")
+                   (KApp "yloop.321" ["Ti15.385.641"]))))))
+              Unit))))))))))))))
+

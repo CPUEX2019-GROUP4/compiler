@@ -86,4 +86,6 @@ s_subst env (Sf x y (V z))  | Just y'       <- lookup_y,
                                 lookup_z = M.lookup z env
 s_subst env (If x e1 e2) = If x (s_body env e1) (s_body env e2)
 s_subst env (FIfCmp cmp x y e1 e2) = FIfCmp cmp x y (s_body env e1) (s_body env e2)
+s_subst env (Makearray t (V y) z)
+                            | Just y'       <- M.lookup y env = Makearray t (C y') z
 s_subst _ e = e

@@ -1,65 +1,123 @@
-fromList 
-[("Ta23.2687",Global {typ = Array Int, addr = 10568}),
-("Ta28.2693",Global {typ = Array (Array Int), addr = 10772}),
-("Tt10.2667",Global {typ = Tuple [Int,Int,Int,Int,Array Float,Array Float,Int,Array Float,Array Float,Array Float,Array Float], addr = 10244}),
-("Tt69.2759",Global {typ = Tuple [Array Float,Array (Array Float)], addr = 10948}),
-("Tt82.2778",Global {typ = Tuple [Int,Tuple [Array Float,Array (Array Float)],Float], addr = 11244}),
-("and_net.2685",Global {typ = Array (Array Int), addr = 10572}),
-("beam.2682",Global {typ = Array Float, addr = 10564}),
-("consts.2768",Global {typ = Array (Array Float), addr = 10988}),
-("diffuse_ray.2718",Global {typ = Array Float, addr = 10832}),
-("dirvecs.2751",Global {typ = Array (Array (Tuple [Array Float,Array (Array Float)])), addr = 10956}),
-("dummydv.2776",Global {typ = Tuple [Array Float,Array (Array Float)], addr = 11236}),
-("image_center.2727",Global {typ = Array Int, addr = 10864}),
-("image_size.2724",Global {typ = Array Int, addr = 10856}),
-("intersected_object_id.2709",Global {typ = Array Int, addr = 10804}),
-("intersection_point.2706",Global {typ = Array Float, addr = 10792}),
-("intsec_rectside.2700",Global {typ = Array Int, addr = 10784}),
-("light.2679",Global {typ = Array Float, addr = 10552}),
-("light_dirvec.2761",Global {typ = Tuple [Array Float,Array (Array Float)], addr = 11228}),
-("n_objects.2659",Global {typ = Array Int, addr = 10240}),
-("n_reflections.2781",Global {typ = Array Int, addr = 11976}),
-("nvector.2712",Global {typ = Array Float, addr = 10808}),
-("objects.2662",Global {typ = Array (Tuple [Int,Int,Int,Int,Array Float,Array Float,Bool,Array Float,Array Float,Array Float,Array Float]), addr = 10288}),
-("or_net.2691",Global {typ = Array (Array (Array Int)), addr = 10776}),
-("ptrace_dirvec.2748",Global {typ = Array Float, addr = 10936}),
-("reflections.2770",Global {typ = Array (Tuple [Int,Tuple [Array Float,Array (Array Float)],Float]), addr = 11256}),
-("rgb.2721",Global {typ = Array Float, addr = 10844}),
-("scan_pitch.2730",Global {typ = Array Float, addr = 10872}),
-("screen.2673",Global {typ = Array Float, addr = 10528}),
-("screenx_dir.2739",Global {typ = Array Float, addr = 10900}),
-("screeny_dir.2742",Global {typ = Array Float, addr = 10912}),
-("screenz_dir.2745",Global {typ = Array Float, addr = 10924}),
-("solver_dist.2697",Global {typ = Array Float, addr = 10780}),
-("startp.2733",Global {typ = Array Float, addr = 10876}),
-("startp_fast.2736",Global {typ = Array Float, addr = 10888}),
-("texture_color.2715",Global {typ = Array Float, addr = 10820}),
-("tmin.2703",Global {typ = Array Float, addr = 10788}),
-("v3.2765",Global {typ = Array Float, addr = 10976}),
-("viewpoint.2676",Global {typ = Array Float, addr = 10540})]
+ (KLetRec (KFunc {kname = ("vecunit",Fun [Array Float] Unit), kargs = [("v",Array Float)],
+  kbody =
+   Let ("il",Float) 
+
+   (Let ("Tf11",Float) (Float 1.0)                     
+    (Let ("Tf12",Float)
+    
+     (Let ("Tf10",Float)
+     
+      (Let ("Tf8",Float)
+      
+       (Let ("Tf4",Float)
+        (Let ("Tf1",Float)
+         (Let ("Ti0",Int) (Int 0)
+        (Get "v" "Ti0"))
+         (KApp "fsqr" ["Tf1"]))
+          (Let ("Tf5",Float)
+           (Let ("Tf3",Float)
+            (Let ("Ti2",Int)
+             (Int 1)
+              (Get "v" "Ti2")) 
+              (KApp "fsqr" ["Tf3"]))
+               (Float2 FAdd "Tf4" "Tf5")))
+               
+                (Let ("Tf9",Float) (Let ("Tf7",Float) (Let ("Ti6",Int) (Int 2) (Get "v" "Ti6"))
+                 (KApp "fsqr" ["Tf7"])) (Float2 FAdd "Tf8" "Tf9"))) (KApp "sqrt" ["Tf10"]))
+                 
+                  (KApp "fdiv" ["Tf11","Tf12"]))) (Let ("TuSemi.",Unit)
+                   (Let ("Ti15",Int) (Int 0)
+                   (Let ("Tf16",Float) (Let ("Tf14",Float) (Let ("Ti13",Int) (Int 0) (Get "v" "Ti13")) (Float2 FMul "Tf14" "il"))
+                    (Put "v" "Ti15" "Tf16")))
+                     
+                     (Let ("TuSemi.",Unit) (Let ("Ti19",Int) (Int 1) (Let ("Tf20",Float)
+                      (Let ("Tf18",Float) (Let ("Ti17",Int) (Int 1) (Get "v" "Ti17")) (Float2 FMul "Tf18" "il"))
+                       (Put "v" "Ti19" "Tf20")))
+                        (Let ("Ti23",Int) (Int 2)
+                         (Let ("Tf24",Float) (Let ("Tf22",Float)
+                          (Let ("Ti21",Int) (Int 2) (Get "v" "Ti21")) (Float2 FMul "Tf22" "il"))
+                           (Put "v" "Ti23" "Tf24")))))}) Unit)))))))))))))))))))))
 
 
 
-free variable(s) fromList ["beam.2682.15433","light.2679.15443"] found in function read_light.3556@.
 
-Let ("nl.3558.15465",Int) (In Int)
-(Let ("Tf1835.3560.15466",Float) (In Float)
-(Let ("Tf1895.3483.6177.15467",Float) (Float 1.7453292e-2)
-(Let ("l1.3559.15468",Float) (Float2 FMul "Tf1835.3560.15466" "Tf1895.3483.6177.15467")
-(Let ("sl1.3561.15469",Float) (KApp "sin.2540" ["l1.3559.15468"])
-(Let ("Ti1836.3563.15470",Int) (Int 1)
-(Let ("Tf1837.3564.15471",Float) (Float1 FNeg "sl1.3561.15469")
-(Let ("TuSemi..3562.15472",Unit) (Put "light.2679.15443" "Ti1836.3563.15470" "Tf1837.3564.15471")
-(Let ("Tf1838.3566.15473",Float) (In Float)
-(Let ("Tf1895.3483.6178.15474",Float) (Float 1.7453292e-2)
-(Let ("l2.3565.15475",Float) (Float2 FMul "Tf1838.3566.15473" "Tf1895.3483.6178.15474")
-(Let ("cl1.3567.15476",Float) (KApp "cos.2558" ["l1.3559.15468"])
-(Let ("sl2.3568.15477",Float) (KApp "sin.2540" ["l2.3565.15475"])
-(Let ("Tf1840.3571.15478",Float) (Float2 FMul "cl1.3567.15476" "sl2.3568.15477")
-(Let ("TuSemi..3569.15479",Unit) (Put "light.2679.15443" "%r0" "Tf1840.3571.15478")
-(Let ("cl2.3572.15480",Float) (KApp "cos.2558" ["l2.3565.15475"])
-(Let ("Ti1841.3574.15481",Int) (Int 2)
-(Let ("Tf1842.3575.15482",Float) (Float2 FMul "cl1.3567.15476" "cl2.3572.15480")
-(Let ("TuSemi..3573.15483",Unit) (Put "light.2679.15443" "Ti1841.3574.15481" "Tf1842.3575.15482")
-(Let ("Tf1844.3577.15484",Float) (In Float)
-(Put "beam.2682.15433" "%r0" "Tf1844.3577.15484"))))))))))))))))))))
+ (KLetRec (KFunc {kname = ("vecunit.294",Fun [Array Float] Unit), kargs = [("v.295",Array Float)],
+  kbody = Let ("Tf11.297",Float) (Float 1.0)
+   (Let ("Tf1.302",Float) (Get "v.295" "%r0")
+    (Let ("Tf4.301",Float) (KApp "fsqr.274" ["Tf1.302"])
+     (Let ("Ti2.306",Int) (Int 1)
+      (Let ("Tf3.305",Float) (Get "v.295" "Ti2.306")
+       (Let ("Tf5.304",Float) (KApp "fsqr.274" ["Tf3.305"])
+        (Let ("Tf8.300",Float) (Float2 FAdd "Tf4.301" "Tf5.304")
+         (Let ("Ti6.309",Int) (Int 2)
+          (Let ("Tf7.308",Float) (Get "v.295" "Ti6.309")
+           (Let ("Tf9.307",Float) (KApp "fsqr.274" ["Tf7.308"])
+            (Let ("Tf10.299",Float) (Float2 FAdd "Tf8.300" "Tf9.307")
+             (Let ("Tf12.298",Float) (KApp "sqrt.214" ["Tf10.299"])
+              (Let ("il.296",Float) (KApp "fdiv.119" ["Tf11.297","Tf12.298"])
+               (Let ("Tf14.313",Float) (Get "v.295" "%r0")
+                (Let ("Tf16.312",Float) (Float2 FMul "Tf14.313" "il.296")
+                 (Let ("TuSemi..310",Unit) (Put "v.295" "%r0" "Tf16.312")
+                  (Let ("Ti19.316",Int) (Int 1)
+                   (Let ("Ti17.319",Int) (Int 1)
+                    (Let ("Tf18.318",Float) (Get "v.295" "Ti17.319")
+                     (Let ("Tf20.317",Float) (Float2 FMul "Tf18.318" "il.296")
+                      (Let ("TuSemi..315",Unit) (Put "v.295" "Ti19.316" "Tf20.317")
+                       (Let ("Ti23.320",Int) (Int 2)
+                        (Let ("Ti21.323",Int) (Int 2)
+                         (Let ("Tf22.322",Float) (Get "v.295" "Ti21.323")
+                          (Let ("Tf24.321",Float) (Float2 FMul "Tf22.322" "il.296")
+                           (Put "v.295" "Ti23.320" "Tf24.321")))))))))))))))))))))))))}) Unit)))))))))))))))))))))
+
+
+
+
+Afundef {a_name = L "vecunit.294", a_args = ["v.295"], a_fargs = [],
+ a_body = 
+ Let ("Tf11.297.462",Float) (FLi 1.0)
+(Let ("Tf1.302.463",Float) (Lf "v.295" (C 0))
+(Let ("Tf4.301.464",Float) (CallDir (L "fsqr.274") [] ["Tf1.302.463"])
+(Let ("Ti2.306.465",Int) (Li 1)
+(Let ("o.488",Int) (Slw "Ti2.306.465" (C 2))
+(Let ("Tf3.305.466",Float) (Lf "v.295" (V "o.488"))
+(Let ("Tf5.304.467",Float) (CallDir (L "fsqr.274") [] ["Tf3.305.466"])
+(Let ("Tf8.300.468",Float) (Float2 FAdd "Tf4.301.464" "Tf5.304.467")
+(Let ("Ti6.309.469",Int) (Li 2)
+(Let ("o.489",Int) (Slw "Ti6.309.469" (C 2))
+(Let ("Tf7.308.470",Float) (Lf "v.295" (V "o.489"))
+(Let ("Tf9.307.471",Float) (CallDir (L "fsqr.274") [] ["Tf7.308.470"])
+(Let ("Tf10.299.472",Float) (Float2 FAdd "Tf8.300.468" "Tf9.307.471")
+(Let ("Tf12.298.473",Float) (CallDir (L "sqrt.214") [] ["Tf10.299.472"])
+(Let ("il.296.474",Float) (CallDir (L "fdiv.119") [] ["Tf11.297.462","Tf12.298.473"])
+(Let ("Tf14.313.475",Float) (Lf "v.295" (C 0))
+(Let ("Tf16.312.476",Float) (Float2 FMul "Tf14.313.475" "il.296.474")
+(Let ("TuSemi..310.477",Unit) (Sf "Tf16.312.476" "v.295" (C 0)) (Let ("Ti19.316.478",Int) (Li 1) (Let ("Ti17.319.479",Int) (Li 1) (Let ("o.492",Int) (Slw "Ti17.319.479" (C 2)) (Let ("Tf18.318.480",Float) (Lf "v.295" (V "o.492")) (Let ("Tf20.317.481",Float) (Float2 FMul "Tf18.318.480" "il.296.474") (Let ("o.493",Int) (Slw "Ti19.316.478" (C 2)) (Let ("TuSemi..315.482",Unit) (Sf "Tf20.317.481" "v.295" (V "o.493")) (Let ("Ti23.320.483",Int) (Li 2) (Let ("Ti21.323.484",Int) (Li 2) (Let ("o.494",Int) (Slw "Ti21.323.484" (C 2)) (Let ("Tf22.322.485",Float) (Lf "v.295" (V "o.494")) (Let ("Tf24.321.486",Float) (Float2 FMul "Tf22.322.485" "il.296.474") (Let ("o.495",Int) (Slw "Ti23.320.483" (C 2)) (Ans (Sf "Tf24.321.486" "v.295" (V "o.495"))))))))))))))))))))))))))))))))), a_ret = Unit}]
+
+
+
+
+
+
+
+
+
+Afundef {a_name = L "vecunit.294", a_args = ["v.295"], a_fargs = [],
+ a_body =
+Let ("Tf11.297.462",Float) (FLi 1.0)
+ (Let ("Tf1.302.463",Float) (Lf "v.295" (C 0))
+  (Let ("Tf4.301.464",Float) (CallDir (L "fsqr.274") [] ["Tf1.302.463"])
+   (Let ("Tf3.305.466",Float) (Lf "v.295" (C 4))
+    (Let ("Tf5.304.467",Float) (CallDir (L "fsqr.274") [] ["Tf3.305.466"])
+     (Let ("Tf8.300.468",Float) (Float2 FAdd "Tf4.301.464" "Tf5.304.467")
+      (Let ("Tf7.308.470",Float) (Lf "v.295" (C 8))
+       (Let ("Tf9.307.471",Float) (CallDir (L "fsqr.274") [] ["Tf7.308.470"])
+        (Let ("Tf10.299.472",Float) (Float2 FAdd "Tf8.300.468" "Tf9.307.471") (Let ("Tf12.298.473",Float) (CallDir (L "sqrt.214") [] ["Tf10.299.472"]) (Let ("il.296.474",Float) (CallDir (L "fdiv.119") [] ["Tf11.297.462","Tf12.298.473"]) (Let ("Tf14.313.475",Float) (Lf "v.295" (C 0)) (Let ("Tf16.312.476",Float) (Float2 FMul "Tf14.313.475" "il.296.474") (Let ("TuSemi..310.477",Unit) (Sf "Tf16.312.476" "v.295" (C 0)) (Let ("Tf18.318.480",Float) (Lf "v.295" (C 4)) (Let ("Tf20.317.481",Float) (Float2 FMul "Tf18.318.480" "il.296.474") (Let ("TuSemi..315.482",Unit) (Sf "Tf20.317.481" "v.295" (C 4)) (Let ("Tf22.322.485",Float) (Lf "v.295" (C 8)) (Let ("Tf24.321.486",Float) (Float2 FMul "Tf22.322.485" "il.296.474") (Ans (Sf "Tf24.321.486" "v.295" (C 8))))))))))))))))))))), a_ret = Unit}]
+
+
+
+Let ("%f0",Float) (FLi 1.0)
+ (Let ("%f1",Float) (Lf "%r1" (C 0))
+  (Let ("Tu531",Unit) (Save "%r1" "v.295")
+   (Let ("Tu530",Unit) (Save "%f0" "Tf11.297.462")
+    (Let ("%f0",Float) (CallDir (L "fsqr.274") [] ["%f1"])
+     (Let ("%f1",Float) (Restore "v.295") (Let ("%f2",Float) (Lf "%f1" (C 4)) (Let ("Tu533",Unit) (Save "%f1" "v.295") (Let ("Tu532",Unit) (Save "%f0" "Tf4.301.464") (Let ("%f0",Float) (CallDir (L "fsqr.274") [] ["%f2"]) (Let ("%f1",Float) (Restore "Tf4.301.464") (Let ("%f0",Float) (Float2 FAdd "%f1" "%f0") (Let ("%f1",Float) (Restore "v.295") (Let ("%f2",Float) (Lf "%f1" (C 8)) (Let ("Tu535",Unit) (Save "%f1" "v.295") (Let ("Tu534",Unit) (Save "%f0" "Tf8.300.468") (Let ("%f0",Float) (CallDir (L "fsqr.274") [] ["%f2"]) (Let ("%f1",Float) (Restore "Tf8.300.468") (Let ("%f0",Float) (Float2 FAdd "%f1" "%f0") (Let ("%f1",Float) (CallDir (L "sqrt.214") [] ["%f0"]) (Let ("%f0",Float) (Restore "Tf11.297.462") (Let ("%f0",Float) (CallDir (L "fdiv.119") [] ["%f0","%f1"]) (Let ("%f1",Float) (Restore "v.295") (Let ("%f2",Float) (Lf "%f1" (C 0)) (Let ("%f2",Float) (Float2 FMul "%f2" "%f0") (Let ("%r0",Unit) (Sf "%f2" "%f1" (C 0)) (Let ("%f2",Float) (Lf "%f1" (C 4)) (Let ("%f2",Float) (Float2 FMul "%f2" "%f0") (Let ("%r0",Unit) (Sf "%f2" "%f1" (C 4)) (Let ("%f2",Float) (Lf "%f1" (C 8)) (Let ("%f0",Float) (Float2 FMul "%f2" "%f0") (Ans (Sf "%f0" "%f1" (C 8)))))))))))))))))))))))))))))))))

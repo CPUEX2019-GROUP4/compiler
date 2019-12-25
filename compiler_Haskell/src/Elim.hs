@@ -2,7 +2,6 @@ module Elim where
 
 import KNormal
 import RunRun
-
 import Data.Map as M hiding(map)
 import Data.Set as S hiding(map)
 import Control.Monad.State
@@ -11,6 +10,7 @@ type Memo = StateT (Map String (Set String)) RunRun
 
 elim :: K -> RunRun K
 elim e = do
+--    eprint e
     eputstrln "elim ..."
     fst <$> (runStateT (e_body e) M.empty)
 
@@ -25,7 +25,7 @@ effect (KApp _ _)           = True
 effect (In _)               = True
 effect (Out _ _)            = True
 effect (Put _ _ _)          = True
-effect (Malloc _ _ _ _)       = True
+effect (Malloc _ _ _ _)     = True
 effect _ = False
 
 
@@ -35,6 +35,7 @@ e_body (FIfCmp cmp x y e1 e2)   = FIfCmp cmp x y <$> e_body e1 <*> e_body e2
 e_body (Let (x,t) e1 e2)        = do
                                         e1' <- e_body e1
                                         e2' <- e_body e2
+--                                        let fe2' = fv e2'
                                         fe2' <- free e2'
                                         if effect e1' || S.member x fe2' then
                                             return $ Let (x, t) e1' e2'
@@ -44,6 +45,8 @@ e_body (Let (x,t) e1 e2)        = do
 e_body (KLetRec f e2)           = do
                                         let x = (fst.kname) f
                                         e2' <- e_body e2
+--                                        let fe2' = fv e2'
+                                        -----------
                                         fe2' <- free e2'
                                         if S.member x fe2' then do
                                             e1' <- e_body (kbody f)
@@ -54,6 +57,7 @@ e_body (KLetRec f e2)           = do
 e_body (LetTuple xts y e)       = do
                                         let xs = map fst xts
                                         e' <- e_body e
+--                                        let live = fv e'
                                         live <- free e'
                                         if any (\x -> S.member x live) xs then
                                             return $ LetTuple xts y e'

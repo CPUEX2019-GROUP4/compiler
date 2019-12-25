@@ -112,8 +112,8 @@ g _ known (K.KApp x ys)
 
 closure :: K.K -> RunRun Prog
 closure e = do
-        -- eprint e
+--        eprint e
         eputstrln "closure ..."
         e' <- g M.empty S.empty e
-        -- eprint e'
+--        eprint e'
         return $ Prog e'

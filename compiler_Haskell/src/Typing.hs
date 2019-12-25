@@ -27,7 +27,7 @@ type TypeM = StateT TypingEnvs (ExceptT TypeError Identity)
 
 typing :: Syntax -> RunRun Syntax
 typing e = do
---    eprint e
+    eprint e
     eputstrln "typing ..."
     r <- get
     let env = TypingEnvs {
@@ -47,8 +47,8 @@ typing e = do
             put (r { RunRun.tyVarCounter = Typing.tyVarCounter s,
                 RunRun.tyenv = Typing.tyenv s,
                 RunRun.exttyenv = Typing.extenv s})
-            eprint =<< get
-            eprint s
+--            eprint =<< get
+--            eprint s
             return $ fst e'
 
 

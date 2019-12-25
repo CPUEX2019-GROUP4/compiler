@@ -10,27 +10,28 @@ import qualified Alpha (g)
 
 convertGlobal :: K -> RunRun K
 convertGlobal e = do
-        eprint =<< (globals <$> get)
+--        eprint =<< (globals <$> get)
+        eprint e
         eputstrln "convering ..."
         find_and_convert e
 
 
 find_and_convert :: K -> RunRun K
-find_and_convert (KLetRec f@(KFunc {kname=(x,t),kargs=yts,kbody=e1}) e2) = do
-            eputstrln $ "converting inside " ++ x
-            eputstrln "  "
+find_and_convert (KLetRec f@(KFunc {kname=(x,t),kargs=yts,kbody=_}) e2) = do
+           -- eputstrln $ "converting inside " ++ x
+           -- eputstrln "  "
             e1' <- convert_each f =<< globals <$> get
-            eputstrln "  "
-            eputstrln "globals are"
-            eputstrln "  "
-            gb <- globals <$> get
-            eprint gb
-            eputstrln "  "
-            eprint e1
-            eputstrln " "
-            eputstrln " to "
-            eputstrln " "
-            eprint e1'
+           -- eputstrln "  "
+           -- eputstrln "globals are"
+           -- eputstrln "  "
+           -- gb <- globals <$> get
+           -- eprint gb
+           -- eputstrln "  "
+           -- eprint e1
+           -- eputstrln " "
+           -- eputstrln " to "
+           -- eputstrln " "
+           -- eprint e1'
             e2' <- find_and_convert e2
             return $ KLetRec (KFunc {kname=(x,t),kargs=yts,kbody=e1'}) e2'
 find_and_convert (Let xt e1 e2) =
@@ -47,7 +48,7 @@ find_and_convert e = return e
 convert_each :: KFundef -> Map String Global -> RunRun K
 convert_each (K.KFunc { K.kname = (_,_), K.kargs = _, K.kbody = e1}) global = do
         mapping <- sequence (mapWithKey (\k _ -> genid k) global)
-        eprint mapping
+--        eprint mapping
         let newglobal = M.mapKeys (mapping M.!) global
         e1' <- Alpha.g mapping e1
         return $ convert newglobal e1'
