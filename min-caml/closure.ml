@@ -34,6 +34,8 @@ type t = (* クロージャ変換後の式 (caml2html: closure_t) *)
   | ExtArray of Id.l
   | Out of Id.t * int
   | Unknown of Id.t * Type.t * Type.t * Id.t
+  | Malloc of Type.t * int * int * array_or_tuple
+and array_or_tuple = A of Id.t | T of Id.t list
 type fundef = { name : Id.l * Type.t;
                 args : (Id.t * Type.t) list;
                 formal_fv : (Id.t * Type.t) list;
@@ -53,6 +55,8 @@ let rec fv = function
   | AppDir(_, xs) | Tuple(xs) -> S.remove "%r0" (S.of_list xs)
   | LetTuple(xts, y, e) -> S.add y (S.diff (fv e) (S.of_list (List.map fst xts)))
   | Put(x, y, z) -> S.remove "%r0" (S.of_list [x; y; z])
+  | Malloc(_,n,p,(A x )) -> S.remove "%r0" (S.singleton x)
+  | Malloc(_,n,p,(T xs)) -> S.remove "%r0" (S.of_list xs)
 
 let toplevel : fundef list ref = ref []
 
@@ -122,6 +126,13 @@ let rec g env known = function (* クロージャ変換ルーチン本体 (caml2html: closure
   | KNormal.ExtFunApp(x, ys) -> AppDir(Id.L("min_caml_" ^ x), ys)
   | KNormal.Out(x, y) -> Out(x, y)
   | KNormal.Unknown(a,b,c,d) -> Unknown(a,b,c,d)
+  | KNormal.Array(t,x,y) ->
+      let name = if t = Type.Float then "create_float_array" else "create_array" in
+      AppDir(Id.L("min_caml_" ^ name), [x; y])
+  | KNormal.Malloc(t, n, p,(KNormal.A x)) ->
+      Malloc(t,n,p,A x)
+  | KNormal.Malloc(t, n, p,(KNormal.T x)) ->
+      Malloc(t,n,p,T x)
 
 let f e =
   print_string "------------------closure.ml----------------";

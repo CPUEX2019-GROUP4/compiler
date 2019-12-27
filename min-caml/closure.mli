@@ -34,6 +34,8 @@ type t =
   | ExtArray of Id.l
   | Out of Id.t * int
   | Unknown of Id.t * Type.t * Type.t * Id.t
+  | Malloc of Type.t * int * int * array_or_tuple
+and array_or_tuple = A of Id.t | T of Id.t list
 type fundef = { name : Id.l * Type.t;
                 args : (Id.t * Type.t) list;
                 formal_fv : (Id.t * Type.t) list;

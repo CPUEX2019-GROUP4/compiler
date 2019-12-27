@@ -2305,4 +2305,4 @@ let rec rt size_x size_y =
 )
 in
 
-rt 128 128
+rt 1 1

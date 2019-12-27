@@ -53,5 +53,8 @@ let rec g env = function (* α変換ルーチン本体 (caml2html: alpha_g) *)
   | ExtFunApp(x, ys) -> ExtFunApp(x, List.map (fun y -> find y env) ys)
   | Out(x, y) -> Out(find x env, y)
   | Unknown(a,b,c,x) -> Unknown(a,b,c,find x env)
+  | Array(t,x,y) -> Array(t, find x env, find y env)
+  | Malloc(t,n,p,(A x )) -> Malloc(t,n,p,(A (find x env)))
+  | Malloc(t,n,p,(T xs)) -> Malloc(t,n,p,(T (List.map (fun x -> find x env) xs)))
 
 let f = g M.empty

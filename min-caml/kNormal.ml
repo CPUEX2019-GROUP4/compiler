@@ -29,18 +29,21 @@ type t = (* K正規化後の式 (caml2html: knormal_t) *)
   | App of Id.t * Id.t list
   | Tuple of Id.t list
   | LetTuple of (Id.t * Type.t) list * Id.t * t
+  | Array of Type.t * Id.t * Id.t
   | Get of Id.t * Id.t
   | Put of Id.t * Id.t * Id.t
   | ExtArray of Id.t
   | ExtFunApp of Id.t * Id.t list
   | Out of Id.t * int
   | Unknown of Id.t * Type.t * Type.t * Id.t
+  | Malloc of Type.t * int * int * array_or_tuple
 and fundef = { name : Id.t * Type.t; args : (Id.t * Type.t) list; body : t }
+and array_or_tuple = A of Id.t | T of Id.t list
 
 let rec fv = function (* 式に出現する（自由な）変数 (caml2html: knormal_fv) *)
   | Unit | Int(_) | Float(_) | ExtArray(_) -> S.empty
-  | Neg(x) | FNeg(x) | Mul4(x) | Mul10(x) | Div2(x) | Div10(x) | FtoI(x) | ItoF(x) | Out(x,_) | Unknown(_,_,_,x) -> S.singleton x
-  | Add(x, y) | Sub(x, y) | FAdd(x, y) | FSub(x, y) | FMul(x, y) | FDiv(x, y) | Get(x, y) | LE(x,y)-> S.of_list [x; y]
+  | Neg(x) | FNeg(x) | Mul4(x) | Mul10(x) | Div2(x) | Div10(x) | FtoI(x) | ItoF(x) | Out(x,_) | Unknown(_,_,_,x) | Malloc(_,_,_,A x)-> S.singleton x
+  | Add(x, y) | Sub(x, y) | FAdd(x, y) | FSub(x, y) | FMul(x, y) | FDiv(x, y) | Get(x, y) | LE(x,y) | Array(_,x,y) -> S.of_list [x; y]
   | IfFZero(x,e1,e2) -> S.add x (S.union (fv e1) (fv e2))
   | IfEq(x, y, e1, e2) | IfLE(x, y, e1, e2) | IfFLt(x, y, e1, e2)-> S.add x (S.add y (S.union (fv e1) (fv e2)))
   | Let((x, t), e1, e2) -> S.union (fv e1) (S.remove x (fv e2))
@@ -49,7 +52,7 @@ let rec fv = function (* 式に出現する（自由な）変数 (caml2html: knormal_fv) *)
       let zs = S.diff (fv e1) (S.of_list (List.map fst yts)) in
       S.diff (S.union zs (fv e2)) (S.singleton x)
   | App(x, ys) -> S.of_list (x :: ys)
-  | Tuple(xs) | ExtFunApp(_, xs) -> S.of_list xs
+  | Tuple(xs) | ExtFunApp(_, xs) | Malloc(_,_,_,T xs)-> S.of_list xs
   | Put(x, y, z) -> S.of_list [x; y; z]
   | LetTuple(xs, y, e) -> S.add y (S.diff (fv e) (S.of_list (List.map fst xs)))
 
@@ -200,16 +203,14 @@ let rec g env = function (* K正規化ルーチン本体 (caml2html: knormal_g) *)
           let e2', t2 = g (M.add_list xts env) e2 in
           LetTuple(xts, y, e2'), t2)
   | Syntax.Array(e1, e2) ->
-      insert_let (g env e1)
-        (fun x ->
-          let _, t2 as g_e2 = g env e2 in
-          insert_let g_e2
-            (fun y ->
-              let l =
-                match t2 with
-                | Type.Float -> "create_float_array"
-                | _ -> "create_array" in
-              ExtFunApp(l, [x; y]), Type.Array(t2)))
+      insert_let (g env e1) (fun x ->
+      let _, t2 as g_e2 = g env e2 in
+      insert_let g_e2 (fun y ->
+      Array (t2, x, y), Type.Array t2))
+        (* let l = match t2 with *)
+        (*         | Type.Float -> "create_float_array" *)
+        (*         | _ -> "create_array" in *)
+        (* ExtFunApp(l, [x; y]), Type.Array(t2))) *)
   | Syntax.Get(e1, e2) ->
       (match g env e1 with
       |        _, Type.Array(t) as g_e1 ->
@@ -305,6 +306,8 @@ let rec print e i =
   | ExtFunApp (f,x) -> p ("extfunapp"); print_newline (); indent j; p f; p_rec x j
   | Out (x,y)  -> p ("out " ^ x ^ " "); print_int y
   | Unknown (x,_,_,y)  -> p ("unknown " ^ x ^ " " ^ y)
+  | Array _ -> ()
+  | Malloc _ -> ()
 
 
 

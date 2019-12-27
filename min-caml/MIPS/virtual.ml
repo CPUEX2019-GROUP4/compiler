@@ -35,6 +35,9 @@ let expand xts ini addf addi =
     (fun (offset, acc) x t ->
       (offset + 4, addi x t offset acc))
 
+let store_same_value n constr ans =
+  List.fold_left (fun acc offset -> seq ((constr offset),acc)) ans (List.init n (fun x -> x))
+
 let rec g env = function (* 式の仮想マシンコード生成 (caml2html: virtual_g) *)
   | Closure.Unit -> Ans(Nop)
   | Closure.Int(i) -> Ans(Li(i))
@@ -168,9 +171,31 @@ let rec g env = function (* 式の仮想マシンコード生成 (caml2html: virtual_g) *)
           else
             Ans(Stw(z, x, C(0)))
       | _ -> assert false)
+  | Closure.Malloc(t, n,p,(Closure.A x)) ->
+      (match t with
+      | Type.Array Type.Unit -> Ans Nop
+      | Type.Array Type.Float ->
+          let addr = Id.genid "ap" in
+          let store = store_same_value n
+                        (fun offset -> Stfd (x,addr,(C (offset * 4)))) (Ans (Li p)) in
+          Let ((addr,t), (Li p), store)
+      | _ ->
+          let addr = Id.genid "ap" in
+          let store = store_same_value n
+                        (fun offset -> Stw (x,addr,(C (offset * 4)))) (Ans (Li p)) in
+          Let ((addr,t), (Li p), store))
+  | Closure.Malloc(t,n,p,(Closure.T xs)) -> (* 組の生成 (caml2html: virtual_tuple) *)
+      let y = Id.genid "tp" in
+      let (offset, store) = expand
+          (List.map (fun x -> (x, find x env)) xs)
+          (0, Ans(Li p))
+          (fun x offset store -> seq(Stfd(x, y, C(offset)), store))
+          (fun x _ offset store -> seq(Stw(x, y, C(offset)), store))  in
+      Let((y, Type.Tuple(List.map (fun x -> find x env) xs)), (Li p), store)
   | Closure.ExtArray(Id.L(x)) -> Ans(SetL(Id.L("min_caml_" ^ x)))
   | Closure.Out(x, y) -> Ans(Out(x, y))
   | Closure.Unknown(a,b,c,d) -> Ans(Unknown(a,b,c,d))
+
 
 (* 関数の仮想マシンコード生成 (caml2html: virtual_h) *)
 let h { Closure.name = (Id.L(x), t); Closure.args = yts; Closure.formal_fv = zts; Closure.body = e } =

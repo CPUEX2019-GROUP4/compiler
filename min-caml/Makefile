@@ -23,6 +23,8 @@ SOURCES = float.c type.ml id.ml m.ml s.ml \
 syntax.ml parser.mly lexer.mll typing.mli typing.ml kNormal.mli kNormal.ml \
 alpha.mli alpha.ml beta.mli beta.ml assoc.mli assoc.ml \
 inline.mli inline.ml constFold.mli constFold.ml elim.mli elim.ml \
+global.mli global.ml \
+convert_global.mli convert_global.ml \
 closure.mli closure.ml asm.mli asm.ml virtual.mli virtual.ml \
 simm.mli simm.ml regAlloc.mli regAlloc.ml emit.mli emit.ml \
 main.mli main.ml
@@ -61,7 +63,7 @@ raytrace: $(RESULT) raytracer/minrt.ml
 	cat MIPS/library.ml > raytracer/galois.ml
 	cat raytracer/globals.ml >> raytracer/galois.ml
 	cat raytracer/minrt.ml >> raytracer/galois.ml
-	./$(RESULT) raytracer/galois -inline 500 > ../syntax.txt
+	./$(RESULT) raytracer/galois -inline 700 > ../syntax.txt
 	cat MIPS/create_array.S >> raytracer/galois.s
 #	cat MIPS/sin.S >> raytracer/galois.s
 #	cat MIPS/print.S >> raytracer/galois.s
