@@ -7,7 +7,6 @@ import Control.Monad.State
 import RunRun
 import Type (Type)
 import Alpha (g)
-
 import Syntax(Compare(..), Arith_binary(..))
 
 inline :: K -> RunRun K
@@ -60,6 +59,5 @@ foldl2M :: (acc -> a -> b -> acc) -> acc -> [a] -> [b] -> RunRun acc
 foldl2M _ z [] [] = return z
 foldl2M k z (a:as)(b:bs) = foldl2M k (k z a b) as bs
 foldl2M _ _ _  _ = throw $ Fail "length not hitoshii. oh."
-
 
 

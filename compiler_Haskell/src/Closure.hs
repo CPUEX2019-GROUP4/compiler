@@ -39,8 +39,8 @@ fv (Put x y z)              = S.delete "%r0" $ S.fromList [x,y,z]
 fv (MakeCls (x,_) (Cls{actual_fv=ys}) e)
                             = S.delete "%r0" $ S.delete x $ S.union (S.fromList ys) (fv e)
 fv (AppDir _ xs)            = S.delete "%r0" $ S.fromList xs
-fv (Malloc _ _ (A x))     = if x /= "%r0" then S.singleton x else S.empty
-fv (Malloc _ _ (T xs))      = S.delete "%r0" $ S.fromList xs
+fv (Malloc _ _ _ (A x))     = if x /= "%r0" then S.singleton x else S.empty
+fv (Malloc _ _ _ (T xs))      = S.delete "%r0" $ S.fromList xs
 
 
 
@@ -65,8 +65,8 @@ g env known (K.LetTuple xts y e)= LetTuple xts y <$> g (M.union (M.fromList xts)
 g _ _ (K.Array t x y)           = return $ Array t x y
 g _ _ (K.Get x y)               = return $ Get x y
 g _ _ (K.Put x y z)             = return $ Put x y z
-g _ _ (K.Malloc _ n p (K.A x))  = return $ Malloc n p (A x)
-g _ _ (K.Malloc _ n p (K.T xs)) = return $ Malloc n p (T xs)
+g _ _ (K.Malloc t n p (K.A x))  = return $ Malloc t n p (A x)
+g _ _ (K.Malloc t n p (K.T xs)) = return $ Malloc t n p (T xs)
 g env known (K.KLetRec (K.KFunc { K.kname = (x,t), K.kargs = yts, K.kbody = e1}) e2) = do
         toplevel_backup <- toplevel <$> get
         let env' = M.insert x t env

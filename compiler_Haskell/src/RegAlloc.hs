@@ -73,14 +73,6 @@ alloc dest cont regenv x t =
 --        eputstrln ">>>>>>>>>"
         -- eprint free
         (_,prefer) <- target x dest cont
-        if x == "vec.295" then do
-              eputstrln "dest = "
-              eprint dest
-              eputstrln "cont = "
-              eprint cont
-              eputstrln "prefer = "
-              eprint prefer
-        else return ()
 
 --        eputstrln "dest = "
 --        eprint dest
@@ -95,7 +87,6 @@ alloc dest cont regenv x t =
                     Just y' -> S.insert y' liv) S.empty free
 --        eputstrln "live = "
 --        eprint live
-        
         case find (\r' -> S.notMember r' live) (prefer ++ all) of
                 Just r -> do
 --                        eputstrln "r ="
@@ -114,6 +105,7 @@ alloc dest cont regenv x t =
                         eputstrln $ "spilling  " ++ y ++ " from "
                                 ++ (regenv M.! y) ++ "@."
                         return $ Spill y
+
 
 add_regenv :: String -> String -> M.Map String String -> RunRun (M.Map String String)
 add_regenv x r regenv
@@ -273,8 +265,12 @@ g'_call :: ([Char], b) -> T -> M.Map [Char] String
                  -> (Either (String, Type) [String] -> Either (String, Type) ([String] -> Exp))
                  -> [String] -> [String] -> RunRun (Either (String, Type) (T, M.Map k a))
 g'_call dest cont regenv constr ys zs = do
-        exp <- foldM (\e x -> if x == fst dest || M.notMember x regenv then return e else -- e :: either b, x :: a
-                mapM (\e' -> seq (Save (regenv M.! x) x) e') e)
+        exp <- foldM (\e x -> if x == fst dest || M.notMember x regenv then return e else
+        -- e :: either T, x :: a
+        -- e' :: T
+        -- mapM :: (T -> RunRun T) -> Either T -> RunRun (Either T)
+        -- exp :: Either T
+                mapM (\e' -> seq (Save (regenv M.! x) x) e') e) -- is there something wrong here ???
                 (Ans <$> (constr
                     (mapM (\y -> find_reg y Type.Int regenv) ys)
                     <*> (mapM (\z -> find_reg z Type.Float regenv) zs)))
@@ -304,15 +300,13 @@ reg_fun (Afundef {a_name=L x, a_args=ys, a_fargs=zs, a_body=e, a_ret=t}) = do
         return $ Afundef {a_name=L x, a_args=arg_regs, a_fargs=farg_regs, a_body=e', a_ret=t}
 
 
-
-
 return_reg :: a -> RunRun (Either (String,Type) a)
 return_reg x = return $ Right x
 
 regalloc :: Aprog -> RunRun Aprog
 regalloc (Aprog fundefs e) = do
     eputstrln "regalloc ..."
-    eprint fundefs
+    --eprint fundefs
     fundefs' <- mapM reg_fun fundefs
     (e', _) <- gentmp Type.Unit >>= \x -> g (x, Type.Unit) (Ans Nop) M.empty e
     return $ Aprog fundefs' e'

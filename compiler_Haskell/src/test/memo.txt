@@ -1,0 +1,28 @@
+5288: lw r5 r28 0
+array::at: __n (which is 18446744072622457390) >= _Nm (which is 2097152)
+died at 453170th instruction of pc: 4964, line: 5288
+function in trace_or_matrix
+r28 = -1087094226
+
+5284: lw r4 r28 0
+funciton in trace_or_matrix
+r4 = -1087094226
+r28 = 13228
+
+988: swcZ f0 r28 0
+function in vecset <- calc_dirvec
+f0 = -0.704135
+r28 = 13228
+(this was the only change of M988)
+
+(d_vec = fst)
+
+(assuming dirvecs.2486 as a global Array@
+addr : 10956)
+
+
+
+
+
+1st nothing
+253922

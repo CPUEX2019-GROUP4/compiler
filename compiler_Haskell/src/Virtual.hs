@@ -1,6 +1,7 @@
 module Virtual where
 
 import Prelude hiding(seq)
+import Control.Monad.IO.Class(liftIO)
 import Control.Monad.State (get, foldM)
 import qualified Data.Map as M
 import qualified Data.Set as S (notMember)
@@ -142,30 +143,33 @@ g env (C.Put x y z)
                         throw $ Fail "ext array ... sorry ..."
         where
             t = M.lookup x env
-g env (C.Malloc n p (C.A x))
-        | Type.Unit  <- t = return $ Ans Nop
-        | Type.Float <- t = do
+g env (C.Malloc t n p (C.A x))
+        | Type.Array Type.Unit  <- t = return $ Ans Nop
+        | Type.Array Type.Float <- t = do
+                liftIO $ putStrLn $ "malloc" ++ x
+                liftIO $ print t
                 addr_ <- genid "ap"
                 store <- (store_same_value n
                             (\offset -> Sf x addr_ (C (offset * 4))) (Ans (Li p)))
                 return $ Let (addr_,t) (Li p) store
         | otherwise = do
+                liftIO $ putStrLn $ "malloc" ++ x
+                liftIO $ print t
                 addr_ <- genid "ap"
                 store <- (store_same_value n
                             (\offset -> Sw x addr_ (C (offset * 4))) (Ans (Li p)))
                 return $ Let (addr_,t) (Li p) store
-        where
-            t = env M.! x
-g env (C.Malloc _ p (C.T xs)) = do
+g env (C.Malloc t _ p (C.T xs)) = do
         y <- genid "tp"
+        let xts = map (\x -> (x,env M.! x)) xs
         let (_, store_tmp) = (expand
-                (map (\x -> (x, env M.! x)) xs)
-                (0, return $ Ans(Mv y))
+                xts
+                (0, return $ Ans(Li p))
                 (\x offset store_elem -> store_elem >>= (\st -> seq (Sf x y (C offset)) st))
                 (\x _ offset store_elem -> store_elem >>= (\st -> seq (Sw x y (C offset)) st))
                 )
         store <- store_tmp
-        return $ Let (y, (Tuple (map (\x -> env M.! x) xs))) (Li p) $ store
+        return $ Let (y, t) (Li p) $ store
 
 
 

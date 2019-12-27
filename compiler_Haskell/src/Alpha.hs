@@ -59,6 +59,6 @@ g env e
 
 alpha :: K -> RunRun K
 alpha x = do
-    eprint x
+    --eprint x
     eputstrln "alpha ..."
     g M.empty x

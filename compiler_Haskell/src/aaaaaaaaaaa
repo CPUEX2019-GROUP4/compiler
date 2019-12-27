@@ -1,0 +1,144 @@
+ghc Main.hs float.o -Wall
+[ 4 of 23] Compiling Closure_Type     ( Closure_Type.hs, Closure_Type.o )
+[ 5 of 23] Compiling RunRun           ( RunRun.hs, RunRun.o ) [Closure_Type changed]
+[ 6 of 23] Compiling Parser           ( Parser.hs, Parser.o ) [RunRun changed]
+[ 7 of 23] Compiling KNormal          ( KNormal.hs, KNormal.o ) [RunRun changed]
+[ 8 of 23] Compiling Global           ( Global.hs, Global.o )
+[ 9 of 23] Compiling Elim             ( Elim.hs, Elim.o ) [RunRun changed]
+[10 of 23] Compiling ConstFold        ( ConstFold.hs, ConstFold.o ) [RunRun changed]
+[11 of 23] Compiling Beta             ( Beta.hs, Beta.o ) [RunRun changed]
+[12 of 23] Compiling Assoc            ( Assoc.hs, Assoc.o ) [RunRun changed]
+[13 of 23] Compiling Alpha            ( Alpha.hs, Alpha.o ) [RunRun changed]
+[14 of 23] Compiling Inline           ( Inline.hs, Inline.o ) [Alpha changed]
+[15 of 23] Compiling ConvertGlobal    ( ConvertGlobal.hs, ConvertGlobal.o ) [Alpha changed]
+[16 of 23] Compiling Closure          ( Closure.hs, Closure.o )
+[17 of 23] Compiling Asm              ( Asm.hs, Asm.o ) [RunRun changed]
+[18 of 23] Compiling Simm             ( Simm.hs, Simm.o ) [RunRun changed]
+[19 of 23] Compiling RegAlloc         ( RegAlloc.hs, RegAlloc.o ) [Asm changed]
+[20 of 23] Compiling Emit             ( Emit.hs, Emit.o ) [RunRun changed]
+[21 of 23] Compiling Typing           ( Typing.hs, Typing.o ) [RunRun changed]
+[22 of 23] Compiling Virtual          ( Virtual.hs, Virtual.o )
+[23 of 23] Compiling Main             ( Main.hs, Main.o ) [Alpha changed]
+Linking Main ...
+cat library.ml  > test/test.ml
+cat test/galois.ml >> test/test.ml
+./Main test/test.ml
+mallocTi1.2396
+Array Int
+mallocTf3.2400
+Array Float
+mallocTt10.2402
+Array (Tuple [Int,Int,Int,Int,Array Float,Array Float,Bool,Array Float,Array Float,Array Float,Array Float])
+mallocTf12.2410
+Array Float
+mallocTf14.2413
+Array Float
+mallocTf16.2416
+Array Float
+mallocTf18.2419
+Array Float
+mallocTi21.2424
+Array Int
+mallocTa23.2422
+Array (Array Int)
+mallocTa26.2430
+Array (Array Int)
+mallocTa28.2428
+Array (Array (Array Int))
+mallocTf30.2434
+Array Float
+mallocTi32.2437
+Array Int
+mallocTf34.2440
+Array Float
+mallocTf36.2443
+Array Float
+mallocTi38.2446
+Array Int
+mallocTf40.2449
+Array Float
+mallocTf42.2452
+Array Float
+mallocTf44.2455
+Array Float
+mallocTf46.2458
+Array Float
+mallocTi48.2461
+Array Int
+mallocTi50.2464
+Array Int
+mallocTf52.2467
+Array Float
+mallocTf54.2470
+Array Float
+mallocTf56.2473
+Array Float
+mallocTf58.2476
+Array Float
+mallocTf60.2479
+Array Float
+mallocTf62.2482
+Array Float
+mallocTf64.2485
+Array Float
+mallocTf66.2489
+Array Float
+mallocdummyf.2487
+Array (Array Float)
+mallocTt69.2494
+Array (Tuple [Array Float,Array (Array Float)])
+mallocdummy_vs.2492
+Array (Array (Tuple [Array Float,Array (Array Float)]))
+mallocTf72.2499
+Array Float
+mallocTf74.2502
+Array Float
+mallocdummyf2.2497
+Array (Array Float)
+mallocTf77.2508
+Array Float
+mallocdummyf3.2506
+Array (Array Float)
+mallocTt82.2513
+Array (Tuple [Int,Tuple [Array Float,Array (Array Float)],Float])
+mallocTi84.2518
+Array Int
+mv test/test.s test/galois.s
+make: Nothing to be done for `all'.
+------------------------------
+operand type check ok.
+Preassembled successfully.
+galois.s ==> piyo.s
+output file is to be saved to a.out.
+------------------------------
+Assembled successfully.
+piyo.s ==> a.out
+------------------------------
+Running simulator...
+loaded 9067 instructions.
+available commands.
+-------------------
+at (a): 			prints the current pc and line.
+
+step (s): 			executes the current instruction of the binary.
+
+monitor (m) {{rn}}: 		halts when the value of the register changes.
+
+unmonitor (um) {{rn}}: 		removes the register from monitoring list.
+
+print (p) {{rn}}: 		adds the register to reserved list to show.
+                  		E.g. `p r0`, `p f2`.
+clear (c) {{rn}}: 		clears provided registers from display list.
+
+break (b) {{line/label}}: 	sets a brakepoint at the line/label.
+                          	valid until you put `ub`.
+unbreak (ub): 			resets the breakpoint.
+
+run (r) {{n}}: 			runs the program until it reaches NOP, 
+               			or at the nth instruction if given
+fast (f) {{n}}: 		runs the program in silent mode until it reaches NOP, 
+                		or at the nth instruction if given
+exit/quit 			terminates the simulator
+-------------------
+
+>> 

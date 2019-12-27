@@ -381,7 +381,7 @@ g'_array oc t x (V n) v = do
             cont <- genid "arraycont"
             exit <- genid "arrayexit"
             liftIO $ hPutStr oc $ printf "    mv %s %s\n"    (reg reg_tmp) (reg n)
-            liftIO $ hPutStr oc $ printf "    mv %s %s\n"       (reg x) (reg reg_hp)
+            -- liftIO $ hPutStr oc $ printf "    mv %s %s\n"       (reg x) (reg reg_hp)
             liftIO $ hPutStr oc $ printf "%s:\n"                loop
             liftIO $ hPutStr oc $ printf "    bne %s r0 %s\n"   (reg reg_tmp) cont
             liftIO $ hPutStr oc $ printf "    j %s\n"           exit
@@ -395,6 +395,8 @@ g'_array oc t x (V n) v = do
             liftIO $ hPutStr oc $ printf "    addi %s %s 4\n"   (reg reg_hp) (reg reg_hp)
             liftIO $ hPutStr oc $ printf "    j %s\n"           loop
             liftIO $ hPutStr oc $ printf "%s:\n"                exit
+            liftIO $ hPutStr oc $ printf "    sll %s %s 2\n"    (reg reg_tmp) (reg n)
+            liftIO $ hPutStr oc $ printf "    sub %s %s %s\n"   (reg x) (reg reg_hp) (reg reg_tmp)
 g'_array oc t x (C n) v = do
             forM_ [0..(n-1)] $ \ofset ->
                     case t of
@@ -410,7 +412,7 @@ h :: Handle -> Afundef -> RunRun ()
 h oc (Afundef{ a_name = L x, a_args = _, a_fargs =_, a_body = e, a_ret = _ }) = do
         liftIO $ hPutStr oc $ printf "%s:\n" x
         (\f -> put (f {stackset=empty, stackmap=[]})) =<< get
-        eprint e
+    --    eprint e
         g oc (Tail,e)
 
 emit :: Handle -> Aprog -> RunRun ()

@@ -152,9 +152,11 @@ k_body env (Syn.Cmp cmp e1 e2) = do
         y'@(_,t) <- k_body env e2
         case t of
                 Type.Float -> (`runCont` id) $ do
-                        (\x y -> return (FIfCmp cmp x y (Int 1) (Int 0), Type.Int)) <$> insert_let x' <*> insert_let y'
+                        (\x y -> return (FIfCmp cmp x y (Int 1) (Int 0), Type.Int))
+                            <$> insert_let x' <*> insert_let y'
                 _ -> (`runCont` id) $ do
                         (\x y -> return (Cmp cmp x y, Type.Int)) <$> insert_let x' <*> insert_let y'
+                -- ここ多分大丈夫
 k_body env (Syn.Let (x,t) e1 e2) = do
         (e1', _) <- k_body env e1
         (e2', t2) <- k_body (M.insert x t env) e2
@@ -165,6 +167,7 @@ k_body env (Syn.LetRec (Syn.Func { Syn.name = (x,t), Syn.args = yts, Syn.body = 
         (e1', _) <- k_body (M.union (M.fromList yts) env') e1
         return (KLetRec (KFunc { kname = (x,t), kargs = yts, kbody = e1' }) e2', t2)
 k_body env (Syn.Tuple es) = do
+        -- これも大丈夫?
         xs' <- mapM (k_body env) es
         (`runCont` id) $ do
             (\xs -> return (Tuple xs, Type.Tuple $ map snd xs')) <$> mapM insert_let xs'
@@ -191,13 +194,15 @@ k_body env (Syn.Put e1 e2 e3) = do
         (`runCont` id) $ do
             (\x y z -> return (Put x y z, Type.Unit)) <$> insert_let x'
                         <*> insert_let y' <*> insert_let z'
-
+k_body env (Syn.App (Syn.Var f) e2s)
+        | M.notMember f env = throwError $ Fail "ext fun app"
 k_body env (Syn.App e es) = do -- とりあえず外部関数は禁止
         x' <- k_body env e
         let (_,Type.Fun _ t) = x'
         ys' <- mapM (k_body env) es
         (`runCont` id) $ do
             (\x ys -> return (KApp x ys, t)) <$> insert_let x' <*> mapM insert_let ys'
+            -- この mapM の評価順序あってるよね？？
 k_body env (Syn.If e1 e2 e3)
     | Syn.Not e1'           <- e1 = k_body env (Syn.If e1' e3 e2)
     | Syn.Cmp cmp ex ey     <- e1 = do
@@ -211,7 +216,7 @@ k_body env (Syn.If e1 e2 e3)
                                 (\x y -> return (FIfCmp cmp x y e2' e3', t)) <$> insert_let x' <*> insert_let y'
                     _ -> do
                             xx <- (`runCont` id) $ do
-                                    ((\x y -> return (Cmp cmp x y, Type.Int)) <$> insert_let x' <*> insert_let y')
+                                    ((\x y -> return (Cmp cmp x y, ty)) <$> insert_let x' <*> insert_let y')
                             (`runCont` id) $ do
                                     (\x -> return (If x e2' e3', t)) <$> insert_let xx
     | otherwise = do
@@ -228,7 +233,7 @@ k_body env (Syn.Var x)
 
 knormal :: Syn.Syntax -> RunRun K
 knormal e = do
-    eprint e
+    --eprint e
     eputstrln "knormal ..."
     f <- get
     let idc = idcounter f

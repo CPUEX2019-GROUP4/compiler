@@ -11,7 +11,7 @@ import qualified Alpha (g)
 convertGlobal :: K -> RunRun K
 convertGlobal e = do
 --        eprint =<< (globals <$> get)
-        eprint e
+--        eprint e
         eputstrln "convering ..."
         find_and_convert e
 

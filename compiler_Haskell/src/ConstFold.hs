@@ -45,7 +45,8 @@ f env e
 f env (Let (x,t) e1 e2)
     | Int   _ <- e1' = ans1
     | Float _ <- e1' = ans1
---    | Tuple _ <- e1' = ans1
+-- | Tuple _ <- e1' = ans1
+-- これ入れるとクロージャが発生
     | _       <- e1' = ans2
     | Malloc _ _ _ (T xs) <- e1' = Let (x,t) e1' (f (M.insert x (Tuple xs) env) e2)
     where

@@ -90,20 +90,20 @@ let reflections =
 let n_reflections = create_array 1 0 in
 (****************************************************************)
 (*                                                              *)
-(* Ray Tracing Program for (Mini) Objective Caml                *)
+(* ray tracing program for (mini) objective caml                *)
 (*                                                              *)
-(* Original Program by Ryoji Kawamichi                          *)
-(* Arranged for Chez Scheme by Motohico Nanano                  *)
-(* Arranged for Objective Caml by Y. Oiwa and E. Sumii          *)
-(* Added diffuse ray tracer by Y.Ssugawara                      *)
+(* original program by ryoji kawamichi                          *)
+(* arranged for chez scheme by motohico nanano                  *)
+(* arranged for objective caml by y. oiwa and e. sumii          *)
+(* added diffuse ray tracer by y.ssugawara                      *)
 (*                                                              *)
 (****************************************************************)
 
-(*NOMINCAML open MiniMLRuntime;;*)
-(*NOMINCAML open Globals;;*)
-(*MINCAML   let true = 1 in*)
-(*MINCAML   let false = 0 in*)
-(*MINCAML*) let rec xor x y = if x then not y else y in
+(*nomincaml open minimlruntime;;*)
+(*nomincaml open globals;;*)
+(*mincaml   let true = 1 in*)
+(*mincaml   let false = 0 in*)
+(*mincaml*) let rec xor x y = if x then not y else y in
 
 (******************************************************************************
    ユーティリティー
@@ -133,7 +133,7 @@ in
 
 (*
 let rec vecprint v =
-  (o_param_abc m) inFormat.eprintf "(%f %f %f)" v.(0) v.(1) v.(2)
+  (o_param_abc m) informat.eprintf "(%f %f %f)" v.(0) v.(1) v.(2)
 in
 *)
 
@@ -372,7 +372,7 @@ let rec o_hilight m =
   m_surfparams.(1)
 in
 
-(* 物体色の R成分 *)
+(* 物体色の r成分 *)
 let rec o_color_red m =
   let (xm_tex, xm_shape, m_surface, xm_isrot,
        xm_abc, xm_xyz,
@@ -382,7 +382,7 @@ let rec o_color_red m =
   m_color.(0)
 in
 
-(* 物体色の G成分 *)
+(* 物体色の g成分 *)
 let rec o_color_green m =
   let (xm_tex, xm_shape, m_surface, xm_isrot,
        xm_abc, xm_xyz,
@@ -392,7 +392,7 @@ let rec o_color_green m =
   m_color.(1)
 in
 
-(* 物体色の B成分 *)
+(* 物体色の b成分 *)
 let rec o_color_blue m =
   let (xm_tex, xm_shape, m_surface, xm_isrot,
        xm_abc, xm_xyz,
@@ -450,10 +450,10 @@ let rec o_param_ctbl m =
 in
 
 (******************************************************************************
-   Pixelデータのメンバアクセス関数群
+   pixelデータのメンバアクセス関数群
  *****************************************************************************)
 
-(* 直接光追跡で得られたピクセルのRGB値 *)
+(* 直接光追跡で得られたピクセルのrgb値 *)
 let rec p_rgb pixel =
   let (m_rgb, xm_isect_ps, xm_sids, xm_cdif, xm_engy,
        xm_r20p, xm_gid, xm_nvectors ) = pixel in
@@ -496,9 +496,9 @@ let rec p_received_ray_20percent pixel =
   m_r20p
 in
 
-(* このピクセルのグループ ID *)
+(* このピクセルのグループ id *)
 (*
-   スクリーン座標 (x,y)の点のグループIDを (x+2*y) mod 5 と定める
+   スクリーン座標 (x,y)の点のグループidを (x+2*y) mod 5 と定める
    結果、下図のような分け方になり、各点は上下左右4点と別なグループになる
    0 1 2 3 4 0 1 2 3 4
    2 3 4 0 1 2 3 4 0 1
@@ -512,7 +512,7 @@ let rec p_group_id pixel =
   m_gid.(0)
 in
 
-(* グループIDをセットするアクセス関数 *)
+(* グループidをセットするアクセス関数 *)
 let rec p_set_group_id pixel id =
   let (xm_rgb, xm_isect_ps, xm_sids, xm_cdif, xm_engy,
        xm_r20p, m_gid, xm_nvectors ) = pixel in
@@ -591,11 +591,11 @@ let rec read_screen_settings _ =
   screenz_dir.(0) <- cos_v1 *. sin_v2 *. 200.0;
   screenz_dir.(1) <- sin_v1 *. -200.0;
   screenz_dir.(2) <- cos_v1 *. cos_v2 *. 200.0;
-  (* スクリーン面X方向のベクトル *)
+  (* スクリーン面x方向のベクトル *)
   screenx_dir.(0) <- cos_v2;
   screenx_dir.(1) <- 0.0;
   screenx_dir.(2) <- fneg sin_v2;
-  (* スクリーン面Y方向のベクトル *)
+  (* スクリーン面y方向のベクトル *)
   screeny_dir.(0) <- fneg sin_v1 *. sin_v2;
   screeny_dir.(1) <- fneg cos_v1;
   screeny_dir.(2) <- fneg sin_v1 *. cos_v2;
@@ -625,12 +625,12 @@ let rec read_light _ =
 
 in
 
-(* 元の2次形式行列 A に両側から回転行列 R をかけた行列 R^t * A * R を作る *)
-(* R は x,y,z軸に関する回転行列の積 R(z)R(y)R(x) *)
+(* 元の2次形式行列 a に両側から回転行列 r をかけた行列 r^t * a * r を作る *)
+(* r は x,y,z軸に関する回転行列の積 r(z)r(y)r(x) *)
 (* スクリーン座標のため、y軸回転のみ角度の符号が逆 *)
 
 let rec rotate_quadratic_matrix abc rot =
-  (* 回転行列の積 R(z)R(y)R(x) を計算する *)
+  (* 回転行列の積 r(z)r(y)r(x) を計算する *)
   let cos_x = cos rot.(0) in
   let sin_x = sin rot.(0) in
   let cos_y = cos rot.(1) in
@@ -655,14 +655,14 @@ let rec rotate_quadratic_matrix abc rot =
   let bo = abc.(1) in
   let co = abc.(2) in
 
-  (* R^t * A * R を計算 *)
+  (* r^t * a * r を計算 *)
 
-  (* X^2, Y^2, Z^2成分 *)
+  (* x^2, y^2, z^2成分 *)
   abc.(0) <- ao *. fsqr m00 +. bo *. fsqr m10 +. co *. fsqr m20;
   abc.(1) <- ao *. fsqr m01 +. bo *. fsqr m11 +. co *. fsqr m21;
   abc.(2) <- ao *. fsqr m02 +. bo *. fsqr m12 +. co *. fsqr m22;
 
-  (* 回転によって生じた XY, YZ, ZX成分 *)
+  (* 回転によって生じた xy, yz, zx成分 *)
   rot.(0) <- 2.0 *. (ao *. m01 *. m02 +. bo *. m11 *. m12 +. co *. m21 *. m22);
   rot.(1) <- 2.0 *. (ao *. m00 *. m02 +. bo *. m10 *. m12 +. co *. m20 *. m22);
   rot.(2) <- 2.0 *. (ao *. m00 *. m01 +. bo *. m10 *. m11 +. co *. m20 *. m21)
@@ -728,13 +728,13 @@ let rec read_nth_object n =
 
       if form = 3 then
 	(
-	  (* 2次曲面: X,Y,Z サイズから2次形式行列の対角成分へ *)
+	  (* 2次曲面: x,y,z サイズから2次形式行列の対角成分へ *)
 	 let a = abc.(0) in
-	 abc.(0) <- if fiszero a then 0.0 else sgn a /. fsqr a; (* X^2 成分 *)
+	 abc.(0) <- if fiszero a then 0.0 else sgn a /. fsqr a; (* x^2 成分 *)
 	 let b = abc.(1) in
-	 abc.(1) <- if fiszero b then 0.0 else sgn b /. fsqr b; (* Y^2 成分 *)
+	 abc.(1) <- if fiszero b then 0.0 else sgn b /. fsqr b; (* y^2 成分 *)
 	 let c = abc.(2) in
-	 abc.(2) <- if fiszero c then 0.0 else sgn c /. fsqr c  (* Z^2 成分 *)
+	 abc.(2) <- if fiszero c then 0.0 else sgn c /. fsqr c  (* z^2 成分 *)
 	)
       else if form = 2 then
 	(* 平面: 法線ベクトルを正規化, 極性を負に統一 *)
@@ -766,7 +766,7 @@ let rec read_all_object _ =
   read_object 0
 in
 
-(**** AND, OR ネットワークの読み込み ****)
+(**** and, or ネットワークの読み込み ****)
 
 (* ネットワーク1つを読み込みベクトルにして返す *)
 let rec read_net_item length =
@@ -810,8 +810,8 @@ in
  *****************************************************************************)
 
 (* solver :
-   オブジェクト (の index) と、ベクトル L, P を受けとり、
-   直線 Lt + P と、オブジェクトとの交点を求める。
+   オブジェクト (の index) と、ベクトル l, p を受けとり、
+   直線 lt + p と、オブジェクトとの交点を求める。
    交点がない場合は 0 を、交点がある場合はそれ以外を返す。
    この返り値は nvector で交点の法線ベクトルを求める際に必要。
    (直方体の場合)
@@ -820,7 +820,7 @@ in
 *)
 
 (* 直方体の指定された面に衝突するかどうか判定する *)
-(* i0 : 面に垂直な軸のindex X:0, Y:1, Z:2         i2,i3は他の2軸のindex *)
+(* i0 : 面に垂直な軸のindex x:0, y:1, z:2         i2,i3は他の2軸のindex *)
 let rec solver_rect_surface m dirvec b0 b1 b2 i0 i1 i2  =
   if fiszero dirvec.(i0) then false else
   let abc = o_param_abc m in
@@ -837,9 +837,9 @@ in
 
 (***** 直方体オブジェクトの場合 ****)
 let rec solver_rect m dirvec b0 b1 b2 =
-  if      solver_rect_surface m dirvec b0 b1 b2 0 1 2 then 1   (* YZ 平面 *)
-  else if solver_rect_surface m dirvec b1 b2 b0 1 2 0 then 2   (* ZX 平面 *)
-  else if solver_rect_surface m dirvec b2 b0 b1 2 0 1 then 3   (* XY 平面 *)
+  if      solver_rect_surface m dirvec b0 b1 b2 0 1 2 then 1   (* yz 平面 *)
+  else if solver_rect_surface m dirvec b1 b2 b0 1 2 0 then 2   (* zx 平面 *)
+  else if solver_rect_surface m dirvec b2 b0 b1 2 0 1 then 3   (* xy 平面 *)
   else                                                     0
 in
 
@@ -857,7 +857,7 @@ let rec solver_surface m dirvec b0 b1 b2 =
 in
 
 
-(* 3変数2次形式 v^t A v を計算 *)
+(* 3変数2次形式 v^t a v を計算 *)
 (* 回転が無い場合は対角部分のみ計算すれば良い *)
 let rec quadratic m v0 v1 v2 =
   let diag_part =
@@ -872,8 +872,8 @@ let rec quadratic m v0 v1 v2 =
       +. v0 *. v1 *. o_param_r3 m
 in
 
-(* 3変数双1次形式 v^t A w を計算 *)
-(* 回転が無い場合は A の対角部分のみ計算すれば良い *)
+(* 3変数双1次形式 v^t a w を計算 *)
+(* 回転が無い場合は a の対角部分のみ計算すれば良い *)
 let rec bilinear m v0 v1 v2 w0 w1 w2 =
   let diag_part =
     v0 *. w0 *. o_param_a m
@@ -891,25 +891,25 @@ in
 
 
 (* 2次曲面または円錐の場合 *)
-(* 2次形式で表現された曲面 x^t A x - (0 か 1) = 0 と 直線 base + dirvec*t の
+(* 2次形式で表現された曲面 x^t a x - (0 か 1) = 0 と 直線 base + dirvec*t の
    交点を求める。曲線の方程式に x = base + dirvec*t を代入してtを求める。
-   つまり (base + dirvec*t)^t A (base + dirvec*t) - (0 か 1) = 0、
-   展開すると (dirvec^t A dirvec)*t^2 + 2*(dirvec^t A base)*t  +
-   (base^t A base) - (0か1) = 0 、よってtに関する2次方程式を解けば良い。*)
+   つまり (base + dirvec*t)^t a (base + dirvec*t) - (0 か 1) = 0、
+   展開すると (dirvec^t a dirvec)*t^2 + 2*(dirvec^t a base)*t  +
+   (base^t a base) - (0か1) = 0 、よってtに関する2次方程式を解けば良い。*)
 
 let rec solver_second m dirvec b0 b1 b2 =
 
-  (* 解の公式 (-b' ± sqrt(b'^2 - a*c)) / a  を使用(b' = b/2) *)
-  (* a = dirvec^t A dirvec *)
+  (* 解の公式 (-b' ?? sqrt(b'^2 - a*c)) / a  を使用(b' = b/2) *)
+  (* a = dirvec^t a dirvec *)
   let aa = quadratic m dirvec.(0) dirvec.(1) dirvec.(2) in
 
   if fiszero aa then
     0 (* 正確にはこの場合も1次方程式の解があるが、無視しても通常は大丈夫 *)
   else (
 
-    (* b' = b/2 = dirvec^t A base   *)
+    (* b' = b/2 = dirvec^t a base   *)
     let bb = bilinear m dirvec.(0) dirvec.(1) dirvec.(2) b0 b1 b2 in
-    (* c = base^t A base  - (0か1)  *)
+    (* c = base^t a base  - (0か1)  *)
     let cc0 = quadratic m b0 b1 b2 in
     let cc = if o_form m = 3 then cc0 -. 1.0 else cc0 in
     (* 判別式 *)
@@ -960,7 +960,7 @@ in
 (***** solver_rectのdirvecテーブル使用高速版 ******)
 let rec solver_rect_fast m v dconst b0 b1 b2 =
   let d0 = (dconst.(0) -. b0) *. dconst.(1) in
-  if  (* YZ平面との衝突判定 *)
+  if  (* yz平面との衝突判定 *)
     if fless (fabs (d0 *. v.(1) +. b1)) (o_param_b m) then
       if fless (fabs (d0 *. v.(2) +. b2)) (o_param_c m) then
 	not (fiszero dconst.(1))
@@ -969,7 +969,7 @@ let rec solver_rect_fast m v dconst b0 b1 b2 =
   then
     (solver_dist.(0) <- d0; 1)
   else let d1 = (dconst.(2) -. b1) *. dconst.(3) in
-  if  (* ZX平面との衝突判定 *)
+  if  (* zx平面との衝突判定 *)
     if fless (fabs (d1 *. v.(0) +. b0)) (o_param_a m) then
       if fless (fabs (d1 *. v.(2) +. b2)) (o_param_c m) then
 	not (fiszero dconst.(3))
@@ -978,7 +978,7 @@ let rec solver_rect_fast m v dconst b0 b1 b2 =
   then
     (solver_dist.(0) <- d1; 2)
   else let d2 = (dconst.(4) -. b2) *. dconst.(5) in
-  if  (* XY平面との衝突判定 *)
+  if  (* xy平面との衝突判定 *)
     if fless (fabs (d2 *. v.(0) +. b0)) (o_param_a m) then
       if fless (fabs (d2 *. v.(1) +. b1)) (o_param_b m) then
 	not (fiszero dconst.(5))
@@ -1092,21 +1092,21 @@ in
 let rec setup_rect_table vec m =
   let const = create_array 6 0.0 in
 
-  if fiszero vec.(0) then (* YZ平面 *)
+  if fiszero vec.(0) then (* yz平面 *)
     const.(1) <- 0.0
   else (
-    (* 面の X 座標 *)
+    (* 面の x 座標 *)
     const.(0) <- fneg_cond (xor (o_isinvert m) (fisneg vec.(0))) (o_param_a m);
-    (* 方向ベクトルを何倍すればX方向に1進むか *)
+    (* 方向ベクトルを何倍すればx方向に1進むか *)
     const.(1) <- 1.0 /. vec.(0)
   );
-  if fiszero vec.(1) then (* ZX平面 : YZ平面と同様*)
+  if fiszero vec.(1) then (* zx平面 : yz平面と同様*)
     const.(3) <- 0.0
   else (
     const.(2) <- fneg_cond (xor (o_isinvert m) (fisneg vec.(1))) (o_param_b m);
     const.(3) <- 1.0 /. vec.(1)
   );
-  if fiszero vec.(2) then (* XY平面 : YZ平面と同様*)
+  if fiszero vec.(2) then (* xy平面 : yz平面と同様*)
     const.(5) <- 0.0
   else (
     const.(4) <- fneg_cond (xor (o_isinvert m) (fisneg vec.(2))) (o_param_c m);
@@ -1145,7 +1145,7 @@ let rec setup_second_table v m =
 
   const.(0) <- aa;  (* 2次方程式の a 係数 *)
 
-  (* b' = dirvec^t A start だが、(dirvec^t A)の部分を計算しconst.(1:3)に格納。
+  (* b' = dirvec^t a start だが、(dirvec^t a)の部分を計算しconst.(1:3)に格納。
      b' を求めるにはこのベクトルとstartの内積を取れば良い。符号は逆にする *)
   if o_isrot m <> 0 then (
     const.(1) <- c1 -. fhalf (v.(2) *. o_param_r2 m +. v.(1) *. o_param_r3 m);
@@ -1257,7 +1257,7 @@ let rec is_outside m q0 q1 q2 =
     is_second_outside m p0 p1 p2
 in
 
-(**** 点 q が AND ネットワーク iand の内部にあるかどうかを判定 ****)
+(**** 点 q が and ネットワーク iand の内部にあるかどうかを判定 ****)
 let rec check_all_inside ofs iand q0 q1 q2 =
   let head = iand.(ofs) in
   if head = -1 then
@@ -1277,7 +1277,7 @@ in
 (* 点 intersection_point から、光線ベクトルの方向に辿り、   *)
 (* 物体にぶつかる (=影にはいっている) か否かを判定する。*)
 
-(**** AND ネットワーク iand の影内かどうかの判定 ****)
+(**** and ネットワーク iand の影内かどうかの判定 ****)
 let rec shadow_check_and_group iand_ofs and_group =
   if and_group.(iand_ofs) = -1 then
     false
@@ -1286,7 +1286,7 @@ let rec shadow_check_and_group iand_ofs and_group =
     let t0 = solver_fast obj light_dirvec intersection_point in
     let t0p = solver_dist.(0) in
     if (if t0 <> 0 then fless t0p (-0.2) else false) then
-      (* Q: 交点の候補。実際にすべてのオブジェクトに *)
+      (* q: 交点の候補。実際にすべてのオブジェクトに *)
       (* 入っているかどうかを調べる。*)
       let t = t0p +. 0.01 in
       let q0 = light.(0) *. t +. intersection_point.(0) in
@@ -1299,7 +1299,7 @@ let rec shadow_check_and_group iand_ofs and_group =
 	  (* 次のオブジェクトから候補点を探す *)
     else
       (* 交点がない場合: 極性が正(内側が真)の場合、    *)
-      (* AND ネットの共通部分はその内部に含まれるため、*)
+      (* and ネットの共通部分はその内部に含まれるため、*)
       (* 交点はないことは自明。探索を打ち切る。        *)
       if o_isinvert (objects.(obj)) then
 	shadow_check_and_group (iand_ofs + 1) and_group
@@ -1307,7 +1307,7 @@ let rec shadow_check_and_group iand_ofs and_group =
 	false
 in
 
-(**** OR グループ or_group の影かどうかの判定 ****)
+(**** or グループ or_group の影かどうかの判定 ****)
 let rec shadow_check_one_or_group ofs or_group =
   let head = or_group.(ofs) in
   if head = -1 then
@@ -1322,11 +1322,11 @@ let rec shadow_check_one_or_group ofs or_group =
    )
 in
 
-(**** OR グループの列のどれかの影に入っているかどうかの判定 ****)
+(**** or グループの列のどれかの影に入っているかどうかの判定 ****)
 let rec shadow_check_one_or_matrix ofs or_matrix =
   let head = or_matrix.(ofs) in
   let range_primitive = head.(0) in
-  if range_primitive = -1 then (* OR行列の終了マーク *)
+  if range_primitive = -1 then (* or行列の終了マーク *)
     false
   else
     if (* range primitive が無いか、またはrange_primitiveと交わる事を確認 *)
@@ -1357,7 +1357,7 @@ in
    光線と物体の交差判定
  *****************************************************************************)
 
-(**** あるANDネットワークが、レイトレースの方向に対し、****)
+(**** あるandネットワークが、レイトレースの方向に対し、****)
 (**** 交点があるかどうかを調べる。                     ****)
 let rec solve_each_element iand_ofs and_group dirvec =
   let iobj = and_group.(iand_ofs) in
@@ -1399,7 +1399,7 @@ let rec solve_each_element iand_ofs and_group dirvec =
    )
 in
 
-(**** 1つの OR-group について交点を調べる ****)
+(**** 1つの or-group について交点を調べる ****)
 let rec solve_one_or_network ofs or_group dirvec =
   let head = or_group.(ofs) in
   if head <> -1 then (
@@ -1409,7 +1409,7 @@ let rec solve_one_or_network ofs or_group dirvec =
    ) else ()
 in
 
-(**** ORマトリクス全体について交点を調べる。****)
+(**** orマトリクス全体について交点を調べる。****)
 let rec trace_or_matrix ofs or_network dirvec =
   let head = or_network.(ofs) in
   let range_primitive = head.(0) in
@@ -1434,8 +1434,8 @@ let rec trace_or_matrix ofs or_network dirvec =
 in
 
 (**** トレース本体 ****)
-(* トレース開始点 ViewPoint と、その点からのスキャン方向ベクトル *)
-(* Vscan から、交点 crashed_point と衝突したオブジェクト         *)
+(* トレース開始点 viewpoint と、その点からのスキャン方向ベクトル *)
+(* vscan から、交点 crashed_point と衝突したオブジェクト         *)
 (* crashed_object を返す。関数自体の返り値は交点の有無の真偽値。 *)
 let rec judge_intersection dirvec = (
   tmin.(0) <- (1000000000.0);
@@ -1492,7 +1492,7 @@ let rec solve_each_element_fast iand_ofs and_group dirvec =
    )
 in
 
-(**** 1つの OR-group について交点を調べる ****)
+(**** 1つの or-group について交点を調べる ****)
 let rec solve_one_or_network_fast ofs or_group dirvec =
   let head = or_group.(ofs) in
   if head <> -1 then (
@@ -1502,7 +1502,7 @@ let rec solve_one_or_network_fast ofs or_group dirvec =
    ) else ()
 in
 
-(**** ORマトリクス全体について交点を調べる。****)
+(**** orマトリクス全体について交点を調べる。****)
 let rec trace_or_matrix_fast ofs or_network dirvec =
   let head = or_network.(ofs) in
   let range_primitive = head.(0) in
@@ -1563,7 +1563,7 @@ let rec get_nvector_plane m =
   nvector.(2) <- fneg (o_param_c m)
 in
 
-(* 2次曲面 :  grad x^t A x = 2 A x を正規化する *)
+(* 2次曲面 :  grad x^t a x = 2 a x を正規化する *)
 let rec get_nvector_second m =
   let p0 = intersection_point.(0) -. o_param_x m in
   let p1 = intersection_point.(1) -. o_param_y m in
@@ -1610,7 +1610,7 @@ let rec utexture m p =
   texture_color.(2) <- o_color_blue m;
   if m_tex = 1 then
     (
-     (* zx方向のチェッカー模様 (G) *)
+     (* zx方向のチェッカー模様 (g) *)
      let w1 = p.(0) -. o_param_x m in
      let flag1 =
        let d1 = (floor (w1 *. 0.05)) *. 20.0 in
@@ -1627,14 +1627,14 @@ let rec utexture m p =
        else (if flag2 then 0.0 else 255.0)
     )
   else if m_tex = 2 then
-    (* y軸方向のストライプ (R-G) *)
+    (* y軸方向のストライプ (r-g) *)
     (
       let w2 = fsqr (sin (p.(1) *. 0.25)) in
       texture_color.(0) <- 255.0 *. w2;
       texture_color.(1) <- 255.0 *. (1.0 -. w2)
     )
   else if m_tex = 3 then
-    (* ZX面方向の同心円 (G-B) *)
+    (* zx面方向の同心円 (g-b) *)
     (
       let w1 = p.(0) -. o_param_x m in
       let w3 = p.(2) -. o_param_z m in
@@ -1645,7 +1645,7 @@ let rec utexture m p =
       texture_color.(2) <- (1.0 -. cws) *. 255.0
     )
   else if m_tex = 4 then (
-    (* 球面上の斑点 (B) *)
+    (* 球面上の斑点 (b) *)
     let w1 = (p.(0) -. o_param_x m) *. (sqrt (o_param_a m)) in
     let w3 = (p.(2) -. o_param_z m) *. (sqrt (o_param_c m)) in
     let w4 = (fsqr w1) +. (fsqr w3) in
@@ -1679,7 +1679,7 @@ in
    衝突点に当たる光源の直接光と反射光を計算する関数群
  *****************************************************************************)
 
-(* 当たった光による拡散光と不完全鏡面反射光による寄与をRGB値に加算 *)
+(* 当たった光による拡散光と不完全鏡面反射光による寄与をrgb値に加算 *)
 let rec add_light bright hilight hilight_scale =
 
   (* 拡散光 *)
@@ -1709,7 +1709,7 @@ let rec trace_reflections index diffuse hilight_scale dirvec =
       if surface_id = r_surface_id rinfo then
 	(* 鏡面との衝突点が光源の影になっていなければ反射光は届く *)
         if not (shadow_check_one_or_matrix 0 or_net.(0)) then
-	  (* 届いた反射光による RGB成分への寄与を加算 *)
+	  (* 届いた反射光による rgb成分への寄与を加算 *)
           let p = veciprod nvector (d_vec dvec) in
           let scale = r_bright rinfo in
           let bright = scale *. diffuse *. p in
@@ -1764,7 +1764,7 @@ let rec trace_ray nref energy dirvec pixel dist =
 
       let hilight_scale = energy *. o_hilight obj in
 
-      (* 光源光が直接届く場合、RGB成分にこれを加味する *)
+      (* 光源光が直接届く場合、rgb成分にこれを加味する *)
       if not (shadow_check_one_or_matrix 0 or_net.(0)) then
         let bright = fneg (veciprod nvector light) *. diffuse in
         let hilight = fneg (veciprod dirvec light) in
@@ -1796,7 +1796,7 @@ let rec trace_ray nref energy dirvec pixel dist =
 
       if nref <> 0 then (
 	let hl = fneg (veciprod dirvec light) in
-        (* 90°を超える場合は0 (光なし) *)
+        (* 90??を超える場合は0 (光なし) *)
 	if fispos hl then
 	  (
 	   (* ハイライト強度は角度の cos^3 に比例 *)
@@ -1820,7 +1820,6 @@ in
 (* 間接光の方向ベクトル dirvecに関しては定数テーブルが作られており、衝突判定
    が高速に行われる。物体に当たったら、その後の反射は追跡しない *)
 let rec trace_diffuse_ray dirvec energy =
-
   (* どれかの物体に当たるか調べる *)
   if judge_intersection_fast dirvec then
     let obj = objects.(intersected_object_id.(0)) in
@@ -2395,4 +2394,4 @@ let rec rt size_x size_y =
 )
 in
 
-rt 1 1
+rt 128 128
