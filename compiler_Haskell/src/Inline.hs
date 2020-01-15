@@ -7,7 +7,7 @@ import Control.Monad.State
 import RunRun
 import Type (Type)
 import Alpha (g)
-import Syntax(Compare(..), Arith_binary(..))
+import Syntax() -- (Compare(..), Arith_binary(..))
 
 inline :: K -> RunRun K
 inline e = do
@@ -28,7 +28,7 @@ i_body env (KLetRec (KFunc {kname=(x,t),kargs=yts,kbody=e1}) e2) = do
         n <- inlinenum <$> get
         let is_recursive = S.member x free_variables
         let nenv =
-                if s > n || (is_recursive && s > n `div` 7) then
+                if s > n || (is_recursive && s > n `div` 10) then
                     env
                 else
                     M.insert x (yts, e1) env

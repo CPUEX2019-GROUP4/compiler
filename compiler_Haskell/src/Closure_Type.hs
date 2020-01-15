@@ -32,6 +32,17 @@ data C =
   | AppDir !L ![String]
   | Malloc !Ty.Type !Int !Int !MallocInit
   deriving(Show)
+
+
+-- Show Exp
+-- instance Show C where
+--     show Unit = "Unit"
+--     show (Int n) = show n ++ "\n"
+--     show (Float f) = show f ++ "\n"
+--     show (Unary_op op _ _ x) = show op ++ " " ++ show x
+--     show e = ""
+
+
 data Fundef = Fundef {
         name :: (L, Ty.Type),
         args :: [(String, Ty.Type)],
@@ -39,6 +50,10 @@ data Fundef = Fundef {
         body :: C
         }
         deriving(Show)
+
+
+
+
 
 data Closure = Cls { entry :: L, actual_fv :: [String] }
         deriving (Show)

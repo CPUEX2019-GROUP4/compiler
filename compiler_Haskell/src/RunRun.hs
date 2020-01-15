@@ -24,7 +24,8 @@ data Env = Env {
     inlinenum :: Int,
     globals :: Map String Global,
     hp :: Int,
-    sp :: Int
+    sp :: Int,
+    blockid :: Int
     }
     deriving (Show)
 
@@ -61,6 +62,13 @@ gentmp t = do
     get >>= (\f -> put (f { idcounter = n + 1 }))
     s <- id_of_typ t
     return $ 'T' : s : show n
+
+newblock :: () -> RunRun Int
+newblock () = do
+    f <- get
+    let n = blockid f
+    put (f { blockid = n + 1 })
+    return n
 
 id_of_typ :: Type -> RunRun Char
 id_of_typ Unit      = return 'u'

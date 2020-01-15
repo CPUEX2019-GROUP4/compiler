@@ -160,29 +160,30 @@ g' oc xx@(NonTail x, exp)
     | Slw y (C z) <- exp =
             liftIO $ hPutStr oc $ printf "    sll %s %s %d\n" (reg x) (reg y) z
     | Lw y (V z) <- exp = do
-            liftIO $ hPutStr oc $ printf "    add %s %s %s\n" (reg reg_tmp) (reg y) (reg z)
-            liftIO $ hPutStr oc $ printf "    lw %s %s 0\n" (reg x) (reg reg_tmp)
+            liftIO $ hPutStr oc $ printf "    lwab %s %s %s\n" (reg x) (reg y) (reg z)
     | Lw y (C z) <- exp =
             liftIO $ hPutStr oc $ printf "    lw %s %s %d\n" (reg x) (reg y) z
     | Sw a y (V z) <- exp = do
-            liftIO $ hPutStr oc $ printf "    add %s %s %s\n" (reg reg_tmp) (reg y) (reg z)
-            liftIO $ hPutStr oc $ printf "    sw %s %s 0\n" (reg a) (reg reg_tmp)
+            liftIO $ hPutStr oc $ printf "    swab %s %s %s\n" (reg a) (reg y) (reg z)
     | Sw a y (C z) <- exp =
             liftIO $ hPutStr oc $ printf "    sw %s %s %d\n" (reg a) (reg y) z
     | FMv y      <- exp, x == y = return ()
     | FMv y      <- exp =
             liftIO $ hPutStr oc $ printf "    fmv %s %s\n" (reg x) (reg y)
     | Cmp Syntax.Eq y (V z) <- exp = do
-            liftIO $ hPutStr oc $ printf "    slt %s %s %s\n" (reg reg_tmp) (reg y) (reg z)
-            liftIO $ hPutStr oc $ printf "    slt %s %s %s\n" (reg x)       (reg z) (reg y)
-            liftIO $ hPutStr oc $ printf "    add %s %s %s\n" (reg reg_tmp) (reg x) (reg reg_tmp)
-            liftIO $ hPutStr oc $ printf "    slti %s %s 1\n" (reg x) (reg reg_tmp)
+            liftIO $ hPutStr oc $ printf "    seq %s %s %s\n" (reg x) (reg y) (reg z)
+            -- liftIO $ hPutStr oc $ printf "    slt %s %s %s\n" (reg reg_tmp) (reg y) (reg z)
+            -- liftIO $ hPutStr oc $ printf "    slt %s %s %s\n" (reg x)       (reg z) (reg y)
+            -- liftIO $ hPutStr oc $ printf "    add %s %s %s\n" (reg reg_tmp) (reg x) (reg reg_tmp)
+            -- liftIO $ hPutStr oc $ printf "    slti %s %s 1\n" (reg x) (reg reg_tmp)
     | Cmp Syntax.Eq y (C z) <- exp = do
             liftIO $ hPutStr oc $ printf "    ori %s %d\n"     (reg reg_tmp) z
-            liftIO $ hPutStr oc $ printf "    slt %s %s %s\n"  (reg reg_tmp) (reg reg_tmp) y
-            liftIO $ hPutStr oc $ printf "    slti %s %s %d\n" (reg x) (reg y) z
-            liftIO $ hPutStr oc $ printf "    add %s %s %s\n"  (reg reg_tmp) (reg reg_tmp) (reg x)
-            liftIO $ hPutStr oc $ printf "    slti %s %s 1\n"  (reg x) (reg reg_tmp)
+            liftIO $ hPutStr oc $ printf "    seq %s %s %s\n" (reg x) (reg y) (reg reg_tmp)
+            -- liftIO $ hPutStr oc $ printf "    ori %s %d\n"     (reg reg_tmp) z
+            -- liftIO $ hPutStr oc $ printf "    slt %s %s %s\n"  (reg reg_tmp) (reg reg_tmp) y
+            -- liftIO $ hPutStr oc $ printf "    slti %s %s %d\n" (reg x) (reg y) z
+            -- liftIO $ hPutStr oc $ printf "    add %s %s %s\n"  (reg reg_tmp) (reg reg_tmp) (reg x)
+            -- liftIO $ hPutStr oc $ printf "    slti %s %s 1\n"  (reg x) (reg reg_tmp)
     | Cmp Syntax.Ne y (V z) <- exp =
             liftIO $ hPutStr oc $ printf "    sub %s %s %s\n" (reg x) (reg y) (reg z)
     | Cmp Syntax.Ne y (C z) <- exp =
@@ -197,13 +198,12 @@ g' oc xx@(NonTail x, exp)
             liftIO $ hPutStr oc $ printf "    ori %s r0 %d\n" (reg reg_tmp) z
             liftIO $ hPutStr oc $ printf "    slt %s %s %s\n" (reg x) (reg reg_tmp) (reg y)
     | Lf y (V z) <- exp = do
-            liftIO $ hPutStr oc $ printf "    add %s %s %s\n" (reg reg_tmp) (reg y) (reg z)
-            liftIO $ hPutStr oc $ printf "    lwcZ %s %s 0\n" (reg x) (reg reg_tmp)
+            -- liftIO $ hPutStr oc $ printf "    add %s %s %s\n" (reg reg_tmp) (reg y) (reg z)
+            liftIO $ hPutStr oc $ printf "    flwab %s %s %s\n" (reg x) (reg y) (reg z)
     | Lf y (C z) <- exp = do
             liftIO $ hPutStr oc $ printf "    lwcZ %s %s %d\n" (reg x) (reg y) z
     | Sf a y (V z) <- exp = do
-            liftIO $ hPutStr oc $ printf "    add %s %s %s\n" (reg reg_tmp) (reg y) (reg z)
-            liftIO $ hPutStr oc $ printf "    swcZ %s %s 0\n" (reg a) (reg reg_tmp)
+            liftIO $ hPutStr oc $ printf "    fswab %s %s %s\n" (reg a) (reg y) (reg z)
     | Sf a y (C z) <- exp =
             liftIO $ hPutStr oc $ printf "    swcZ %s %s %d\n" (reg a) (reg y) z
     | Save _ _  <- exp = g'_stackset oc xx =<< (stackset <$> get)
@@ -378,25 +378,21 @@ g'_array :: Handle -> Type -> String -> Id_or_imm -> String -> RunRun ()
 g'_array oc t x (V "%r0") v = g'_array oc t x (C 0) v
 g'_array oc t x (V n) v = do
             loop <- genid "arrayloop"
-            cont <- genid "arraycont"
             exit <- genid "arrayexit"
-            liftIO $ hPutStr oc $ printf "    mv %s %s\n"    (reg reg_tmp) (reg n)
-            -- liftIO $ hPutStr oc $ printf "    mv %s %s\n"       (reg x) (reg reg_hp)
+            liftIO $ hPutStr oc $ printf "    beq r0 %s %s\n"   (reg n) exit
+            liftIO $ hPutStr oc $ printf "    sll %s %s  2\n"   (reg reg_tmp) (reg n)
             liftIO $ hPutStr oc $ printf "%s:\n"                loop
-            liftIO $ hPutStr oc $ printf "    bne %s r0 %s\n"   (reg reg_tmp) cont
-            liftIO $ hPutStr oc $ printf "    j %s\n"           exit
-            liftIO $ hPutStr oc $ printf "%s:\n"                cont
+            liftIO $ hPutStr oc $ printf "    subi %s %s 4\n"   (reg reg_tmp) (reg reg_tmp)
             case t of
                     Type.Float ->
-                        liftIO $ hPutStr oc $ printf "    swcZ %s %s 0\n"   (reg v) (reg reg_hp)
+                        liftIO $ hPutStr oc $ printf "    fswab %s %s %s\n" (reg v) (reg reg_hp) (reg reg_tmp)
                     _ ->
-                        liftIO $ hPutStr oc $ printf "    sw %s %s 0\n" (reg v) (reg reg_hp)
-            liftIO $ hPutStr oc $ printf "    subi %s %s 1\n"   (reg reg_tmp) (reg reg_tmp)
-            liftIO $ hPutStr oc $ printf "    addi %s %s 4\n"   (reg reg_hp) (reg reg_hp)
-            liftIO $ hPutStr oc $ printf "    j %s\n"           loop
+                        liftIO $ hPutStr oc $ printf "    swab %s %s %s\n"  (reg v) (reg reg_hp) (reg reg_tmp)
+            liftIO $ hPutStr oc $ printf "    bne r0 %s %s\n"   (reg reg_tmp) loop
+            liftIO $ hPutStr oc $ printf "    sll %s %s  2\n"   (reg reg_tmp) (reg n)
+            liftIO $ hPutStr oc $ printf "    mv %s %s\n"       (reg x) (reg reg_hp)
+            liftIO $ hPutStr oc $ printf "    add %s %s %s\n"   (reg reg_hp) (reg reg_hp) (reg reg_tmp)
             liftIO $ hPutStr oc $ printf "%s:\n"                exit
-            liftIO $ hPutStr oc $ printf "    sll %s %s 2\n"    (reg reg_tmp) (reg n)
-            liftIO $ hPutStr oc $ printf "    sub %s %s %s\n"   (reg x) (reg reg_hp) (reg reg_tmp)
 g'_array oc t x (C n) v = do
             forM_ [0..(n-1)] $ \ofset ->
                     case t of

@@ -8,9 +8,10 @@ import qualified Data.Map as M
 
 simm :: Aprog -> RunRun Aprog
 simm (Aprog fundefs e) = do
+    eprint e
     eputstrln "simm ..."
     global <- (M.map addr . globals) <$> get
-    return $ Aprog (map (function_simm global) fundefs) (s_body M.empty e)
+    return $ Aprog (map (function_simm global) fundefs) (s_body (M.empty) e)
 
 function_simm :: M.Map String Int -> Afundef -> Afundef
 function_simm global fundef =
@@ -86,6 +87,7 @@ s_subst env (Sf x y (V z))  | Just y'       <- lookup_y,
                                 lookup_z = M.lookup z env
 s_subst env (If x e1 e2) = If x (s_body env e1) (s_body env e2)
 s_subst env (FIfCmp cmp x y e1 e2) = FIfCmp cmp x y (s_body env e1) (s_body env e2)
+s_subst _ (Makearray t (V "%r0") z) = Makearray t (C 0) z
 s_subst env (Makearray t (V y) z)
                             | Just y'       <- M.lookup y env = Makearray t (C y') z
 s_subst _ e = e

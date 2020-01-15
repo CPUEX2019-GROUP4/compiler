@@ -194,7 +194,7 @@ k_body env (Syn.Put e1 e2 e3) = do
         (`runCont` id) $ do
             (\x y z -> return (Put x y z, Type.Unit)) <$> insert_let x'
                         <*> insert_let y' <*> insert_let z'
-k_body env (Syn.App (Syn.Var f) e2s)
+k_body env (Syn.App (Syn.Var f) _)
         | M.notMember f env = throwError $ Fail "ext fun app"
 k_body env (Syn.App e es) = do -- とりあえず外部関数は禁止
         x' <- k_body env e

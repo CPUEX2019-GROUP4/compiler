@@ -5,6 +5,7 @@ import Prelude hiding(exp, all, seq)
 import Control.Monad.State(foldM)
 import Control.Monad.Except()
 import Data.List (find)
+import qualified Data.Sequence()
 import qualified Data.Array as Array
 import qualified Data.Map as M
 import qualified Data.Set as S

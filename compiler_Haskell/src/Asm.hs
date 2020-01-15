@@ -2,14 +2,25 @@ module Asm where
 
 import qualified Data.Set as S
 import Data.Array
+import qualified Data.Sequence
 import Data.List()
 import RunRun
 import Type
 import Syntax (Arith_binary(..), Arith_unary(..), Float_binary(..), Float_unary(..), Unary_operator(..), Compare(..))
 import Closure_Type (L(..))
 
-data Id_or_imm = V String | C Int deriving(Show, Eq)
-data T = Ans !Exp | Let !(String, Type) Exp T deriving(Show, Eq)
+
+data Id_or_imm = V String | C Int deriving(Eq)
+instance Show Id_or_imm where
+    show (V s) = s
+    show (C n) = "(" ++ show n ++ ")"
+
+data T = Ans !Exp | Let !(String, Type) Exp T deriving(Eq)
+--type Inst = Seq !((String, Type), Exp)
+instance Show T where
+    show (Ans s) = show s
+    show (Let (x,_) e1 e2) = "(" ++ x ++ "\t<-\t" ++ show e1 ++ "\n" ++ show e2 ++ ")"
+
 data Exp =
     Nop
   | Li !Int
@@ -36,7 +47,8 @@ data Exp =
   | Save !String !String
   | Restore !String
   | Makearray !Type !Id_or_imm !String
-  deriving(Show, Eq)
+  deriving(Eq, Show)
+
 
 data Afundef = Afundef {
             a_name :: !L,
@@ -57,8 +69,8 @@ seq e1 e2 = do
         return $ Let (nid, Unit) e1 e2
 
 regs :: Array Int String
-regs = array (0,24)
-    (zip [0..] (map (\x -> "%r" ++ show (x :: Int)) [1..25]))
+regs = array (0,26)
+    (zip [0..] (map (\x -> "%r" ++ show (x :: Int)) [1..27]))
 fregs :: Array Int String
 fregs = array (0,30)
     (zip [0..] (map (\x -> "%f" ++ show (x :: Int)) [0..30]))

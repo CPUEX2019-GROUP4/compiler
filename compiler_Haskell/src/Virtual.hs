@@ -98,7 +98,7 @@ g env (C.MakeCls (x,t) (C.Cls { C.entry = l, C.actual_fv = ys }) e2) = do
         tmp <- seq (Sw z x (C 0)) store_fv
         return $ Let (x,t) (Mv reg_hp)
                         (Let (reg_hp,Type.Int) (Arith2 Add reg_hp (C ofset))
-                                (Let (z,Type.Int) (SetL l) tmp))
+                                (Let (z,Type.Int) (SetL l) tmp)) -- closure 消したから SetL は作られないはず.
 g env (C.AppDir (C.L x) ys) = do
         let (i,f) = separate (map (\y -> (y,env M.! y)) ys)
         return (Ans (CallDir (C.L x) i f))
@@ -143,7 +143,7 @@ g env (C.Put x y z)
                         throw $ Fail "ext array ... sorry ..."
         where
             t = M.lookup x env
-g env (C.Malloc t n p (C.A x))
+g _ (C.Malloc t n p (C.A x))
         | Type.Array Type.Unit  <- t = return $ Ans Nop
         | Type.Array Type.Float <- t = do
                 liftIO $ putStrLn $ "malloc" ++ x
@@ -210,9 +210,10 @@ findGlobal x = ((M.lookup x) . globals) <$> get
 
 virtual :: C.Prog -> RunRun Aprog
 virtual (C.Prog e) = do
+    --eprint e
     eputstrln "virtual ..."
     e' <- g mapinit e
---    eprint e'
+    -- eprint e'
     fundefs' <- ((mapM h . reverse . toplevel) =<< get)
 --    eprint fundefs'
     return $ Aprog fundefs' e'
