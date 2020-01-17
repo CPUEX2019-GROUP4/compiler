@@ -40,6 +40,7 @@ data Exp =
   | FMv !String
   | Cmp !Compare !String !Id_or_imm
   | If !String !T !T
+  | IfCmp !Compare !String !String !T !T
   | FIfCmp !Compare !String !String !T !T
   | Lf !String !Id_or_imm
   | Sf !String !String !Id_or_imm
@@ -136,6 +137,7 @@ fv_exp (Lf x y') = x : fv_id_pr_imm y'
 fv_exp (Lw x y') = x : fv_id_pr_imm y'
 fv_exp (Cmp _ x y') = x : fv_id_pr_imm y'
 fv_exp (If x e1 e2) = x : remove_and_uniq S.empty (fv' e1 ++ fv' e2)
+fv_exp (IfCmp _ x y e1 e2) = x : y : remove_and_uniq S.empty (fv' e1 ++ fv' e2)
 fv_exp (FIfCmp _ x y e1 e2) = x : y : remove_and_uniq S.empty (fv' e1 ++ fv' e2)
 fv_exp (Sw x y z') = x : y : fv_id_pr_imm z'
 fv_exp (Sf x y z') = x : y : fv_id_pr_imm z'

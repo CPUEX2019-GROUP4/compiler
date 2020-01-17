@@ -17,6 +17,7 @@ data C =
   | Float2 !Syn.Float_binary !String !String
   | Cmp !Syn.Compare !String !String
   | If !String !C !C
+  | IfCmp !Syn.Compare !String !String !C !C
   | FIfCmp !Syn.Compare !String !String !C !C
   | Let !(String, Ty.Type) !C !C
   | Var !String

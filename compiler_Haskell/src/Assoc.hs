@@ -12,6 +12,8 @@ assoc e = do
 a_body :: K -> K
 a_body (FIfCmp cmp x y e1 e2) =
         FIfCmp cmp x y (a_body e1) (a_body e2)
+a_body (IfCmp cmp x y e1 e2) =
+        IfCmp cmp x y (a_body e1) (a_body e2)
 a_body (If x e1 e2) =
         If x (a_body e1) (a_body e2)
 a_body (Let xt e1 e2) =

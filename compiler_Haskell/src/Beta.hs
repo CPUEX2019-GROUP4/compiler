@@ -26,6 +26,7 @@ b env e
     | Float1 arith x              <- e      = return $ Float1 arith (find x)
     | Float2 arith x y            <- e      = return $ Float2 arith (find x) (find y)
     | Cmp cmp x y                 <- e      = return $ Cmp cmp (find x) (find y)
+    | IfCmp cmp x y e1 e2         <- e      = IfCmp cmp (find x) (find y) <$> b env e1 <*> b env e2
     | FIfCmp cmp x y e1 e2        <- e      = FIfCmp cmp (find x) (find y) <$> b env e1 <*> b env e2
     | Let (x,_) (Var x') e2       <- e      = do
                                                 eputstrln $ "beta-reducing " ++ x ++ " = " ++ x'

@@ -27,6 +27,10 @@ target' src (dest,t) (If _ e1 e2) = do
         (c1, rs1) <- target src (dest,t) e1
         (c2, rs2) <- target src (dest,t) e2
         return (c1 && c2, rs1 ++ rs2)
+target' src (dest,t) (IfCmp _ _ _ e1 e2) = do
+        (c1, rs1) <- target src (dest,t) e1
+        (c2, rs2) <- target src (dest,t) e2
+        return (c1 && c2, rs1 ++ rs2)
 target' src (dest,t) (FIfCmp _ _ _ e1 e2) = do
         (c1, rs1) <- target src (dest,t) e1
         (c2, rs2) <- target src (dest,t) e2
@@ -207,6 +211,10 @@ g' _ _ regenv (Cmp cmp x y') = return $
 g' dest cont regenv (If x e1 e2) =
         g'_if dest cont regenv (\e1' e2' ->
             ((\x'' -> If x'' e1' e2') <$> find_reg x Type.Int regenv)) e1 e2
+g' dest cont regenv (IfCmp cmp x y e1 e2) =
+        g'_if dest cont regenv (\e1' e2' ->
+            ((\x'' y'' -> IfCmp cmp x'' y'' e1' e2') <$>
+                find_reg x Type.Int regenv <*> find_reg y Type.Int regenv)) e1 e2
 g' dest cont regenv (FIfCmp cmp x y e1 e2) =
         g'_if dest cont regenv (\e1' e2' ->
             ((\x'' y'' -> FIfCmp cmp x'' y'' e1' e2') <$>

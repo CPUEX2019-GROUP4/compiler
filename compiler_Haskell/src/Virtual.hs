@@ -53,6 +53,8 @@ g _ (C.Cmp cmp x y)   = ------------ have to check type !!!!!!!!!
         return $ Ans (Cmp cmp x (V y))
 g env (C.If x e1 e2)    = do
         Ans <$> (If x <$> g env e1 <*> g env e2)
+g env (C.IfCmp cmp x y e1 e2)    = do
+        Ans <$> (IfCmp cmp x y <$> g env e1 <*> g env e2)
 g env (C.FIfCmp cmp x y e1 e2)    = do
         Ans <$> (FIfCmp cmp x y <$> g env e1 <*> g env e2)
 g env (C.Let (x,t) e1 e2) = do

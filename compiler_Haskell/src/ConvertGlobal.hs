@@ -40,6 +40,8 @@ find_and_convert (LetTuple xts y e) =
             LetTuple xts y <$> find_and_convert e
 find_and_convert (If x e1 e2) =
             If x <$> find_and_convert e1 <*> find_and_convert e2
+find_and_convert (IfCmp cmp x y e1 e2) =
+            IfCmp cmp x y <$> find_and_convert e1 <*> find_and_convert e2
 find_and_convert (FIfCmp cmp x y e1 e2) =
             FIfCmp cmp x y <$> find_and_convert e1 <*> find_and_convert e2
 find_and_convert e = return e

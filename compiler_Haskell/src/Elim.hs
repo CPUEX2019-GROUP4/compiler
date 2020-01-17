@@ -17,6 +17,7 @@ elim e = do
 
 effect :: K -> Bool
 effect (If _ e1 e2)         = effect e1 || effect e2
+effect (IfCmp _ _ _ e1 e2) = effect e1 || effect e2
 effect (FIfCmp _ _ _ e1 e2) = effect e1 || effect e2
 effect (Let _ e1 e2)        = effect e1 || effect e2
 effect (KLetRec _ e2)       = effect e2
@@ -31,6 +32,7 @@ effect _ = False
 
 e_body :: K -> Memo K
 e_body (If x e1 e2)             = If x <$> e_body e1 <*> e_body e2
+e_body (IfCmp cmp x y e1 e2)    = IfCmp cmp x y <$> e_body e1 <*> e_body e2
 e_body (FIfCmp cmp x y e1 e2)   = FIfCmp cmp x y <$> e_body e1 <*> e_body e2
 e_body (Let (x,t) e1 e2)        = do
                                         e1' <- e_body e1
@@ -81,6 +83,10 @@ free (KLetRec (KFunc { kname = (x,_), kargs = yts, kbody = e1}) e2) = do
                         let s = (S.union zs fe2) S.\\ (S.singleton x)
                         (\env -> put (M.insert x s env)) =<< get
                         return s
+free (IfCmp _ x y e1 e2) = do
+        fe1 <- free e1
+        fe2 <- free e2
+        return $ S.insert x $ S.insert y $ S.union fe1 fe2
 free (FIfCmp _ x y e1 e2) = do
         fe1 <- free e1
         fe2 <- free e2

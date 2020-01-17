@@ -20,6 +20,7 @@ data K =
     | Float1 !Syn.Float_unary  !String
     | Float2 !Syn.Float_binary !String !String
     | Cmp !Syn.Compare !String !String
+    | IfCmp !Syn.Compare !String !String !K !K
     | FIfCmp !Syn.Compare !String !String !K !K
     | Let !(String, Type.Type) !K !K
     | KLetRec !KFundef !K
@@ -57,6 +58,7 @@ fv (Arith2 _ x y)       = S.fromList [x, y]
 fv (Float1 _ x)         = S.singleton x
 fv (Float2 _ x y)       = S.fromList [x, y]
 fv (Cmp _ x y)          = S.fromList [x, y]
+fv (IfCmp _ x y e1 e2)  = S.insert x $ S.insert y $ S.union (fv e1) (fv e2)
 fv (FIfCmp _ x y e1 e2) = S.insert x $ S.insert y $ S.union (fv e1) (fv e2)
 fv (Let (x,_) e1 e2)    = S.union (fv e1) (S.delete x (fv e2))
 fv (If x e2 e3)         = S.insert x $ S.union (fv e2) (fv e3)
@@ -215,10 +217,8 @@ k_body env (Syn.If e1 e2 e3)
                             (`runCont` id) $ do
                                 (\x y -> return (FIfCmp cmp x y e2' e3', t)) <$> insert_let x' <*> insert_let y'
                     _ -> do
-                            xx <- (`runCont` id) $ do
-                                    ((\x y -> return (Cmp cmp x y, ty)) <$> insert_let x' <*> insert_let y')
                             (`runCont` id) $ do
-                                    (\x -> return (If x e2' e3', t)) <$> insert_let xx
+                                (\x y -> return (IfCmp cmp x y e2' e3', t)) <$> insert_let x' <*> insert_let y'
     | otherwise = do
         x' <- k_body env e1
         (e2',_) <- k_body env e2

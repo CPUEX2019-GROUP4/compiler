@@ -35,6 +35,9 @@ f env e
     | Cmp cmp x y           <- e,
       Just (Int a)          <- find x,
       Just (Int b)          <- find y   = if calc_cmp cmp a b then Int 1 else Int 0
+    | IfCmp cmp x y e1 e2  <- e,
+      Just (Float a)        <- find x,
+      Just (Float b)        <- find y   = if calc_cmp cmp a b then f env e1 else f env e2
     | FIfCmp cmp x y e1 e2  <- e,
       Just (Float a)        <- find x,
       Just (Float b)        <- find y   = if calc_cmp cmp a b then f env e1 else f env e2
@@ -62,6 +65,7 @@ f env (LetTuple xts y e)
     | otherwise = LetTuple xts y (f env e)
 f env (If x e1 e2) = If x (f env e1) (f env e2)
 f env (FIfCmp cmp x y e1 e2) = FIfCmp cmp x y (f env e1) (f env e2)
+f env (IfCmp cmp x y e1 e2) = IfCmp cmp x y (f env e1) (f env e2)
 f _ e = e
 
 

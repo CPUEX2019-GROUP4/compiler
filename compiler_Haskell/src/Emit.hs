@@ -221,6 +221,23 @@ g' oc xx@(NonTail x, exp)
             g'_non_tail_if oc (NonTail x) e1 e2 b_else b_cont
     | Makearray t n' v <- exp =
             g'_array oc t x n' v
+    -- ifcmp
+    | IfCmp Gt y z e1 e2 <- exp = g' oc (NonTail x, IfCmp Lt (reg z) (reg y) e1 e2)
+    | IfCmp Lt y z e1 e2 <- exp = do
+            b_else <- genid "if_gt_else"
+            b_cont <- genid "if_gt_cont"
+            liftIO $ hPutStr oc $ printf "    blt %s %s %s\n" (reg y) (reg z) b_else
+            g'_non_tail_if oc (NonTail x) e2 e1 b_else b_cont
+    | IfCmp Eq y z e1 e2 <- exp = do
+            b_else <- genid "if_eq_else"
+            b_cont <- genid "if_eq_cont"
+            liftIO $ hPutStr oc $ printf "    bne %s %s %s\n" (reg y) (reg z) b_else
+            g'_non_tail_if oc (NonTail x) e1 e2 b_else b_cont
+    | IfCmp Ne y z e1 e2 <- exp = do
+            b_else <- genid "if_ne_else"
+            b_cont <- genid "if_ne_cont"
+            liftIO $ hPutStr oc $ printf "    beq %s %s %s\n" (reg y) (reg z) b_else
+            g'_non_tail_if oc (NonTail x) e1 e2 b_else b_cont
     | FIfCmp Lt y z e1 e2 <- exp = do
             b_else <- genid "fless_else"
             b_cont <- genid "fless_cont"
@@ -290,6 +307,21 @@ g' oc (Tail, FIfCmp Lt y z e1 e2) = do
             liftIO $ hPutStr oc $ printf "    fclt %s %s\n" (reg y) (reg z)
             liftIO $ hPutStr oc $ printf "    bc1f %s\n" b_else
             g'_tail_if oc e1 e2 b_else
+-- IfCmp
+g' oc (Tail, IfCmp Eq y z e1 e2) = do
+            b_else <- genid "if_eq_else"
+            liftIO $ hPutStr oc $ printf "    bne %s %s %s\n" (reg y) (reg z) b_else
+            g'_tail_if oc e1 e2 b_else
+g' oc (Tail, IfCmp Ne y z e1 e2) = do
+            b_else <- genid "if_ne_else"
+            liftIO $ hPutStr oc $ printf "    beq %s %s %s\n" (reg y) (reg z) b_else
+            g'_tail_if oc e1 e2 b_else
+g' oc (Tail, IfCmp Gt y z e1 e2) = g' oc (Tail, IfCmp Lt z y e1 e2)
+g' oc (Tail, IfCmp Lt y z e1 e2) = do
+            b_else <- genid "if_lt_else"
+            liftIO $ hPutStr oc $ printf "    blt %s %s %s\n" (reg y) (reg z) b_else
+            g'_tail_if oc e2 e1 b_else
+-- FIfCmp
 g' oc (Tail, FIfCmp Gt y z e1 e2) = g' oc (Tail, FIfCmp Lt z y e1 e2)
 g' oc (Tail, FIfCmp Eq y z e1 e2) = do
             b_else <- genid "fless_else"

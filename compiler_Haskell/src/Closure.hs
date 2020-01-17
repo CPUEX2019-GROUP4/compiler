@@ -28,6 +28,7 @@ fv (Float1 _ x)             = S.singleton x
 fv (Float2 _ x y)           = S.fromList [x,y]
 fv (Cmp _ x y)              = S.delete "%r0" $ S.fromList [x,y]
 fv (If x e1 e2)             = S.delete "%r0" $ S.insert x $ S.union (fv e1) (fv e2)
+fv (IfCmp _ x y e1 e2)      = S.delete "%r0" $ S.insert x $ S.insert y $ S.union (fv e1) (fv e2)
 fv (FIfCmp _ x y e1 e2)     = S.delete "%r0" $ S.insert x $ S.insert y $ S.union (fv e1) (fv e2)
 fv (Let (x,_) e1 e2)        = S.union (fv e1) (S.delete x (fv e2))
 fv (Var x)                  = if x /= "%r0" then S.singleton x else S.empty
@@ -57,7 +58,8 @@ g _   _ (K.Float1 arith e1)     = return $ Float1 arith e1
 g _   _ (K.Float2 arith e1 e2)  = return $ Float2 arith e1 e2
 g _   _ (K.Cmp cmp e1 e2)       = return $ Cmp cmp e1 e2
 g env known (K.If x e1 e2)      = If x <$> g env known e1 <*> g env known e2
-g env known (K.FIfCmp cmp x y e1 e2)= FIfCmp cmp x y <$> g env known e1 <*> g env known e2
+g env known (K.IfCmp cmp x y e1 e2)  = IfCmp cmp x y  <$> g env known e1 <*> g env known e2
+g env known (K.FIfCmp cmp x y e1 e2) = FIfCmp cmp x y <$> g env known e1 <*> g env known e2
 g env known (K.Let (x,t) e1 e2) = Let (x,t) <$> g env known e1 <*> g (M.insert x t env) known e2
 g _   _ (K.Var x)               = return $ Var x
 g _   _ (K.Tuple xs)            = return $ Tuple xs

@@ -18,6 +18,8 @@ inline e = do
 i_body :: Map String ([(String,Type)], K) -> K -> RunRun K
 i_body env (If x e1 e2) =
                 If x <$> i_body env e1 <*> i_body env e2
+i_body env (IfCmp cmp x y e1 e2) =
+                IfCmp cmp x y <$> i_body env e1 <*> i_body env e2
 i_body env (FIfCmp cmp x y e1 e2) =
                 FIfCmp cmp x y <$> i_body env e1 <*> i_body env e2
 i_body env (Let xt e1 e2) =
@@ -48,6 +50,7 @@ i_body _ e = return e
 
 size :: K -> Int
 size (If _ e1 e2) = 1 + size e1 + size e2
+size (IfCmp _ _ _ e1 e2) = 1 + size e1 +  size e2
 size (FIfCmp _ _ _ e1 e2) = 1 + size e1 + size e2
 size (Let _ e1 e2) = 1 + size e1 + size e2
 size (KLetRec f e2) = 1 + size (kbody f) + size e2

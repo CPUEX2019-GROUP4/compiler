@@ -24,6 +24,7 @@ g env e
     | Float1 arith x    <- e = return $ Float1 arith (f x)
     | Float2 arith x y  <- e = return $ Float2 arith (f x) (f y)
     | Cmp cmp x y       <- e = return $ Cmp cmp (f x) (f y)
+    | IfCmp cmp x y e1 e2  <- e = IfCmp cmp (f x) (f y) <$> g env e1 <*> g env e2
     | FIfCmp cmp x y e1 e2 <- e = FIfCmp cmp (f x) (f y) <$> g env e1 <*> g env e2
     | If x e1 e2        <- e = If (f x) <$> g env e1 <*> g env e2
     | Let (x,t) e1 e2   <- e = do
