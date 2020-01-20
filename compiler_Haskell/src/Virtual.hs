@@ -11,6 +11,7 @@ import Closure (fv)
 import Type
 import RunRun
 import Syntax (Arith_binary(..))
+import Block (Id_or_imm (..))
 
 mapinit :: M.Map String Type
 mapinit = M.singleton "%r0" Type.Int
@@ -45,10 +46,10 @@ g _ (C.Float f)       = return $ Ans (FLi f)
 g _ (C.Out n x)       = return $ Ans (Out n x)
 g _ (C.In t)          = return $ Ans (In t)
 g _ (C.Unary_op op t1 t2 x) = return $ Ans (Unary_op op t1 t2 x)
-g _ (C.Arith1 arith x)= return $ Ans (Arith1 arith x)
-g _ (C.Arith2 arith x y) = return $ Ans (Arith2 arith x (V y))
-g _ (C.Float1 arith x)= return $ Ans (Float1 arith x)
-g _ (C.Float2 arith x y) = return $ Ans (Float2 arith x y)
+g _ (C.Arith1 arith x)      = return $ Ans (Arith1 arith x)
+g _ (C.Arith2 arith x y)    = return $ Ans (Arith2 arith x (V y))
+g _ (C.Float1 arith x)      = return $ Ans (Float1 arith x)
+g _ (C.Float2 arith x y)    = return $ Ans (Float2 arith x y)
 g _ (C.Cmp cmp x y)   = ------------ have to check type !!!!!!!!!
         return $ Ans (Cmp cmp x (V y))
 g env (C.If x e1 e2)    = do

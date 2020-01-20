@@ -4,12 +4,15 @@ module RunRun where
 import System.IO
 import Data.Set (Set)
 import Data.Map (Map)
+-- import Data.Graph (Graph)
 import Control.Monad.State
 import Control.Monad.Except
 import Control.Monad.Identity()
 
 import qualified Closure_Type as Cl
 import Type
+import Syntax()
+import Block
 
 type RunRun = StateT Env (ExceptT Error IO)
 
@@ -25,7 +28,9 @@ data Env = Env {
     globals :: Map String Global,
     hp :: Int,
     sp :: Int,
-    blockid :: Int
+    blockid :: Int,
+    blockmap :: [((String, [String], [String], Type), Map Int Block)]
+    -- funcGraph :: Map String Graph
     }
     deriving (Show)
 
@@ -63,12 +68,6 @@ gentmp t = do
     s <- id_of_typ t
     return $ 'T' : s : show n
 
-newblock :: () -> RunRun Int
-newblock () = do
-    f <- get
-    let n = blockid f
-    put (f { blockid = n + 1 })
-    return n
 
 id_of_typ :: Type -> RunRun Char
 id_of_typ Unit      = return 'u'
@@ -86,3 +85,10 @@ eputstrln s = liftIO $ hPutStrLn stderr s
 eprint :: Show a => a -> RunRun ()
 eprint s = liftIO $ hPrint stderr s
 
+
+newblock :: () -> RunRun Int
+newblock () = do
+    f <- get
+    let n = blockid f
+    put (f { blockid = n + 1 })
+    return n

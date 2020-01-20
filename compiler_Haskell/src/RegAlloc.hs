@@ -13,6 +13,7 @@ import Closure_Type (L(L))
 import Asm
 import Type
 import RunRun
+import Block (Id_or_imm (..))
 
 -- 関数の返り値や引数をできるだけ第一レジスタに.
 target' :: String -> (String, Type) -> Exp -> RunRun (Bool, [String])

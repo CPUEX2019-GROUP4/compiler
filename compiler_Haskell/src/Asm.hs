@@ -2,18 +2,18 @@ module Asm where
 
 import qualified Data.Set as S
 import Data.Array
-import qualified Data.Sequence
+-- import qualified Data.Sequence
 import Data.List()
 import RunRun
 import Type
 import Syntax (Arith_binary(..), Arith_unary(..), Float_binary(..), Float_unary(..), Unary_operator(..), Compare(..))
 import Closure_Type (L(..))
+import Block (Id_or_imm (..))
 
-
-data Id_or_imm = V String | C Int deriving(Eq)
-instance Show Id_or_imm where
-    show (V s) = s
-    show (C n) = "(" ++ show n ++ ")"
+-- data Id_or_imm = V String | C Int deriving(Eq)
+-- instance Show Id_or_imm where
+--     show (V s) = s
+--     show (C n) = "(" ++ show n ++ ")"
 
 data T = Ans !Exp | Let !(String, Type) Exp T deriving(Eq)
 --type Inst = Seq !((String, Type), Exp)

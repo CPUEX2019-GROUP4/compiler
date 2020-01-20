@@ -16,6 +16,7 @@ import Data.Bits as B
 import Syntax (Arith_unary(..), Arith_binary(..), Compare(..))
 import Closure_Type (L(L))
 import Type (Type(..))
+import Block (Id_or_imm (..))
 
 import Foreign.C.Types
 

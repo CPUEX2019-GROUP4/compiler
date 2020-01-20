@@ -1,7 +1,7 @@
 RESULT = Main
 
-Main: float.o Type.hs Syntax.hs Lexer.x Parser.y Closure_Type.hs RunRun.hs Asm.hs Lexer.hs Parser.hs Typing.hs KNormal.hs Alpha.hs Beta.hs Assoc.hs Inline.hs ConstFold.hs Elim.hs Global.hs ConvertGlobal.hs Closure.hs Virtual.hs RegAlloc.hs Simm.hs Emit.hs Main.hs
-	ghc Main.hs float.o -Wall
+Main: float.o Type.hs Syntax.hs Lexer.x Parser.y Closure_Type.hs RunRun.hs Asm.hs Lexer.hs Parser.hs Typing.hs KNormal.hs Alpha.hs Beta.hs Assoc.hs Inline.hs ConstFold.hs Elim.hs Global.hs ConvertGlobal.hs Closure.hs Virtual.hs RegAlloc.hs Simm.hs Emit.hs Main.hs Block.hs ToBlock.hs BlockEmit.hs BlockGraph.hs BlockStackSearch.hs
+	ghc Main.hs float.o -Wall -fmax-pmcheck-iterations=100000
 
 float.o: float.c
 	gcc -c float.c

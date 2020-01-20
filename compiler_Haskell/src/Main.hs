@@ -21,7 +21,7 @@ import Closure_Type()
 import Asm()
 import Virtual
 import RegAlloc
-import Emit
+-- import Emit
 import Beta
 import Assoc
 import Inline
@@ -30,6 +30,12 @@ import Simm
 import ConstFold
 import Global
 import ConvertGlobal
+import Block()
+import ToBlock
+import BlockPrepare
+import BlockEmit
+import BlockStackSearch
+-- import Blocktest(test)
 
 main :: IO ()
 main = do
@@ -50,7 +56,11 @@ main = do
         >>= Virtual.virtual
         >>= Simm.simm
         >>= RegAlloc.regalloc
-        >>= Emit.emit oc
+        >>= ToBlock.toBlock
+        >> BlockPrepare.prepare
+        >>= BlockStackSearch.blockStackSearch
+        >>= BlockEmit.emit oc
+        -- >>= Emit.emit oc
     hClose oc
     case a of
         Left err -> print err
@@ -78,8 +88,11 @@ initEnv = Env {
             stackset = empty,
             stackmap = [],
             toplevel = [],
-            inlinenum = 700,
+            inlinenum = 100,
             globals = M.empty,
             hp = 10240,
-            sp = 5040
+            sp = 5040,
+            blockid = 0,
+            blockmap = []
+            -- funcGraph = M.empty
             }
