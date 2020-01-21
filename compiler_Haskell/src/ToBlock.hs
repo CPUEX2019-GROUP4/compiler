@@ -63,8 +63,12 @@ toBlock :: A.Aprog -> RunRun ()
 toBlock (A.Aprog fs main) = do
     eputstrln "toBlock ..."
     b <- newblock ()
-    (\f -> put $ f {blockmap = [(("main", [], [], Unit), M.empty)] }) =<< get
-    convert b SQ.empty ("R0", Type.Unit) None main
+    (\f -> put $ f {blockmap = [((("main", [], [], Unit), []), M.empty)] }) =<< get
+    list <- convert b SQ.empty ("R0", Type.Unit) None main
+    f <- get
+    let (((func, _), headblockmap):xs) = blockmap $ f
+    let newmap = ((func, list), headblockmap) : xs
+    (\a -> put $ a {blockmap = newmap}) =<< get
     eprint main
     mapM_ eprint fs
     mapM_ convertFundef fs
@@ -77,16 +81,21 @@ convertFundef (A.Afundef {A.a_name = (L name), A.a_args = ys, A.a_fargs = zs, A.
     b <- newblock ()
     eputstrln "block id ="
     eprint b
-    let ans = case t of
-                Float -> (fregs Array.! 0)
-                _     -> (regs Array.! 0)
+    ans <- case t of
+                Float -> return (fregs Array.! 0)
+                Unit  -> gentmp Type.Unit
+                _     -> return (regs Array.! 0)
     (\f -> do
         let bm = blockmap f
-        put $ f {blockmap = ((name, ys, zs, t), M.empty) : bm}) =<< get
-    convert b SQ.empty (ans, t) None e
+        put $ f {blockmap = (((name, ys, zs, t), []), M.empty) : bm}) =<< get
+    list <- convert b SQ.empty (ans, t) None e
+    f <- get
+    let (((func, _), headblockmap):xs) = blockmap $ f
+    let newmap = ((func, list), headblockmap) : xs
+    (\a -> put $ a {blockmap = newmap}) =<< get
 
 
-convert :: Int -> InstSeq -> (String, Type) -> Branch -> A.T -> RunRun ()
+convert :: Int -> InstSeq -> (String, Type) -> Branch -> A.T -> RunRun [Int]
 convert b seq yt branch instruction
     | A.Let xt (A.If x e1 e2) e <- instruction
             = subfunc (If x) e1 e2 e xt
@@ -100,9 +109,10 @@ convert b seq yt branch instruction
           b2 <- newblock ()
           bcont <- newblock ()
           define_block b seq tail (Two b1 b2)
-          convert b1 SQ.empty xt (One bcont) e2 -- if b で true であるときに jump するように入れ替える.
-          convert b2 SQ.empty xt (One bcont) e1
-          convert bcont SQ.empty yt branch e
+          l1 <- convert b1 SQ.empty xt (One bcont) e2 -- if b で true であるときに jump するように入れ替える.
+          l2 <- convert b2 SQ.empty xt (One bcont) e1
+          l3 <- convert bcont SQ.empty yt branch e
+          return $ b : l1 ++ l2 ++ l3
 convert b seq xt branch instruction
     | A.Ans (A.If x e1 e2) <- instruction
             = subfunc (If x) e1 e2
@@ -115,8 +125,9 @@ convert b seq xt branch instruction
           b1 <- newblock ()
           b2 <- newblock ()
           define_block b seq tail (Two b1 b2)
-          convert b1 SQ.empty xt branch e2
-          convert b2 SQ.empty xt branch e1
+          l1 <- convert b1 SQ.empty xt branch e2
+          l2 <- convert b2 SQ.empty xt branch e1
+          return $ b : l1 ++ l2
 convert b seq xt branch (A.Ans exp) = do
     let blockexp = case exp of
           A.Nop -> Nop
@@ -144,6 +155,7 @@ convert b seq xt branch (A.Ans exp) = do
           A.Makearray t x' y -> Makearray t x' y
           _ -> Nop -- shoud be error
     define_block b (seq |> (xt, blockexp)) End branch
+    return [b]
 convert b seq yt branch (A.Let xt exp e) =
     let blockexp = case exp of
           A.Nop -> Nop

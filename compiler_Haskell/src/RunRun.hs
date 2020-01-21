@@ -29,7 +29,7 @@ data Env = Env {
     hp :: Int,
     sp :: Int,
     blockid :: Int,
-    blockmap :: [((String, [String], [String], Type), Map Int Block)]
+    blockmap :: [(((String, [String], [String], Type), [Int]), Map Int Block)]
     -- funcGraph :: Map String Graph
     }
     deriving (Show)

@@ -17,14 +17,14 @@ prepare = do
     --                      line = (topSort . mkBlockGraphSeq) a,
     --                      args = ys, fargs = zs, ret = t
     --                      }) m
-    let newlist = Prelude.map (\((func, ys, zs, t), a) ->
+    let newlist = Prelude.map (\(((func, ys, zs, t), list), a) ->
             let g = mkBlockGraph a in
             (func,
             FunctionData {blocks = a,
                          blockGraph = g,
                          blockReverseGraph = transposeG g,
-                         line = (topSort . mkBlockGraphSeq) a,
-                         args = ys, fargs = zs, ret = t
+                         line = list,
+                         args = ys, fargs = zs, ret = t, allStack = []
                          })) blockmaplist
     return $ fromList newlist
 

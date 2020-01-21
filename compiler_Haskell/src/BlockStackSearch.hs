@@ -15,8 +15,9 @@ blockStackSearch m =
 
 mkFuncStack :: FunctionData -> FunctionData
 mkFuncStack func =
-    let bm = Prelude.foldl f blocks_ (line func) in
-    func {blocks = bm}
+    let bm = Prelude.foldl f blocks_ (line func)
+        allStored = Prelude.foldl g S.empty bm in
+    func {blocks = bm, allStack = S.toList allStored}
     where
       blocks_ = blocks func
       f bmap b =
@@ -26,6 +27,9 @@ mkFuncStack func =
             s = mkStackSet ss block
         in
         M.insert b (block {blockStack = s}) bmap
+      g acc b =
+        let s = snd . blockStack $ b in
+        S.union s acc
 
 
 mkStackSet :: [Set String] -> Block -> (Set String, Set String)

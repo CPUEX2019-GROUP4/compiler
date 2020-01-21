@@ -88,10 +88,12 @@ instance Show Block where
     show block =
       let seQ    = blockInst block
           taiL   = blockTailExp block
-          branch = blockBranch block in
+          branch = blockBranch block
+          bs = blockStack block in
       foldr (\xti acc -> printinstruction xti ++ acc)
             ("(tail = " ++ show taiL ++
-            ", branch = " ++ show branch ++ ")")
+            ", branch = " ++ show branch ++
+            ", stack = " ++ show bs ++ ")")
             seQ
 newBlock :: InstSeq -> TailExp -> Branch -> Block
 newBlock x y z = Block {blockInst = x, blockTailExp = y, blockBranch = z, blockStack = (S.empty,S.empty)}
@@ -103,8 +105,10 @@ data FunctionData = FunctionData {
                   line :: [Int],
                   args :: ![String],
                   fargs :: ![String],
-                  ret :: !Type
+                  ret :: !Type,
+                  allStack :: [String]
                   }
+                  deriving (Show)
 
 
 printinstruction :: ((String, Type), Inst) -> String

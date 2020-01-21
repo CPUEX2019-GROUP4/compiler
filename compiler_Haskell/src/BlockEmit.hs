@@ -30,6 +30,7 @@ getlo = fmap fromIntegral . c_getlo . realToFrac
 gethi :: Float -> IO Int
 gethi = fmap fromIntegral . c_gethi . realToFrac
 
+
 -- stackset = いま格納されている変数の集合.
 -- stackmap = stack 内での積む順番位置. どこで格納されても関数内で同じ変数は同じ位置に.
 stackadd :: String -> RunRun ()
@@ -37,19 +38,19 @@ stackadd x = do
     f <- get
     put $ f {stackset = insert x (stackset f)}
 
-stackmap_append :: String -> RunRun ()
-stackmap_append x = do
-    f <- get
-    put $ f {stackmap = (stackmap f) ++ [x]}
+-- stackmap_append :: String -> RunRun ()
+-- stackmap_append x = do
+--     f <- get
+--     put $ f {stackmap = (stackmap f) ++ [x]}
 
 save :: String -> RunRun ()
 save x = do
     stackadd x
-    smap <- stackmap <$> get
-    if notElem x $ smap then
-        stackmap_append x
-    else
-        return ()
+    -- smap <- stackmap <$> get
+    -- if notElem x $ smap then
+    --     stackmap_append x
+    -- else
+    --     return ()
 
 --savef = save
 
@@ -63,7 +64,7 @@ offset x = do
     mn <- locate x
     case mn of
         Just n -> return $ n * 4
-        Nothing -> throw $ Fail "what!?"
+        Nothing -> throw $ Fail $ "what!? " ++ x
 
 stacksize :: RunRun Int
 stacksize = ((*4) . (+1) . length) <$> (stackmap <$> get)
@@ -99,7 +100,7 @@ data Dest = Tail | NonTail String
 print_function :: Handle -> String -> FunctionData -> RunRun ()
 print_function oc funcname funcdata = do
         liftIO $ hPutStr oc $ printf "%s:\n" funcname
-        (\f -> put (f {stackset=empty, stackmap=[]})) =<< get
+        (\f -> put (f {stackset=empty, stackmap= allStack funcdata})) =<< get
         print_blocks oc (line funcdata) (blocks funcdata)
 
 
@@ -113,10 +114,11 @@ print_block oc b (Block {blockInst = seq, blockTailExp = tail, blockBranch = bra
     | End <- tail, None <- branch = do
             instructions
             liftIO $ hPutStr oc $ printf "    jr %s\n" (reg reg_lr)
-    | If x <- tail, Two _ b2 <- branch = do
+    | If x <- tail, Two b1 b2 <- branch = do
             instructions
             liftIO $ hPutStr oc $ printf "    bne %s r0 %s\n" (reg x) ("block_" ++ (show b2))
-    | IfCmp cmp x y <- tail, Two _ b2 <- branch = do
+            liftIO $ hPutStrLn oc $ printf "    j %s" ("block_" ++ (show b1))
+    | IfCmp cmp x y <- tail, Two b1 b2 <- branch = do
             instructions
             (case cmp of
                 Eq  -> liftIO $ hPutStr oc $ printf "    beq %s %s %s\n" (reg x) (reg y) ("block_" ++ (show b2))
@@ -124,7 +126,8 @@ print_block oc b (Block {blockInst = seq, blockTailExp = tail, blockBranch = bra
                 Gt  -> liftIO $ hPutStr oc $ printf "    blt %s %s %s\n" (reg y) (reg x) ("block_" ++ (show b2))
                 Lt  -> liftIO $ hPutStr oc $ printf "    blt %s %s %s\n" (reg x) (reg y) ("block_" ++ (show b2))
                 )
-    | FIfCmp cmp x y <- tail, Two _ b2 <- branch = do
+            -- liftIO $ hPutStrLn oc $ printf "    j %s" ("block_" ++ (show b1))
+    | FIfCmp cmp x y <- tail, Two b1 b2 <- branch = do
             instructions
             (case cmp of
                 Eq  -> do
@@ -142,6 +145,7 @@ print_block oc b (Block {blockInst = seq, blockTailExp = tail, blockBranch = bra
                           liftIO $ hPutStr oc $ printf "    fclt %s %s\n" (reg y) (reg x)
                           liftIO $ hPutStr oc $ printf "    bc1t %s\n" ("block_" ++ (show b2))
                           )
+            -- liftIO $ hPutStrLn oc $ printf "    j %s" ("block_" ++ (show b1))
     | End <- tail, One b1 <- branch = do
             instructions
             liftIO $ hPutStr oc $ printf "    j %s\n" ("block_" ++ (show b1))
@@ -205,6 +209,15 @@ print_seq_save oc ((_, _), Save x y) stset
             save y
             ofset <- offset y
             liftIO $ hPutStr oc $ printf "    swcZ %s %s %d\n" (reg x) (reg reg_sp) ofset
+    -- iranai hazu
+    -- | elem x allregs    = do
+    --         save y
+    --         ofset <- offset y
+    --         liftIO $ hPutStr oc $ printf "    sw %s %s %d\n" (reg x) (reg reg_sp) ofset
+    -- | elem x allfregs   = do
+    --         save y
+    --         ofset <- offset y
+    --         liftIO $ hPutStr oc $ printf "    swcZ %s %s %d\n" (reg x) (reg reg_sp) ofset
     | not tf                = return ()
     | otherwise             = throw $ Fail "maji!?"
     where
@@ -262,6 +275,7 @@ emit :: Handle -> M.Map String FunctionData -> RunRun ()
 emit oc functions = do
     eputstrln "emit ..."
     --eprint e
+    eprint functions
     eputstrln "assembly"
     stack <- sp <$> get
     heap  <- hp <$> get
