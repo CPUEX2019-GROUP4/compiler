@@ -1,4 +1,4 @@
-module ToBlock where
+module Back.ToBlock where
 
 import Prelude hiding (exp, seq, tail)
 import Control.Monad.State (get, put)
@@ -7,11 +7,11 @@ import Data.Map as M
 import qualified Data.Array as Array
 import Data.Sequence as SQ
 import Data.List()
-import Block
-import RunRun
-import Type
-import Closure_Type (L(..))
-import qualified Asm as A
+import Back.Block
+import RunRun.RunRun
+import RunRun.Type as Type
+import Middle.Closure_Type (L(..))
+import qualified Back.Asm as A
 
 
 

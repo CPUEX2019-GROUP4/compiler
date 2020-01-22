@@ -1,4 +1,4 @@
-module RegAlloc where
+module Back.RegAlloc where
 
 import Text.Printf (printf)
 import Prelude hiding(exp, all, seq)
@@ -9,11 +9,11 @@ import qualified Data.Sequence()
 import qualified Data.Array as Array
 import qualified Data.Map as M
 import qualified Data.Set as S
-import Closure_Type (L(L))
-import Asm
-import Type
-import RunRun
-import Block (Id_or_imm (..))
+import Middle.Closure_Type (L(L))
+import Back.Asm as Asm
+import RunRun.Type as Type
+import RunRun.RunRun
+import Back.Block (Id_or_imm (..))
 
 -- 関数の返り値や引数をできるだけ第一レジスタに.
 target' :: String -> (String, Type) -> Exp -> RunRun (Bool, [String])

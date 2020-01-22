@@ -1,7 +1,7 @@
-module Assoc where
+module Middle.Assoc where
 
-import RunRun
-import KNormal
+import RunRun.RunRun
+import Middle.KNormal
 
 assoc :: K -> RunRun K
 assoc e = do

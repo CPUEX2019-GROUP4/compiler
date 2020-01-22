@@ -1,4 +1,4 @@
-module Type where
+module RunRun.Type where
 
 import Control.Monad.Identity (Identity)
 import Control.Monad.State

@@ -2,17 +2,17 @@
 
 {
 {-# OPTIONS_GHC -w #-}
-module Parser where
+module Front.Parser where
 
 import Control.Monad.IO.Class(liftIO)
 import System.IO
 import Prelude hiding (EQ, LT, GT)
 import Control.Applicative
 
-import qualified Type
-import RunRun
-import Syntax
-import Lexer
+import qualified RunRun.Type as Type
+import RunRun.RunRun
+import Front.Syntax as Syntax
+import Front.Lexer
 }
 
 %name mparse exp

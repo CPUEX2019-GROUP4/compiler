@@ -1,11 +1,11 @@
-module BlockStackSearch where
+module Back.BlockStackSearch where
 
 import Prelude hiding(seq)
-import Block
+import Back.Block
 import Data.Map as M
 import Data.Set as S
-import BlockGraph
-import RunRun
+import Back.BlockGraph
+import RunRun.RunRun
 
 
 blockStackSearch :: Map String FunctionData -> RunRun (Map String FunctionData)

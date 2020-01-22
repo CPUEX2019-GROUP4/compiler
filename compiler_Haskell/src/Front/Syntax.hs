@@ -1,6 +1,6 @@
-module Syntax where
+module Front.Syntax where
 
-import Type
+import RunRun.Type
 
 data Syntax =
     Unit

@@ -1,9 +1,9 @@
-module ConstFold where
+module Middle.ConstFold where
 
 import Data.Map
-import KNormal
-import RunRun
-import Syntax (Arith_binary(..), Arith_unary(..), Float_binary(..), Float_unary(..), Compare(..)) --Unary_operator(..),
+import Middle.KNormal
+import RunRun.RunRun
+import Front.Syntax (Arith_binary(..), Arith_unary(..), Float_binary(..), Float_unary(..), Compare(..)) --Unary_operator(..),
 import qualified Data.Map as M
 
 constfold :: K -> RunRun K

@@ -1,4 +1,4 @@
-module KNormal where
+module Middle.KNormal where
 
 import Control.Monad.Cont
 import Control.Monad.State
@@ -6,9 +6,9 @@ import Control.Monad.Except
 import Data.Set as S hiding(map)
 import Data.Map as M hiding(map)
 
-import RunRun
-import qualified Type
-import qualified Syntax as Syn
+import RunRun.RunRun as RunRun
+import qualified RunRun.Type as Type
+import qualified Front.Syntax as Syn
 
 data K =
       Unit
@@ -95,7 +95,7 @@ gennewid t = do
         return $ 'T' : s : show n
 
 insert_let :: (K, Type.Type) -> Cont (StateT Int (Except Error) (K, Type.Type)) String
-insert_let (KNormal.Var x,_) = return x
+insert_let (Middle.KNormal.Var x,_) = return x
 insert_let (e,t) = do
             let s = \k -> do
                 x <- gennewid t

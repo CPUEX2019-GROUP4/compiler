@@ -1,4 +1,4 @@
-module Closure where
+module Middle.Closure where
 
 import Data.Set as S hiding(map)
 import Data.Map as M hiding(map)
@@ -8,11 +8,11 @@ import Data.Map as M hiding(map)
 import System.IO
 import Text.Printf
 import Control.Monad.State
-import qualified Syntax() --as Syn
-import RunRun
-import qualified KNormal as K hiding (fv)
-import qualified Type as Ty
-import Closure_Type
+import qualified Front.Syntax() --as Syn
+import RunRun.RunRun
+import qualified Middle.KNormal as K hiding (fv)
+import qualified RunRun.Type as Ty
+import Middle.Closure_Type
 
 
 fv :: C -> S.Set String

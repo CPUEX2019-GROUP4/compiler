@@ -1,4 +1,4 @@
-module BlockEmit where
+module Back.BlockEmit where
 
 import System.IO
 import Prelude hiding(exp, seq, tail)
@@ -12,13 +12,13 @@ import Data.Int ()
 import Control.Monad.State
 import Control.Monad.IO.Class()
 -- import Asm
-import RunRun
+import RunRun.RunRun
 -- import Data.Bits as B
-import Syntax ({- Arith_unary(..), Arith_binary(..),-} Compare(..))
-import Closure_Type (L(L))
-import Type (Type(..))
+import Front.Syntax ({- Arith_unary(..), Arith_binary(..),-} Compare(..))
+import Middle.Closure_Type (L(L))
+import RunRun.Type as Type (Type(..))
 
-import Block
+import Back.Block
 
 import Foreign.C.Types
 
@@ -110,7 +110,7 @@ print_blocks oc list bmap = do
 
 
 print_block :: Handle -> Int -> Block -> RunRun ()
-print_block oc b (Block {blockInst = seq, blockTailExp = tail, blockBranch = branch, blockStack = pp@(bs,_)})
+print_block oc b (Block {blockInst = seq, blockTailExp = tail, blockBranch = branch, blockStack = (bs,_)})
     | End <- tail, None <- branch = do
             instructions
             liftIO $ hPutStr oc $ printf "    jr %s\n" (reg reg_lr)
@@ -118,7 +118,7 @@ print_block oc b (Block {blockInst = seq, blockTailExp = tail, blockBranch = bra
             instructions
             liftIO $ hPutStr oc $ printf "    bne %s r0 %s\n" (reg x) ("block_" ++ (show b2))
             liftIO $ hPutStrLn oc $ printf "    j %s" ("block_" ++ (show b1))
-    | IfCmp cmp x y <- tail, Two b1 b2 <- branch = do
+    | IfCmp cmp x y <- tail, Two _ b2 <- branch = do
             instructions
             (case cmp of
                 Eq  -> liftIO $ hPutStr oc $ printf "    beq %s %s %s\n" (reg x) (reg y) ("block_" ++ (show b2))
@@ -127,7 +127,7 @@ print_block oc b (Block {blockInst = seq, blockTailExp = tail, blockBranch = bra
                 Lt  -> liftIO $ hPutStr oc $ printf "    blt %s %s %s\n" (reg x) (reg y) ("block_" ++ (show b2))
                 )
             -- liftIO $ hPutStrLn oc $ printf "    j %s" ("block_" ++ (show b1))
-    | FIfCmp cmp x y <- tail, Two b1 b2 <- branch = do
+    | FIfCmp cmp x y <- tail, Two _ b2 <- branch = do
             instructions
             (case cmp of
                 Eq  -> do
@@ -152,7 +152,6 @@ print_block oc b (Block {blockInst = seq, blockTailExp = tail, blockBranch = bra
     | otherwise = throw $ Fail (show tail ++ show branch)
     where
       instructions = do
-        -- eprint pp
         (\a -> put (a {stackset = bs})) =<< get
         liftIO $ hPutStr oc $ printf "%s:\n" ("block_" ++ (show b))
         mapM_ (print_seq oc) seq

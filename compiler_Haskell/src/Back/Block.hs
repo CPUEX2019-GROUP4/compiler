@@ -1,4 +1,4 @@
-module Block where
+module Back.Block where
 
 import Prelude hiding(exp)
 -- import qualified Data.Set as S
@@ -10,9 +10,9 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Graph as G
 -- import RunRun
-import Type
-import Syntax (Arith_binary(..), Arith_unary(..), Float_binary(..), Float_unary(..), Unary_operator(..), Compare(..))
-import Closure_Type (L(..))
+import RunRun.Type as Type
+import Front.Syntax as Syntax (Arith_binary(..), Arith_unary(..), Float_binary(..), Float_unary(..), Unary_operator(..), Compare(..))
+import Middle.Closure_Type (L(..))
 import Text.Printf(printf)
 import Data.Char(toLower)
 import Data.Bits as B

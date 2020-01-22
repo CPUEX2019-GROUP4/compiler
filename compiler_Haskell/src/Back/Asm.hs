@@ -1,14 +1,15 @@
-module Asm where
+module Back.Asm where
 
+import Prelude hiding (concat)
 import qualified Data.Set as S
 import Data.Array
 -- import qualified Data.Sequence
 import Data.List()
-import RunRun
-import Type
-import Syntax (Arith_binary(..), Arith_unary(..), Float_binary(..), Float_unary(..), Unary_operator(..), Compare(..))
-import Closure_Type (L(..))
-import Block (Id_or_imm (..))
+import RunRun.RunRun
+import RunRun.Type
+import Front.Syntax (Arith_binary(..), Arith_unary(..), Float_binary(..), Float_unary(..), Unary_operator(..), Compare(..))
+import Middle.Closure_Type (L(..))
+import Back.Block (Id_or_imm (..))
 
 -- data Id_or_imm = V String | C Int deriving(Eq)
 -- instance Show Id_or_imm where
@@ -154,6 +155,6 @@ fv e = remove_and_uniq S.empty (fv' e)
 
 concat :: T -> (String, Type) -> T -> T
 concat (Ans ex) xt e2 = Let xt ex e2
-concat (Let yt ex e1') xt e2 = Let yt ex (Asm.concat e1' xt e2)
+concat (Let yt ex e1') xt e2 = Let yt ex (concat e1' xt e2)
 
 

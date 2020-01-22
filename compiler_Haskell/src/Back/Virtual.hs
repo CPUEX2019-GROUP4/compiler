@@ -1,17 +1,17 @@
-module Virtual where
+module Back.Virtual where
 
 import Prelude hiding(seq)
-import Control.Monad.IO.Class(liftIO)
+-- import Control.Monad.IO.Class(liftIO)
 import Control.Monad.State (get, foldM)
 import qualified Data.Map as M
 import qualified Data.Set as S (notMember)
-import Asm hiding(fv)
-import qualified Closure_Type as C
-import Closure (fv)
-import Type
-import RunRun
-import Syntax (Arith_binary(..))
-import Block (Id_or_imm (..))
+import Back.Asm as Asm hiding(fv)
+import qualified Middle.Closure_Type as C
+import Middle.Closure (fv)
+import RunRun.Type as Type
+import RunRun.RunRun
+import Front.Syntax (Arith_binary(..))
+import Back.Block (Id_or_imm (..))
 
 mapinit :: M.Map String Type
 mapinit = M.singleton "%r0" Type.Int

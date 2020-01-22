@@ -1,7 +1,7 @@
-module Elim where
+module Middle.Elim where
 
-import KNormal
-import RunRun
+import Middle.KNormal
+import RunRun.RunRun
 import Data.Map as M hiding(map)
 import Data.Set as S hiding(map)
 import Control.Monad.State

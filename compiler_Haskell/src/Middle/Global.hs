@@ -1,11 +1,11 @@
-module Global where
+module Middle.Global where
 
-import RunRun
-import KNormal
+import RunRun.RunRun
+import Middle.KNormal
 import Data.Map as M
 import Data.Set as S()
 import Control.Monad.State
-import qualified Type as T
+import qualified RunRun.Type as T
 
 global :: K -> RunRun K
 global e = do

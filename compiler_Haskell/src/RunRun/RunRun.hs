@@ -1,4 +1,4 @@
-module RunRun where
+module RunRun.RunRun where
 
 --import Text.Printf(hPrintf, PrintfType)
 import System.IO
@@ -9,10 +9,10 @@ import Control.Monad.State
 import Control.Monad.Except
 import Control.Monad.Identity()
 
-import qualified Closure_Type as Cl
-import Type
-import Syntax()
-import Block
+import qualified Middle.Closure_Type as Cl
+import RunRun.Type
+import Front.Syntax()
+import Back.Block
 
 type RunRun = StateT Env (ExceptT Error IO)
 

@@ -1,6 +1,6 @@
-module BlockGraph where
+module Back.BlockGraph where
 
-import Block
+import Back.Block
 import Data.Graph
 import Data.Map
 import qualified Data.Array as Array

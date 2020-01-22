@@ -1,7 +1,7 @@
-module Closure_Type where
+module Middle.Closure_Type where
 
-import qualified Syntax as Syn
-import qualified Type as Ty
+import qualified Front.Syntax as Syn
+import qualified RunRun.Type as Ty
 
 
 data L = L String deriving (Show, Eq)

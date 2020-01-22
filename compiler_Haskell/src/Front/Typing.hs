@@ -1,13 +1,13 @@
-module Typing where
+module Front.Typing where
 
 import Control.Monad.State
 import Control.Monad.Except
 import Control.Monad.Identity
 import Data.Map as M hiding(map)
 
-import RunRun
-import Syntax
-import qualified Type
+import qualified RunRun.RunRun as R
+import Front.Syntax
+import qualified RunRun.Type as Type
 
 data TypingEnvs = TypingEnvs {
       extenv :: Type.ExtEnv,
@@ -25,28 +25,28 @@ throw = throwError
 
 type TypeM = StateT TypingEnvs (ExceptT TypeError Identity)
 
-typing :: Syntax -> RunRun Syntax
+typing :: Syntax -> R.RunRun Syntax
 typing e = do
 --    eprint e
-    eputstrln "typing ..."
+    R.eputstrln "typing ..."
     r <- get
     let env = TypingEnvs {
-                    Typing.extenv = exttyenv r,
-                    Typing.tyenv = RunRun.tyenv r,
-                    Typing.subst = M.empty,
-                    Typing.tyVarCounter = RunRun.tyVarCounter r
+                    extenv = R.exttyenv r,
+                    tyenv = R.tyenv r,
+                    subst = M.empty,
+                    tyVarCounter = R.tyVarCounter r
                     }
     let e_e' = (runIdentity . runExceptT) (runStateT (typingTM e) env)
 --    eputstrln "typing point1 ..."
 --    eprint e_e'
     case e_e' of
-        Left err -> RunRun.throw (Fail (show err))
+        Left err -> R.throw (R.Fail (show err))
         Right e' -> do
 --            eputstrln "typing point2 ..."
             let s = snd e'
-            put (r { RunRun.tyVarCounter = Typing.tyVarCounter s,
-                RunRun.tyenv = Typing.tyenv s,
-                RunRun.exttyenv = Typing.extenv s})
+            put (r { R.tyVarCounter = tyVarCounter s,
+                R.tyenv = tyenv s,
+                R.exttyenv = extenv s})
 --            eprint =<< get
 --            eprint s
             return $ fst e'
@@ -60,12 +60,12 @@ typingTM e = do
     ext <- getextenv
     -- deref_typ は typem に包んで返してしまう
     ext' <- mapM deref_typ ext
-    get >>= (\f -> put (f { Typing.extenv = ext' }))
+    get >>= (\f -> put (f { extenv = ext' }))
     deref_term e
 
 deref_typ :: Type.Type -> TypeM Type.Type
 deref_typ (Type.Var n) = do
-    mt <- M.lookup n <$> Typing.subst <$> get
+    mt <- M.lookup n <$> subst <$> get
     case mt of
           Nothing -> add_subst n Type.Int >> return Type.Int
           Just t  -> deref_typ t >>= \t' -> add_subst n t' >> return t'
@@ -102,7 +102,7 @@ deref_term e                        = return e
 
 
 occur :: Int -> Type.Type -> TypeM Bool
-occur n t = occur__ n t <$> Typing.subst <$> get
+occur n t = occur__ n t <$> subst <$> get
 
 occur__ :: Int -> Type.Type -> Type.Subst -> Bool
 occur__ n (Type.Var m) ss
@@ -124,11 +124,11 @@ unify__ :: Type.Type -> Type.Type -> Type.Subst -> TypeM ()
 unify__ t1 t2 _
     | t1 == t2 = return ()
 unify__ tt1@(Type.Fun t1s t1) tt2@(Type.Fun t2s t2) _ = do
-   if length t1s /= length t2s then Typing.throw $ UnifyError tt1 tt2 else return ()
+   if length t1s /= length t2s then throw $ UnifyError tt1 tt2 else return ()
    sequence_ $ zipWith unify t1s t2s
    unify t1 t2
 unify__ t1_@(Type.Tuple t1s) t2_@(Type.Tuple t2s) _ = do
-    if length t1s /= length t2s then Typing.throw $ UnifyError t1_ t2_ else return ()
+    if length t1s /= length t2s then throw $ UnifyError t1_ t2_ else return ()
     sequence_ $ zipWith unify t1s t2s
 unify__ (Type.Array t1) (Type.Array t2) _ = unify t1 t2
 unify__ t1 t2 ss
@@ -136,12 +136,12 @@ unify__ t1 t2 ss
     | (Type.Var n) <- t2, Just t <- M.lookup n ss = unify t1 t
     | (Type.Var n) <- t1 = add_type_var n t2
     | (Type.Var n) <- t2 = add_type_var n t1
-    | otherwise = Typing.throw $ UnifyError t1 t2
+    | otherwise = throw $ UnifyError t1 t2
     where
         add_type_var n t = do
             tf <- occur n t
             if not tf then add_subst n t
-            else Typing.throw $ UnifyError (Type.Var n) t
+            else throw $ UnifyError (Type.Var n) t
 
 
 
@@ -153,7 +153,7 @@ unifyM2 tm1 tm2 = (\t1 -> (\t2 -> unify t1 t2) =<< tm2) =<< tm1
 infer :: Syntax -> TypeM Type.Type
 infer e = do
     f <- get
-    infer__ e (Typing.tyenv f) (extenv f)
+    infer__ e (tyenv f) (extenv f)
 
 infer__ :: Syntax -> Type.TyEnv -> Type.ExtEnv -> TypeM Type.Type
 infer__ Unit _ _ = return Type.Unit
@@ -192,9 +192,9 @@ infer__ (Let (x, t) e1 e2) _ _ = do
 infer__ (LetRec (Func {name = (x,t), args = yts, body = e1}) e2) env _ = do
     let nenv = M.insert x t env
     let addmap = M.fromList yts
-    get >>= (\f -> put (f { Typing.tyenv = M.union addmap nenv }))    -- env を変更
+    get >>= (\f -> put (f { tyenv = M.union addmap nenv }))    -- env を変更
     unifyM t (Type.Fun (map snd yts) <$> (infer e1))
-    get >>= (\f -> put (f { Typing.tyenv = nenv }))                   -- nenv に戻す
+    get >>= (\f -> put (f { tyenv = nenv }))                   -- nenv に戻す
     infer e2
 infer__ (App e es) _ _ = do
     t <- Type.Var <$> gentyp
@@ -206,7 +206,7 @@ infer__ (LetTuple xts e1 e2) env _ = do
     let t = Type.Tuple $ map snd xts
     unifyM t (infer e1)
     let nenv = M.union (M.fromList xts) env
-    get >>= (\f -> put (f {Typing.tyenv = nenv}))
+    get >>= (\f -> put (f {tyenv = nenv}))
     infer e2
 infer__ (Array e1 e2) _ _ = do
     unifyM Type.Int (infer e1)
@@ -236,11 +236,11 @@ infer__ (Var x) tenv ext
 
 
 add_tyenv :: String -> Type.Type -> TypeM ()
-add_tyenv n t = get >>= (\f -> put (f { Typing.tyenv  = insert n t (Typing.tyenv  f) }))
+add_tyenv n t = get >>= (\f -> put (f { tyenv  = insert n t (tyenv  f) }))
 add_subst :: Int -> Type.Type -> TypeM ()
-add_subst n t = get >>= (\f -> put (f { Typing.subst  = insert n t (Typing.subst  f) }))
+add_subst n t = get >>= (\f -> put (f { subst  = insert n t (subst  f) }))
 add_ext :: String -> Type.Type -> TypeM ()
-add_ext x t   = get >>= (\f -> put (f { Typing.extenv = insert x t (Typing.extenv f) }))
+add_ext x t   = get >>= (\f -> put (f { extenv = insert x t (extenv f) }))
 
 find_tyenv :: String -> TypeM (Maybe Type.Type)
 find_tyenv x = M.lookup x <$> gettyenv
@@ -252,13 +252,13 @@ find_ext x = M.lookup x <$> getextenv
 gentyp :: TypeM Int
 gentyp = do
     f <- get
-    let c = Typing.tyVarCounter f
-    put $ f { Typing.tyVarCounter = c + 1 }
+    let c = tyVarCounter f
+    put $ f { tyVarCounter = c + 1 }
     return c
 
 gettyenv  :: TypeM Type.TyEnv
-gettyenv  = Typing.tyenv <$> get
+gettyenv  = tyenv <$> get
 getsubst  :: TypeM Type.Subst
-getsubst  = Typing.subst <$> get
+getsubst  = subst <$> get
 getextenv :: TypeM Type.ExtEnv
-getextenv = Typing.extenv <$> get
+getextenv = extenv <$> get

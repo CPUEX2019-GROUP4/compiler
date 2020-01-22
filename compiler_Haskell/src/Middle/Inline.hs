@@ -1,13 +1,13 @@
-module Inline where
+module Middle.Inline where
 
-import KNormal
+import Middle.KNormal
 import Data.Map as M hiding(size)
 import Data.Set as S hiding(size)
 import Control.Monad.State
-import RunRun
-import Type (Type)
-import Alpha (g)
-import Syntax() -- (Compare(..), Arith_binary(..))
+import RunRun.RunRun
+import RunRun.Type (Type)
+import Middle.Alpha as Alpha (g)
+import Front.Syntax() -- (Compare(..), Arith_binary(..))
 
 inline :: K -> RunRun K
 inline e = do

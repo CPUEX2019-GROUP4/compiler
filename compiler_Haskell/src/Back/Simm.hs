@@ -1,9 +1,9 @@
-module Simm where
+module Back.Simm where
 
 import Prelude hiding(exp)
-import RunRun
-import Asm
-import Block (Id_or_imm (..))
+import RunRun.RunRun
+import Back.Asm
+import Back.Block (Id_or_imm (..))
 import Control.Monad.State(get)
 import qualified Data.Map as M
 

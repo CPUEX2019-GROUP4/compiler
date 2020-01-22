@@ -1,4 +1,4 @@
-module Main where
+module RunRun.Main where
 
 import System.Environment (getArgs)
 import System.IO
@@ -8,34 +8,32 @@ import Control.Monad(foldM)
 import Control.Monad.Except()
 import Control.Monad.Identity()
 
-import RunRun
-import Syntax()
-import Type
-import Typing(typing)
-import Lexer
-import Parser
-import KNormal
-import Alpha
-import Closure
-import Closure_Type()
-import Asm()
-import Virtual
-import RegAlloc
--- import Emit
-import Beta
-import Assoc
-import Inline
-import Elim
-import Simm
-import ConstFold
-import Global
-import ConvertGlobal
-import Block()
-import ToBlock
-import BlockPrepare
-import BlockEmit
-import BlockStackSearch
--- import Blocktest(test)
+import RunRun.RunRun
+import RunRun.Type
+
+import Front.Lexer          as Lexer
+import Front.Parser         as Parser
+import qualified Front.Typing as Typing
+
+import Middle.KNormal       as KNormal
+import Middle.Alpha         as Alpha
+import Middle.Beta          as Beta
+import Middle.Inline        as Inline
+import Middle.ConstFold     as ConstFold
+import Middle.Assoc         as Assoc
+import Middle.Elim          as Elim
+import Middle.Global        as Global
+import Middle.ConvertGlobal as ConvertGlobal
+import Middle.Closure       as Closure
+
+import Back.Virtual         as Virtual
+import Back.Simm            as Simm
+import Back.RegAlloc        as RegAlloc
+import Back.ToBlock         as ToBlock
+-- import Back.Block           as Block
+import Back.BlockPrepare    as BlockPrepare
+import Back.BlockStackSearch as BlockStackSearch
+import Back.BlockEmit       as BlockEmit
 
 main :: IO ()
 main = do

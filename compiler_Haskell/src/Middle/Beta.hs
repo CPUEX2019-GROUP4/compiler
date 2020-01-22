@@ -1,7 +1,7 @@
-module Beta where
+module Middle.Beta where
 
-import RunRun
-import KNormal
+import RunRun.RunRun
+import Middle.KNormal
 import Prelude hiding(lookup)
 import Data.Map hiding(map)
 

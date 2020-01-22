@@ -1,7 +1,7 @@
 -- vim : set filetype=Haskell :
 {
 {-# OPTIONS_GHC -w #-}
-module Lexer where
+module Front.Lexer where
 
 import Prelude hiding (EQ, LT, GT)
 import Data.Char (isDigit)

@@ -1,9 +1,9 @@
-module Alpha where
+module Middle.Alpha where
 
 import Data.Map as M hiding(map)
 import Control.Monad.State()
-import RunRun
-import KNormal
+import RunRun.RunRun
+import Middle.KNormal
 
 find_a :: Ord k => k -> Map k k -> k
 find_a x env
