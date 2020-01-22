@@ -273,7 +273,7 @@ print_seq_array oc t x (C n) v = do
 
 emit :: Handle -> M.Map String FunctionData -> RunRun ()
 emit oc functions = do
-    eputstrln "emit ..."
+    eputstrln "blockemit ..."
     --eprint e
     -- eprint functions
     eputstrln "assembly"

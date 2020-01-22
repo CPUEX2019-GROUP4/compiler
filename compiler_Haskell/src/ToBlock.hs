@@ -69,7 +69,7 @@ toBlock (A.Aprog fs main) = do
     let (((func, _), headblockmap):xs) = blockmap $ f
     let newmap = ((func, list), headblockmap) : xs
     (\a -> put $ a {blockmap = newmap}) =<< get
-    eprint main
+    -- eprint main
     -- mapM_ eprint fs
     mapM_ convertFundef fs
     return ()

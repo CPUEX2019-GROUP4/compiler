@@ -149,15 +149,15 @@ g env (C.Put x y z)
 g _ (C.Malloc t n p (C.A x))
         | Type.Array Type.Unit  <- t = return $ Ans Nop
         | Type.Array Type.Float <- t = do
-                liftIO $ putStrLn $ "malloc" ++ x
-                liftIO $ print t
+                -- liftIO $ putStrLn $ "malloc" ++ x
+                -- liftIO $ print t
                 addr_ <- genid "ap"
                 store <- (store_same_value n
                             (\offset -> Sf x addr_ (C (offset * 4))) (Ans (Li p)))
                 return $ Let (addr_,t) (Li p) store
         | otherwise = do
-                liftIO $ putStrLn $ "malloc" ++ x
-                liftIO $ print t
+                -- liftIO $ putStrLn $ "malloc" ++ x
+                -- liftIO $ print t
                 addr_ <- genid "ap"
                 store <- (store_same_value n
                             (\offset -> Sw x addr_ (C (offset * 4))) (Ans (Li p)))

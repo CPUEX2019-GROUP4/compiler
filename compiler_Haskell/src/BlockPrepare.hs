@@ -10,6 +10,7 @@ import Type ()
 
 prepare :: RunRun (Map String FunctionData)
 prepare = do
+    eputstrln "blockprepare ..."
     blockmaplist <- blockmap <$> get
     -- let newmap = mapWithKey (\(func, ys, zs, t) a ->
     --         FunctionData {blocks = a,

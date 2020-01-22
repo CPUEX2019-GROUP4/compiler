@@ -9,7 +9,8 @@ import RunRun
 
 
 blockStackSearch :: Map String FunctionData -> RunRun (Map String FunctionData)
-blockStackSearch m =
+blockStackSearch m = do
+    eputstrln "blockStackSearch ... "
     return $ M.map mkFuncStack m
 
 
