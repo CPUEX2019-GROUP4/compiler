@@ -70,7 +70,7 @@ toBlock (A.Aprog fs main) = do
     let newmap = ((func, list), headblockmap) : xs
     (\a -> put $ a {blockmap = newmap}) =<< get
     eprint main
-    mapM_ eprint fs
+    -- mapM_ eprint fs
     mapM_ convertFundef fs
     return ()
 
@@ -79,8 +79,8 @@ toBlock (A.Aprog fs main) = do
 convertFundef :: A.Afundef -> RunRun ()
 convertFundef (A.Afundef {A.a_name = (L name), A.a_args = ys, A.a_fargs = zs, A.a_body = e, A.a_ret = t}) = do
     b <- newblock ()
-    eputstrln "block id ="
-    eprint b
+    -- eputstrln "block id ="
+    -- eprint b
     ans <- case t of
                 Float -> return (fregs Array.! 0)
                 Unit  -> gentmp Type.Unit

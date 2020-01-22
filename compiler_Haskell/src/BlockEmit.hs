@@ -152,7 +152,7 @@ print_block oc b (Block {blockInst = seq, blockTailExp = tail, blockBranch = bra
     | otherwise = throw $ Fail (show tail ++ show branch)
     where
       instructions = do
-        eprint pp
+        -- eprint pp
         (\a -> put (a {stackset = bs})) =<< get
         liftIO $ hPutStr oc $ printf "%s:\n" ("block_" ++ (show b))
         mapM_ (print_seq oc) seq
@@ -275,7 +275,7 @@ emit :: Handle -> M.Map String FunctionData -> RunRun ()
 emit oc functions = do
     eputstrln "emit ..."
     --eprint e
-    eprint functions
+    -- eprint functions
     eputstrln "assembly"
     stack <- sp <$> get
     heap  <- hp <$> get

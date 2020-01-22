@@ -9,7 +9,7 @@ import qualified Data.Map as M
 
 simm :: Aprog -> RunRun Aprog
 simm (Aprog fundefs e) = do
-    eprint e
+    -- eprint e
     eputstrln "simm ..."
     global <- (M.map addr . globals) <$> get
     return $ Aprog (map (function_simm global) fundefs) (s_body (M.empty) e)

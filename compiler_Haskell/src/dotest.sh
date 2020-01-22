@@ -5,7 +5,9 @@ fi
 
 make test/$1.s
 
-cp test/$1.s ../../simulator/simulator/sim/
+sed -e ':a' -e 'N' -e '$!ba' -e 's/    j block_\([0-9]*\)\nblock_\1:/block_\1:/g' test/$1.s > test/$1_sed.s
+
+cp test/$1_sed.s ../../simulator/simulator/sim/$1.s
 cd ../../simulator/simulator/sim
 ./test.sh $1.s input.bin $2
 mv out.txt ../../../compiler_Haskell/src/test/$1.sim
