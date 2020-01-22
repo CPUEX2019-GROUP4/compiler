@@ -18,8 +18,6 @@ import qualified Back.Asm as A
 
 
 
-
-
 -- b :: Int
 -- sequence :: Seq
 -- dest = (dest_x,dest_t)
@@ -130,58 +128,78 @@ convert b seq xt branch instruction
           return $ b : l1 ++ l2
 convert b seq xt branch (A.Ans exp) = do
     let blockexp = case exp of
-          A.Nop -> Nop
-          A.FLi f -> FLi f
-          A.Li i -> Li i
-          A.SetL l -> SetL l
-          A.Mv x -> Mv x
-          A.Out n x -> Out n x
-          A.In t -> In t
-          A.Unary_op op t1 t2 x -> Unary_op op t1 t2 x
-          A.Arith1 op x -> Arith1 op x
-          A.Arith2 op x y -> Arith2 op  x y
-          A.Float1 op x -> Float1 op x
-          A.Float2 op x y -> Float2 op x y
-          A.Slw x y' -> Slw x y'
-          A.Lw x y' -> Lw x y'
-          A.Sw x y z' -> Sw x y z'
-          A.FMv x -> FMv x
-          A.Cmp cmp x y' -> Cmp cmp x y'
-          A.Lf x y' -> Lf x y'
-          A.Sf x y z' -> Sf x y z'
-          A.CallDir l xs ys -> CallDir l xs ys
-          A.Save x y -> Save x y
-          A.Restore x -> Restore x
-          A.Makearray t x' y -> Makearray t x' y
-          _ -> Nop -- shoud be error
+          A.Nop                 -> Inst Nop [] []
+          A.FLi f               -> Inst (FLi f) [] []
+          A.Li i                -> Inst (Li i) [] []
+          A.SetL l              -> Inst (SetL l) [] []
+          A.Mv x                -> Inst Mv [x] []
+          A.Out n x             -> Inst (Out n) [x] []
+          A.In t                -> Inst (In t) [] []
+          -- A.Unary_op op t1 t2 x -> Inst (Unary_op op t1 t2) [x
+          A.Arith1 op x         -> Inst (Arith1 op) [x] []
+          A.Arith2 op x (A.V y) -> Inst (Arith2 op V) [x,y] []
+          A.Arith2 op x (A.C y) -> Inst (Arith2 op (C y)) [x] []
+          A.Float1 op x         -> Inst (Float1 op) [] [x]
+          A.Float2 op x y       -> Inst (Float2 op) [] [x,y]
+          A.Slw x (A.V y)       -> Inst (Slw V) [x,y] []
+          A.Slw x (A.C y)       -> Inst (Slw (C y)) [x] []
+          A.Lw x (A.V y)        -> Inst (Lw V) [x,y] []
+          A.Lw x (A.C y)        -> Inst (Lw (C y)) [x] []
+          A.Sw x y (A.V z)      -> Inst (Sw V) [x,y,z] []
+          A.Sw x y (A.C z)      -> Inst (Sw (C z)) [x,y] []
+          A.FMv x               -> Inst FMv [] [x]
+          A.Cmp cmp x (A.V y)   -> Inst (Cmp cmp V) [x, y] []
+          A.Cmp cmp x (A.C y)   -> Inst (Cmp cmp (C y)) [x] []
+          A.Lf x (A.V y)        -> Inst (Lf V) [x, y] []
+          A.Lf x (A.C y)        -> Inst (Lf (C y)) [x] []
+          A.Sf x y (A.V z)      -> Inst (Sf V) [y, z] [x]
+          A.Sf x y (A.C z)      -> Inst (Sf (C z)) [y] [x]
+          A.CallDir l xs ys     -> Inst (CallDir l) xs ys
+          -- A.Save x y            -> Inst (Save y) [y] []
+          A.Restore x           -> Inst (Restore x) [] []
+          -- A.Makearray t (A.V x) y -> Inst (Makearray t V) [x,y] []
+          -- A.Makearray t (A.C x) y -> Inst (Makearray t (C x)) [y] []
+          -- _ -> Nop -- shoud be error
+          -- コメントアウト部分は、ちゃんと型を見て判断しなければならない
+          -- !!!!!!!!!!!!
     define_block b (seq |> (xt, blockexp)) End branch
     return [b]
 convert b seq yt branch (A.Let xt exp e) =
     let blockexp = case exp of
-          A.Nop -> Nop
-          A.FLi f -> FLi f
-          A.Li f -> Li f
-          A.SetL l -> SetL l
-          A.Mv x -> Mv x
-          A.Out n x -> Out n x
-          A.In t -> In t
-          A.Unary_op op t1 t2 x -> Unary_op op t1 t2 x
-          A.Arith1 op x -> Arith1 op x
-          A.Arith2 op x y -> Arith2 op  x y
-          A.Float1 op x -> Float1 op x
-          A.Float2 op x y -> Float2 op x y
-          A.Slw x y' -> Slw x y'
-          A.Lw x y' -> Lw x y'
-          A.Sw x y z' -> Sw x y z'
-          A.FMv x -> FMv x
-          A.Cmp cmp x y' -> Cmp cmp x y'
-          A.Lf x y' -> Lf x y'
-          A.Sf x y z' -> Sf x y z'
-          A.CallDir l xs ys -> CallDir l xs ys
-          A.Save x y -> Save x y
-          A.Restore x -> Restore x
-          A.Makearray t x' y -> Makearray t x' y
-          _ -> Nop -- shoud be error
+          A.Nop                 -> Inst Nop [] []
+          A.FLi f               -> Inst (FLi f) [] []
+          A.Li i                -> Inst (Li i) [] []
+          A.SetL l              -> Inst (SetL l) [] []
+          A.Mv x                -> Inst Mv [x] []
+          A.Out n x             -> Inst (Out n) [x] []
+          A.In t                -> Inst (In t) [] []
+          -- A.Unary_op op t1 t2 x -> Inst (Unary_op op t1 t2) [x
+          A.Arith1 op x         -> Inst (Arith1 op) [x] []
+          A.Arith2 op x (A.V y) -> Inst (Arith2 op V) [x,y] []
+          A.Arith2 op x (A.C y) -> Inst (Arith2 op (C y)) [x] []
+          A.Float1 op x         -> Inst (Float1 op) [] [x]
+          A.Float2 op x y       -> Inst (Float2 op) [] [x,y]
+          A.Slw x (A.V y)       -> Inst (Slw V) [x,y] []
+          A.Slw x (A.C y)       -> Inst (Slw (C y)) [x] []
+          A.Lw x (A.V y)        -> Inst (Lw V) [x,y] []
+          A.Lw x (A.C y)        -> Inst (Lw (C y)) [x] []
+          A.Sw x y (A.V z)      -> Inst (Sw V) [x,y,z] []
+          A.Sw x y (A.C z)      -> Inst (Sw (C z)) [x,y] []
+          A.FMv x               -> Inst FMv [] [x]
+          A.Cmp cmp x (A.V y)   -> Inst (Cmp cmp V) [x, y] []
+          A.Cmp cmp x (A.C y)   -> Inst (Cmp cmp (C y)) [x] []
+          A.Lf x (A.V y)        -> Inst (Lf V) [x, y] []
+          A.Lf x (A.C y)        -> Inst (Lf (C y)) [x] []
+          A.Sf x y (A.V z)      -> Inst (Sf V) [y, z] [x]
+          A.Sf x y (A.C z)      -> Inst (Sf (C z)) [y] [x]
+          A.CallDir l xs ys     -> Inst (CallDir l) xs ys
+          -- A.Save x y            -> Inst (Save y) [y] []
+          A.Restore x           -> Inst (Restore x) [] []
+          -- A.Makearray t (A.V x) y -> Inst (Makearray t V) [x,y] []
+          -- A.Makearray t (A.C x) y -> Inst (Makearray t (C x)) [y] []
+          -- _ -> Nop -- shoud be error
+          -- コメントアウト部分は、ちゃんと型を見て判断しなければならない
+          -- !!!!!!!!!!!!
     in
     convert b (seq |> (xt, blockexp)) yt branch e
 -- convert (A.If x e1 e2) =

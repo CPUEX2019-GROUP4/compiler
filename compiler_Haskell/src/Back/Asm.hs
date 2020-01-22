@@ -9,12 +9,12 @@ import RunRun.RunRun
 import RunRun.Type
 import Front.Syntax (Arith_binary(..), Arith_unary(..), Float_binary(..), Float_unary(..), Unary_operator(..), Compare(..))
 import Middle.Closure_Type (L(..))
-import Back.Block (Id_or_imm (..))
+-- import Back.Block (Id_or_imm (..))
 
--- data Id_or_imm = V String | C Int deriving(Eq)
--- instance Show Id_or_imm where
---     show (V s) = s
---     show (C n) = "(" ++ show n ++ ")"
+data Id_or_imm = V String | C Int deriving(Eq)
+instance Show Id_or_imm where
+    show (V s) = s
+    show (C n) = "(" ++ show n ++ ")"
 
 data T = Ans !Exp | Let !(String, Type) Exp T deriving(Eq)
 --type Inst = Seq !((String, Type), Exp)

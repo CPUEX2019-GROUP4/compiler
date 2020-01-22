@@ -159,7 +159,7 @@ print_block oc b (Block {blockInst = seq, blockTailExp = tail, blockBranch = bra
 
 
 print_seq :: Handle -> ((String, Type), Inst) -> RunRun ()
-print_seq oc e@((x,_),exp)
+print_seq oc e@((x,_), Inst exp ys zs)
     | FLi f     <- exp = do
             n <- liftIO $ getlo f
             m <- liftIO $ gethi f
@@ -171,7 +171,7 @@ print_seq oc e@((x,_),exp)
             else
                 return ()
     | In t1 <- exp, t1 /= Int, t1 /= Float = throw $ Fail "input is only available for int and float."
-    | Save _ _  <- exp = print_seq_save oc e =<< (stackset <$> get)
+    | Save _  <- exp = print_seq_save oc e =<< (stackset <$> get)
     | Restore y <- exp, elem x allregs = do
             ofset <- offset y
             liftIO $ hPutStr oc $ printf "    lw %s %s %d\n" (reg x) (reg reg_sp) ofset
@@ -179,9 +179,9 @@ print_seq oc e@((x,_),exp)
             ofset <- offset y
             liftIO $ hPutStr oc $ printf "    lwcZ %s %s %d\n" (reg x) (reg reg_sp) ofset
     | Restore _ <- exp = throw $ Fail "my god ..."
-    | Makearray t' n' v <- exp =
-            print_seq_array oc t' x n' v
-    | CallDir (L func) ys zs <- exp = do
+    | Makearray t' n' <- exp =
+            print_seq_array oc t' x n' ys zs
+    | CallDir (L func) <- exp = do
             mv_args oc [] ys zs
             ss <- stacksize
             liftIO $ hPutStr oc $ printf "    sw %s %s %d\n"    (reg reg_lr) (reg reg_sp) (ss - 4)
@@ -199,11 +199,15 @@ print_seq oc e@((x,_),exp)
 
 
 print_seq_save :: Handle -> ((String, Type), Inst) -> Set String -> RunRun ()
-print_seq_save oc ((_, _), Save x y) stset
+print_seq_save oc ((_, _), Inst (Save y) [x] []) stset
     | elem x allregs, tf    = do
             save y
             ofset <- offset y
             liftIO $ hPutStr oc $ printf "    sw %s %s %d\n" (reg x) (reg reg_sp) ofset
+    | not tf                = return ()
+    where
+        tf = notMember y stset
+print_seq_save oc ((_, _), Inst (Save y) [] [x]) stset
     | elem x allfregs, tf   = do
             save y
             ofset <- offset y
@@ -218,7 +222,8 @@ print_seq_save oc ((_, _), Save x y) stset
     --         ofset <- offset y
     --         liftIO $ hPutStr oc $ printf "    swcZ %s %s %d\n" (reg x) (reg reg_sp) ofset
     | not tf                = return ()
-    | otherwise             = throw $ Fail "maji!?"
+-- print_seq_save oc ((_, _), Inst (Save y) [] [x]) stset
+--     | otherwise             = throw $ Fail "maji!?"
     where
         tf = notMember y stset
 print_seq_save _ _ _ = throw $ Fail "e?"
@@ -239,9 +244,15 @@ mv_args oc x_reg_cl ys zs = do
             (shuffle reg_fsw zrs)
 
 
-print_seq_array :: Handle -> Type -> String -> Id_or_imm -> String -> RunRun ()
-print_seq_array oc t x (V "%r0") v = print_seq_array oc t x (C 0) v
-print_seq_array oc t x (V n) v = do
+print_seq_array :: Handle -> Type -> String -> Id_or_imm -> [String] -> [String] -> RunRun ()
+print_seq_array oc t x V ["%r0", v] [] = print_seq_array oc t x (C 0) [v] []
+print_seq_array oc t x V ["%r0"] [v] = print_seq_array oc t x (C 0) [] [v]
+print_seq_array oc t x V ys zs =
+    let (n,v) = case (ys, zs) of
+              ([n',v'],[]) -> (n', v')
+              ([n'], [v']) -> (n', v')
+              _ -> ("error","error") in
+    do
             loop <- genid "arrayloop"
             exit <- genid "arrayexit"
             liftIO $ hPutStr oc $ printf "    beq r0 %s %s\n"   (reg n) exit
@@ -258,7 +269,11 @@ print_seq_array oc t x (V n) v = do
             liftIO $ hPutStr oc $ printf "    mv %s %s\n"       (reg x) (reg reg_hp)
             liftIO $ hPutStr oc $ printf "    add %s %s %s\n"   (reg reg_hp) (reg reg_hp) (reg reg_tmp)
             liftIO $ hPutStr oc $ printf "%s:\n"                exit
-print_seq_array oc t x (C n) v = do
+print_seq_array oc t x (C n) ys zs
+    | [v] <- ys = f v
+    | [v] <- zs = f v
+    | otherwise = throw $ Fail "hyoeee"
+    where f v = do
             forM_ [0..(n-1)] $ \ofset ->
                     case t of
                             Float -> liftIO $ hPutStr oc $

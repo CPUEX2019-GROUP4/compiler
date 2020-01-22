@@ -11,7 +11,7 @@ import Middle.Closure (fv)
 import RunRun.Type as Type
 import RunRun.RunRun
 import Front.Syntax (Arith_binary(..))
-import Back.Block (Id_or_imm (..))
+-- import Back.Block (Id_or_imm (..))
 
 mapinit :: M.Map String Type
 mapinit = M.singleton "%r0" Type.Int

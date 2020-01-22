@@ -13,7 +13,7 @@ import Middle.Closure_Type (L(L))
 import Back.Asm as Asm
 import RunRun.Type as Type
 import RunRun.RunRun
-import Back.Block (Id_or_imm (..))
+-- import Back.Block (Id_or_imm (..))
 
 -- 関数の返り値や引数をできるだけ第一レジスタに.
 target' :: String -> (String, Type) -> Exp -> RunRun (Bool, [String])

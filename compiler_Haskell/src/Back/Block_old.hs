@@ -24,69 +24,38 @@ import Data.Bits as B
 --     show (V s) = s
 --     show (C n) = "(" ++ show n ++ ")"
 
-data Id_or_imm = V | C Int deriving(Eq)
+data Id_or_imm = V String | C Int deriving(Eq)
 instance Show Id_or_imm where
-    show V = ""
+    show (V s) = s
     show (C n) = "(" ++ show n ++ ")"
 
-data InstHead =
+data Inst =
     Nop
   | Li !Int
   | FLi !Float
   | SetL !L
-  | Mv
-  | Out !Int
+  | Mv !String
+  | Out !Int !String
   | In !Type
-  | Unary_op !Unary_operator !Type !Type
-  | Arith1 !Arith_unary
-  | Arith2 !Arith_binary !Id_or_imm
-  | Float1 !Float_unary
-  | Float2 !Float_binary
-  | Slw !Id_or_imm
-  | Lw !Id_or_imm
-  | Sw !Id_or_imm
-  | FMv
-  | Cmp !Compare !Id_or_imm
-  | Lf !Id_or_imm
-  | Sf !Id_or_imm
-  | CallDir !L
-  | Save !String
+  | Unary_op !Unary_operator !Type !Type !String
+  | Arith1 !Arith_unary  !String
+  | Arith2 !Arith_binary !String !Id_or_imm
+  | Float1 !Float_unary !String
+  | Float2 !Float_binary !String !String
+  | Slw !String !Id_or_imm
+  | Lw !String !Id_or_imm
+  | Sw !String !String !Id_or_imm
+  | FMv !String
+  | Cmp !Compare !String !Id_or_imm
+  -- | If !String !T !T
+  -- | IfCmp !Compare !String !String !T !T
+  -- | FIfCmp !Compare !String !String !T !T
+  | Lf !String !Id_or_imm
+  | Sf !String !String !Id_or_imm
+  | CallDir !L ![String] ![String]
+  | Save !String !String
   | Restore !String
-  | Makearray !Type !Id_or_imm
-  deriving(Eq, Show)
-
-
--- data Inst =
---     Nop
---   | Li !Int
---   | FLi !Float
---   | SetL !L
---   | Mv !String
---   | Out !Int !String
---   | In !Type
---   | Unary_op !Unary_operator !Type !Type !String
---   | Arith1 !Arith_unary  !String
---   | Arith2 !Arith_binary !String !Id_or_imm
---   | Float1 !Float_unary !String
---   | Float2 !Float_binary !String !String
---   | Slw !String !Id_or_imm
---   | Lw !String !Id_or_imm
---   | Sw !String !String !Id_or_imm
---   | FMv !String
---   | Cmp !Compare !String !Id_or_imm
---   -- | If !String !T !T
---   -- | IfCmp !Compare !String !String !T !T
---   -- | FIfCmp !Compare !String !String !T !T
---   | Lf !String !Id_or_imm
---   | Sf !String !String !Id_or_imm
---   | CallDir !L ![String] ![String]
---   | Save !String !String
---   | Restore !String
---   | Makearray !Type !Id_or_imm !String
---   deriving(Eq, Show)
-
-data Inst =
-    Inst InstHead ![String] ![String]
+  | Makearray !Type !Id_or_imm !String
   deriving(Eq, Show)
 
 
@@ -143,7 +112,7 @@ data FunctionData = FunctionData {
 
 
 printinstruction :: ((String, Type), Inst) -> String
-printinstruction ((x,t), Inst e ys zs)
+printinstruction ((x,t),e)
     | Nop               <- e = ""
             -- printf "    nop\n"
     | Li i      <- e, -32768 <= i, i < 32768 =
@@ -161,97 +130,91 @@ printinstruction ((x,t), Inst e ys zs)
     | SetL (L label)    <- e =
             (printf "    lui %s ha(%s)\n" x label) ++
             (printf "    ori %s %s lo16(%s)\n" x x label)
-    | Mv <- e, [y] <- ys, x == y = ""
-    | Mv <- e, [y] <- ys =
+    | Mv y              <- e, x == y = ""
+    | Mv y              <- e =
             printf "    mv %s %s\n" (reg x) (reg y)
-    | Out n <- e, [y] <- ys =
+    | Out n y           <- e =
             printf "    out %s %d\n" (reg y) n
-    | In (Type.Int) <- e =
+    | In (Type.Int)     <- e =
             printf "    inint %s\n" (reg x)
-    | In (Type.Float) <- e =
+    | In (Type.Float)   <- e =
             printf "    inflt %s\n" (reg x)
-    | In _ <- e =
+    | In _              <- e =
             printf "    error : input %s\n" (show t)
-    -- | Unary_op op _ _ <- e, [y] <- ys =
-    --         printf "    %s %s %s\n" ((map toLower . show) op) (reg x) (reg y)
-    | Arith1 Neg <- e, [y] <- ys =
+    | Unary_op op _ _ y <- e =
+            printf "    %s %s %s\n" ((map toLower . show) op) (reg x) (reg y)
+    | Arith1 Neg y      <- e =
             printf "    sub %s r0 %s\n" (reg x) (reg y)
-    | Arith1 Mul4 <- e, [y] <- ys =
+    | Arith1 Mul4 y     <- e =
             printf "    sll %s %s 2\n" (reg x) (reg y)
-    | Arith1 Mul10 <- e, [y] <- ys =
+    | Arith1 Mul10 y    <- e =
             (printf "    sll %s %s 3\n" (reg reg_tmp) (reg y)) ++
             (printf "    add %s %s %s\n" (reg reg_tmp) (reg reg_tmp) (reg y)) ++
             (printf "    add %s %s %s\n" (reg x) (reg reg_tmp) (reg y))
-    | Arith1 Div2 <- e, [y] <- ys =
+    | Arith1 Div2 y     <- e =
             printf "    div2 %s %s\n" (reg x) (reg y)
-    | Arith1 Div10 <- e, [y] <- ys =
+    | Arith1 Div10 y    <- e =
             printf "    div10 %s %s\n" (reg x) (reg y)
-    | Arith2 arith V <- e, [y,z] <- ys =
+    | Arith2 arith y (V z) <- e =
             printf "    %s %s %s %s\n" ((map toLower . show) arith) (reg x) (reg y) (reg z)
-    | Arith2 Add (C z) <- e, [y] <- ys =
+    | Arith2 Add y (C z) <- e =
             printf "    addi %s %s %d\n" (reg x) (reg y) z
-    | Arith2 Sub (C z) <- e, [y] <- ys =
+    | Arith2 Sub y (C z) <- e =
             printf "    subi %s %s %d\n" (reg x) (reg y) z
-    | Float1 arith <- e, [y] <- zs =
+    | Float1 arith y    <- e =
             printf "    %s %s %s\n" ((map toLower . show) arith) (reg x) (reg y)
-    | Float2 arith <- e, [y,z] <- zs =
+    | Float2 arith y z  <- e =
             printf "    %s %s %s %s\n" ((map toLower . show) arith) (reg x) (reg y) (reg z)
-    | Slw V <- e, [y,z] <- ys =
+    | Slw y (V z)       <- e =
             printf "    sllv %s %s %s\n" (reg x) (reg y) (reg z)
-    | Slw (C z) <- e, [y] <- ys =
+    | Slw y (C z)       <- e =
             printf "    sll %s %s %d\n" (reg x) (reg y) z
-    | Lw V <- e, [y,z] <- ys =
+    | Lw y (V z)        <- e =
             printf "    lwab %s %s %s\n" (reg x) (reg y) (reg z)
-    | Lw (C z) <- e, [y] <- ys =
+    | Lw y (C z)        <- e =
             printf "    lw %s %s %d\n" (reg x) (reg y) z
-    | Sw V <- e, [a,y,z] <- ys =
+    | Sw a y (V z)      <- e =
             printf "    swab %s %s %s\n" (reg a) (reg y) (reg z)
-    | Sw (C z) <- e, [a, y] <- ys =
+    | Sw a y (C z)      <- e =
             printf "    sw %s %s %d\n" (reg a) (reg y) z
-    | FMv <- e, [y] <- zs, x == y = ""
-    | FMv <- e, [y] <- zs =
+    | FMv y      <- e, x == y = ""
+    | FMv y      <- e =
             printf "    fmv %s %s\n" (reg x) (reg y)
-    | Cmp Syntax.Eq V <- e, [y,z] <- ys =
+    | Cmp Syntax.Eq y (V z) <- e =
             printf "    seq %s %s %s\n" (reg x) (reg y) (reg z)
-    | Cmp Syntax.Eq (C z) <- e, [y] <- ys =
+    | Cmp Syntax.Eq y (C z) <- e =
            (printf "    ori %s %d\n"     (reg reg_tmp) z) ++
            (printf "    seq %s %s %s\n" (reg x) (reg y) (reg reg_tmp))
-    | Cmp Syntax.Ne V <- e, [y,z] <- ys =
+    | Cmp Syntax.Ne y (V z) <- e =
             printf "    sub %s %s %s\n" (reg x) (reg y) (reg z)
-    | Cmp Syntax.Ne (C z) <- e, [y] <- ys =
+    | Cmp Syntax.Ne y (C z) <- e =
             printf "    subi %s %s %d\n" (reg x) (reg y) z
-    | Cmp Syntax.Lt V <- e, [y,z] <- ys =
+    | Cmp Syntax.Lt y (V z) <- e =
             printf "    slt %s %s %s\n" (reg x) (reg y) (reg z)
-    | Cmp Syntax.Lt (C z) <- e, [y] <- ys =
+    | Cmp Syntax.Lt y (C z) <- e =
             printf "    slti %s %s %d\n" (reg x) (reg y) z
-    | Cmp Syntax.Gt V <- e, [y,z] <- ys =
+    | Cmp Syntax.Gt y (V z) <- e =
             printf "    slt %s %s %s\n" (reg x) (reg z) (reg y)
-    | Cmp Syntax.Gt (C z) <- e, [y] <- ys =
+    | Cmp Syntax.Gt y (C z) <- e =
            (printf "    ori %s r0 %d\n" (reg reg_tmp) z) ++
            (printf "    slt %s %s %s\n" (reg x) (reg reg_tmp) (reg y))
-    | Lf V <- e, [y,z] <- ys =
+    | Lf y (V z) <- e =
             printf "    flwab %s %s %s\n" (reg x) (reg y) (reg z)
-    | Lf (C z) <- e, [y] <- ys =
+    | Lf y (C z) <- e =
             printf "    lwcZ %s %s %d\n" (reg x) (reg y) z
-    | Sf V <- e, [y,z] <- ys, [a] <- zs =
+    | Sf a y (V z) <- e =
             printf "    fswab %s %s %s\n" (reg a) (reg y) (reg z)
-    | Sf (C z) <- e, [y] <- ys, [a] <- zs =
+    | Sf a y (C z) <- e =
             printf "    swcZ %s %s %d\n" (reg a) (reg y) z
-    | Save z <- e, [y] <- ys =
-            printf "    save %s (=%s) to the stack.\n" (reg y) (reg z)
-    | Save z <- e, [y] <- zs =
+    | Save y z <- e =
             printf "    save %s (=%s) to the stack.\n" (reg y) (reg z)
     | Restore y <- e =
             printf "    %s = restore %s from the stack.\n" (reg x) (reg y)
-    | Makearray Type.Float (C n) <- e, [v] <- zs =
+    | Makearray _ (C n) v <- e =
             printf "    makearray %d %s\n" n (reg v)
-    | Makearray _ (C n) <- e, [v] <- ys =
-            printf "    makearray %d %s\n" n (reg v)
-    | Makearray Type.Float V <- e, [n] <- ys, [v] <- zs =
+    | Makearray _ (V n) v <- e =
             printf "    makearray %s %s\n" (reg n) (reg v)
-    | Makearray _ V <- e, [n, v] <- ys =
-            printf "    makearray %s %s\n" (reg n) (reg v)
-    | CallDir (L s) <- e =
+    | CallDir (L s) ys zs <- e=
             (printf "    call %s\n" s) ++
             (printf "      ys = %s\n" (show ys)) ++
             (printf "      zs = %s\n" (show zs))
