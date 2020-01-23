@@ -172,8 +172,10 @@ printinstruction ((x,t), Inst e ys zs)
             printf "    inflt %s\n" (reg x)
     | In _ <- e =
             printf "    error : input %s\n" (show t)
-    -- | Unary_op op _ _ <- e, [y] <- ys =
-    --         printf "    %s %s %s\n" ((map toLower . show) op) (reg x) (reg y)
+    | Unary_op op _ _ <- e, [y] <- ys =
+            printf "    %s %s %s\n" ((map toLower . show) op) (reg x) (reg y)
+    | Unary_op op _ _ <- e, [y] <- zs =
+            printf "    %s %s %s\n" ((map toLower . show) op) (reg x) (reg y)
     | Arith1 Neg <- e, [y] <- ys =
             printf "    sub %s r0 %s\n" (reg x) (reg y)
     | Arith1 Mul4 <- e, [y] <- ys =
@@ -237,9 +239,9 @@ printinstruction ((x,t), Inst e ys zs)
             printf "    fswab %s %s %s\n" (reg a) (reg y) (reg z)
     | Sf (C z) <- e, [y] <- ys, [a] <- zs =
             printf "    swcZ %s %s %d\n" (reg a) (reg y) z
-    | Save z <- e, [y] <- ys =
+    | Save y <- e, [z] <- ys =
             printf "    save %s (=%s) to the stack.\n" (reg y) (reg z)
-    | Save z <- e, [y] <- zs =
+    | Save y <- e, [z] <- zs =
             printf "    save %s (=%s) to the stack.\n" (reg y) (reg z)
     | Restore y <- e =
             printf "    %s = restore %s from the stack.\n" (reg x) (reg y)
@@ -255,6 +257,7 @@ printinstruction ((x,t), Inst e ys zs)
             (printf "    call %s\n" s) ++
             (printf "      ys = %s\n" (show ys)) ++
             (printf "      zs = %s\n" (show zs))
+    | otherwise = show e ++ show ys ++ show zs
 
 
 

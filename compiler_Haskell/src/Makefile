@@ -1,7 +1,7 @@
 RESULT = Main
 
 # Main: float.o Type.hs Syntax.hs Lexer.x Parser.y Closure_Type.hs RunRun.hs Asm.hs Lexer.hs Parser.hs Typing.hs KNormal.hs Alpha.hs Beta.hs Assoc.hs Inline.hs ConstFold.hs Elim.hs Global.hs ConvertGlobal.hs Closure.hs Virtual.hs RegAlloc.hs Simm.hs Emit.hs Main.hs Block.hs ToBlock.hs BlockEmit.hs BlockGraph.hs BlockStackSearch.hs
-Main: Front/*.hs Middle/*.hs Back/*.hs Back/float.o
+Main: Front/*.hs Middle/*.hs Back/*.hs Back/float.o Front/Parser.hs Front/Lexer.hs
 	ghc Main.hs Back/float.o -Wall -fmax-pmcheck-iterations=100000 -o Main
 
 Back/float.o: Back/float.c

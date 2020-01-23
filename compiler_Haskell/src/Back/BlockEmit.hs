@@ -46,6 +46,7 @@ stackadd x = do
 save :: String -> RunRun ()
 save x = do
     stackadd x
+    -- eprint x
     -- smap <- stackmap <$> get
     -- if notElem x $ smap then
     --     stackmap_append x
@@ -205,6 +206,15 @@ print_seq_save oc ((_, _), Inst (Save y) [x] []) stset
             ofset <- offset y
             liftIO $ hPutStr oc $ printf "    sw %s %s %d\n" (reg x) (reg reg_sp) ofset
     | elem x allfregs = throw $ Fail "so-nansu"
+    -- iranai hazu
+    | elem x allregs    = do
+            save y
+            ofset <- offset y
+            liftIO $ hPutStr oc $ printf "    sw %s %s %d\n" (reg x) (reg reg_sp) ofset
+    | elem x allfregs   = do
+            save y
+            ofset <- offset y
+            liftIO $ hPutStr oc $ printf "    swcZ %s %s %d\n" (reg x) (reg reg_sp) ofset
     | not tf                = return ()
     where
         tf = notMember y stset
@@ -215,14 +225,14 @@ print_seq_save oc ((_, _), Inst (Save y) [] [x]) stset
             liftIO $ hPutStr oc $ printf "    swcZ %s %s %d\n" (reg x) (reg reg_sp) ofset
     | elem x allregs = throw $ Fail "so-nano"
     -- iranai hazu
-    -- | elem x allregs    = do
-    --         save y
-    --         ofset <- offset y
-    --         liftIO $ hPutStr oc $ printf "    sw %s %s %d\n" (reg x) (reg reg_sp) ofset
-    -- | elem x allfregs   = do
-    --         save y
-    --         ofset <- offset y
-    --         liftIO $ hPutStr oc $ printf "    swcZ %s %s %d\n" (reg x) (reg reg_sp) ofset
+    | elem x allregs    = do
+            save y
+            ofset <- offset y
+            liftIO $ hPutStr oc $ printf "    sw %s %s %d\n" (reg x) (reg reg_sp) ofset
+    | elem x allfregs   = do
+            save y
+            ofset <- offset y
+            liftIO $ hPutStr oc $ printf "    swcZ %s %s %d\n" (reg x) (reg reg_sp) ofset
     | not tf                = return ()
 -- print_seq_save oc ((_, _), Inst (Save y) [] [x]) stset
 --     | otherwise             = throw $ Fail "maji!?"
@@ -290,7 +300,6 @@ print_seq_array oc t x (C n) ys zs
 emit :: Handle -> M.Map String FunctionData -> RunRun ()
 emit oc functions = do
     eputstrln "blockemit ..."
-    --eprint e
     -- eprint functions
     eputstrln "assembly"
     stack <- sp <$> get

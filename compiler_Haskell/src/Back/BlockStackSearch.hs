@@ -47,6 +47,6 @@ searchSave block =
     let seq = blockInst block in
     Prelude.foldl addToSet S.empty seq
     where
-      addToSet s (_, (Inst (Save _) [y] [])) = S.insert y s
-      addToSet s (_, (Inst (Save _) [] [y])) = S.insert y s
+      addToSet s (_, (Inst (Save y) _ _)) = S.insert y s
+      addToSet s (_, (Inst (Save y) _ _)) = S.insert y s
       addToSet s _ = s

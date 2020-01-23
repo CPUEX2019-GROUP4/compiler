@@ -167,6 +167,7 @@ convert b seq xt branch (A.Ans exp) = do
           A.Makearray t (A.V x) y -> Inst (Makearray t V) [x,y] []
           A.Makearray t (A.C x) y -> Inst (Makearray t (C x)) [y] []
           _                     -> Inst Nop [] [] -- shoud be error
+          -- a                     -> Inst Nop [show a] [] -- shoud be error
           -- コメントアウト部分は、ちゃんと型を見て判断しなければならない
           -- !!!!!!!!!!!!
     define_block b (seq |> (xt, blockexp)) End branch
@@ -213,6 +214,7 @@ convert b seq yt branch (A.Let xt exp e) =
                                 -> Inst (Makearray t V) [x,y] []
           A.Makearray t (A.C x) y
                                 -> Inst (Makearray t (C x)) [y] []
+          -- a                     -> Inst Nop [show a] [] -- shoud be error
           _                     -> Inst Nop [] [] -- shoud be error
           -- コメントアウト部分は、ちゃんと型を見て判断しなければならない
           -- !!!!!!!!!!!!
