@@ -161,7 +161,9 @@ g dest cont regenv (Let xt@(x,t) exp e) = do
                     let r = regenv1 M.! y -- exception ?
                     (e2', regenv2) <- (\x'' -> g dest cont x'' e) =<< (add_regenv x r (M.delete y regenv1))
                     let save = case M.lookup y regenv of
-                            Just x'' -> Save x'' y
+                            Just rx | elem rx allregs -> Save rx y
+                                    | otherwise -> SaveFloat rx y
+                                    | elem rx allfregs -> SaveFloat rx y
                             Nothing ->  Nop
                     (\p -> return (p, regenv2)) =<<
                             Asm.seq save (Asm.concat e1' (r,t) e2')
@@ -236,6 +238,7 @@ g' dest cont regenv (CallDir (L x) ys zs)
                 = throw $ Fail $ printf "cannot allocate resisters to %s\n" x
         | otherwise = g'_call dest cont regenv (CallDir (L x) <$>) ys zs
 g' _ _ _ (Save _ _) = throw $ Fail "ohmygod"
+g' _ _ _ (SaveFloat _ _) = throw $ Fail "ohmygod"
 g' _ _ regenv (Makearray t x' y)
         | Type.Float <- t =
             return $ (Ans <$> (Makearray t <$> find'_reg x' regenv <*> find_reg y Type.Float regenv)) >>= \x_' -> return (x_', regenv)
@@ -266,7 +269,13 @@ g'_if dest cont regenv constr e1 e2 = do
                 if x == fst dest || M.notMember x regenv || M.member x regenv' then e else do
                             e' <- e
                             case e' of
-                                Right e'' -> Right <$> Asm.seq (Save (regenv M.! x) x) e''
+                                -- Right e'' -> Right <$> Asm.seq (Save (regenv M.! x) x) e''
+                                -- Left er -> return (Left er))
+                                Right e''
+                                    | elem rx allregs -> Right <$> Asm.seq (Save rx x) e''
+                                    | elem rx allfregs -> Right <$> Asm.seq (SaveFloat rx x) e''
+                                    | otherwise -> throw $ Fail "pokemon"
+                                    where rx = regenv M.! x
                                 Left er -> return (Left er))
         return $ (\t -> (t,regenv')) <$> tmp
 
@@ -280,7 +289,12 @@ g'_call dest cont regenv constr ys zs = do
         -- e' :: T
         -- mapM :: (T -> RunRun T) -> Either T -> RunRun (Either T)
         -- exp :: Either T
-                mapM (\e' -> seq (Save (regenv M.! x) x) e') e) -- is there something wrong here ???
+                mapM (\e' ->
+                     case regenv M.! x of
+                       rx | elem rx allregs -> seq (Save (regenv M.! x) x) e'
+                          | elem rx allfregs -> seq (SaveFloat (regenv M.! x) x) e'
+                          | otherwise -> throw $ Fail "kikachew !!")
+                     e) -- is there something wrong here ???
                 (Ans <$> (constr
                     (mapM (\y -> find_reg y Type.Int regenv) ys)
                     <*> (mapM (\z -> find_reg z Type.Float regenv) zs)))

@@ -135,7 +135,9 @@ convert b seq xt branch (A.Ans exp) = do
           A.Mv x                -> Inst Mv [x] []
           A.Out n x             -> Inst (Out n) [x] []
           A.In t                -> Inst (In t) [] []
-          -- A.Unary_op op t1 t2 x -> Inst (Unary_op op t1 t2) [x
+          A.Unary_op op Float t2 x
+                                -> Inst (Unary_op op Float t2) [] [x]
+          A.Unary_op op t1 t2 x -> Inst (Unary_op op t1 t2) [x] []
           A.Arith1 op x         -> Inst (Arith1 op) [x] []
           A.Arith2 op x (A.V y) -> Inst (Arith2 op V) [x,y] []
           A.Arith2 op x (A.C y) -> Inst (Arith2 op (C y)) [x] []
@@ -155,11 +157,16 @@ convert b seq xt branch (A.Ans exp) = do
           A.Sf x y (A.V z)      -> Inst (Sf V) [y, z] [x]
           A.Sf x y (A.C z)      -> Inst (Sf (C z)) [y] [x]
           A.CallDir l xs ys     -> Inst (CallDir l) xs ys
-          -- A.Save x y            -> Inst (Save y) [y] []
+          A.Save x y            -> Inst (Save y) [x] []
+          A.SaveFloat x y       -> Inst (Save y) [] [x]
           A.Restore x           -> Inst (Restore x) [] []
-          -- A.Makearray t (A.V x) y -> Inst (Makearray t V) [x,y] []
-          -- A.Makearray t (A.C x) y -> Inst (Makearray t (C x)) [y] []
-          -- _ -> Nop -- shoud be error
+          A.Makearray Float (A.V x) y
+                                -> Inst (Makearray Float V) [x] [y]
+          A.Makearray Float (A.C x) y
+                                -> Inst (Makearray Float (C x)) [] [y]
+          A.Makearray t (A.V x) y -> Inst (Makearray t V) [x,y] []
+          A.Makearray t (A.C x) y -> Inst (Makearray t (C x)) [y] []
+          _                     -> Inst Nop [] [] -- shoud be error
           -- コメントアウト部分は、ちゃんと型を見て判断しなければならない
           -- !!!!!!!!!!!!
     define_block b (seq |> (xt, blockexp)) End branch
@@ -173,7 +180,9 @@ convert b seq yt branch (A.Let xt exp e) =
           A.Mv x                -> Inst Mv [x] []
           A.Out n x             -> Inst (Out n) [x] []
           A.In t                -> Inst (In t) [] []
-          -- A.Unary_op op t1 t2 x -> Inst (Unary_op op t1 t2) [x
+          A.Unary_op op Float t2 x
+                                -> Inst (Unary_op op Float t2) [] [x]
+          A.Unary_op op t1 t2 x -> Inst (Unary_op op t1 t2) [x] []
           A.Arith1 op x         -> Inst (Arith1 op) [x] []
           A.Arith2 op x (A.V y) -> Inst (Arith2 op V) [x,y] []
           A.Arith2 op x (A.C y) -> Inst (Arith2 op (C y)) [x] []
@@ -193,11 +202,18 @@ convert b seq yt branch (A.Let xt exp e) =
           A.Sf x y (A.V z)      -> Inst (Sf V) [y, z] [x]
           A.Sf x y (A.C z)      -> Inst (Sf (C z)) [y] [x]
           A.CallDir l xs ys     -> Inst (CallDir l) xs ys
-          -- A.Save x y            -> Inst (Save y) [y] []
+          A.Save x y            -> Inst (Save y) [x] []
+          A.SaveFloat x y       -> Inst (Save y) [] [x]
           A.Restore x           -> Inst (Restore x) [] []
-          -- A.Makearray t (A.V x) y -> Inst (Makearray t V) [x,y] []
-          -- A.Makearray t (A.C x) y -> Inst (Makearray t (C x)) [y] []
-          -- _ -> Nop -- shoud be error
+          A.Makearray Float (A.V x) y
+                                -> Inst (Makearray Float V) [x] [y]
+          A.Makearray Float (A.C x) y
+                                -> Inst (Makearray Float (C x)) [] [y]
+          A.Makearray t (A.V x) y
+                                -> Inst (Makearray t V) [x,y] []
+          A.Makearray t (A.C x) y
+                                -> Inst (Makearray t (C x)) [y] []
+          _                     -> Inst Nop [] [] -- shoud be error
           -- コメントアウト部分は、ちゃんと型を見て判断しなければならない
           -- !!!!!!!!!!!!
     in

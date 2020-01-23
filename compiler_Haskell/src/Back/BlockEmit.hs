@@ -204,6 +204,7 @@ print_seq_save oc ((_, _), Inst (Save y) [x] []) stset
             save y
             ofset <- offset y
             liftIO $ hPutStr oc $ printf "    sw %s %s %d\n" (reg x) (reg reg_sp) ofset
+    | elem x allfregs = throw $ Fail "so-nansu"
     | not tf                = return ()
     where
         tf = notMember y stset
@@ -212,6 +213,7 @@ print_seq_save oc ((_, _), Inst (Save y) [] [x]) stset
             save y
             ofset <- offset y
             liftIO $ hPutStr oc $ printf "    swcZ %s %s %d\n" (reg x) (reg reg_sp) ofset
+    | elem x allregs = throw $ Fail "so-nano"
     -- iranai hazu
     -- | elem x allregs    = do
     --         save y

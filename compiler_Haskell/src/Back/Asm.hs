@@ -47,6 +47,7 @@ data Exp =
   | Sf !String !String !Id_or_imm
   | CallDir !L ![String] ![String]
   | Save !String !String
+  | SaveFloat !String !String
   | Restore !String
   | Makearray !Type !Id_or_imm !String
   deriving(Eq, Show)
@@ -126,6 +127,7 @@ fv_exp (Restore _) = []
 fv_exp (Mv x) = [x]
 fv_exp (FMv x) = [x]
 fv_exp (Save x _) = [x]
+fv_exp (SaveFloat x _) = [x]
 fv_exp (Out _ x) = [x]
 fv_exp (In _) = []
 fv_exp (Unary_op _ _ _ x) = [x]
